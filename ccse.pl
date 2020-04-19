@@ -55,10 +55,12 @@ elsif($MODE eq "RT"){
 	system("./rate.pl");
 }
 else {
-	system("$0 -NC $POP");
-	system("$0 -ND $POP");
-	system("$0 -FT $POP");
-	system("$0 -RT $POP");
+	system("$0 -NC ");
+	system("$0 -ND ");
+	system("$0 -NC -POP");
+	system("$0 -ND -POP");
+	system("$0 -FT ");
+	system("$0 -RT ");
 	exit(0);
 }
 
@@ -134,8 +136,8 @@ print "country: " , join(", ", $cn),"\n" if($DEBUG);
 #	日次csvの作成
 #
 #my $REPORT_CSVF = "$WIN_PATH/cov_daily_$MODE" .  &ut2d(time, "") . ".csv";
-my $REPORT_CSVF = "$WIN_PATH/cov_daily_$MODE" . "_$POP" . ".csv";
-my $GRAPH_HTML = "$WIN_PATH/COVID-19_$MODE" . "_$POP.html";
+my $REPORT_CSVF = "$WIN_PATH/cov_daily_$MODE" . "$POP" . ".csv";
+my $GRAPH_HTML = "$WIN_PATH/COVID-19_$MODE" . "$POP.html";
 open(CSV, "> $REPORT_CSVF") || die "Cannot create $REPORT_CSVF\n";
 
 print join($DLM, "Country", "Total", @COL), "\n" if($DEBUG);
@@ -224,6 +226,32 @@ my @PARAMS = (
 	{ext => "$mode Japan-122 $TD", start_day => 0, lank =>[0, 9999] , exclusion => $EXCLUSION, target => "Japan", label_skip => 3, graph => "bars"},
 	{ext => "$mode Japan 2weeks $TD", start_day => -21, lank =>[0, 9999] , exclusion => $EXCLUSION, target => "Japan", label_skip => 1, graph => "bars"},
 );
+
+my $EXC_POP = "San Marino,Holy See";
+my @PARAMS_POP = (
+	{ext => "$mode Japan-122 $TD", start_day => 0, lank =>[0, 9999] , exclusion => $EXC_POP, target => "Japan", label_skip => 3, graph => "bars"},
+	{ext => "$mode Japan 2weeks $TD", start_day => -21, lank =>[0, 9999] , exclusion => $EXC_POP, target => "Japan", label_skip => 1, graph => "bars"},
+	{ext => "$mode US $TD", start_day => 39,  lank =>[0, 100] , exclusion => "Others", target => "US", label_skip => 2, graph => "lines"},
+	{ext => "$mode China $TD", start_day => 0,  lank =>[0, 100] , exclusion => "Others", target => "China", label_skip => 2, graph => "lines"},
+
+	{ext => "$mode 01-05 -218 $TD($EXC_POP)", start_day => 27, lank =>[0, 4] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
+	{ext => "$mode 06-10 -218 $TD($EXC_POP)", start_day => 27, lank =>[5, 9] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
+	{ext => "$mode 11-15 -218 $TD($EXC_POP)", start_day => 27, lank =>[10, 14] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
+	{ext => "$mode 16-20 -218 $TD($EXC_POP)", start_day => 27, lank =>[15, 19] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
+	{ext => "$mode 01-05 from 0301 $TD($EXC_POP)", start_day => 38, lank =>[0,  4] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
+	{ext => "$mode 06-10 from 0301 $TD($EXC_POP)", start_day => 38, lank =>[5,  9] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
+	{ext => "$mode 10-15 from 0301 $TD($EXC_POP)", start_day => 38, lank =>[10, 14] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
+	{ext => "$mode 16-20 from 0301 $TD($EXC_POP)", start_day => 38, lank =>[15, 19] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
+	{ext => "$mode 3weeks 01-05 $TD($EXC_POP)", start_day => -21, lank =>[0, 4] , exclusion => $EXC_POP, target => "", graph => "lines"},
+	{ext => "$mode 3weeks 06-10 $TD($EXC_POP)", start_day => -21, lank =>[5, 9] , exclusion => $EXC_POP, target => "", graph => "lines"},
+	{ext => "$mode 3weeks 11-15 $TD($EXC_POP)", start_day => -21, lank =>[10,14] , exclusion => $EXC_POP, target => "", graph => "lines"},
+	{ext => "$mode 3weeks 16-20 $TD($EXC_POP)", start_day => -21, lank =>[15,19] , exclusion => $EXC_POP, target => "", graph => "lines"},
+
+	{ext => "$mode TOP20-218 $TD", start_day => 27, lank =>[0, 19] , exclusion => "", target => "", label_skip => 3, graph => "lines"},
+	{ext => "$mode 01-10 from 0301 $TD",   start_day => 38, lank =>[0,  9] , exclusion => "", target => "", label_skip => 3, graph => "lines"},
+	{ext => "$mode 3weeks 01-05 $TD", start_day => -21, lank =>[0, 4] , exclusion => "", target => "", graph => "lines"},
+
+);
 my $src_url = "https://github.com/beoutbreakprepared/nCoV2019";
 my $src_ref = "<a href=\"$src_url\">$src_url</a>";   
 my @csvlist = (
@@ -233,11 +261,12 @@ my @csvlist = (
 
 foreach my $clp (@csvlist){
    next if($clp->{kind} ne $MODE); 
+	my $parap = ($POP) ? \@PARAMS_POP : \@PARAMS;
     my %params = (
         debug => $DEBUG,
         win_path => $WIN_PATH,
         clp => $clp,
-        params => \@PARAMS,
+        params => $parap,
 		data_rel_path => "cov_data",
     );
     csvgpl::csvgpl(\%params);

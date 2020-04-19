@@ -142,10 +142,12 @@ sub	csv2graph
 	#
 	my $ext = $p->{ext};
 	$ext =~ s/#KIND#/$kind/;
-	$ext =~ s/#LD#/$LAST_DATE/;
 	my $fname = $ext;
+	$fname =~ s/#LD#//;
 	$fname =~ s#/#-#g;
 	$fname =~ s/[\(\) ]//g;
+
+	$ext =~ s/#LD#/$LAST_DATE/;
 
 	my $PNGF = $png_path . "/" . $fname . ".png";
 	my $PLOTCMD = $png_path . "/" . $fname . "-plot.txt";
@@ -338,8 +340,10 @@ _EOD_
 
 	my @w = ();
 	for(my $i = 0; $i <= $#LEGEND_KEYS; $i++){
+		my $country = $LEGEND_KEYS[$i];
+		$country =~ s/'//g;
 		push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d ", 
-					$PLOTCSV, $i+2, $LEGEND_KEYS[$i], ($i < 5) ? 2 : 1)
+					$PLOTCSV, $i+2, $country, ($i < 5) ? 2 : 1)
 			);
 	}
 	my $pn = join(",", @w); 
