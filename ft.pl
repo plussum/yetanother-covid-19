@@ -21,6 +21,7 @@ my $DLM = ",";
 my $WIN_PATH = "/mnt/f/OneDrive/cov";
 #my $file = "./COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv";
 #my $file = "./csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv";
+my $BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 my $file = "";
 my $MODE = "";
 
@@ -30,15 +31,15 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$MODE = "ND" if(/-ND/);
 	$MODE = "NC" if(/-NC/);
 	if(/-copy/){
-		system("cp ./csse_covid_19_data/csse_covid_19_time_series/*.csv $WIN_PATH");
+		system("cp $BASE_DIR/*.csv $WIN_PATH");
 		exit(0);
 	}
 }
 if($MODE eq "NC"){
-	$file = "./csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
+	$file = "$BASE_DIR/time_series_covid19_confirmed_global.csv";
 }
 elsif($MODE eq "ND"){
-	$file = "./csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv";
+	$file = "$BASE_DIR/time_series_covid19_deaths_global.csv";
 }
 else {
 	system("$0 -NC");
@@ -118,10 +119,10 @@ my $FT_CSVF = "$WIN_PATH/cov_ft_$MODE" . ".csv";
 my $ABS_CSVF = "$WIN_PATH/cov_ftabs_$MODE" . ".csv";
 my $GRAPH_HTML = "$WIN_PATH/COVID-19_ft_$MODE.html";
 my %DIFF = ();
-my $AVR_DAY = 7;
 my %FIRST = ();
 my $MIN_FIRST = $#COL;
-my $THRESH = ($MODE eq "NC") ? 10 : 1;
+my $AVR_DAY = 7;
+my $THRESH = ($MODE eq "NC") ? 10 : 1;	# 10 : 1
 open(ABS, "> $ABS_CSVF") || die "Cannot create $ABS_CSVF\n";
 
 print join($DLM, "Country", "Total", @COL), "\n" if($DEBUG);
@@ -198,16 +199,44 @@ my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
 
 #my $EXCLUSION = "Others,China,USA";
 my $EXCLUSION = "Others";
+
+my $scc = 'linecolor "#808080"';
+my $ymin = '10';
+my $guide = "";
+for(my $d = 3; $d <= 10; $d++){
+	my $base = 2**(1/$d);
+	my $p10 = 0;
+	my $b10 = 0;
+	for($p10 = 6; $p10 < 100; $p10 += 1){
+		$b10 = $base**$p10;
+		last if($b10 >= 10);
+	}
+	for(; $p10 > 0; $p10 -= 0.001 ){
+		$b10 = $base**$p10;
+
+		last if($b10 <= 10);
+	}
+	#printf("[%d:%.3f:%3f]\n", $d, $p10, $b10);
+
+	$guide .= sprintf("(%.6f**(x+%.3f)) with lines title '%dday' $scc," , $base, $p10, $d);
+#	printf(">>> $d (%.6f**(x+%.3f)) with lines title '%dday' $scc,\n" , $base, $p10, $d);
+}
+$guide =~ s/,$//;
+#print "[$guide]\n";
+#exit 0;
+
+#$guide =  "(1.148698**(x+16)) with lines title '5day' $scc,  1.122462**(x+20) with lines title '6day' $scc,  1.10409**(x+23.5) with lines title '7day' $scc, 1.090508**(x+27) with lines title '8day' $scc";
+
 my @PARAMS = (
-	{ext => "$mode Japan Koria FT $TD", start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, 
-		target => "Japan,Korea- South", label_skip => 2, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1},
+	{ext => "$mode Japn Koria FT $TD", start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, 
+		target => "Japan,Korea- South", label_skip => 2, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1, ymin => $ymin, additional_plot => $guide},
 	{ext => "$mode Japan and others FT $TD", start_day => 0, lank =>[0, 999] , exclusion => $EXCLUSION, 
 			target => "Japan,Korea- South,US,Spain,Italy,France,Germany,United Kingdom,Iran,Turkey,Belgium,Switzeland",
-		 	label_skip => 2, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1},
+		 	label_skip => 2, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1,  ymin => $ymin, additional_plot => $guide},
 	{ext => "$mode TOP10 $TD", start_day => 0, lank =>[0, 10] , exclusion => $EXCLUSION, target => "", 
-		label_skip => 7, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1},
+		label_skip => 7, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1, ymin => $ymin, additional_plot => $guide},
 	{ext => "$mode 10-20 $TD", start_day => 0, lank =>[10, 19] , exclusion => $EXCLUSION, 
-		target => "", label_skip => 7, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1},
+		target => "", label_skip => 7, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1, ymin => $ymin, additional_plot => $guide},
 #	{ext => "$mode Japan Koria 0301 log $TD",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Japan,Korea- South", label_skip => 2, graph => "lines", logscale => "y"},
 #	{ext => "$mode Focusing area from 0301 $TD",   start_day => 39, lank =>[0, 99] , exclusion => $EXCLUSION, 
 #		target => "R0,Russia,Canada,Ecuador,Brazil,India", label_skip => 3, graph => "lines", ymax => 10},

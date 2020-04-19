@@ -91,7 +91,7 @@ for(my $i = 0; $i <= $#HTML_LIST; $i++){
 		my $region;
 		my $country;
 		($region, $country, @w)  = split(/,/, $_);
-		next if($country =~ /regions International/);
+		next if($country =~ /regions International/i);
 		next if($country =~ /regions/);
 		$country = "Iran" if($country =~ /Iran/);
 		$country = "USA"  if($country =~ /United States of America/);

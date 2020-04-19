@@ -37,6 +37,7 @@ sub	csvgpl
 	my $grp = $para->{params};
 
 my $CSS = << "_EOCSS_";
+	<meta charset="utf-8">
 	<style type="text/css">
 	<!--
 		span.c {font-size: 12px;}
@@ -152,7 +153,14 @@ sub	csv2graph
 	print $PNGF , "\n" if($DEBUG > 1);		#### 
 #	$PNGF =~ s/[\(\) ]//g;
 	my $std = defined($p->{start_day}) ? $p->{start_day} : 0;
-	if($std < 0){
+	if($std =~ /[0-9]+\/[0-9]+/){
+		my $n = &search_list($std, @COL);
+		#print ">>>> $std: $n " . $COL[$n-1] . "\n";
+		if($n > 0){
+			$std = $n - 1;
+		}
+	}
+	elsif($std < 0){
 		$std = -$std;
 		$std = $DATE_NUMBER - $std
 	}	
@@ -230,6 +238,7 @@ sub	csv2graph
 	#	グラフの生成 CSV
 	#
 	my @record = ();
+	my $max_data = 0;
 	for(my $dt = 0; $dt <= $#DATES; $dt++){
 		my @data = ($DATES[$dt]);
 		for (my $i = 1; $i <= $#Dataset; $i++){
@@ -258,10 +267,14 @@ sub	csv2graph
 				#print "--> $v\n";
 			}
 			push(@data, $v);
+			$max_data = $v if($v > $max_data);
 		}
-		push(@record, join(",", @data));;
+		push(@record, join(",", @data));
 	}
 
+	#
+	#	for FT, 全てデータなしの相対日をグラフに入れないための処理
+	#
 	my $final_rec = 0;
 	for(my $i = 0; $i <= $#record; $i++){
 		my $rr = $record[$i];
@@ -270,7 +283,8 @@ sub	csv2graph
 			$final_rec = $i;
 		}
 	}
-	print "#### " . $#record . ":$final_rec\n";
+
+	print "#### " . $#record . ":$final_rec\n" if($DEBUG);
 	open(DF, "> $PLOTCSV") || die "cannot create $PLOTCSV\n";
 	print DF join(",", "#", @LEGEND_KEYS), "\n";
 	for(my $i = 0; $i <= $final_rec; $i++){
@@ -297,7 +311,6 @@ sub	csv2graph
 	my $TERM_YSIZE = &valdef($p->{term_ysize}, 300);
 
 my $PARAMS = << "_EOD_";
-
 set datafile separator ','
 set xtics rotate by -90
 $DATE_FORMAT
@@ -316,10 +329,10 @@ set xtics #XTICKS#
 #set xrange ['$START_DATE':'$LAST_DATE']
 $XRANGE
 set yrange [#YRANGE#]
-set terminal pngcairo size $TERM_XSIZE, $TERM_YSIZE font ",8"
+set terminal pngcairo size $TERM_XSIZE, $TERM_YSIZE font "IPAexゴシック,8" enhanced
 set #LOGSCALE#
 set output '$PNGF'
-plot #PARAM#
+plot #PLOT_PARAM#
 exit
 _EOD_
 
@@ -330,17 +343,19 @@ _EOD_
 			);
 	}
 	my $pn = join(",", @w); 
-	$PARAMS =~ s/#PARAM#/$pn/;	
-	my $logs = "";
+	if(defined $p->{additional_plot} && $p->{additional_plot}){
+		$pn .= ", " . $p->{additional_plot};
+	}
+	$PARAMS =~ s/#PLOT_PARAM#/$pn/;	
+
+	my $ymin = &valdef($p->{ymin}, "");
 	my $ymax = &valdef($p->{ymax}, "");
-	if(defined $p->{logscale}){
-		$logs = "logscale " . $p->{logscale};
-		$PARAMS =~ s/#YRANGE#/10:$ymax/;
+	if(! $ymax ){
+		$ymax = &calc_max($max_data, defined $p->{logscale});
 	}
-	else {
-		$logs = "nologscale";
-		$PARAMS =~ s/#YRANGE#/0:$ymax/;
-	}
+	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/;	
+	my $logs = "nologscale";
+	$logs = "logscale " . $p->{logscale} if(defined $p->{logscale});
 	$PARAMS =~ s/#LOGSCALE#/$logs/;
 
 	my $xtics = 3600 * 24;
@@ -353,6 +368,7 @@ _EOD_
 		}
 	}
 	$PARAMS =~ s/#XTICKS#/$xtics/;
+#	print "[[[$PARAMS]]]\n";
 
 	open(PLF, "> $PLOTCMD") || die "cannot create $pltfile";
 	print PLF $PARAMS;
@@ -374,14 +390,34 @@ sub	valdef
 sub search_list
 {
     my ($country, @w) = @_;
+	my $n = 0;
 
     foreach my $ntc (@w){
         if($country =~ /$ntc/){
             print "search_list: $country:$ntc\n" if($DEBUG > 1);
-            return 1;
+            return $n+1;
         }
+		$n++;
     }
     return "";
+}
+sub	calc_max
+{
+	my ($v, $log) = @_;
+
+	my $digit = int(log($v)/log(10));
+	my $max = 0;
+	if(!$log){
+		$max = (int(($v / 10**$digit)*10 + 9.999)/10) * 10**$digit;
+	}
+	else {
+		$max = 10**($digit+1);
+	}
+
+	print "ymax:[$v:$max]\n";
+
+	return $max;
+
 }
 
 1;

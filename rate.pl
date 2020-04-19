@@ -24,6 +24,7 @@ my $ip = 8;	# 8 感染期間
 my $WIN_PATH = "/mnt/f/OneDrive/cov";
 #my $file = "./COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv";
 #my $file = "./csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv";
+my $BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 my $file = "";
 my $MODE = "";
 
@@ -33,15 +34,15 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$MODE = "ND" if(/-ND/);
 	$MODE = "NC" if(/-NC/);
 	if(/-copy/){
-		system("cp ./csse_covid_19_data/csse_covid_19_time_series/*.csv $WIN_PATH");
+		system("cp $BASE_DIR/*.csv $WIN_PATH");
 		exit(0);
 	}
 }
 if($MODE eq "NC"){
-	$file = "./csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
+	$file = "$BASE_DIR/time_series_covid19_confirmed_global.csv";
 }
 elsif($MODE eq "ND"){
-	$file = "./csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv";
+	$file = "$BASE_DIR/time_series_covid19_deaths_global.csv";
 }
 else {
 	system("$0 -NC");
@@ -155,11 +156,11 @@ close(ABS);
 #
 open(RATE, "> $RATE_CSVF") || die "Cannot create $RATE_CSVF\n";
 print RATE join($DLM, "Country", "Total", @COL[0..($#COL - $ip - $lp)]), "\n" ;
-print RATE join($DLM, "R0=1.0", " ");
-for(my $i = 0; $i <= $#COL - $ip - $lp; $i++){
-		print RATE ",1";
-}
-print RATE "\n";
+#print RATE join($DLM, "R0=1.0", " ");
+#for(my $i = 0; $i <= $#COL - $ip - $lp; $i++){
+#		print RATE ",1";
+#}
+#print RATE "\n";
 foreach my $country (sort {$COUNTRY{$b} <=> $COUNTRY{$a}} keys %COUNTRY){
 	print RATE $country. $DLM . $COUNTRY{$country}. $DLM;
 	for(my $dt = 0; $dt <= ($#COL - $ip - $lp) ; $dt++){
@@ -184,20 +185,26 @@ close(RATE);
 #	グラフとHTMLの作成
 #
 
-my $TD = "($COL[$#COL]) src beoutbreakprepared/nCoV2019";
+my $TD = "($COL[$#COL]) src Johns Hopkins CSSE";
 $TD =~ s#/#.#g;
 my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
 
-#my $EXCLUSION = "Others,China,USA";
 my $EXCLUSION = "Others";
 my @PARAMS = (
-	{ext => "$mode Japan 0301 $TD",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Japan", label_skip => 2, graph => "lines"},
-#	{ext => "$mode Japan Koria 0301 log $TD",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Japan,Korea- South", label_skip => 2, graph => "lines", logscale => "y"},
-#	{ext => "$mode Japan Koria 0301 log $TD",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Japan,Korea- South", label_skip => 2, graph => "lines", logscale => "y"},
+	{ext => "$mode Japan 0301 $TD",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Japan", label_skip => 2, graph => "lines", additional_plot => "1 with lines title 'R0=0'"},
+	{ext => "$mode Japan 3weeks $TD",   start_day => -21, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Japan", label_skip => 1, graph => "lines", additional_plot => "1 with lines title 'R0=0'"},
+	{ext => "$mode Germany 0301 $TD",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Germany", label_skip => 2, graph => "lines", additional_plot => "1 with lines title 'R0=0'"},
+	{ext => "$mode Germany 3weeks $TD",   start_day => -21, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Germany", label_skip => 1, graph => "lines", additional_plot => "1 with lines title 'R0=0'"},
+	{ext => "$mode Forcus area 01 3weeks $TD",   start_day => -21, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Germany,US,Italy,Spain,France", label_skip => 1, graph => "lines", additional_plot => "1 with lines title 'R0=0'"},
+#	{ext => "$mode Japan Koria 0301 log $TD",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Japan,Korea- South", label_skip => 2, graph => "lines", logscale => "y", additional_plot => "1 with lines title 'R0=0'"},
+#	{ext => "$mode Japan Koria 0301 log $TD",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Japan,Korea- South", label_skip => 1, graph => "lines", logscale => "y", additional_plot => "1 with lines title 'R0=0'"},
 	{ext => "$mode Focusing area from 0301 $TD",   start_day => 39, lank =>[0, 99] , exclusion => $EXCLUSION, 
-		target => "R0,Russia,Canada,Ecuador,Brazil,India", label_skip => 3, graph => "lines", ymax => 10},
-	{ext => "$mode TOP 10 from 0301 $TD",   start_day => 39, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", ymax => 10},
-	{ext => "$mode TOP 10 3w $TD",   start_day => -7, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines", ymax => 10},
+		target => "R0,Russia,Canada,Ecuador,Brazil,India", label_skip => 3, graph => "lines", ymax => 10, additional_plot => "1 with lines title 'R0=0'"},
+	{ext => "$mode TOP 01-05 from 0301 $TD",   start_day => 39, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", ymax => 10, additional_plot => "1 with lines title 'R0=0'"},
+	{ext => "$mode TOP 06-10 from 0301 $TD",   start_day => 39, lank =>[5, 9] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", ymax => 10, additional_plot => "1 with lines title 'R0=0'"},
+	{ext => "$mode TOP 10 3w $TD",   start_day => -21, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines", ymax => "", additional_plot => "1 with lines title 'R0=0'"},
+	{ext => "$mode TOP 10 2w $TD",   start_day => -14, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines", ymax => "", additional_plot => "1 with lines title 'R0=0'"},
+	{ext => "$mode TOP 10 1w $TD",   start_day => -7, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines", ymax => "", additional_plot => "1 with lines title 'R0=0'"},
 
 );
 my $src_url = "https://github.com/beoutbreakprepared/nCoV2019";
