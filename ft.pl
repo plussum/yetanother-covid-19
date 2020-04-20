@@ -122,7 +122,8 @@ my %DIFF = ();
 my %FIRST = ();
 my $MIN_FIRST = $#COL;
 my $AVR_DAY = 7;
-my $THRESH = ($MODE eq "NC") ? 10 : 1;	# 10 : 1
+my $THRESH_DAY = ($MODE eq "NC") ? 9 : 1;	# 10 : 1
+my $THRESH_TOTAL = ($MODE eq "NC") ? 100 : 10;	# 10 : 1
 open(ABS, "> $ABS_CSVF") || die "Cannot create $ABS_CSVF\n";
 
 print join($DLM, "Country", "Total", @COL), "\n" if($DEBUG);
@@ -136,13 +137,16 @@ foreach my $country (sort {$COUNTRY{$b} <=> $COUNTRY{$a}} keys %COUNTRY){
     for(my $dt = 0; $dt <= $#COL; $dt++){
         $DIFF{$country}[$dt] = $COUNT{$country}[$dt] - ($dt > 0 ? &valdef($COUNT{$country}[$dt-1], 0) : 0);
     }
+	my $total = 0;
     for(my $dt = 0; $dt <= $#COL; $dt++){
         my $dtn = $DIFF{$country}[$dt];
+		$total += $dtn;
         for(my $i = $dt - $AVR_DAY + 1; $i < $dt; $i++){
             $dtn += ($i >= 0 ? $DIFF{$country}[$i] : $DIFF{$country}[$dt]);
         }
         my $avr = int(0.999999 + $dtn / $AVR_DAY);
-		if($avr >= $THRESH && !defined $FIRST{$country}){
+		if($avr >= $THRESH_DAY && !defined $FIRST{$country}){
+		#if($total >= $THRESH_TOTAL && !defined $FIRST{$country}){
 			$FIRST{$country} = $dt;
 			$MIN_FIRST = $dt if($dt < $MIN_FIRST);
 		}
@@ -203,7 +207,7 @@ my $EXCLUSION = "Others";
 my $scc = 'linecolor "#808080"';
 my $ymin = '10';
 my $guide = "";
-for(my $d = 3; $d <= 10; $d++){
+for(my $d = 2; $d <= 10; $d++){
 	my $base = 2**(1/$d);
 	my $p10 = 0;
 	my $b10 = 0;

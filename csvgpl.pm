@@ -59,7 +59,6 @@ _EOCSS_
 	#print HTML "SOURCE: <a href = \"$WHO_PAGE\"> WHO situation Reports</a>\n<br>\n";
 
 	foreach my $p (@$grp){
-		print ">>>>>> loop [$clp->{csvf}]\n" if($DEBUG);
 		# $p->{kind} = $clp->{name};
 		my ($png, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $p);
 		print HTML "<img src=\"$IMG_PATH/$png\">\n";
@@ -92,12 +91,29 @@ sub	csv2graph
 
 	print join(", ", $p->{ext}, $p->{start_day}, $p->{lank}[0], $p->{lank}[1], $p->{exclusion}), "\n" if($DEBUG > 1);
 	
+	my $ext = $p->{ext};
+	$ext =~ s/#KIND#/$kind/;
+	my $fname = $ext;
+	$fname =~ s/#LD#//;
+	$fname =~ s#/#-#g;
+	$fname =~ s/[\(\) ]//g;
+	
+
+	my $plot_pngf = $png_path . "/" . $fname . ".png";
+	my $plot_cmdf = $png_path . "/" . $fname . "-plot.txt";
+	my $plot_csvf = $png_path . "/" . $fname . "-plot.csv";
+	print $plot_pngf , "\n" if($DEBUG > 1);		#### 
+	print "SRC CSV [$csvf]\n" if($DEBUG);
+	print "DST CSV [$plot_csvf]\n" if($DEBUG);
+	print "DST CMD [$plot_cmdf]\n" if($DEBUG);
+	print "DST PNG [$plot_pngf]\n" if($DEBUG);
+
+#	$plot_pngf =~ s/[\(\) ]//g;
 	#
 	#	Read CSV DATA
 	#
 	my @COL = ();
 	my @DATA = ();
-	print "[$csvf]\n" if($DEBUG > 1);
 
 	open(CSV, $csvf) || die "cannot open $csvf";
 	my $cls = <CSV>; 
@@ -108,9 +124,11 @@ sub	csv2graph
 	}
 	shift(@COL);
 	shift(@COL);
+	print join(",", @COL), "\n";
 
 	my $DATE_NUMBER = $#COL;
 	my $LAST_DATE = $COL[$DATE_NUMBER];
+	$ext =~ s/#LD#/$LAST_DATE/;
 
 	my $l;
 	for($l = 0; <CSV>; $l++){
@@ -140,20 +158,6 @@ sub	csv2graph
 	#
 	#	Graph Parameter set
 	#
-	my $ext = $p->{ext};
-	$ext =~ s/#KIND#/$kind/;
-	my $fname = $ext;
-	$fname =~ s/#LD#//;
-	$fname =~ s#/#-#g;
-	$fname =~ s/[\(\) ]//g;
-
-	$ext =~ s/#LD#/$LAST_DATE/;
-
-	my $PNGF = $png_path . "/" . $fname . ".png";
-	my $PLOTCMD = $png_path . "/" . $fname . "-plot.txt";
-	my $PLOTCSV = $png_path . "/" . $fname . "-plot.csv";
-	print $PNGF , "\n" if($DEBUG > 1);		#### 
-#	$PNGF =~ s/[\(\) ]//g;
 	my $std = defined($p->{start_day}) ? $p->{start_day} : 0;
 	if($std =~ /[0-9]+\/[0-9]+/){
 		my $n = &search_list($std, @COL);
@@ -252,7 +256,7 @@ sub	csv2graph
 				# print "$item_number : $dt";
 				my $av = 0;
 				if($dt > $item_number){
-					$v = $NO_DATA;
+					$v = $NO_DATA;			# for FT, set nodata
 				}
 				else {
 					for(my $ma = $dt - $p->{average}; $ma <= $dt; $ma++){
@@ -286,8 +290,11 @@ sub	csv2graph
 		}
 	}
 
+	#
+	#	グラフ生成用のCSVの作成
+	#
 	print "#### " . $#record . ":$final_rec\n" if($DEBUG);
-	open(DF, "> $PLOTCSV") || die "cannot create $PLOTCSV\n";
+	open(DF, "> $plot_csvf") || die "cannot create $plot_csvf\n";
 	print DF join(",", "#", @LEGEND_KEYS), "\n";
 	for(my $i = 0; $i <= $final_rec; $i++){
 		my $rr = $record[$i];
@@ -295,13 +302,14 @@ sub	csv2graph
 	}
 	close(DF);
 
-	my $pltfile = "$WIN_PATH/plt.txt";
+	#
+	#	グラフ生成
+	#
 	my $TITLE = $ext;
 	my $XLABEL = "";
 	my $YLABEL = "";
 	my $START_DATE = $DATES[0];
 	$LAST_DATE = $DATES[$#DATES];
-	
 
 	my $DATE_FORMAT = "set xdata time\n set timefmt '%m/%d'\nset format x '%m/%d'\n";
 	my $XRANGE = "set xrange ['$START_DATE':'$LAST_DATE']";
@@ -333,7 +341,7 @@ $XRANGE
 set yrange [#YRANGE#]
 set terminal pngcairo size $TERM_XSIZE, $TERM_YSIZE font "IPAexゴシック,8" enhanced
 set #LOGSCALE#
-set output '$PNGF'
+set output '$plot_pngf'
 plot #PLOT_PARAM#
 exit
 _EOD_
@@ -343,7 +351,7 @@ _EOD_
 		my $country = $LEGEND_KEYS[$i];
 		$country =~ s/'//g;
 		push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d ", 
-					$PLOTCSV, $i+2, $country, ($i < 5) ? 2 : 1)
+					$plot_csvf, $i+2, $country, ($i < 5) ? 2 : 1)
 			);
 	}
 	my $pn = join(",", @w); 
@@ -374,12 +382,12 @@ _EOD_
 	$PARAMS =~ s/#XTICKS#/$xtics/;
 #	print "[[[$PARAMS]]]\n";
 
-	open(PLF, "> $PLOTCMD") || die "cannot create $pltfile";
+	open(PLF, "> $plot_cmdf") || die "cannot create $plot_cmdf";
 	print PLF $PARAMS;
 	close(PLF);
 
-	print ("gnuplot $PLOTCMD\n") if(1 || $DEBUG > 1);
-	system("gnuplot $PLOTCMD");
+	print ("gnuplot $plot_cmdf\n") if(1 || $DEBUG > 1);
+	system("gnuplot $plot_cmdf");
 
 	return ($fname . ".png", @LEGEND_KEYS);
 }
@@ -391,6 +399,15 @@ sub	valdef
 	
 	return defined $v ? $v : $d;
 }
+sub	valdefs
+{
+	my ($v, $d) = @_;
+	$d = "" if(! defined $d);
+	
+	return defined $v ? $v : $d;
+}
+
+
 sub search_list
 {
     my ($country, @w) = @_;
@@ -418,7 +435,7 @@ sub	calc_max
 		$max = 10**($digit+1);
 	}
 
-	print "ymax:[$v:$max]\n";
+	# print "ymax:[$v:$max]\n";
 
 	return $max;
 

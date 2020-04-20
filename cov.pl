@@ -11,14 +11,17 @@ use lib qw(../gsfh);
 
 my $DEBUG = 0;
 my $download = 0;
+my $gen = 1;
 
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
 	$DEBUG = 1 if(/^-debug/);
 	$download = 1 if(/-DL/i);
+	$gen = "" if(/-NG/i);
+	
 }
 
-if(1){
+if($gen){
 	system("(cd ../COVID-19; git pull origin master)") if($download);
 	system("./ccse.pl");
 
@@ -31,6 +34,7 @@ if(1){
 
 my $WIN_PATH = "/mnt/f/OneDrive/cov";
 my $INDEX_HTML = "$WIN_PATH/covid_index.html";
+my $FRAME_HTML = "$WIN_PATH/covid_frame.html";
 my $HTML_LIST = << "_EOD_";
 /mnt/f/OneDrive/cov/COVID-19_NC.html
 /mnt/f/OneDrive/cov/COVID-19_ND.html
@@ -41,6 +45,23 @@ my $HTML_LIST = << "_EOD_";
 /mnt/f/OneDrive/cov/COVID-19_ft_NC.html
 /mnt/f/OneDrive/cov/JapanPref.html
 _EOD_
+my @html_list = split("\n", $HTML_LIST);
+
+my $gfs =  $html_list[0];
+$gfs =~ s/$WIN_PATH/./;
+my $INDEX = << "_EOI_";
+<html>
+<head>
+<title>INDEX COVID-19 </title>
+</head>
+
+<frameset cols="300,*">
+    <frame src="covid_frame.html" name="index">
+    <frame src="$gfs" name="graph">
+    </frameset>
+</frameset>
+</html> 
+_EOI_
 
 my $CSS = << "_EOCSS_";
 	<style type="text/css">
@@ -53,25 +74,30 @@ _EOCSS_
 my $TBL_SIZE = 10;
 my $class = "class=\"c\"";
 
-open(HTML, "> $INDEX_HTML") || die "Cannot create file $INDEX_HTML";
-print HTML "<HTML>\n";
-print HTML "<HEAD>\n";
-print HTML "<TITLE> COVID-19 INDEX </TITLE>\n";
-print HTML $CSS;
-print HTML "</HEAD>\n";
-print HTML "<BODY>\n";
+open(INDEX, ">$INDEX_HTML") || die "cannot create file $INDEX_HTML";
+print INDEX $INDEX;
+close(INDEX);
 
-print HTML "<span class=\"c\"> ";
-print HTML "<H1>GRAPHS of COVID-19</H1>\n";
-print HTML "<ul type=\"disc\">\n";
-foreach my $p (split("\n", $HTML_LIST)){
+open(FRAME, "> $FRAME_HTML") || die "Cannot create file $FRAME_HTML";
+print FRAME "<HTML>\n";
+print FRAME "<HEAD>\n";
+print FRAME "<TITLE> COVID-19 INDEX </TITLE>\n";
+print FRAME $CSS;
+print FRAME "</HEAD>\n";
+print FRAME "<BODY>\n";
+
+print FRAME "<span class=\"c\"> ";
+print FRAME "<H1>INDEX COVID-19</H1>\n";
+print FRAME "<ul type=\"disc\">\n";
+foreach my $p (@html_list){
 	my $relp = $p;
 	$relp =~ s/$WIN_PATH/./; 
 
-	print HTML "<li><a href =\"$relp\">$relp</a></li>";
+	print FRAME "<li><a href =\"$relp\" target=\"graph\">$relp</a></li>\n";
 }
-print HTML "</ul>\n";
-print "</span>\n";
-print HTML "</BODY>\n";
-print HTML "</HTML>\n";
-close(HTML);
+print FRAME "</ul>\n";
+print FRAME "</span>\n";
+print FRAME "</BODY>\n";
+print FRAME "</HTML>\n";
+close(FRAME);
+

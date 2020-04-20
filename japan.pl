@@ -108,6 +108,9 @@ while(<TRN>){
 	my $v = ($total_item_col) ? $w[$total_item_col] : 1;	# 1 -> count the records
 	my $dt_raw = $w[$datetime];
 	if(!defined $date_ymd{$dt_raw}) {
+		#print "[$dt_raw]\n";
+		next if(!$dt_raw);
+
 		my $tm = &date2ut($dt_raw, "/", @date_fmt);
 		$date_ymd{$dt_raw} = &ut2d($tm, "");
 
@@ -260,8 +263,14 @@ sub ymd2tm
 	#print "ymd2tm: " . join("/", @_), "\n";
 
 	#$y -= 2100 if($y > 2100);
+	#my ($package, $filename, $line, $func) = caller(0);
+	#print "[$line:$func]";
+	#($package, $filename, $line, $func) = caller(1);
+	#print "[$line:$func]";
+
+	#print "ymd2tm: " . join("/", $y, $m, $d, $h, $mn, $s) ;
 	my $tm = timelocal($s, $mn, $h, $d, $m - 1, $y);
-	# print "ymd2tm: " . join("/", $y, $m, $d, $h, $mn, $s), " --> " . &ut2d($tm, "/") . "\n";
+	#print  &ut2d($tm, "/") . "\n";
 	return $tm;
 }
 
@@ -312,6 +321,9 @@ sub	date2ut
 	$d = &valdef($w[$dn], 0);
 
 	if(! defined $hn){
+		if($y == 0){
+			print ">>>>> $dt: $y, $m, $d\n";
+		}
 		return &ymd2tm($y, $m, $d, 0, 0, 0);
 	}
 

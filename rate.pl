@@ -19,7 +19,7 @@ my $MIN_TOTAL = 100;
 my $DLM = ",";
 
 my $lp = 5;	# 5 潜伏期間
-my $ip = 8;	# 8 感染期間
+my $ip = 10;	# 8 感染期間
 
 my $WIN_PATH = "/mnt/f/OneDrive/cov";
 #my $file = "./COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv";
@@ -27,19 +27,28 @@ my $WIN_PATH = "/mnt/f/OneDrive/cov";
 my $BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 my $file = "";
 my $MODE = "";
+my $DT_S = 4;
+my $DATA = "";
 
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
 	$DEBUG = 1 if(/^-debug/);
 	$MODE = "ND" if(/-ND/);
 	$MODE = "NC" if(/-NC/);
+	$DATA = "JP" if(/-JP/);
 	if(/-copy/){
 		system("cp $BASE_DIR/*.csv $WIN_PATH");
 		exit(0);
 	}
 }
 if($MODE eq "NC"){
-	$file = "$BASE_DIR/time_series_covid19_confirmed_global.csv";
+	if(! $DATA){
+		$file = "$BASE_DIR/time_series_covid19_confirmed_global.csv";
+	}
+	else {
+		$file = "$WIN_PATH/covPrefect.csv";
+		$DT_S = 2;
+	}
 }
 elsif($MODE eq "ND"){
 	$file = "$BASE_DIR/time_series_covid19_deaths_global.csv";
@@ -65,7 +74,6 @@ for(split(/,/, $_)){
 }
 
 my $ITEMS = $#COL;
-my $DT_S = 4;
 for(my $i = 0; $i < $DT_S; $i++){
 	shift(@COL);
 }
@@ -192,7 +200,7 @@ my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
 my $EXCLUSION = "Others";
 my @PARAMS = (
 	{ext => "$mode Japan 0301 $TD",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Japan", label_skip => 2, graph => "lines", additional_plot => "1 with lines title 'R0=0'"},
-	{ext => "$mode Japan 3weeks $TD",   start_day => -21, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Japan", label_skip => 1, graph => "lines", additional_plot => "1 with lines title 'R0=0'"},
+	{ext => "$mode Japan 3weeks $TD",   start_day => -21, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Japan", label_skip => 1, graph => "lines", additional_plot => "1 with lines title 'R0=0'", ymin => 0},
 	{ext => "$mode Germany 0301 $TD",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Germany", label_skip => 2, graph => "lines", additional_plot => "1 with lines title 'R0=0'"},
 	{ext => "$mode Germany 3weeks $TD",   start_day => -21, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Germany", label_skip => 1, graph => "lines", additional_plot => "1 with lines title 'R0=0'"},
 	{ext => "$mode Forcus area 01 3weeks $TD",   start_day => -21, lank =>[0, 99] , exclusion => $EXCLUSION, target => "R0,Germany,US,Italy,Spain,France", label_skip => 1, graph => "lines", additional_plot => "1 with lines title 'R0=0'"},
