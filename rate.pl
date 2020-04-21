@@ -74,13 +74,24 @@ my ($colum, $record , $start_day, $last_day) = jhccse::jhccse($PARAM);
 #
 #	定型のCSVから、再生産数 のデータを生成
 #
-
+#		t                  *
+#		+----+-------------+
+#		  ip       lp
+#
+#		R0 = ip * S[t+ip+lp] / sum(S[t+1..t+ip])
+#	
+#		source		https://qiita.com/oki_mebarun/items/e68b34b604235b1f28a1
+#
+my $ip = 5;			# 5 潜伏期間
+my $lp = 8;			# 8 感染期間
+my $average_date = 7;
 my $RATE_PARAM = {
 	input_file => $IMF_CSVF,
 	output_file => $REPORT_CSVF,
 	delimiter => $DLM,
-	lp 		=> 5,	# 5 潜伏期間
-	ip 		=> 8,	# 8 感染期間
+	average_date => $average_date,
+	lp 		=> $ip,	# 5 潜伏期間
+	ip 		=> $lp,	# 8 感染期間
 };
 rate::rate($RATE_PARAM);
 dp::dp $REPORT_CSVF . "\n";
@@ -89,7 +100,7 @@ dp::dp $REPORT_CSVF . "\n";
 #	グラフとHTMLの作成
 #
 
-my $TD = "($last_day) src Johns Hopkins CSSE";
+my $TD = "ip($ip)lp($lp)moving avr($average_date) ($last_day) src Johns Hopkins CSSE";
 $TD =~ s#/#.#g;
 my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
 
