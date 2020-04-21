@@ -35,20 +35,23 @@ if($gen){
 my $WIN_PATH = "/mnt/f/OneDrive/cov";
 my $INDEX_HTML = "$WIN_PATH/covid_index.html";
 my $FRAME_HTML = "$WIN_PATH/covid_frame.html";
+my $DIR = "/mnt/f/OneDrive/cov";
 my $HTML_LIST = << "_EOD_";
-/mnt/f/OneDrive/cov/COVID-19_NC.html
-/mnt/f/OneDrive/cov/COVID-19_ND.html
-/mnt/f/OneDrive/cov/who_situation_report_NC.html
-/mnt/f/OneDrive/cov/who_situation_report_ND.html
-/mnt/f/OneDrive/cov/COVID-19_rate_NC.html
-/mnt/f/OneDrive/cov/COVID-19_rate_ND.html
-/mnt/f/OneDrive/cov/COVID-19_ft_NC.html
-/mnt/f/OneDrive/cov/JapanPref.html
+COVID-19_NC.html
+COVID-19_ND.html
+COVID-19_NC-POP.html
+COVID-19_ND-POP.html
+who_situation_report_NC.html
+who_situation_report_ND.html
+COVID-19_rate_NC.html
+COVID-19_rate_ND.html
+COVID-19_ft_NC.html
+JapanPref.html
+JapanPref_total-ft.html
 _EOD_
 my @html_list = split("\n", $HTML_LIST);
 
 my $gfs =  $html_list[0];
-$gfs =~ s/$WIN_PATH/./;
 my $INDEX = << "_EOI_";
 <html>
 <head>
@@ -91,7 +94,6 @@ print FRAME "<H1>INDEX COVID-19</H1>\n";
 print FRAME "<ul type=\"disc\">\n";
 foreach my $p (@html_list){
 	my $relp = $p;
-	$relp =~ s/$WIN_PATH/./; 
 
 	print FRAME "<li><a href =\"$relp\" target=\"graph\">$relp</a></li>\n";
 }

@@ -1,5 +1,11 @@
 #!/usr/bin/perl
 #
+#	J.A.G JAPAN のデータから、日本の感染状況をFinatial Time LIKEなグラフ化する
+#		URL: https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv
+#
+#	USAGE:
+#		japan.pl [-dl] 
+#			-dl	データをダウンロードしたうえでグラフを作成
 #
 
 use strict;
@@ -84,12 +90,6 @@ my $src_ref = "J.A.G JAPAN : <a href=\"$src_url\"> $src_url</a>";
 my @PARAMS = (
     {ext => "#KIND# ALL Japan all FT (#LD#) $src", start_day => 0,  lank =>[0, 20] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", 
 		series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1, ymin => $ymin, additional_plot => $guide},
-#    {ext => "#KIND# Japan 01-05 (#LD#) $src", start_day => "02/15",  lank =>[0, 4] , exclusion => "Others", target => "", label_skip => 2, graph => "lines"},
-#    {ext => "#KIND# Japan 02-05 (#LD#) $src", start_day => "02/15",  lank =>[1, 4] , exclusion => "Others", target => "", label_skip => 2, graph => "lines"},
-#    {ext => "#KIND# Japan 06-10 (#LD#) $src", start_day => "02/15",  lank =>[5, 9] , exclusion => "Others", target => "", label_skip => 2, graph => "lines"},
-#    {ext => "#KIND# Japan 11-15 (#LD#) $src", start_day => "02/15",  lank =>[10, 14] , exclusion => "Others", target => "", label_skip => 2, graph => "lines"},
-#    {ext => "#KIND# Japan 16-20 (#LD#) $src", start_day => "02/15",  lank =>[15, 20] , exclusion => "Others", target => "", label_skip => 2, graph => "lines"},
-#    {ext => "#KIND# Japan 01-10 log (#LD#) $src", start_day => "02/15",  lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 2, graph => "lines", logscale => "y", average => 7},
 );
 my @csvlist = (
 	{ name => "New cases", csvf => $ft_jp, htmlf => $GRAPH_HTML, kind => "NC", src_ref => $src_ref, xlabel => "", ylabel => ""},

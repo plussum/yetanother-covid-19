@@ -9,6 +9,8 @@ use Exporter;
 use strict;
 use warnings;
 use Data::Dumper;
+use csvlib;
+use dp;
 
 my $DEBUG = 1;
 my $WIN_PATH = "";
@@ -17,7 +19,7 @@ sub	csvgpl
 {
 	my ($para) = @_;
  
-	$DEBUG = &valdef($para->{debug} , $DEBUG);
+	$DEBUG = csvlib::valdef($para->{debug} , $DEBUG);
 	if($DEBUG){
 		print "###### csvgpl #####\n";
 		open(PARA, "> param.txt") || die "param.txt";
@@ -26,7 +28,7 @@ sub	csvgpl
 	}
 
 
-	$WIN_PATH = &valdef($para->{win_path}, "./");
+	$WIN_PATH = csvlib::valdef($para->{win_path}, "./");
 	#$REPORT_CSVF = "$WIN_PATH/who_situation_report_"; # MODE#.csv";
 	#$GRAPH_HTML = "$WIN_PATH/who_situation_report_"; #MODE#.html";
 	my $PNG_PATH = "$WIN_PATH/" . $para->{data_rel_path}; #MODE#.html";
@@ -60,7 +62,7 @@ _EOCSS_
 
 	foreach my $p (@$grp){
 		# $p->{kind} = $clp->{name};
-		my ($png, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $p);
+		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $p);
 		print HTML "<img src=\"$IMG_PATH/$png\">\n";
 		print HTML "<br>\n";
 		if(defined $clp->{src_ref}){
@@ -75,6 +77,9 @@ _EOCSS_
 			print HTML "</TR>\n" if($l == $#legs || ($l % $TBL_SIZE) == ($TBL_SIZE - 1));
 		}
 		print HTML "</TABLE>";
+		print HTML "<span $class>";
+		print HTML "PNG:<a href=\"./cov_data/$png\">$png</a> CSV:<a type=\"text/plain\" href=\"./cov_data/$csv\">$csv</a> PLOT:<a href=\"./cov_data/$plot\">$plot</a>";
+		print HTML "</span>\n";
 		print HTML "<br><hr>\n";
 	}
 	print HTML "</BODY>\n";
@@ -89,7 +94,7 @@ sub	csv2graph
 {
 	my ($csvf, $png_path, $kind, $p) = @_;
 
-	print join(", ", $p->{ext}, $p->{start_day}, $p->{lank}[0], $p->{lank}[1], $p->{exclusion}), "\n" if($DEBUG > 1);
+	dp::dp join(", ", $p->{ext}, $p->{start_day}, $p->{lank}[0], $p->{lank}[1], $p->{exclusion}), "\n" if($DEBUG > 1);
 	
 	my $ext = $p->{ext};
 	$ext =~ s/#KIND#/$kind/;
@@ -101,12 +106,12 @@ sub	csv2graph
 
 	my $plot_pngf = $png_path . "/" . $fname . ".png";
 	my $plot_cmdf = $png_path . "/" . $fname . "-plot.txt";
-	my $plot_csvf = $png_path . "/" . $fname . "-plot.csv";
-	print $plot_pngf , "\n" if($DEBUG > 1);		#### 
-	print "SRC CSV [$csvf]\n" if($DEBUG);
-	print "DST CSV [$plot_csvf]\n" if($DEBUG);
-	print "DST CMD [$plot_cmdf]\n" if($DEBUG);
-	print "DST PNG [$plot_pngf]\n" if($DEBUG);
+	my $plot_csvf = $png_path . "/" . $fname . "-plot.csv.txt";
+	dp::dp $plot_pngf , "\n" if($DEBUG > 1);		#### 
+	dp::dp "SRC CSV [$csvf]\n" if($DEBUG);
+	dp::dp "DST CSV [$plot_csvf]\n" if($DEBUG);
+	dp::dp "DST CMD [$plot_cmdf]\n" if($DEBUG);
+	dp::dp "DST PNG [$plot_pngf]\n" if($DEBUG);
 
 #	$plot_pngf =~ s/[\(\) ]//g;
 	#
@@ -124,7 +129,7 @@ sub	csv2graph
 	}
 	shift(@COL);
 	shift(@COL);
-	print join(",", @COL), "\n";
+	dp::dp join(",", @COL), "\n" if($DEBUG > 2);
 
 	my $DATE_NUMBER = $#COL;
 	my $LAST_DATE = $COL[$DATE_NUMBER];
@@ -142,17 +147,17 @@ sub	csv2graph
 	my $COUNTRY_NUMBER = $l;
 
 	if($DEBUG > 1){
-		print "CSV: DATA\n";
-		print "     :" , join(",", @COL) , "\n";
+		dp::dp "CSV: DATA\n";
+		dp::dp "     :" , join(",", @COL) , "\n";
 		for($l = 0; $l < 5; $l++){		# $COUNTRY_NUMBER
-			print $DATA[$l][0] . ": ";
+			dp::dp $DATA[$l][0] . ": ";
 			for(my $i = 2; $i <= $DATE_NUMBER + 2; $i++){
 				# print "# " . $i . "  " . $COL[$i-2] .":" ;
 				print $DATA[$l][$i] , ",";
 			}
 			print "\n";
 		}
-		print "-" x 20 , "\n";
+		dp::dp "-" x 20 , "\n";
 	}
 
 	#
@@ -160,7 +165,7 @@ sub	csv2graph
 	#
 	my $std = defined($p->{start_day}) ? $p->{start_day} : 0;
 	if($std =~ /[0-9]+\/[0-9]+/){
-		my $n = &search_list($std, @COL);
+		my $n = csvlib::search_list($std, @COL);
 		#print ">>>> $std: $n " . $COL[$n-1] . "\n";
 		if($n > 0){
 			$std = $n - 1;
@@ -179,10 +184,10 @@ sub	csv2graph
 	my @exclusion = split(/,/, $p->{exclusion});	# 除外国
 	my @target = split(/,/, $p->{target});			# 明示的対象国
 
-	print "TARGET: " , $p->{target}, "  " . $#target, "\n" if($DEBUG > 1);
+	dp::dp "TARGET: " , $p->{target}, "  " . $#target, "\n" if($DEBUG > 1);
 
 	my @DATES = @COL[$std..$end];
-	print "DATES: ", join(",", @DATES) , "\n" if($DEBUG > 1);
+	dp::dp "DATES: ", join(",", @DATES) , "\n" if($DEBUG > 1);
 
 	my @LEGEND_KEYS = ();
 	my $MAX_COUNT = 0;
@@ -200,13 +205,13 @@ sub	csv2graph
 
 		my $tl = 0;
 		for(my $dn = 0; $dn < $dates; $dn++){
-			my $c = &valdef($DATA[$cn][$dn+$std+2], 0);
+			my $c = csvlib::valdef($DATA[$cn][$dn+$std+2], 0);
 			$COUNT_D{$country}[$dn] = $c;
 			$tl += $c;
 		}
 		$CTG{$country} = $tl;
 		$TOTAL{$country} = $DATA[$cn][1];
-		#print "$country : " . $TOTAL{$country} . "\n";
+		#dp::dp "$country : " . $TOTAL{$country} . "\n";
 	}
 
 	#
@@ -214,9 +219,9 @@ sub	csv2graph
 	#
 	my @Dataset = (\@DATES);
 	foreach my $country (sort {$CTG{$b} <=> $CTG{$a}} keys %CTG){
-		next if($#exclusion >= 0 && &search_list($country, @exclusion));
-		next if($#target >= 0 && $#exclusion >= 0 && ! &search_list($country, @target));
-		print "Yes, Target $CNT $tgcs $tgce\n" if($DEBUG > 1);
+		next if($#exclusion >= 0 && csvlib::search_list($country, @exclusion));
+		next if($#target >= 0 && $#exclusion >= 0 && ! csvlib::search_list($country, @target));
+		dp::dp "Yes, Target $CNT $tgcs $tgce\n" if($DEBUG > 1);
 
 		$CNT++;
 		next if($CNT < $tgcs || $CNT > $tgce);
@@ -227,17 +232,17 @@ sub	csv2graph
 		}
 		push(@Dataset, [@{$COUNT_D{$country}}]);
 		push(@COUNTRY, $country);
-		print "COUNT_D: ", join (",", @{$COUNT_D{$country}}) , "\n" if($DEBUG > 1);
+		dp::dp "COUNT_D: ", join (",", @{$COUNT_D{$country}}) , "\n" if($DEBUG > 1);
 	}
 
 	if($DEBUG > 1){
-		print "Dataset: " . $#Dataset, "\n";
-		print join(",", "", "", @{$Dataset[0]}), "\n";
+		dp::dp "Dataset: " . $#Dataset, "\n";
+		dp::dp join(",", "", "", @{$Dataset[0]}), "\n";
 		for (my $i = 1; $i <= $#Dataset; $i++){
 			print "Dataset[$i]:" . $Dataset[$i], "  ";
 			print join(",", "$i", $LEGEND_KEYS[$i-1], @{$Dataset[$i]}), "\n";
 		}
-		print "-" x 20 , "\n";
+		dp::dp "-" x 20 , "\n";
 	}
 
 	#
@@ -246,7 +251,10 @@ sub	csv2graph
 	my @record = ();
 	my $max_data = 0;
 	for(my $dt = 0; $dt <= $#DATES; $dt++){
-		my @data = ($DATES[$dt]);
+		my $dts  = $DATES[$dt];
+		$dts =~ s#([0-9]{4})([0-9]{2})([0-9]{2})#$1/$2/$3#;
+		#print "[[$DATES[$dt]][$dts]\n";
+		my @data = ($dts);
 		for (my $i = 1; $i <= $#Dataset; $i++){
 			my $v = $Dataset[$i][$dt];
 			my $country = $COUNTRY[$i-1];
@@ -293,7 +301,7 @@ sub	csv2graph
 	#
 	#	グラフ生成用のCSVの作成
 	#
-	print "#### " . $#record . ":$final_rec\n" if($DEBUG);
+	dp::dp "#### " . $#record . ":$final_rec\n" if($DEBUG);
 	open(DF, "> $plot_csvf") || die "cannot create $plot_csvf\n";
 	print DF join(",", "#", @LEGEND_KEYS), "\n";
 	for(my $i = 0; $i <= $final_rec; $i++){
@@ -311,14 +319,14 @@ sub	csv2graph
 	my $START_DATE = $DATES[0];
 	$LAST_DATE = $DATES[$#DATES];
 
-	my $DATE_FORMAT = "set xdata time\n set timefmt '%m/%d'\nset format x '%m/%d'\n";
+	my $DATE_FORMAT = "set xdata time\nset timefmt '%m/%d'\nset format x '%m/%d'\n";
 	my $XRANGE = "set xrange ['$START_DATE':'$LAST_DATE']";
 	if(defined $p->{series}){
 		$DATE_FORMAT = "";
 		$XRANGE = "set xrange [1:" . $final_rec . "]";
 	}
-	my $TERM_XSIZE = &valdef($p->{term_xsize}, 1000) ;
-	my $TERM_YSIZE = &valdef($p->{term_ysize}, 300);
+	my $TERM_XSIZE = csvlib::valdef($p->{term_xsize}, 1000) ;
+	my $TERM_YSIZE = csvlib::valdef($p->{term_ysize}, 300);
 
 my $PARAMS = << "_EOD_";
 set datafile separator ','
@@ -360,10 +368,10 @@ _EOD_
 	}
 	$PARAMS =~ s/#PLOT_PARAM#/$pn/;	
 
-	my $ymin = &valdef($p->{ymin}, "");
-	my $ymax = &valdef($p->{ymax}, "");
+	my $ymin = csvlib::valdef($p->{ymin}, "");
+	my $ymax = csvlib::valdef($p->{ymax}, "");
 	if(! $ymax ){
-		$ymax = &calc_max($max_data, defined $p->{logscale});
+		$ymax = csvlib::calc_max($max_data, defined $p->{logscale});
 	}
 	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/;	
 	my $logs = "nologscale";
@@ -372,7 +380,7 @@ _EOD_
 
 	my $xtics = 3600 * 24;
 	if(defined $p->{series}){
-		$xtics = &valdef($p->{y_label_skip}, 1);
+		$xtics = csvlib::valdef($p->{y_label_skip}, 1);
 	}
 	else {
 		if(defined $p->{label_skip}){
@@ -389,56 +397,10 @@ _EOD_
 	print ("gnuplot $plot_cmdf\n") if(1 || $DEBUG > 1);
 	system("gnuplot $plot_cmdf");
 
-	return ($fname . ".png", @LEGEND_KEYS);
+	$plot_pngf =~ s#.*/##;
+	$plot_cmdf =~ s#.*/##;
+	$plot_csvf =~ s#.*/##;
+#	return ("$fname.png", "$fname-plot.txt", "$fname-plot.csv", @LEGEND_KEYS);
+	return ($plot_pngf, $plot_cmdf, $plot_csvf, @LEGEND_KEYS);
 }
-
-sub	valdef
-{
-	my ($v, $d) = @_;
-	$d = 0 if(! defined $d);
-	
-	return defined $v ? $v : $d;
-}
-sub	valdefs
-{
-	my ($v, $d) = @_;
-	$d = "" if(! defined $d);
-	
-	return defined $v ? $v : $d;
-}
-
-
-sub search_list
-{
-    my ($country, @w) = @_;
-	my $n = 0;
-
-    foreach my $ntc (@w){
-        if($country =~ /$ntc/){
-            print "search_list: $country:$ntc\n" if($DEBUG > 1);
-            return $n+1;
-        }
-		$n++;
-    }
-    return "";
-}
-sub	calc_max
-{
-	my ($v, $log) = @_;
-
-	my $digit = int(log($v)/log(10));
-	my $max = 0;
-	if(!$log){
-		$max = (int(($v / 10**$digit)*10 + 9.999)/10) * 10**$digit;
-	}
-	else {
-		$max = 10**($digit+1);
-	}
-
-	# print "ymax:[$v:$max]\n";
-
-	return $max;
-
-}
-
 1;
