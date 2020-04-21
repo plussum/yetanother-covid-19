@@ -75,7 +75,6 @@ my $FT_PARAM = {
 	thresh => $THRESH_DAY,
 	delimiter => ",",
 };
-
 ft::ft($FT_PARAM);
 
 

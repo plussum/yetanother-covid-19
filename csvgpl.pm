@@ -29,11 +29,8 @@ sub	csvgpl
 
 
 	$WIN_PATH = csvlib::valdef($para->{win_path}, "./");
-	#$REPORT_CSVF = "$WIN_PATH/who_situation_report_"; # MODE#.csv";
-	#$GRAPH_HTML = "$WIN_PATH/who_situation_report_"; #MODE#.html";
 	my $PNG_PATH = "$WIN_PATH/" . $para->{data_rel_path}; #MODE#.html";
 	my $IMG_PATH = "./" . $para->{data_rel_path};
-	#$REPORT_MAIN = "$WIN_PATH/who_report_main2.html";
 
 	my $clp = $para->{clp};
 	my $grp = $para->{params};
@@ -144,6 +141,7 @@ sub	csv2graph
 		}
 	}
 	close(CSV);
+	
 	my $COUNTRY_NUMBER = $l;
 
 	if($DEBUG > 1){
@@ -205,7 +203,9 @@ sub	csv2graph
 
 		my $tl = 0;
 		for(my $dn = 0; $dn < $dates; $dn++){
-			my $c = csvlib::valdef($DATA[$cn][$dn+$std+2], 0);
+			my $p = $dn+$std+2;
+			my $c = csvlib::valdef($DATA[$cn][$p], 0);
+			#print "($dn:$std:$p:$c)";
 			$COUNT_D{$country}[$dn] = $c;
 			$tl += $c;
 		}
