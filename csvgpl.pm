@@ -80,14 +80,20 @@ _EOCSS_
 		print HTML "<span $class>";
 
 		my $csvf = $clp->{csvf};
+		my $srcf = csvlib::valdef($clp->{srcf}, "");
+		print $srcf , "\n";
 		$csvf =~ s#$WIN_PATH/##;
+		$srcf =~ s#$WIN_PATH/##;
 		my @refs = ("PNG:./cov_data:$png",
 					"CSV:./cov_data:$csv",
 					"PLT:./cov_data:$plot",
-					"REF:.:$csvf"
+					"REF:.:$csvf",
+					"SRC:.:$srcf",
 		);
+		dp::dp "##### SRC:[$srcf][" . $clp->{srcf} . "]\n";
 		foreach my $r (@refs){
 			my ($tag, $path, $fn) = split(":", $r);
+			#next if(! $fn);
 			print HTML "$tag:<a href=\"$path/$fn\">$fn</a>\n"; 
 		}
 		#print HTML "PNG:<a href=\"./cov_data/$png\">$png</a> CSV:<a type=\"text/plain\" href=\"./cov_data/$csv\">$csv</a> PLOT:<a href=\"./cov_data/$plot\">$plot</a>";

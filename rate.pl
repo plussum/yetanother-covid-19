@@ -135,11 +135,13 @@ my @PARAMS = (
 my $src_url = "https://github.com/beoutbreakprepared/nCoV2019";
 my $src_ref = "<a href=\"$src_url\">$src_url</a>";
 my @csvlist = (
-    { name => "COV19 RATE NEW CASE", csvf => $REPORT_CSVF, htmlf => $GRAPH_HTML, kind => "NC", src_ref => $src_ref },
+    { name => "COV19 RATE NEW CASE", csvf => $REPORT_CSVF, htmlf => $GRAPH_HTML, kind => "NC", src_ref => $src_ref, srcf => $IMF_CSVF },
 #    { name => "NEW DETH", csvf => $RATE_CSVF, htmlf => $GRAPH_HTML, kind => "ND"},
 );
 
 foreach my $clp (@csvlist){
+
+	dp::dp "##### SRC:[" . $clp->{srcf} . "]\n";
     my %params = (
         debug => $DEBUG,
         win_path => $WIN_PATH,
