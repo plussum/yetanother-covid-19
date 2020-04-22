@@ -159,6 +159,7 @@ sub	csv_aggregate
 	#
 	#	1日分のデータの出力
 	#
+	my $rn = 0;
 	my $aggr_mode = csvlib::valdefs($p->{aggr_mode}, "");
 	if(! $aggr_mode){
 		foreach my $sk (@sorted_select_items){
@@ -171,7 +172,7 @@ sub	csv_aggregate
 				push(@records, $count);
 				$total_count += $count;
 			}
-
+			$rn++;
 			print CSV join($DLM, $sk, $total_count, @records), "\n";
 		}
 	}
@@ -195,12 +196,15 @@ sub	csv_aggregate
 				push(@records, ($total_count / ($#date_list + 1)));
 			}
 		}
+		$rn++;
 		print CSV join($DLM, $aggr_mode, $agg_total, @records), "\n";
 	}
 	close(CSV);
 
 	print "### done sort : " . (time - $start_time) . "\n";
 	print join($DLM, "total", $count, $total), "\n";
+
+	return ($#date_list, $rn , $date_list[0], $date_list[$#date_list]) ;
 }
 
 #

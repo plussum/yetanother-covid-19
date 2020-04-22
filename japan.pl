@@ -18,8 +18,8 @@ my $DOWNLOAD = 0;
 my $src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv";
 my $WIN_PATH = "/mnt/f/OneDrive/cov";
 my $transaction = "$WIN_PATH/gis-jag-japan.csv.txt";
-my $GRAPH_HTML = "$WIN_PATH/JapanPref_total.html";
-my $aggregate = "$WIN_PATH/JapanPref_total.csv.txt";
+my $GRAPH_HTML = "$WIN_PATH/JapanPref.html";
+my $aggregate = "$WIN_PATH/JapanPref.csv.txt";
 
 #
 #	引数処理	
@@ -76,6 +76,9 @@ my @PARAMS = (
     {ext => "#KIND# Japan 16-20 (#LD#) $src", start_day => "02/15",  lank =>[15, 20] , exclusion => "Others", target => "", label_skip => 2, graph => "lines"},
     {ext => "#KIND# Japan 01-10 log (#LD#) $src", start_day => "02/15",  lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 2, graph => "lines",
 		 logscale => "y", average => 7},
+
+    {ext => "#KIND# taget cities  (#LD#) $src", start_day => "02/01",  lank =>[0, 99] , exclusion => "Others", 
+		target => "東京,大阪,神戸,北海道", label_skip => 2, graph => "lines"},
 );
 my @csvlist = (
 	{ name => "New cases", csvf => $aggregate, htmlf => $GRAPH_HTML, kind => "NC", src_ref => $src_ref, xlabel => "", ylabel => ""},

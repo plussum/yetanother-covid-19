@@ -29,6 +29,9 @@ if($gen){
 	system("./getwho.pl $gwflag");
 
 	system("./japan.pl $gwflag");
+	system("./jprate.pl $gwflag");
+	system("./jpft.pl $gwflag");
+	system("./jpcomp.pl $gwflag");
 }
 
 
@@ -41,13 +44,19 @@ COVID-19_NC.html
 COVID-19_ND.html
 COVID-19_rateNC.html
 COVID-19_ft_NC.html
+
 COVID-19_NC-POP.html
 COVID-19_ND-POP.html
+
 who_situation_report_NC.html
 who_situation_report_ND.html
 who_rateNC.html
+
 JapanPref.html
+japan_rateNC.html
 JapanPref_total-ft.html
+
+jpcomp.html
 _EOD_
 my @html_list = split("\n", $HTML_LIST);
 
@@ -95,7 +104,12 @@ print FRAME "<ul type=\"disc\">\n";
 foreach my $p (@html_list){
 	my $relp = $p;
 
-	print FRAME "<li><a href =\"$relp\" target=\"graph\">$relp</a></li>\n";
+	if($p){
+		print FRAME "<li><a href =\"$relp\" target=\"graph\">$relp</a></li>\n";
+	}
+	else {
+		print FRAME "<br>\n";
+	}
 }
 print FRAME "</ul>\n";
 print FRAME "</span>\n";

@@ -90,7 +90,7 @@ _EOCSS_
 					"REF:.:$csvf",
 					"SRC:.:$srcf",
 		);
-		dp::dp "##### SRC:[$srcf][" . $clp->{srcf} . "]\n";
+		#dp::dp "##### SRC:[$srcf][" . $clp->{srcf} . "]\n";
 		foreach my $r (@refs){
 			my ($tag, $path, $fn) = split(":", $r);
 			#next if(! $fn);
@@ -202,7 +202,7 @@ sub	csv2graph
 	$tgce = $COUNTRY_NUMBER if($tgce > $COUNTRY_NUMBER);
 
 	my @exclusion = split(/,/, $p->{exclusion});	# 除外国
-	my @target = split(/,/, $p->{target});			# 明示的対象国
+	my @target = split(/,/, csvlib::valdefs($p->{target}, ""));			# 明示的対象国
 
 	dp::dp "TARGET: " , $p->{target}, "  " . $#target, "\n" if($DEBUG > 1);
 

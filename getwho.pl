@@ -53,7 +53,7 @@ $DOWNLOAD = 1 if($dl);
 
 print ">> DOWNLOAD: $DOWNLOAD\n";
 
-my $REPORT_CSVF = "$WIN_PATH/who_situation_report_$MODE.csv";
+my $REPORT_CSVF = "$WIN_PATH/who_situation_report_$MODE.csv.txt";
 my $GRAPH_HTML = "$WIN_PATH/who_situation_report_$MODE.html";
 
 my $LAST_DATE = 0;
@@ -104,6 +104,9 @@ for(my $i = 0; $i <= $#HTML_LIST; $i++){
 		if($MODE eq "NC" || $MODE eq "ND"){
 			$c = &valdef($w[1]) if($MODE eq "NC");
 			$c = &valdef($w[3]) if($MODE eq "ND");
+			if($c =~ /transmission/ || $c =~ /[67][5289] /){
+				dp::dp "find trasnmission [$c][$txtd] $_\n";
+			}
 			$COUNTRY{$country} += $c;	# 累計
 		}
 		elsif($MODE eq "DR"){
@@ -134,7 +137,7 @@ my %NODATA = ();
 my @COL = ();
 my %COUNT_D = ();
 
-unlink($REPORT_CSVF) || die "cannot remove $REPORT_CSVF\n";
+unlink($REPORT_CSVF) || print STDERR "cannot remove $REPORT_CSVF\n";
 open(CSV, ">$REPORT_CSVF") || die "cannot create $REPORT_CSVF\n";
 
 foreach my $dt (sort keys %DATES){
@@ -222,13 +225,14 @@ my @PARAMS = (
     {ext => "#KIND# 2weeks 51-60 (#LD#) $src", start_day => -14, lank =>[50,59] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
     {ext => "#KIND# 2weeks 61-70 (#LD#) $src", start_day => -14, lank =>[60,69] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
     {ext => "#KIND# 2weeks 71-80 (#LD#) $src", start_day => -14, lank =>[70,79] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# Japan-122 (#LD#) $src", start_day => 0, lank =>[0, 9999] , exclusion => $EXCLUSION, target => "Japan", label_skip => 3, graph => "bars"},
+
+    {ext => "#KIND# Japan 0301 (#LD#) $src", start_day => "03/01", lank =>[0, 9999] , exclusion => $EXCLUSION, target => "Japan", label_skip => 2, graph => "lines"},
 );
 my $src_url = "https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports";
 my $src_ref = "WHO SITUATION REPORT: <a href=\"$src_url\"> $src_url</a>";
 my @csvlist = (
-    { name => "WHO CASES NEW", csvf => $REPORT_CSVF, htmlf => $GRAPH_HTML, kind => "NC", src_ref => $src_ref},
-    { name => "WHO DEATHS NEW", csvf => $REPORT_CSVF, htmlf => $GRAPH_HTML, kind => "ND", src_ref => $src_ref},
+    { name => "WHO CASES NEW", csvf => $REPORT_CSVF, htmlf => $GRAPH_HTML, kind => "NC", src_ref => $src_ref, srcf => $REPORT_CSVF},
+    { name => "WHO DEATHS NEW", csvf => $REPORT_CSVF, htmlf => $GRAPH_HTML, kind => "ND", src_ref => $src_ref, srcf => $REPORT_CSVF},
 );
 
 foreach my $clp (@csvlist){

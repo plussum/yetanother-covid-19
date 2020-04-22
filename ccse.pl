@@ -129,6 +129,8 @@ my @PARAMS = (
 	{ext => "$mode Focusing area from 0301 $TD",   start_day => 39, lank =>[0, 99] , exclusion => $EXCLUSION, 
 		target => "Russia,Canada,Ecuador,Brazil,India", label_skip => 3, graph => "lines"},
 	{ext => "$mode no China US -211 no China US $TD", start_day => 0, lank =>[0, 19] , exclusion => "Others,China,US", target => "", label_skip => 3, graph => "lines"},
+
+	{ext => "$mode Japan from 0301 $TD",   start_day => "03/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", label_skip => 2, graph => "lines"},
 );
 
 my $EXC_POP = "San Marino,Holy See";

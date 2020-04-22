@@ -105,7 +105,7 @@ $TD =~ s#/#.#g;
 my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
 
 my $EXCLUSION = "Others";
-my $R0_LINE = "1 with lines dt \"-\" title 'R0=0'";
+my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
 my @PARAMS = (
 	{ext => "$mode Japan 0123 $TD", start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
 		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
@@ -131,6 +131,9 @@ my @PARAMS = (
 		label_skip => 1, graph => "lines", ymax => "", additional_plot => $R0_LINE},
 	{ext => "$mode TOP 10 1w $TD",   start_day => -7, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", 
 		label_skip => 1, graph => "lines", ymax => "", additional_plot => $R0_LINE},
+
+	{ext => "$mode Japan  $TD",   start_day => "03/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
+		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
 );
 my $src_url = "https://github.com/beoutbreakprepared/nCoV2019";
 my $src_ref = "<a href=\"$src_url\">$src_url</a>";

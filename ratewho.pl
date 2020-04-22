@@ -106,6 +106,9 @@ my @PARAMS = (
 		label_skip => 1, graph => "lines", ymax => "", additional_plot => $R0_LINE},
 	{ext => "$mode TOP 10 1w $TD",   start_day => -7, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", 
 		label_skip => 1, graph => "lines", ymax => "", additional_plot => $R0_LINE},
+
+	{ext => "$mode Japan 03/01 $TD",   start_day => "03/01", lank =>[0, 999] , exclusion => $EXCLUSION, target => "Japan", 
+		label_skip => 2, graph => "lines", ymax => "", additional_plot => $R0_LINE},
 );
 my $src_url = $WHO_PAGE;
 my $src_ref = "<a href=\"$src_url\">$src_url</a>";
