@@ -59,8 +59,8 @@ else {
 #
 #	 John Hopkins CCSEを標準のCSVに変換
 #
-my $IMF_CSVF = "$WIN_PATH/cov_daily_im_rate$MODE" . ".csv";
-my $REPORT_CSVF = "$WIN_PATH/cov_daily_rate$MODE" . ".csv";
+my $IMF_CSVF = "$WIN_PATH/cov_daily_im_rate$MODE" . ".csv.txt";
+my $REPORT_CSVF = "$WIN_PATH/cov_daily_rate$MODE" . ".csv.txt";
 my $GRAPH_HTML = "$WIN_PATH/COVID-19_rate$MODE" . ".html";
 my $PARAM = {
 	input_file => $file,

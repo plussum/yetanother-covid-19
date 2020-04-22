@@ -55,11 +55,14 @@ _EOCSS_
 	print HTML $CSS;
 	print HTML "</HEAD>\n";
 	print HTML "<BODY>\n";
+	my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
+
 	#print HTML "SOURCE: <a href = \"$WHO_PAGE\"> WHO situation Reports</a>\n<br>\n";
 
 	foreach my $p (@$grp){
 		# $p->{kind} = $clp->{name};
 		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $p);
+		print HTML "<span class=\"c\">$now</span><br>\n";
 		print HTML "<img src=\"$IMG_PATH/$png\">\n";
 		print HTML "<br>\n";
 		if(defined $clp->{src_ref}){
@@ -75,7 +78,19 @@ _EOCSS_
 		}
 		print HTML "</TABLE>";
 		print HTML "<span $class>";
-		print HTML "PNG:<a href=\"./cov_data/$png\">$png</a> CSV:<a type=\"text/plain\" href=\"./cov_data/$csv\">$csv</a> PLOT:<a href=\"./cov_data/$plot\">$plot</a>";
+
+		my $csvf = $clp->{csvf};
+		$csvf =~ s#$WIN_PATH/##;
+		my @refs = ("PNG:./cov_data:$png",
+					"CSV:./cov_data:$csv",
+					"PLT:./cov_data:$plot",
+					"REF:.:$csvf"
+		);
+		foreach my $r (@refs){
+			my ($tag, $path, $fn) = split(":", $r);
+			print HTML "$tag:<a href=\"$path/$fn\">$fn</a>\n"; 
+		}
+		#print HTML "PNG:<a href=\"./cov_data/$png\">$png</a> CSV:<a type=\"text/plain\" href=\"./cov_data/$csv\">$csv</a> PLOT:<a href=\"./cov_data/$plot\">$plot</a>";
 		print HTML "</span>\n";
 		print HTML "<br><hr>\n";
 	}
@@ -370,7 +385,7 @@ _EOD_
 
 	my $ymin = csvlib::valdef($p->{ymin}, "");
 	my $ymax = csvlib::valdef($p->{ymax}, "");
-	if(! $ymax ){
+	if(! $ymax && defined $p->{logscale}){
 		$ymax = csvlib::calc_max($max_data, defined $p->{logscale});
 	}
 	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/;	

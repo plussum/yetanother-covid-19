@@ -97,7 +97,7 @@ sub	rate
 	#
 	my $rate_term = $date_number - $ip - $lp;
 	open(RATE, "> " . $p->{output_file}) || die "Cannot create " . $p->{output_file} ;
-	print RATE join($dlm, "Country", "Total", @DATE_LIST[0..$rate_term]), "\n";
+	print RATE join($dlm, "Country", "Total", @DATE_LIST[0..($rate_term-1)]), "\n";
 	for(my $cn = 0; $cn <= $#COUNTRY_LIST; $cn++){
 		my $country = $COUNTRY_LIST[$cn];
 

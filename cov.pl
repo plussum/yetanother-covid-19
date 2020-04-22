@@ -39,13 +39,12 @@ my $DIR = "/mnt/f/OneDrive/cov";
 my $HTML_LIST = << "_EOD_";
 COVID-19_NC.html
 COVID-19_ND.html
+COVID-19_rateNC.html
+COVID-19_ft_NC.html
 COVID-19_NC-POP.html
 COVID-19_ND-POP.html
 who_situation_report_NC.html
 who_situation_report_ND.html
-COVID-19_rate_NC.html
-COVID-19_rate_ND.html
-COVID-19_ft_NC.html
 JapanPref.html
 JapanPref_total-ft.html
 _EOD_
