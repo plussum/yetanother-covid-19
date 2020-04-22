@@ -83,7 +83,7 @@ my ($colum, $record , $start_day, $last_day) = jhccse::jhccse($PARAM);
 #		source		https://qiita.com/oki_mebarun/items/e68b34b604235b1f28a1
 #
 my $ip = 5;			# 5 潜伏期間
-my $lp = 8;			# 8 感染期間
+my $lp = 10;			# 8 感染期間
 my $average_date = 7;
 my $RATE_PARAM = {
 	input_file => $IMF_CSVF,
@@ -107,7 +107,9 @@ my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
 my $EXCLUSION = "Others";
 my $R0_LINE = "1 with lines dt \"-\" title 'R0=0'";
 my @PARAMS = (
-	{ext => "$mode Japan 0301 $TD", start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
+	{ext => "$mode Japan 0123 $TD", start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
+		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
+	{ext => "$mode Japan 0301 $TD", start_day => "03/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
 		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
 	{ext => "$mode Japan 3weeks $TD",   start_day => -21, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan",
 		 label_skip => 1, graph => "lines", additional_plot => $R0_LINE, ymin => 0},

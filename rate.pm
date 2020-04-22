@@ -66,7 +66,7 @@ sub	rate
 	#	平均に変換
 	#
 	for(my $cn = 0; $cn <= $#COUNTRY_LIST; $cn++){
-		print "RAW: " . join(",", @{$IMF_DATA[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);
+		#print "RAW: " . join(",", @{$IMF_DATA[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);
 		for(my $dt = 0; $dt < $date_number; $dt++){
 			my $total = 0;
 			my $half = int($avr / 2);
@@ -89,7 +89,7 @@ sub	rate
 			my $a = int(1000 * $total / $avr) / 1000;
 			$AVERAGE[$cn][$dt] = $a;
 		}
-		print "AVR: " . join(",", @{$AVERAGE[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);
+		#print "AVR: " . join(",", @{$AVERAGE[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);
 	}
 
 	#
@@ -117,7 +117,7 @@ sub	rate
 			}
 		}
 		print RATE join($dlm, @{$RATE[$cn]}), "\n";
-		print "R0 : " . join(",", @{$RATE[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);
+		#print "R0 : " . join(",", @{$RATE[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);
 	}
 	close(RATE);
 

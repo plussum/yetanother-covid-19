@@ -84,12 +84,13 @@ sub	date2ut
 
 sub search_list
 {
-    my ($country, @w) = @_;
+    my ($sk, @w) = @_;
 
-    foreach my $ntc (@w){
-        if($country =~ /$ntc/){
-            # print "search_list: $country:$ntc\n" ;
-            return 1;
+    for(my $i = 0; $i <= $#w; $i++){
+		my $ntc = $w[$i];
+        if($sk =~ /$ntc/){
+            #print "search_list: $sk:$ntc\n" ;
+            return $i + 1;
         }
     }
     return "";

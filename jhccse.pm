@@ -51,8 +51,15 @@ sub	jhccse
 	#
 	$_ = <FD>; chop;
 	my @COL = ();
-	for(split(/,/, $_)){
-		s#/[0-9]+$##;		# Date Format 2/10/20 -> 2/10 
+	my @w = split(/,/, $_);
+	
+	for (@w[4..$#w]){
+		#s#/[0-9]+$##;		# Date Format 2/10/20 -> 2/10 
+		my ($m, $d, $y) = split(/\//, $_);
+		#dp::dp "[$_]($y,$m,$d)";
+		#$_ = sprintf("%04d/%02d/%02d", $y + 2000, $m, $d);
+		$_ = sprintf("%02d/%02d", $m, $d);
+		
 		push(@COL, $_);
 	}
 	my $ITEMS = $#COL;		# $ITEMS はCSVのカラム数（全数）
@@ -121,7 +128,6 @@ sub	jhccse
 		next if($country =~ /Diamond Princess/ || $country =~ /MS Zaandam/);	# 国以外のデータを除外
 		next if(! $country || !$country =~ /^[A-Za-z]/);						# エラーデータの除外
 
-		print CSV $country. $DLM . $COUNTRY{$country}. $DLM;					# 国、トータル
 		dp::dp (join(", ", $country, $COUNTRY{$country}, @{$COUNT{$country}}[0..$#COL]), "\n")  if($ln < 3 && $DEBUG > 1);
 
 		for(my $dt = 0; $dt <= $#COL; $dt++){
@@ -137,7 +143,8 @@ sub	jhccse
 			}
 			$COUNT_D{$country}[$dt] = $dtn;										# データを COUNT_D セット
 		}
-		print CSV join($DLM, @{$COUNT_D{$country}}), "\n";						# 1行分（国）のデータの出力
+		#print CSV $country. $DLM . $COUNTRY{$country}. $DLM;					# 国、トータル
+		print CSV join($DLM, $country, $COUNTRY{$country}, @{$COUNT_D{$country}}), "\n";						# 1行分（国）のデータの出力
 		dp::dp (join(", ", $country, $COUNTRY{$country}, @{$COUNT_D{$country}}[0..$#COL]), "\n" x 2 ) if($ln < 3 && $DEBUG > 1);
 		$ln++;
 	}

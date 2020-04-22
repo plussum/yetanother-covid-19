@@ -57,7 +57,7 @@ my $REPORT_CSVF = "$WIN_PATH/who_daily_rate$MODE" . ".csv.txt";
 my $GRAPH_HTML = "$WIN_PATH/who_rate$MODE" . ".html";
 
 my $ip = 5;			# 5 潜伏期間
-my $lp = 8;			# 8 感染期間
+my $lp = 10;			# 8 感染期間
 my $average_date = 7;
 
 my $RATE_PARAM = {

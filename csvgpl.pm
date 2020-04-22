@@ -179,7 +179,8 @@ sub	csv2graph
 	my $std = defined($p->{start_day}) ? $p->{start_day} : 0;
 	if($std =~ /[0-9]+\/[0-9]+/){
 		my $n = csvlib::search_list($std, @COL);
-		#print ">>>> $std: $n " . $COL[$n-1] . "\n";
+		#dp::dp ">>>> $std: $n " . $COL[$n-1] . "\n";
+		#dp::dp ">>> " . join(",", @COL) . "\n";
 		if($n > 0){
 			$std = $n - 1;
 		}

@@ -103,7 +103,7 @@ sub	csv_aggregate
 			next if(!$dt_raw);
 
 			my $tm = csvlib::date2ut($dt_raw, "/", @date_fmt);
-			$date_ymd{$dt_raw} = csvlib::ut2d($tm, "");				# 変換が重いので、連想配列に記録
+			$date_ymd{$dt_raw} = csvlib::ut2d4($tm, "");				# 変換が重いので、連想配列に記録
 
 			$date_start = $tm if($tm < csvlib::valdef($date_start, 999999999));	# データ中の最初の日と
 			$date_final = $tm if($tm > csvlib::valdef($date_final, 0));			# 最後の日を抽出
@@ -127,7 +127,7 @@ sub	csv_aggregate
 	#
 	print "### make no data date \n";
 	for(my $tm = $date_start; $tm <= $date_final; $tm += 60 * 60 * 24){
-		my $ymd = csvlib::ut2d($tm, "");
+		my $ymd = csvlib::ut2d4($tm, "");
 		push(@date_list, $ymd);
 	}
 
