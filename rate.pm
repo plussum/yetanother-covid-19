@@ -120,6 +120,8 @@ sub	rate
 		print "R0 : " . join(",", @{$RATE[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);
 	}
 	close(RATE);
+
+	return ($#COUNTRY_LIST, $rate_term, $DATE_LIST[0], $DATE_LIST[$rate_term]);
 }
 
 1;

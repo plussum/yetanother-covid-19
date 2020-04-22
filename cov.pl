@@ -45,6 +45,7 @@ COVID-19_NC-POP.html
 COVID-19_ND-POP.html
 who_situation_report_NC.html
 who_situation_report_ND.html
+who_rateNC.html
 JapanPref.html
 JapanPref_total-ft.html
 _EOD_
