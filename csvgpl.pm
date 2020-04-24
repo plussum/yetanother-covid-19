@@ -67,6 +67,7 @@ _EOCSS_
 		}
 		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $p);
 
+		print HTML "<!-- " . $p->{ext} . " -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
 		print HTML "<img src=\"$IMG_PATH/$png\">\n";
 		print HTML "<br>\n";
@@ -101,9 +102,8 @@ _EOCSS_
 			#next if(! $fn);
 			print HTML "$tag:<a href=\"$path/$fn\">$fn</a>\n"; 
 		}
-		#print HTML "PNG:<a href=\"./cov_data/$png\">$png</a> CSV:<a type=\"text/plain\" href=\"./cov_data/$csv\">$csv</a> PLOT:<a href=\"./cov_data/$plot\">$plot</a>";
 		print HTML "</span>\n";
-		print HTML "<br><hr>\n";
+		print HTML "<br><hr>\n\n";
 	}
 	print HTML "</BODY>\n";
 	print HTML "</HTML>\n";
@@ -119,8 +119,10 @@ sub	csv2graph
 
 	dp::dp join(", ", $p->{ext}, $p->{start_day}, $p->{lank}[0], $p->{lank}[1], $p->{exclusion}), "\n" if($DEBUG > 1);
 	
+	my $src = csvlib::valdefs($p->{src}, "");
 	my $ext = $p->{ext};
 	$ext =~ s/#KIND#/$kind/;
+	$ext =~ s/#SRC#/$src/;
 	my $fname = $ext;
 	$fname =~ s/#LD#//;
 	$fname =~ s#/#-#g;
@@ -218,7 +220,6 @@ sub	csv2graph
 
 	my @LEGEND_KEYS = ();
 	my $MAX_COUNT = 0;
-	my $CNT = -1;
 	my %CTG = ();
 	my %COUNT_D = ();
 	my %TOTAL = ();
@@ -249,7 +250,10 @@ sub	csv2graph
 	#	グラフ用の配列の作成
 	#
 	my @Dataset = (\@DATES);
+	my $CNT = -1;
+	my $rn = 0;
 	foreach my $country (sort {$CTG{$b} <=> $CTG{$a}} keys %CTG){
+		$rn++;
 		next if($#exclusion >= 0 && csvlib::search_list($country, @exclusion));
 		next if($#target >= 0 && $#exclusion >= 0 && ! csvlib::search_list($country, @target));
 		dp::dp "Yes, Target $CNT $tgcs $tgce\n" if($DEBUG > 1);
@@ -262,7 +266,7 @@ sub	csv2graph
 			#dp::dp "[$cr] $country:" . join(",", @add_target) . "\n";
 		}
 
-		push(@LEGEND_KEYS, sprintf("%02d:%s", $CNT+1, $country));
+		push(@LEGEND_KEYS, sprintf("%02d:%s", $rn, $country));
 		foreach my $dtn (@{$COUNT_D{$country}}){
 			$MAX_COUNT = $dtn if(defined $dtn && $dtn > $MAX_COUNT);
 		}
