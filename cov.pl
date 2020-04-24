@@ -23,7 +23,7 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 
 if($gen){
 	system("(cd ../COVID-19; git pull origin master)") if($download);
-	system("./ccse.pl");
+	system("./ccse.pl -all");
 
 	my $gwflag = ($download) ? "-dl" : "";
 	system("./getwho.pl $gwflag");

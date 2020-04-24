@@ -91,21 +91,21 @@ my $ymin = '10';
 #my $EXCLUSION = "Others,China,USA";
 my $EXCLUSION = "Others";
 my @PARAMS = (
-	{ext => "$mode TOP5 $TD", start_day => 0, lank =>[0, 5] , exclusion => $EXCLUSION, 
-		target => "", label_skip => 2, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, 
-		ft => 1, ymin => $ymin, additional_plot => $guide},
-	{ext => "$mode Japn Koria FT $TD", start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, 
-		target => "Japan,Korea- South", label_skip => 2, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, 
-		ft => 1, ymin => $ymin, additional_plot => $guide},
 	{ext => "$mode Japan and others FT $TD", start_day => 0, lank =>[0, 999] , exclusion => $EXCLUSION, 
 			target => "Japan,Korea- South,US,Spain,Italy,France,Germany,United Kingdom,Iran,Turkey,Belgium,Switzeland",
 		 	label_skip => 2, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1,  ymin => $ymin, additional_plot => $guide},
+	{ext => "$mode TOP5 $TD", start_day => 0, lank =>[0, 5] , exclusion => $EXCLUSION, 
+		target => "", label_skip => 2, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, 
+		ft => 1, ymin => $ymin, additional_plot => $guide},
 	{ext => "$mode TOP10 $TD", start_day => 0, lank =>[0, 10] , exclusion => $EXCLUSION, target => "", 
 		label_skip => 7, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600,
 		 ft => 1, ymin => $ymin, additional_plot => $guide},
 	{ext => "$mode 10-20 $TD", start_day => 0, lank =>[10, 19] , exclusion => $EXCLUSION, 
 		target => "", label_skip => 7, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600,
 		 ft => 1, ymin => $ymin, additional_plot => $guide},
+	{ext => "$mode Japn Koria FT $TD", start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, 
+		target => "Japan,Korea- South", label_skip => 2, graph => "lines", series => 1, average => 7, logscale => "y", term_ysize => 600, 
+		ft => 1, ymin => $ymin, additional_plot => $guide},
 );
 my @csvlist = (
     { name => "NEW CASE", csvf => $FT_CSVF, htmlf => $GRAPH_HTML, kind => "NC"},

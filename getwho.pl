@@ -96,6 +96,7 @@ for(my $i = 0; $i <= $#HTML_LIST; $i++){
 		$country = "Iran" if($country =~ /Iran/);
 		$country = "USA"  if($country =~ /United States of America/);
 		$country = "UK"  if($country =~ /The United Kingdom/);
+		$country =~ s/ *transmission *//;
 		print "### COUNTRY($date):" . join(",", $region, $country, @w) . " \n" if($country =~ /^[0-9]+$/);
 
 		my $k = join("\t", $date, $country);
@@ -195,36 +196,44 @@ close(CSV);
 #
 #	Create graph and HTML by Lib
 #
-my $src = "src WHO";
+my $src = "src WHO situation report";
 my $EXCLUSION = "Others,China,USA";
+
 my @PARAMS = (
-    {ext => "#KIND# all-122 with US(#LD#) $src", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 3, graph => "lines"},
-    {ext => "#KIND# all-122 log TOP 5(#LD#) $src", start_day => 0,  lank =>[0, 4] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", logscale => "y", average => 5},
-    {ext => "#KIND# all-122 log TOP 20(#LD#) $src", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", logscale => "y", average => 5},
-    {ext => "#KIND# Japan (#LD#) $src", start_day => 0,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 3, graph => "lines", average => 5},
-    {ext => "#KIND# Japan (#LD#) log $src", start_day => 0,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 3, graph => "lines", logscale => "y", average => 5},
+    {ext => "#KIND# all with US(#LD#) $src", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 3, graph => "lines"},
+	{ext => "#KIND# TOP5+Japan(#LD#) $src", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", add_target => "Japan"},
+	{ext => "#KIND# TOP5+Japan(wo US)(#LD#) $src", start_day => 0, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", add_target => "Japan"},
 
-    {ext => "#KIND# all-122 (#LD#) $src", start_day => 0, lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# Japan (#LD#) $src", start_day => 0,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# Japan 3weeks (#LD#) $src", start_day => -21,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 1, graph => "lines"},
 
-#   {ext => "$PP#KIND# Taiwan (#LD#) $src", start_day => 0,  lank =>[0, 999] , exclusion => $EXCLUSION, target => "Taiwan,Japan", label_skip => 3, graph => "lines"},
-#   {ext => "$PP#KIND# China (#LD#) $src", start_day => 0,  lank =>[0, 19] , exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# TOP20-122 (#LD#) $src", start_day => 0, lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", term_ysize => 600},
 
-    {ext => "#KIND# 01-05 from 0301 (#LD#) $src",   start_day => 0, lank =>[0,  4] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-    {ext => "#KIND# 06-10 from 0301 (#LD#) $src",   start_day => 0, lank =>[5,  9] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-    {ext => "#KIND# 01-10 from 0301 (#LD#) $src",   start_day => 0, lank =>[0,  9] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-    {ext => "#KIND# 11-20 from 0301 (#LD#) $src",   start_day => 0, lank =>[10, 19] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-    {ext => "#KIND# 21-30 from 0301 (#LD#) $src",   start_day => 0, lank =>[20, 29] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-    {ext => "#KIND# 31-40 from 0301 (#LD#) $src",   start_day => 0, lank =>[30, 39] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-    {ext => "#KIND# 41-50 from 0301 (#LD#) $src",   start_day => 0, lank =>[40, 49] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-    {ext => "#KIND# 2weeks 01-05 (#LD#) $src", start_day => -14, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", graph => "lines"},
-    {ext => "#KIND# 2weeks 05-10 (#LD#) $src", start_day => -14, lank =>[5, 9] , exclusion => $EXCLUSION, target => "", graph => "lines"},
-    {ext => "#KIND# 2weeks 11-20 (#LD#) $src", start_day => -14, lank =>[10,19] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 2weeks 21-30 (#LD#) $src", start_day => -14, lank =>[20,29] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 2weeks 31-40 (#LD#) $src", start_day => -14, lank =>[30,39] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 2weeks 41-50 (#LD#) $src", start_day => -14, lank =>[40,49] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 2weeks 51-60 (#LD#) $src", start_day => -14, lank =>[50,59] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 2weeks 61-70 (#LD#) $src", start_day => -14, lank =>[60,69] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 2weeks 71-80 (#LD#) $src", start_day => -14, lank =>[70,79] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 01-05 from 0301 (#LD#) $src",   start_day => "03/01", lank =>[0,  4] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# 06-10 from 0301 (#LD#) $src",   start_day => "03/01", lank =>[5,  9] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# 11-20 from 0301 (#LD#) $src",   start_day => "03/01", lank =>[10, 19] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# 21-30 from 0301 (#LD#) $src",   start_day => "03/01", lank =>[20, 29] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# 31-40 from 0301 (#LD#) $src",   start_day => "03/01", lank =>[30, 39] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# 41-50 from 0301 (#LD#) $src",   start_day => "03/01", lank =>[40, 49] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+
+    {ext => "#KIND# 3weeks 01-05 (#LD#) $src", start_day => -21, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 3weeks 06-10 (#LD#) $src", start_day => -21, lank =>[5, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 3weeks 11-20 (#LD#) $src", start_day => -21, lank =>[10,19] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 3weeks 21-30 (#LD#) $src", start_day => -21, lank =>[20,29] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 3weeks 31-40 (#LD#) $src", start_day => -21, lank =>[30,39] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 3weeks 41-50 (#LD#) $src", start_day => -21, lank =>[40,49] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 3weeks 51-60 (#LD#) $src", start_day => -21, lank =>[50,59] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 3weeks 61-70 (#LD#) $src", start_day => -21, lank =>[60,69] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 3weeks 71-80 (#LD#) $src", start_day => -21, lank =>[70,79] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
+
+	{ext => "#KIND# all-211 ALL logscale (#LD#) $src", start_day => 0, lank =>[0, 19] , exclusion => "Others", target => "", additional_target => "Japan",
+		label_skip => 3, graph => "lines", logscale => "y", average => 5, add_target => "Japan"},
+	{ext => "#KIND# TOP10 -211 ALL logscale (#LD#) $src", start_day => 0, lank =>[0, 9] , exclusion => "Others", target => "", additional_target => "Japan",
+		label_skip => 3, graph => "lines", logscale => "y", average => 5, add_target => "Japan"},
+	{ext => "#KIND# TOP5 -211 ALL logscale (#LD#) $src", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", additional_target => "Japan",
+		label_skip => 3, graph => "lines", logscale => "y", average => 5, add_target => "Japan"},
+    {ext => "#KIND# Taiwan (#LD#) $src", start_day => 0,  lank =>[0, 999] , exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
+#    {ext => "$PP#KIND# China (#LD#) $src", start_day => 0,  lank =>[0, 19] , exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
 
     {ext => "#KIND# Japan 0301 (#LD#) $src", start_day => "03/01", lank =>[0, 9999] , exclusion => $EXCLUSION, target => "Japan", label_skip => 2, graph => "lines"},
 );
@@ -360,11 +369,11 @@ sub	molding
 		elsif(defined $w[0]){
 			if($LAST_W > 1){
 				$RECORD[$ln-1][1] .= " " . $w[0];
-				print "#PRE:$LAST_W# $RECORD[$ln-1][1]\n" if(1 || $DEBUG);
+				print "#PRE:$LAST_W# $RECORD[$ln-1][1]\n" if($DEBUG);
 			}
 			else {
 				$post_c .= $w[0];   #  $_ ;
-				print "#POST:$LAST_W# $post_c\n" if(1 || $DEBUG);
+				print "#POST:$LAST_W# $post_c\n" if($DEBUG);
 			}
 		}
 		last if($dataf == 3);
@@ -377,7 +386,7 @@ sub	molding
 	for(my $n = 0; $n < $ln; $n++){
 		print "## $n $RECORD[$n]\n" if($DEBUG);
 		my @w = @{$RECORD[$n]};
-		print TXD join(",", @w), "\n";
+		print TXD join(",", @w[0..5]), "\n";
 		print join(",", @w), "\n" if($DEBUG);
 
 	}

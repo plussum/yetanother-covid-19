@@ -61,7 +61,12 @@ _EOCSS_
 
 	foreach my $p (@$grp){
 		# $p->{kind} = $clp->{name};
+		if($p->{ext} eq "EOD"){
+			print "#### EOD ###\n";
+			last;
+		}
 		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $p);
+
 		print HTML "<span class=\"c\">$now</span><br>\n";
 		print HTML "<img src=\"$IMG_PATH/$png\">\n";
 		print HTML "<br>\n";
@@ -203,8 +208,10 @@ sub	csv2graph
 
 	my @exclusion = split(/,/, $p->{exclusion});	# 除外国
 	my @target = split(/,/, csvlib::valdefs($p->{target}, ""));			# 明示的対象国
+	my @add_target = split(/,/, csvlib::valdefs($p->{add_target}, ""));	# 追加する対象国
 
 	dp::dp "TARGET: " , $p->{target}, "  " . $#target, "\n" if($DEBUG > 1);
+	dp::dp "ADD_TARGET: " , $p->{add_target}, "  " . $#add_target, "\n" if($DEBUG > 1);
 
 	my @DATES = @COL[$std..$end];
 	dp::dp "DATES: ", join(",", @DATES) , "\n" if($DEBUG > 1);
@@ -227,7 +234,9 @@ sub	csv2graph
 		for(my $dn = 0; $dn < $dates; $dn++){
 			my $p = $dn+$std+2;
 			my $c = csvlib::valdef($DATA[$cn][$p], 0);
-			#print "($dn:$std:$p:$c)";
+			if($c =~ /[^0-9]\-\./){
+				dp::dp "($dn:$std:$p:$c:$csvf)\n";
+			}
 			$COUNT_D{$country}[$dn] = $c;
 			$tl += $c;
 		}
@@ -246,7 +255,12 @@ sub	csv2graph
 		dp::dp "Yes, Target $CNT $tgcs $tgce\n" if($DEBUG > 1);
 
 		$CNT++;
-		next if($CNT < $tgcs || $CNT > $tgce);
+		if($CNT < $tgcs || $CNT > $tgce){
+			next if($#add_target < 0);
+			next if(! csvlib::search_list($country, @add_target));
+			#my $cr = csvlib::search_list($country, @add_target);
+			#dp::dp "[$cr] $country:" . join(",", @add_target) . "\n";
+		}
 
 		push(@LEGEND_KEYS, sprintf("%02d:%s", $CNT+1, $country));
 		foreach my $dtn (@{$COUNT_D{$country}}){
@@ -361,7 +375,7 @@ set key below
 # second ax
 #set y2tics
 #
-set title '$TITLE'
+set title '$TITLE' font "IPAexゴシック,12" enhanced
 set xlabel '$XLABEL'
 set ylabel '$YLABEL'
 #
