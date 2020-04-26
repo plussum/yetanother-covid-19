@@ -75,7 +75,7 @@ dp::dp $REPORT_CSVF . "\n";
 #	グラフとHTMLの作成
 #
 
-my $TD = "ip($ip)lp($lp)moving avr($average_date) ($last_day) src WHO situation report";
+my $TD = "ip($ip)lp($lp)moving avr($average_date) (#LD#) src WHO situation report";
 $TD =~ s#/#.#g;
 my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
 

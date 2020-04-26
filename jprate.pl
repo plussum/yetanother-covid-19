@@ -111,9 +111,9 @@ my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
 my $EXCLUSION = "Others";
 my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
 my @PARAMS = (
-	{ext => "$mode Japan 0301 $TD", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, ymax => 10, 
+	{ext => "$mode Japan 0301 (#LD#)", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, ymax => 10, 
 		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
-	{ext => "$mode Tokyo 0301 $TD", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", ymax => 10, 
+	{ext => "$mode Tokyo 0301 (#LD#)", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", ymax => 10, 
 		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
 );
 my $src_ref = "<a href=\"$src_url\">$src_url</a>";

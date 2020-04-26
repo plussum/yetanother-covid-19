@@ -100,16 +100,16 @@ dp::dp $REPORT_CSVF . "\n";
 #	グラフとHTMLの作成
 #
 
-my $TD = "ip($ip)lp($lp)moving avr($average_date) ($last_day) src Johns Hopkins CSSE";
+my $TD = "ip($ip)lp($lp)moving avr($average_date) (#LD#) src Johns Hopkins CSSE";
 $TD =~ s#/#.#g;
 my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
 
 my $EXCLUSION = "Others";
 my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
 my @PARAMS = (
-	{ext => "$mode Japan 0123 $TD", start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
+	{ext => "$mode Japan 01/23 $TD", start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
 		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
-	{ext => "$mode Japan 0301 $TD", start_day => "03/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
+	{ext => "$mode Japan 03/01 $TD", start_day => "03/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
 		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
 	{ext => "$mode Japan 3weeks $TD",   start_day => -21, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan",
 		 label_skip => 1, graph => "lines", additional_plot => $R0_LINE, ymin => 0},
