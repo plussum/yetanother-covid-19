@@ -25,10 +25,14 @@ my $MODE = "NC";
 my $src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv";
 my $WIN_PATH = "/mnt/f/OneDrive/cov";
 my $transaction = "$WIN_PATH/gis-jag-japan.csv";
-my $aggregate = "$WIN_PATH/JapanPref_total.csv.txt";
 
+my $aggregate = "$WIN_PATH/JapanPref.csv.txt";
 my $REPORT_CSVF = "$WIN_PATH/japan_rate$MODE" . ".csv.txt";
 my $GRAPH_HTML = "$WIN_PATH/japan_rate$MODE" . ".html";
+
+my $aggr_total = "$WIN_PATH/JapanPref_rate_total.csv.txt";
+my $TOTAL_CSVF = "$WIN_PATH/japan_rate_total$MODE" . ".csv.txt";
+my $TOTAL_GRAPH_HTML = "$WIN_PATH/japan_rate_total$MODE" . ".html";
 
 my $DLM = ",";
 
@@ -75,15 +79,6 @@ csvaggregate::csv_aggregate($params);		# 集計処理
 #
 #	定型のCSVから、再生産数 のデータを生成
 #
-#		t                  *
-#		+----+-------------+
-#		  ip       lp
-#
-#		R0 = ip * S[t+ip+lp] / sum(S[t+1..t+ip])
-#	
-#		source		https://qiita.com/oki_mebarun/items/e68b34b604235b1f28a1
-#
-
 my $ip = 5;			# 5 潜伏期間
 my $lp = 10;			# 8 感染期間
 my $average_date = 7;
@@ -104,21 +99,80 @@ dp::dp $REPORT_CSVF . "\n";
 #	グラフとHTMLの作成
 #
 my $src = "src J.A.G JAPAN ";
-my $TD = "ip($ip)lp($lp)moving avr($average_date) ($last_day) $src";
+my $TD = "ip($ip)lp($lp)moving avr($average_date) (#LD#) $src";
 $TD =~ s#/#.#g;
 my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
 
 my $EXCLUSION = "Others";
 my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
 my @PARAMS = (
-	{ext => "$mode Japan 0301 (#LD#)", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, ymax => 10, 
-		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
-	{ext => "$mode Tokyo 0301 (#LD#)", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", ymax => 10, 
-		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
+	{ext => "$mode Japan 0301 $TD", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, taget => "", ymax => 10, 
+		label_skip => 2, graph => "lines", additional_plot => $R0_LINE, term_ysize => 300},
+	{ext => "$mode Tokyo 0301 $TD", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", ymax => 10, 
+		label_skip => 2, graph => "lines", additional_plot => $R0_LINE, term_ysize => 600},
+	{ext => "$mode Tokyo 3w $TD", start_day => -21, lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", ymax => 10, 
+		label_skip => 2, graph => "lines", additional_plot => $R0_LINE, term_ysize => 600},
 );
 my $src_ref = "<a href=\"$src_url\">$src_url</a>";
 my @csvlist = (
     { name => "COV19 RATE NEW CASE", csvf => $REPORT_CSVF, htmlf => $GRAPH_HTML, kind => "NC", src_ref => $src_ref },
+#    { name => "NEW DETH", csvf => $RATE_CSVF, htmlf => $GRAPH_HTML, kind => "ND"},
+);
+
+foreach my $clp (@csvlist){
+    my %params = (
+        debug => $DEBUG,
+        win_path => $WIN_PATH,
+		data_rel_path => "cov_data",
+        clp => $clp,
+        params => \@PARAMS,
+    );
+    csvgpl::csvgpl(\%params);
+}
+
+############################
+#
+#	TOTAL
+#
+#
+#	パラメータの設定と集計の実施
+#
+$params = {
+	input_file => $transaction,
+	output_file => $aggr_total,
+	delemiter => ",",
+	#agr_items_name => ["確定日#:#1/2/0","居住都道府県"],
+	date_item => "確定日",
+	date_format => [2, 0, 1],
+	aggr_mode => "TOTAL",
+	
+	select_item => "居住都道府県",
+#	select_keys  => [qw(東京都 神奈川県)],
+	exclude_keys => [],
+	agr_total => 0,
+	agr_count => 0,
+	total_item_name => "",
+	sort_keys_name => [qw (確定日) ],		# とりあえず、今のところ確定日にフォーカス（一般化できずにいる）
+};
+
+csvaggregate::csv_aggregate($params);		# 集計処理
+#system("more $aggregate");
+
+$TD = "total ip($ip)lp($lp)moving avr($average_date) (#LD#) $src";
+$TD =~ s#/#.#g;
+my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
+
+my $EXCLUSION = "Others";
+my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
+my @PARAMS = (
+	{ext => "$mode Japan 0201 $TD", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, target => "TOTAL", ymax => 10, 
+		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
+	{ext => "$mode Japan total 3w $TD", start_day => -21, lank =>[0, 5] , exclusion => $EXCLUSION, target => "TOTAL", ymax => 10, 
+		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
+);
+my $src_ref = "<a href=\"$src_url\">$src_url</a>";
+my @csvlist = (
+    { name => "COV19 RATE NEW CASE", csvf => $TOTAL_CSVF, htmlf => $TOTAL_GRAPH_HTML, kind => "NC", src_ref => $src_ref },
 #    { name => "NEW DETH", csvf => $RATE_CSVF, htmlf => $GRAPH_HTML, kind => "ND"},
 );
 

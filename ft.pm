@@ -40,6 +40,7 @@ sub	ft
 	my $avr_day = $p->{average_day};
 	$DEBUG = csvlib::valdef($p->{DEBUG}, 0);
 
+	dp::dp "#### $thresh\n";
 
 	#
 	#	Load input file

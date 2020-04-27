@@ -32,6 +32,7 @@ if($gen){
 	system("./jprate.pl $gwflag");
 	system("./jpft.pl $gwflag");
 	system("./jpcomp.pl $gwflag");
+	system("cp COV/jpcomp.html .");
 }
 
 
@@ -44,6 +45,7 @@ COVID-19_NC.html
 COVID-19_ND.html
 COVID-19_rateNC.html
 COVID-19_ft_NC.html
+COVID-19_ft_ND.html
 
 COVID-19_NC-POP.html
 COVID-19_ND-POP.html
