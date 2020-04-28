@@ -14,6 +14,7 @@ use csvgpl;
 use dp;
 use params;
 use ccse;
+use who;
 
 
 #
@@ -106,7 +107,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 			my $STG2_CSVF = $config::CSV_PATH  . "/" . $plist->{prefix} . join("_", $SUB_MODE, $AGGR_MODE) . ".csv.txt";
 			my $HTMLF = $config::HTML_PATH . "/" . $plist->{prefix} . join("_", $MODE, $SUB_MODE, $AGGR_MODE) . ".html";
 
-			if($VERBOSE || $DEBUG){
+			if(1 || $VERBOSE || $DEBUG){
 				dp::dp "SRC_FILE:[$SRC_FILE]\n" ;
 				dp::dp "STG1_CSVF:[$STG1_CSVF]\n";
 				dp::dp "HTMLF:[$HTMLF]\n";
@@ -146,7 +147,7 @@ sub	daily
 	my ($fp) = @_;
 	my $plist = $fp->{param};
 
-	dp::dp "daily \n" ; # Dumper($fp);
+	#dp::dp "daily \n" ; # Dumper($fp);
 
 	#
 	#	Load CCSE CSV
@@ -158,11 +159,15 @@ sub	daily
 	#	グラフとHTMLの作成
 	#
 
-	my $aggr_mode = $fp->{aggr_mode};
-	my $name = ($fp->{mode} eq "NC") ? "$aggr_mode NEW CASE" : "$aggr_mode NEW DEATH"; 
+	#my $prefix = $plist->{prefix};
+	my $name = ($fp->{mode} eq "NC") ? "NEW CASE" : "NEW DEATH"; 
+	dp::dp "name: $name\n";
 	my $csvlist = {
 		name => $name,
-		csvf => $fp->{stage1_csvf}, htmlf => $fp->{htmlf}, kind => $fp->{mode},
+		csvf => $fp->{stage1_csvf}, 
+		htmlf => $fp->{htmlf},
+		kind => $fp->{mode},
+		src_file => $fp->{src_file},
 		src => $plist->{src},
 		src_url => $plist->{src_url},
 	};
@@ -170,8 +175,10 @@ sub	daily
 	my %params = (
 		debug => $DEBUG,
 		clp => $csvlist,
+		plist => $plist,
 		params => $fp->{gparam}{graphp},
 	);
+	#dp::dp "### daily: " . Dumper(%params) . "\n";
 	csvgpl::csvgpl(\%params);
 }
 
@@ -198,7 +205,10 @@ sub	pop
 	dp::dp "NAME: $name \n";
 	my $csvlist = {
 		name => $name,
-		csvf => $fp->{stage1_csvf}, htmlf => $fp->{htmlf}, kind => $fp->{mode},
+		csvf => $fp->{stage1_csvf}, 
+		htmlf => $fp->{htmlf}, 
+		kind => $fp->{mode},
+		src_file => $fp->{src_file},
 		src => $plist->{src},
 		src_url => $plist->{src_url},
 	};
@@ -253,7 +263,10 @@ sub	ft
 	my $name = ($fp->{mode} eq "NC") ? "FT NEW CASE" : "FT NEW DEATH"; 
 	my $csvlist = {
 		name => $name,
-		csvf => $fp->{stage2_csvf}, htmlf => $fp->{htmlf}, kind => $fp->{mode},
+		csvf => $fp->{stage2_csvf},
+		htmlf => $fp->{htmlf}, 
+		kind => $fp->{mode},
+		src_file => $fp->{src_file},
 		src => $plist->{src},
 		src_url => $plist->{src_url},
 	};
@@ -299,24 +312,29 @@ sub	rate
 		output_file => $fp->{stage2_csvf},
 		delimiter => $plist->{DLM},
 		average_date => $fp->{gparam}{average_date},
-		lp 		=> $plist->{ip},	# 5 潜伏期間
-		ip 		=> $plist->{lp},	# 8 感染期間
+		ip 		=> $fp->{gparam}{ip},
+		lp 		=> $fp->{gparam}{lp},	
 	};
 	rate::rate($RATE_PARAM);
 	#dp::dp $REPORT_CSVF . "\n";
+	#dp::dp "plist\n" . Dumper($fp->{gparam}) ."\n";
 
 	#
 	#	グラフとHTMLの作成
 	#
 
-	my $RT_TD = sprintf("ip(%d)lp(%d)moving avr(%d) (#LD#)", $plist->{ip}, $plist->{lp}, $fp->{gparam}{average_date});
+	my $RT_TD = sprintf("ip(%d)lp(%d)mv-avr(%d) (#LD#)", $fp->{gparam}{ip}, $fp->{gparam}{lp}, $fp->{gparam}{average_date});
+	dp::dp "RT_TD :" . $RT_TD. "\n";
 	$RT_TD =~ s#/#.#g;
 
 	my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
 	my $name = ($fp->{mode} eq "NC") ? "RATE NEW CASE" : "RATE NEW DEATH"; 
 	my $csvlist = { 
 		name => $name,
-		csvf => $fp->{stage2_csvf}, htmlf => $fp->{htmlf}, kind => $fp->{mode},
+		csvf => $fp->{stage2_csvf}, 
+		htmlf => $fp->{htmlf}, 
+		kind => $fp->{mode},
+		src_file => $fp->{src_file},
 		src => $plist->{src},
 		src_url => $plist->{src_url},
 	};

@@ -34,11 +34,13 @@ sub	csvgpl
 	my $PNG_PATH = $config::PNG_PATH; 
 	my $PNG_REL_PATH = $config::PNG_REL_PATH; 
 	my $IMG_PATH = $config::PNG_REL_PATH;
+	my $CSV_REL_PATH = $config::CSV_REL_PATH; 
 	my $CSS = $config::CSS;
 	my $class = $config::CLASS;
 
 	my $clp = $para->{clp};
 	my $grp = $para->{params};
+	my $plist = $para->{plist};
 
 	my $src_url = $clp->{src_url};
     my $src_ref = "<a href=\"$src_url\">$src_url</a>";
@@ -62,7 +64,7 @@ sub	csvgpl
 			print "#### EOD ###\n";
 			last;
 		}
-		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $p, $clp);
+		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $p, $clp, $plist);
 
 		print HTML "<!-- " . $p->{ext} . " -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
@@ -81,22 +83,28 @@ sub	csvgpl
 		print HTML "<span $class>";
 
 		my $csvf = $clp->{csvf};
-		my $srcf = csvlib::valdef($clp->{srcf}, "");
+		my $srcf = csvlib::valdef($clp->{src_file}, "");
 		dp::dp $srcf , "\n" if($srcf && $VERBOSE);
 		$csvf =~ s#.*/##;
 		$srcf =~ s#.*/##;
 		my @refs = (join(":", "PNG", $PNG_REL_PATH, $png),
 					join(":", "CSV", $PNG_REL_PATH, $csv),
 					join(":", "PLT", $PNG_REL_PATH, $plot),
-					join(":", "REF", "", $csvf),
-					join(":", "SRC", "", $srcf),
+					join(":", "REF", $CSV_REL_PATH, $csvf),
+					join(":", "SRC", $CSV_REL_PATH, $srcf),
 		);
 		#dp::dp "##### SRC:[$srcf][" . $clp->{srcf} . "]\n";
+		#dp::dp "##### refs \n" . Dumper(@refs) . "]\n";
 		foreach my $r (@refs){
 			my ($tag, $path, $fn) = split(":", $r);
 			#dp::dp "r:[$r]  $tag, $path, $fn\n";
-			#next if(! $fn);
-			print HTML "$tag:<a href=\"$path/$fn\">$fn</a>\n"; 
+			#dp::dp "$tag:<a href=\"$path/$fn\">$fn</a>\n"; 
+			if($fn){
+				print HTML "$tag:<a href=\"$path/$fn\">$fn</a>\n"; 
+			}
+			else {
+				print HTML "$tag:\n"; 
+			}
 		}
 		print HTML "</span>\n";
 		print HTML "<br><hr>\n\n";
@@ -111,12 +119,12 @@ sub	csvgpl
 #
 sub	csv2graph
 {
-	my ($csvf, $png_path, $kind, $p, $clp) = @_;
+	my ($csvf, $png_path, $kind, $p, $clp, $plist) = @_;
 
 	dp::dp join(", ", $p->{ext}, $p->{start_day}, $p->{lank}[0], $p->{lank}[1], $p->{exclusion}, "[" . $clp->{src} . "]"), "\n" if($DEBUG > 1);
 	
 	my $src = csvlib::valdefs($p->{src}, "");
-	my $ext = $p->{ext};
+	my $ext = $plist->{prefix} . " " . $p->{ext};
 	$ext =~ s/#KIND#/$kind/;
 	$ext =~ s/#SRC#/$src/;
 	my $fname = $ext;

@@ -58,7 +58,7 @@ our @PARAMS_COUNT = (
 
 our	@PARMS_FT = (
 	{ext => "#KIND# Japan and others #FT_TD#", start_day => 0, lank =>[0, 999] , exclusion => $EXCLUSION, add_target => "Japan",
-		target => "Japan,Korea- South,US,Spain,Italy,France,Germany,United Kingdom,Iran,Turkey,Belgium,Switzeland",
+		target => "Japan,Korea,US,Spain,Italy,France,Germany,United Kingdom,Iran,Turkey,Belgium,Switzeland",
 		label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
 	{ext => "#KIND# TOP5 #FT_TD#", start_day => 0, lank =>[0, 5] , exclusion => $EXCLUSION, target => "", 
 		label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},

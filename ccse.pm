@@ -123,12 +123,14 @@ sub	download
 {
 	my ($info_path) = @_;
 	system("(cd ../COVID-19; git pull origin master)");
+	&copy($info_path);
+	
 }
 
 sub	copy
 {
 	my ($info_path) = @_;
 	my $BASE_DIR = $info_path->{base_dir};
-	system("cp $BASE_DIR/*.csv $WIN_PATH");
+	system("cp $BASE_DIR/*.csv $WIN_PATH/CSV");
 }
 1;
