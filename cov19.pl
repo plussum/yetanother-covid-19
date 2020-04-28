@@ -56,24 +56,23 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	}
 }
 
-if(! defined  $config::INFO_PATH->{$DATA_SOURCE}){
-	print STDERR "No data source definiton for [$DATA_SOURCE] in confg.pm\n";
-	exit(1);
-}
-my $INFO_PATH = $config::INFO_PATH->{$DATA_SOURCE};
-my $plist = $INFO_PATH->{params}; 
-#dp::dp Dumper $INFO_PATH;
-dp::dp join(",", "DATA SOURCE:[$DATA_SOURCE] ", $INFO_PATH->{src}, "[" . $plist->{comment} . "]") . "\n";
+my $plist = ""; 
+$plist = ccse::new() if($DATA_SOURCE eq "ccse");
+$plist = who::new()  if($DATA_SOURCE eq "who");
+die "no package for $DATA_SOURCE\n" if(! $plist);
+
+
+dp::dp join(",", "DATA SOURCE:[$DATA_SOURCE] ", $plist->{src}, "[" . $plist->{comment} . "]") . "\n";
 
 if($COPY){
 	my $copy = $plist->{copy};
-	$copy->($INFO_PATH);
+	$copy->($plist);
 	exit(0);
 }
 
 if($DOWNLOAD){
 	my $download = $plist->{download};
-	$download->($INFO_PATH);
+	$download->($plist);
 }	
 if($#MODE_LIST < 0) {
 	push(@MODE_LIST, "ND", "NC");
@@ -93,18 +92,18 @@ my 	$FUNCS = {
 };
 
 my $DLM = $plist->{DLM};
-my $SOURCE_DATA = $INFO_PATH->{src};
+my $SOURCE_DATA = $plist->{src};
 foreach my $AGGR_MODE (@AGGR_LIST){
 	foreach my $MODE (@MODE_LIST){
 		foreach my $SUB_MODE (@SUB_MODE_LIST){
 			dp::dp "AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n";
 
 			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");
-			my $SRC_FILE = $INFO_PATH->{$MODE};
-			my $STG1_CSVF   = $config::CSV_PATH  . "/" . $INFO_PATH->{prefix} . join("_", $MODE, $AGGR_MODE) . ".csv.txt";
+			my $SRC_FILE = $plist->{src_file}{$MODE};
+			my $STG1_CSVF   = $config::CSV_PATH  . "/" . $plist->{prefix} . join("_", $MODE, $AGGR_MODE) . ".csv.txt";
 			
-			my $STG2_CSVF = $config::CSV_PATH  . "/" . $INFO_PATH->{prefix} . join("_", $SUB_MODE, $AGGR_MODE) . ".csv.txt";
-			my $HTMLF = $config::HTML_PATH . "/" . $INFO_PATH->{prefix} . join("_", $MODE, $SUB_MODE, $AGGR_MODE) . ".html";
+			my $STG2_CSVF = $config::CSV_PATH  . "/" . $plist->{prefix} . join("_", $SUB_MODE, $AGGR_MODE) . ".csv.txt";
+			my $HTMLF = $config::HTML_PATH . "/" . $plist->{prefix} . join("_", $MODE, $SUB_MODE, $AGGR_MODE) . ".html";
 
 			if($DEBUG){
 				dp::dp "SRC_FILE:[$SRC_FILE]\n" ;
@@ -112,11 +111,24 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 				dp::dp "HTMLF:[$HTMLF]\n";
 				dp::dp "STG2_CSVF:[$STG2_CSVF]\n";
 			}
-			my $aggregate = $plist->{aggregate};
-			my $p = $plist->{$SUB_MODE};
 
 			if(defined $FUNCS->{$SUB_MODE}){
-				$FUNCS->{$SUB_MODE}->($p, $plist, $INFO_PATH, $MODE, $AGGR_MODE, $SRC_FILE, $STG1_CSVF, $HTMLF, $STG2_CSVF);
+				if(! defined $plist->{$SUB_MODE}){
+					print STDERR "NO GRAPH Parameter for $SOURCE_DATA -> $SUB_MODE\n";
+					next;
+				}
+				my $funcp = {
+					param => $plist,
+					gparam => $plist->{$SUB_MODE},
+					mode => $MODE,
+					aggr_mode => $AGGR_MODE,
+					src_file => $SRC_FILE,
+					stage1_csvf => $STG1_CSVF,
+					stage2_csvf => $STG2_CSVF,
+					htmlf => $HTMLF,
+					dlm => $DLM,
+				};
+				$FUNCS->{$SUB_MODE}->($funcp);
 			}
 			else {
 				print STDERR "No function defined for $SUB_MODE\n";
@@ -130,7 +142,8 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 #
 sub	daily 
 {
-	my ($p, $plist, $infop, $mode, $aggr_mode, $src_file, $report_csvf, $graph_html, $sub_csvf) = @_;
+	my ($fp) = @_;
+	my $plist = $fp->{param};
 
 	#dp::dp Dumper $p;
 
@@ -138,24 +151,24 @@ sub	daily
 	#	Load CCSE CSV
 	#
 	my $aggr_func = $plist->{aggregate};
-	my ($colum, $record , $start_day, $last_day) = $aggr_func->($mode, $aggr_mode, $src_file, $report_csvf, $graph_html);
+	my ($colum, $record , $start_day, $last_day) = $aggr_func->($fp);
 
 	#
 	#	グラフとHTMLの作成
 	#
 
-	my $name = ($mode eq "NC") ? "NEW CASE" : "NEW DEATH"; 
+	my $name = ($fp->{mode} eq "NC") ? "NEW CASE" : "NEW DEATH"; 
 	my $csvlist = {
 		name => $name,
-		csvf => $report_csvf, htmlf => $graph_html, kind => $mode,
-		src => $infop->{src},
-		src_url => $infop->{src_url},
+		csvf => $fp->{stage1_csvf}, htmlf => $fp->{htmlf}, kind => $fp->{mode},
+		src => $plist->{src},
+		src_url => $plist->{src_url},
 	};
 
 	my %params = (
 		debug => $DEBUG,
 		clp => $csvlist,
-		params => $p->{graphp},
+		params => $fp->{gparam}{graphp},
 	);
 	csvgpl::csvgpl(\%params);
 }
@@ -165,29 +178,30 @@ sub	daily
 #
 sub	pop
 {
-	my ($p, $plist, $infop, $mode, $aggr_mode, $src_file, $report_csvf, $graph_html, $sub_csvf) = @_;
+	my ($fp) = @_;
+	my $plist = $fp->{param};
 
 	#
 	#	Load CCSE CSV
 	#
 	my $aggr_func = $plist->{aggregate};
-	my ($colum, $record , $start_day, $last_day) = $aggr_func->($mode, $aggr_mode, $src_file, $report_csvf, $graph_html);
+	my ($colum, $record , $start_day, $last_day) = $aggr_func->($fp);
 
 	#
 	#	PARAMS for POP
 	#
-	my $name = ($mode eq "NC") ? "POP NEW CASE" : "POP NEW DEATH"; 
+	my $name = ($fp->{mode} eq "NC") ? "POP NEW CASE" : "POP NEW DEATH"; 
 	my $csvlist = {
 		name => $name,
-		csvf => $report_csvf, htmlf => $graph_html, kind => $mode, srcf => $report_csvf,
-		src => $infop->{src},
-		src_url => $infop->{src_url},
+		csvf => $fp->{stage1_csvf}, htmlf => $fp->{htmlf}, kind => $fp->{mode},
+		src => $plist->{src},
+		src_url => $plist->{src_url},
 	};
 
 	my %params = (
 		debug => $DEBUG,
 		clp => $csvlist,
-		params => $p->{graphp},
+		params => $fp->{gparam}{graphp},
 	);
 	csvgpl::csvgpl(\%params);
 }
@@ -201,26 +215,28 @@ sub	pop
 #
 sub	ft
 {
-	my ($p, $plist, $infop, $mode, $aggr_mode, $src_file, $report_csvf, $graph_html, $sub_csvf) = @_;
+	my ($fp) = @_;
+	my $plist = $fp->{param};
 
 	#
 	#	Load CCSE CSV
 	#
 	my $aggr_func = $plist->{aggregate};
-	my ($colum, $record , $start_day, $last_day) = $aggr_func->($mode, $aggr_mode, $src_file, $report_csvf, $graph_html);
+	my ($colum, $record , $start_day, $last_day) = $aggr_func->($fp);
 
 	#
 	#	Create FT CSV
 	#
-	my $THRESH_DAY = ($mode eq "NC") ? 9 : 5;	# 10 : 1
+	my $THRESH_DAY = ($fp->{mode} eq "NC") ? 9 : 5;	# 10 : 1
 
 	my $FT_PARAM = {
-		input_file => $report_csvf,
-		output_file => $sub_csvf,
-		average_date => $p->{average_date},
+		input_file => $fp->{stage1_csvf},
+		output_file => $fp->{stage2_csvf},
+		average_date => $fp->{gparam}{average_date},
 		thresh => $THRESH_DAY,
-		delimiter => $DLM,
+		delimiter => $plist->{DLM},
 	};
+	#dp::dp "FT_PARAM: " . Dumper $FT_PARAM;
 	ft::ft($FT_PARAM);
 
 	#
@@ -229,25 +245,27 @@ sub	ft
 	my $guide = ft::exp_guide(2,10, 10, 'linecolor "#808080"');
    	my $FT_TD = "($record)";
     $FT_TD =~ s#/#.#g;
-	my $name = ($mode eq "NC") ? "FT NEW CASE" : "FT NEW DEATH"; 
+	my $name = ($fp->{mode} eq "NC") ? "FT NEW CASE" : "FT NEW DEATH"; 
 	my $csvlist = {
 		name => $name,
-		csvf => $sub_csvf, htmlf => $graph_html, kind => $mode, srcf => $report_csvf,
-		src => $infop->{src},
-		src_url => $infop->{src_url},
+		csvf => $fp->{stage2_csvf}, htmlf => $fp->{htmlf}, kind => $fp->{mode},
+		src => $plist->{src},
+		src_url => $plist->{src_url},
 	};
 
-	foreach my $gp (@{$p->{graphp}}){
-		$gp->{ymin} = $p->{ymin};
+	#dp::dp "### gparam " . Dumper ($fp->{gparam}{graphp}) . "\n";
+	foreach my $gp (@{$fp->{gparam}{graphp}}){
+		$gp->{ymin} = $plist->{ymin};
 		$gp->{guide} = $guide;
-		$gp->{average_date} = $p->{average_date};
+		$gp->{average_date} = $fp->{gparam}{average_date};
 		$gp->{ext} =~ s/#FT_TD#/$FT_TD/;
+		#dp::dp ">>>> gp: " . Dumper($gp) . "\n";
 	}
 
 	my %params = (
 		debug => $DEBUG,
 		clp => $csvlist,
-		params => $p->{graphp},
+		params => $fp->{gparam}{graphp},
 	);
 	csvgpl::csvgpl(\%params);
 }
@@ -265,18 +283,19 @@ sub	ft
 #
 sub	rate
 {
-	my ($p, $plist, $infop, $mode, $aggr_mode, $src_file, $report_csvf, $graph_html, $sub_csvf) = @_;
+	my ($fp) = @_;
+	my $plist = $fp->{param};
 
 	my $aggr_func = $plist->{aggregate};
-	my ($colum, $record , $start_day, $last_day) = $aggr_func->($mode, $aggr_mode, $src_file, $report_csvf, $graph_html);
+	my ($colum, $record , $start_day, $last_day) = $aggr_func->($fp);
 
 	my $RATE_PARAM = {
-		input_file => $report_csvf,
-		output_file => $sub_csvf,
-		delimiter => $DLM,
-		average_date => $p->{average_date},
-		lp 		=> $p->{ip},	# 5 潜伏期間
-		ip 		=> $p->{lp},	# 8 感染期間
+		input_file => $fp->{stage1_csvf},
+		output_file => $fp->{stage2_csvf},
+		delimiter => $plist->{DLM},
+		average_date => $fp->{gparam}{average_date},
+		lp 		=> $plist->{ip},	# 5 潜伏期間
+		ip 		=> $plist->{lp},	# 8 感染期間
 	};
 	rate::rate($RATE_PARAM);
 	#dp::dp $REPORT_CSVF . "\n";
@@ -285,26 +304,26 @@ sub	rate
 	#	グラフとHTMLの作成
 	#
 
-	my $RT_TD = sprintf("ip(%d)lp(%d)moving avr(%d) (#LD#)", $p->{ip}, $p->{lp}, $p->{average_date});
+	my $RT_TD = sprintf("ip(%d)lp(%d)moving avr(%d) (#LD#)", $plist->{ip}, $plist->{lp}, $fp->{gparam}{average_date});
 	$RT_TD =~ s#/#.#g;
 
 	my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
-	my $name = ($mode eq "NC") ? "RATE NEW CASE" : "RATE NEW DEATH"; 
+	my $name = ($fp->{mode} eq "NC") ? "RATE NEW CASE" : "RATE NEW DEATH"; 
 	my $csvlist = { 
 		name => $name,
-		csvf => $sub_csvf, htmlf => $graph_html, kind => "NC",
-		src => $infop->{src},
-		src_url => $infop->{src_url},
+		csvf => $fp->{stage2_csvf}, htmlf => $fp->{htmlf}, kind => $fp->{mode},
+		src => $plist->{src},
+		src_url => $plist->{src_url},
 	};
 
-	foreach my $gp (@{$p->{graphp}}){
+	foreach my $gp (@{$fp->{gparam}{graphp}}){
 		$gp->{additional_plot} = $R0_LINE;
 		$gp->{ext} =~ s/#RT_TD#/$RT_TD/;
 	}
 	my %params = (
 		debug => $DEBUG,
 		clp => $csvlist,
-		params => $p->{graphp},
+		params => $fp->{gparam}{graphp},
 	);
 	csvgpl::csvgpl(\%params);
 }

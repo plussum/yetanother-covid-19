@@ -286,20 +286,22 @@ sub	csv2graph
 	#
 	#	グラフの生成 CSV
 	#
+	#dp::dp "AVERAGE_DATE : [" . $p->{average_date} . "]\n";
 	my @record = ();
 	my $max_data = 0;
 	for(my $dt = 0; $dt <= $#DATES; $dt++){
 		my $dts  = $DATES[$dt];
 		$dts =~ s#([0-9]{4})([0-9]{2})([0-9]{2})#$1/$2/$3#;
+		$dts = $dt if(defined $p->{ft});
 		#print "[[$DATES[$dt]][$dts]\n";
-		my @data = ($dts);
+		my @data = ();
 		for (my $i = 1; $i <= $#Dataset; $i++){
 			my $v = $Dataset[$i][$dt];
 			my $country = $COUNTRY[$i-1];
 			#print "### [$country]: ";
 			my $item_number = $TOTAL{$country};
+			#dp::dp "###### $item_number : $dt";
 			if(defined $p->{average_date}){
-				# print "$item_number : $dt";
 				my $av = 0;
 				if($dt > $item_number){
 					$v = $NO_DATA;			# for FT, set nodata
@@ -311,17 +313,18 @@ sub	csv2graph
 							$d = $Dataset[$i][$ma];
 						}
 						$av += $d;
-						#print "($i: $dt $ma $av)";
+						#dp::dp "($i: $dt $ma $av)";
 					}
-					$v = int(0.5 + $av / $p->{average_date});
-					$v = 1 if($v < 1 && defined $p->{logscale});
+					$v = int(0.5 + $av) / $p->{average_date};
+					#$v = int(100 * $av / $p->{average_date}) / 100;
+					#$v = 1 if($v < 1 && defined $p->{logscale});
 				}
 				#print "--> $v\n";
 			}
 			push(@data, $v);
 			$max_data = $v if($v > $max_data);
 		}
-		push(@record, join(",", @data));
+		push(@record, join(",", $dts, @data));
 	}
 
 	#
@@ -402,6 +405,7 @@ _EOD_
 	}
 	my $pn = join(",", @w); 
 	if(defined $p->{additional_plot} && $p->{additional_plot}){
+		#dp::dp "additional_plot: " . $p->{additional_plot} . "\n";
 		$pn .= ", " . $p->{additional_plot};
 	}
 	$PARAMS =~ s/#PLOT_PARAM#/$pn/;	
