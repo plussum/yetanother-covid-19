@@ -35,34 +35,16 @@ my $date = "";
 my %POP = ();
 my $PP = "";
 
-my $dl = "";
-for(my $i = 0;  $i <= $#ARGV; $i++){
-	$_ = $ARGV[$i];
-	$MODE = "ND" if(/-ND/);
-	$MODE = "NC" if(/-NC/);
-	$MODE = "DR" if(/-DR/);
-	$PP   = $_ if(/-PP/);
-	$dl = "-dl" if(/-dl/);
-}
-if($MODE eq "") {
-	system("$0 -ND $PP $dl");
-	system("$0 -NC $PP $dl");
-	#	system("$0 -DR");
-	exit;
-}
-$DOWNLOAD = 1 if($dl);
 
-print ">> DOWNLOAD: $DOWNLOAD\n";
+our %PARAMS = {
+	"NC" => {
+		graph => [@params::COMMON_LIST, @LOCAL_PARAMS],
+	},
+	"ND" => {
+		graph => [@params::COMMON_LIST, @LOCAL_PARAMS],
+	},
+};
 
-my $REPORT_CSVF = "$WIN_PATH/who_situation_report_$MODE.csv.txt";
-my $GRAPH_HTML = "$WIN_PATH/who_situation_report_$MODE.html";
-
-my $LAST_DATE = 0;
-
-#
-#
-#
-#&get_population();
 {
 	#
 	#	Create graph and HTMl by command

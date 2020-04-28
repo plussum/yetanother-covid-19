@@ -160,11 +160,11 @@ csvaggregate::csv_aggregate($params);		# 集計処理
 
 $TD = "total ip($ip)lp($lp)moving avr($average_date) (#LD#) $src";
 $TD =~ s#/#.#g;
-my $mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
+$mode = ($MODE eq "NC") ? "RATE NEW CASES" : "RATE NEW DEATHS" ;
 
-my $EXCLUSION = "Others";
-my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
-my @PARAMS = (
+$EXCLUSION = "Others";
+$R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
+@PARAMS = (
 	{ext => "$mode Japan 0201 $TD", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, target => "TOTAL", ymax => 10, 
 		label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
 	{ext => "$mode Japan total 3w $TD", start_day => -21, lank =>[0, 5] , exclusion => $EXCLUSION, target => "TOTAL", ymax => 10, 

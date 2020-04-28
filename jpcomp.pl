@@ -108,7 +108,7 @@ my $RATE_PARAM = {
 	lp 		=> $ip,	# 5 潜伏期間
 	ip 		=> $lp,	# 8 感染期間
 };
-my ($colum, $record , $start_day, $last_day) = rate::rate($RATE_PARAM);
+($colum, $record , $start_day, $last_day) = rate::rate($RATE_PARAM);
 
 my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
 $TD = "ip($ip)lp($lp)moving avr($average_date) ($last_day) $src";

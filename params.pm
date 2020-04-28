@@ -13,7 +13,7 @@ use warnings;
 
 my $EXCLUSION = "Others,China,US";
 my $NONE_EXC = "Others";
-my @COMMON_PARAMS = (
+our @COMMON_PARAMS = (
     {ext => "#KIND# all with US(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 3, graph => "lines"},
 	{ext => "#KIND# TOP5+Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", add_target => "Japan"},
 	{ext => "#KIND# TOP5+Japan(wo US)(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", add_target => "Japan"},

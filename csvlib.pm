@@ -1,4 +1,4 @@
-#
+
 #	csv操作の基本的な関数群
 #
 #
@@ -11,6 +11,7 @@ use Exporter;
 use strict;
 use warnings;
 use Time::Local 'timelocal';
+
 
 
 #
@@ -149,6 +150,7 @@ sub	calc_max
 {
 	my ($v, $log) = @_;
 
+	$v = 1 if($v < 1);
 	my $digit = int(log($v)/log(10));
 	my $max = 0;
 	if(!$log){

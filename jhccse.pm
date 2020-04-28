@@ -30,13 +30,11 @@ my $DEBUG = 1;
 sub	jhccse
 {
 	my ($p) = @_;
-	
-	#print Dumper $p;
 
 	my %CNT_POP = ();
-	if($p->{population}){
+	if($p->{aggr_mode} eq "POP"){
 		csvlib::cnt_pop(\%CNT_POP);
-		dp::dp( "###### $p->{population}\n");
+		dp::dp( "###### $p->{aggr_mode}\n") if($DEBUG > 1);
 	}
 
 	my $DLM = csvlib::valdefs($p->{delimiter} , ",");
@@ -111,7 +109,7 @@ sub	jhccse
 		$COUNTRY{$country} += $DATA[$rn][$DT_E];
 	}
 	my $cn =  keys %COUNTRY;
-	dp::dp( "country: " , join(", ", $cn),"\n") if($DEBUG);
+	dp::dp( "country: " , join(", ", $cn),"\n") if($DEBUG > 1);
 
 
 	#
@@ -132,7 +130,7 @@ sub	jhccse
 
 		for(my $dt = 0; $dt <= $#COL; $dt++){
 			my $dtn = $COUNT{$country}[$dt] - ($dt == 0 ? 0 : $COUNT{$country}[$dt-1]);	# 累計 -> 日次
-			if($p->{population}){															# 人口比に置き換え
+			if($p->{aggr_mode} eq "POP"){															# 人口比に置き換え
 				if(defined $CNT_POP{$country}){
 					$dtn = $dtn / ($CNT_POP{$country} / (1000*1000));			# 100万人当たり
 				}

@@ -7,7 +7,7 @@
 #
 use strict;
 use warnings;
-use lib qw(../gsfh);
+use config;
 
 my $DEBUG = 0;
 my $download = 0;
@@ -40,29 +40,11 @@ my $WIN_PATH = "/mnt/f/OneDrive/cov";
 my $INDEX_HTML = "$WIN_PATH/covid_index.html";
 my $FRAME_HTML = "$WIN_PATH/covid_frame.html";
 my $DIR = "/mnt/f/OneDrive/cov";
-my $HTML_LIST = << "_EOD_";
-COVID-19_NC.html
-COVID-19_ND.html
-COVID-19_rateNC.html
-COVID-19_ft_NC.html
-COVID-19_ft_ND.html
+my @src_list = qw (jhccse who_situation_report japan);
+my @mode_list = qw (NC ND);
+my @submode_list = qw (COUNT FT RT);
+my @aggr_list = qw (DAY POP);
 
-COVID-19_NC-POP.html
-COVID-19_ND-POP.html
-
-who_situation_report_NC.html
-who_situation_report_ND.html
-who_rateNC.html
-
-JapanPref.html
-japan_rateNC.html
-JapanPref_total-ft.html
-
-jpcomp.html
-_EOD_
-my @html_list = split("\n", $HTML_LIST);
-
-my $gfs =  $html_list[0];
 my $INDEX = << "_EOI_";
 <html>
 <head>
@@ -71,19 +53,13 @@ my $INDEX = << "_EOI_";
 
 <frameset cols="300,*">
     <frame src="covid_frame.html" name="index">
-    <frame src="$gfs" name="graph">
+    <frame src="covid_frame.html" name="graph">
     </frameset>
 </frameset>
 </html> 
 _EOI_
 
-my $CSS = << "_EOCSS_";
-	<style type="text/css">
-	<!--
-		span.c {font-size: 12px;}
-	-->
-	</style>
-_EOCSS_
+my $CSS = $config::CSS;
 
 my $TBL_SIZE = 10;
 my $class = "class=\"c\"";
@@ -103,15 +79,18 @@ print FRAME "<BODY>\n";
 print FRAME "<span class=\"c\"> ";
 print FRAME "<H1>INDEX COVID-19</H1>\n";
 print FRAME "<ul type=\"disc\">\n";
-foreach my $p (@html_list){
-	my $relp = $p;
+foreach my $src (@src_list){
+	foreach my $sub (@submode_list){
+		foreach my $aggr (@aggr_list){
+			foreach my $mode (@mode_list){
+				next if($aggr eq "POP" && $sub ne "COUNT");
+				my $relp = join("_", $src, $mode, $sub, $aggr) . ".html";
 
-	if($p){
-		print FRAME "<li><a href =\"$relp\" target=\"graph\">$relp</a></li>\n";
+				print FRAME "<li><a href =\"HTML/$relp\" target=\"graph\">$relp</a></li>\n";
+			}
+		}
 	}
-	else {
-		print FRAME "<br>\n";
-	}
+	print FRAME "<br>\n";
 }
 print FRAME "</ul>\n";
 print FRAME "</span>\n";

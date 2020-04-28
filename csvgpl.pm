@@ -9,10 +9,12 @@ use Exporter;
 use strict;
 use warnings;
 use Data::Dumper;
+use config;
 use csvlib;
 use dp;
 
 my $DEBUG = 1;
+my $VERBOSE = 0;
 my $WIN_PATH = "";
 my $NO_DATA = "NaN";
 sub	csvgpl
@@ -28,26 +30,21 @@ sub	csvgpl
 	}
 
 
-	$WIN_PATH = csvlib::valdef($para->{win_path}, "./");
-	my $PNG_PATH = "$WIN_PATH/" . $para->{data_rel_path}; #MODE#.html";
-	my $IMG_PATH = "./" . $para->{data_rel_path};
+	$WIN_PATH = $config::WIN_PATH;
+	my $PNG_PATH = $config::PNG_PATH; 
+	my $PNG_REL_PATH = $config::PNG_REL_PATH; 
+	my $IMG_PATH = $config::PNG_REL_PATH;
+	my $CSS = $config::CSS;
+	my $class = $config::CLASS;
 
 	my $clp = $para->{clp};
 	my $grp = $para->{params};
 
-my $CSS = << "_EOCSS_";
-	<meta charset="utf-8">
-	<style type="text/css">
-	<!--
-		span.c {font-size: 12px;}
-	-->
-	</style>
-_EOCSS_
-
+	my $src_url = $clp->{src_url};
+    my $src_ref = "<a href=\"$src_url\">$src_url</a>";
 	my $TBL_SIZE = 10;
-	my $class = "class=\"c\"";
 
-	print "TITLE: $clp->{name} \n $clp->{htmlf}\n";
+	dp::dp "TITLE: $clp->{name} \n $clp->{htmlf}\n" if($VERBOSE);
 	open(HTML, "> $clp->{htmlf}") || die "Cannot create file $clp->{htmlf}";
 	print HTML "<HTML>\n";
 	print HTML "<HEAD>\n";
@@ -65,15 +62,13 @@ _EOCSS_
 			print "#### EOD ###\n";
 			last;
 		}
-		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $p);
+		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $p, $clp);
 
 		print HTML "<!-- " . $p->{ext} . " -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
 		print HTML "<img src=\"$IMG_PATH/$png\">\n";
 		print HTML "<br>\n";
-		if(defined $clp->{src_ref}){
-			print HTML "<span $class> Data Source $clp->{src_ref} </span>\n";
-		}
+		print HTML "<span $class> Data Source $src_ref </span>\n";
 		print HTML "<hr>\n";
 		print HTML "<TABLE>";
 		for(my $l = 0; $l <= $#legs; $l++){
@@ -87,18 +82,19 @@ _EOCSS_
 
 		my $csvf = $clp->{csvf};
 		my $srcf = csvlib::valdef($clp->{srcf}, "");
-		print $srcf , "\n";
-		$csvf =~ s#$WIN_PATH/##;
-		$srcf =~ s#$WIN_PATH/##;
-		my @refs = ("PNG:./cov_data:$png",
-					"CSV:./cov_data:$csv",
-					"PLT:./cov_data:$plot",
-					"REF:.:$csvf",
-					"SRC:.:$srcf",
+		dp::dp $srcf , "\n" if($srcf && $VERBOSE);
+		$csvf =~ s#.*/##;
+		$srcf =~ s#.*/##;
+		my @refs = (join(":", "PNG", $PNG_REL_PATH, $png),
+					join(":", "CSV", $PNG_REL_PATH, $csv),
+					join(":", "PLT", $PNG_REL_PATH, $plot),
+					join(":", "REF", "", $csvf),
+					join(":", "SRC", "", $srcf),
 		);
 		#dp::dp "##### SRC:[$srcf][" . $clp->{srcf} . "]\n";
 		foreach my $r (@refs){
 			my ($tag, $path, $fn) = split(":", $r);
+			#dp::dp "r:[$r]  $tag, $path, $fn\n";
 			#next if(! $fn);
 			print HTML "$tag:<a href=\"$path/$fn\">$fn</a>\n"; 
 		}
@@ -115,9 +111,9 @@ _EOCSS_
 #
 sub	csv2graph
 {
-	my ($csvf, $png_path, $kind, $p) = @_;
+	my ($csvf, $png_path, $kind, $p, $clp) = @_;
 
-	dp::dp join(", ", $p->{ext}, $p->{start_day}, $p->{lank}[0], $p->{lank}[1], $p->{exclusion}), "\n" if($DEBUG > 1);
+	dp::dp join(", ", $p->{ext}, $p->{start_day}, $p->{lank}[0], $p->{lank}[1], $p->{exclusion}, "[" . $clp->{src} . "]"), "\n" if($DEBUG > 1);
 	
 	my $src = csvlib::valdefs($p->{src}, "");
 	my $ext = $p->{ext};
@@ -126,17 +122,19 @@ sub	csv2graph
 	my $fname = $ext;
 	$fname =~ s/#LD#//;
 	$fname =~ s#/#-#g;
-	$fname =~ s/[\(\) ]//g;
+	$fname =~ s/[^0-9a-zA-Z]+/_/g;
 	
 
 	my $plot_pngf = $png_path . "/" . $fname . ".png";
 	my $plot_cmdf = $png_path . "/" . $fname . "-plot.txt";
 	my $plot_csvf = $png_path . "/" . $fname . "-plot.csv.txt";
-	dp::dp $plot_pngf , "\n" if($DEBUG > 1);		#### 
-	dp::dp "SRC CSV [$csvf]\n" if($DEBUG);
-	dp::dp "DST CSV [$plot_csvf]\n" if($DEBUG);
-	dp::dp "DST CMD [$plot_cmdf]\n" if($DEBUG);
-	dp::dp "DST PNG [$plot_pngf]\n" if($DEBUG);
+	if($DEBUG){
+		dp::dp $plot_pngf , "\n" ;		#### 
+		dp::dp "SRC CSV [$csvf]\n" ;
+		dp::dp "DST CSV [$plot_csvf]\n";
+		dp::dp "DST CMD [$plot_cmdf]\n";
+		dp::dp "DST PNG [$plot_pngf]\n";
+	}
 
 #	$plot_pngf =~ s/[\(\) ]//g;
 	#
@@ -300,14 +298,14 @@ sub	csv2graph
 			my $country = $COUNTRY[$i-1];
 			#print "### [$country]: ";
 			my $item_number = $TOTAL{$country};
-			if(defined $p->{average}){
+			if(defined $p->{average_date}){
 				# print "$item_number : $dt";
 				my $av = 0;
 				if($dt > $item_number){
 					$v = $NO_DATA;			# for FT, set nodata
 				}
 				else {
-					for(my $ma = $dt - $p->{average}; $ma <= $dt; $ma++){
+					for(my $ma = $dt - $p->{average_date}; $ma <= $dt; $ma++){
 						my $d = $Dataset[$i][$dt];
 						if($ma >= 0) {
 							$d = $Dataset[$i][$ma];
@@ -315,7 +313,7 @@ sub	csv2graph
 						$av += $d;
 						#print "($i: $dt $ma $av)";
 					}
-					$v = int(0.5 + $av / $p->{average});
+					$v = int(0.5 + $av / $p->{average_date});
 					$v = 1 if($v < 1 && defined $p->{logscale});
 				}
 				#print "--> $v\n";
@@ -353,7 +351,7 @@ sub	csv2graph
 	#
 	#	グラフ生成
 	#
-	my $TITLE = $ext;
+	my $TITLE = $ext . "  src:" . $clp->{src};
 	my $XLABEL = "";
 	my $YLABEL = "";
 	my $START_DATE = $DATES[0];
@@ -434,7 +432,7 @@ _EOD_
 	print PLF $PARAMS;
 	close(PLF);
 
-	print ("gnuplot $plot_cmdf\n") if(1 || $DEBUG > 1);
+	print ("gnuplot $plot_cmdf\n") if($VERBOSE || $DEBUG > 1);
 	system("gnuplot $plot_cmdf");
 
 	$plot_pngf =~ s#.*/##;
