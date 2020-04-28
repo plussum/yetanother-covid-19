@@ -20,6 +20,7 @@ use ccse;
 #	初期化など
 #
 my $DEBUG = 0;
+my $VERBOSE = 0;
 my $MIN_TOTAL = 100;
 
 my $WIN_PATH = $config::WIN_PATH;
@@ -88,7 +89,7 @@ my 	$FUNCS = {
 	COUNT => \&daily,
 	FT => \&ft,
 	RT => \&rate,
-	POP => \&pop,
+	#POP => \&pop,
 };
 
 my $DLM = $plist->{DLM};
@@ -105,7 +106,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 			my $STG2_CSVF = $config::CSV_PATH  . "/" . $plist->{prefix} . join("_", $SUB_MODE, $AGGR_MODE) . ".csv.txt";
 			my $HTMLF = $config::HTML_PATH . "/" . $plist->{prefix} . join("_", $MODE, $SUB_MODE, $AGGR_MODE) . ".html";
 
-			if($DEBUG){
+			if($VERBOSE || $DEBUG){
 				dp::dp "SRC_FILE:[$SRC_FILE]\n" ;
 				dp::dp "STG1_CSVF:[$STG1_CSVF]\n";
 				dp::dp "HTMLF:[$HTMLF]\n";
@@ -145,7 +146,7 @@ sub	daily
 	my ($fp) = @_;
 	my $plist = $fp->{param};
 
-	#dp::dp Dumper $p;
+	dp::dp "daily \n" ; # Dumper($fp);
 
 	#
 	#	Load CCSE CSV
@@ -157,7 +158,8 @@ sub	daily
 	#	グラフとHTMLの作成
 	#
 
-	my $name = ($fp->{mode} eq "NC") ? "NEW CASE" : "NEW DEATH"; 
+	my $aggr_mode = $fp->{aggr_mode};
+	my $name = ($fp->{mode} eq "NC") ? "$aggr_mode NEW CASE" : "$aggr_mode NEW DEATH"; 
 	my $csvlist = {
 		name => $name,
 		csvf => $fp->{stage1_csvf}, htmlf => $fp->{htmlf}, kind => $fp->{mode},
@@ -181,6 +183,8 @@ sub	pop
 	my ($fp) = @_;
 	my $plist = $fp->{param};
 
+	dp::dp "pop: \n" ; #  Dumper($fp) ;
+
 	#
 	#	Load CCSE CSV
 	#
@@ -191,6 +195,7 @@ sub	pop
 	#	PARAMS for POP
 	#
 	my $name = ($fp->{mode} eq "NC") ? "POP NEW CASE" : "POP NEW DEATH"; 
+	dp::dp "NAME: $name \n";
 	my $csvlist = {
 		name => $name,
 		csvf => $fp->{stage1_csvf}, htmlf => $fp->{htmlf}, kind => $fp->{mode},
@@ -255,7 +260,7 @@ sub	ft
 
 	#dp::dp "### gparam " . Dumper ($fp->{gparam}{graphp}) . "\n";
 	foreach my $gp (@{$fp->{gparam}{graphp}}){
-		$gp->{ymin} = $plist->{ymin};
+		$gp->{ymin} = $fp->{gparam}{ymin};
 		$gp->{guide} = $guide;
 		$gp->{average_date} = $fp->{gparam}{average_date};
 		$gp->{ext} =~ s/#FT_TD#/$FT_TD/;

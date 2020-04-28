@@ -123,7 +123,6 @@ sub	csv2graph
 	$fname =~ s/#LD#//;
 	$fname =~ s#/#-#g;
 	$fname =~ s/[^0-9a-zA-Z]+/_/g;
-	
 
 	my $plot_pngf = $png_path . "/" . $fname . ".png";
 	my $plot_cmdf = $png_path . "/" . $fname . "-plot.txt";
