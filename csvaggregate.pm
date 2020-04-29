@@ -63,7 +63,7 @@ sub	csv_aggregate
 
 	my $start_time = time;
 		
-	dp::dp "### open $agrp->{input_file}: " . (time - $start_time) . "\n";
+	dp::dp "### open $agrp->{input_file}: " . (time - $start_time) . "\n" if($DEBUG > 1);
 	open(TRN, $agrp->{input_file}) || die "cannot open $agrp->{input_file} file\n";
 
 	$_ = <TRN>; chop;
@@ -90,7 +90,7 @@ sub	csv_aggregate
 	my $date_start = 9999999999;
 	my $date_final = 0;
 	my @date_list = ();
-	dp::dp "### start read data $agrp->{input_file}: " . (time - $start_time) . "\n" ;
+	dp::dp "### start read data $agrp->{input_file}: " . (time - $start_time) . "\n" if($DEBUG > 1);
 	while(<TRN>){
 		chop;
 		my @w = split(/,/, $_);
@@ -121,12 +121,12 @@ sub	csv_aggregate
 		$total += $v;
 	}
 	close(TRN);
-	dp::dp "### close $agrp->{input_file}: " . (time - $start_time) . "\n";
+	dp::dp "### close $agrp->{input_file}: " . (time - $start_time) . "\n"if($DEBUG > 1);
 
 	#
 	#	欠損している日時に補完するために最小から最大までの日をセットする
 	#
-	dp::dp "### make no data date \n";
+	dp::dp "### make no data date \n"if($DEBUG > 1);
 	for(my $tm = $date_start; $tm <= $date_final; $tm += 60 * 60 * 24){
 		my $ymd = csvlib::ut2d4($tm, "");
 		push(@date_list, $ymd);
@@ -135,7 +135,7 @@ sub	csv_aggregate
 	#
 	#	日付けでsortし、データを出力
 	#
-	dp::dp "### set sort key : " . (time - $start_time) . "\n";
+	dp::dp "### set sort key : " . (time - $start_time) . "\n"if($DEBUG > 1);
 	
 	#	選択した項目をソートして配列に入れておく（ソートを一回で済ますため）I
 	my @sorted_select_items = (sort {$select_items{$b} <=> $select_items{$a}} keys %select_items);
@@ -162,6 +162,7 @@ sub	csv_aggregate
 	#
 	my $rn = 0;
 	my $aggr_mode = csvlib::valdefs($agrp->{aggr_mode}, "");
+	dp::dp "aggr_mode: $aggr_mode\n"if($DEBUG > 1);
 	if(! $aggr_mode){
 		foreach my $sk (@sorted_select_items){
 			my @records = ();
@@ -202,8 +203,8 @@ sub	csv_aggregate
 	}
 	close(CSV);
 
-	dp::dp "### done sort : " . (time - $start_time) . "\n";
-	print join($DLM, "total", $count, $total), "\n";
+	dp::dp "### done sort : " . (time - $start_time) . "\n"if($DEBUG > 1);
+	dp::dp join($DLM, "total", $count, $total), "\n"if($DEBUG > 1);
 
 	return ($#date_list, $rn , $date_list[0], $date_list[$#date_list]) ;
 }

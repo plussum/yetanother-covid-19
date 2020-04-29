@@ -148,22 +148,24 @@ sub	csv2graph
 	#
 	#	Read CSV DATA
 	#
-	my @COL = ();
+	my @DATE_LABEL = ();
 	my @DATA = ();
+	my $DATE_COL_NO = 2;
 
 	open(CSV, $csvf) || die "cannot open $csvf";
 	my $cls = <CSV>; 
 	$cls =~ s/,*[\r\n]+$//;
 	for(split(/,/, $cls)){
 		# s#[0-9]{4}/##;
-		push(@COL,  $_);
+		push(@DATE_LABEL,  $_);
 	}
-	shift(@COL);
-	shift(@COL);
-	dp::dp join(",", @COL), "\n" if($DEBUG > 2);
+	for(my $i = 0; $i <$DATE_COL_NO; $i++){
+		shift(@DATE_LABEL);
+	}
+	dp::dp join(",", @DATE_LABEL), "\n" if($DEBUG > 2);
 
-	my $DATE_NUMBER = $#COL;
-	my $LAST_DATE = $COL[$DATE_NUMBER];
+	my $DATE_NUMBER = $#DATE_LABEL;
+	my $LAST_DATE = $DATE_LABEL[$DATE_NUMBER];
 	$ext =~ s/#LD#/$LAST_DATE/;
 
 	my $l;
@@ -180,11 +182,11 @@ sub	csv2graph
 
 	if($DEBUG > 1){
 		dp::dp "CSV: DATA\n";
-		dp::dp "     :" , join(",", @COL) , "\n";
+		dp::dp "     :" , join(",", @DATE_LABEL) , "\n";
 		for($l = 0; $l < 5; $l++){		# $COUNTRY_NUMBER
 			dp::dp $DATA[$l][0] . ": ";
-			for(my $i = 2; $i <= $DATE_NUMBER + 2; $i++){
-				# print "# " . $i . "  " . $COL[$i-2] .":" ;
+			for(my $i = $DATE_COL_NO; $i <= $DATE_NUMBER + $DATE_COL_NO; $i++){
+				# print "# " . $i . "  " . $DATE_LABEL[$i-$DATE_COL_NO] .":" ;
 				print $DATA[$l][$i] , ",";
 			}
 			print "\n";
@@ -197,9 +199,9 @@ sub	csv2graph
 	#
 	my $std = defined($gplitem->{start_day}) ? $gplitem->{start_day} : 0;
 	if($std =~ /[0-9]+\/[0-9]+/){
-		my $n = csvlib::search_list($std, @COL);
-		#dp::dp ">>>> $std: $n " . $COL[$n-1] . "\n";
-		#dp::dp ">>> " . join(",", @COL) . "\n";
+		my $n = csvlib::search_list($std, @DATE_LABEL);
+		#dp::dp ">>>> $std: $n " . $DATE_LABEL[$n-1] . "\n";
+		#dp::dp ">>> " . join(",", @DATE_LABEL) . "\n";
 		if($n > 0){
 			$std = $n - 1;
 		}
@@ -222,7 +224,7 @@ sub	csv2graph
 	dp::dp "TARGET: " , $gplitem->{target}, "  " . $#target, "\n" if($DEBUG > 1);
 	dp::dp "ADD_TARGET: " , $gplitem->{add_target}, "  " . $#add_target, "\n" if($DEBUG > 1);
 
-	my @DATES = @COL[$std..$end];
+	my @DATES = @DATE_LABEL[$std..$end];
 	dp::dp "DATES: ", join(",", @DATES) , "\n" if($DEBUG > 1);
 
 	my @LEGEND_KEYS = ();
@@ -240,7 +242,7 @@ sub	csv2graph
 
 		my $tl = 0;
 		for(my $dn = 0; $dn < $dates; $dn++){
-			my $p = $dn+$std+2;
+			my $p = $dn+$std+$DATE_COL_NO;
 			my $c = csvlib::valdef($DATA[$cn][$p], 0);
 			if($c =~ /[^0-9]\-\./){
 				dp::dp "($dn:$std:$p:$c:$csvf)\n";
@@ -410,7 +412,7 @@ _EOD_
 		my $country = $LEGEND_KEYS[$i];
 		$country =~ s/'//g;
 		push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d ", 
-					$plot_csvf, $i+2, $country, ($i < 5) ? 2 : 1)
+					$plot_csvf, $i+$DATE_COL_NO, $country, ($i < 5) ? 2 : 1)
 			);
 	}
 	my $pn = join(",", @w); 

@@ -13,9 +13,9 @@ use warnings;
 use config;
 use csvgpl;
 use params;
-use ft;
-use rate;
 use dp;
+#use ft;
+#use rate;
 
 my $DEBUG = 1;
 my $DLM = $config::DLM;
@@ -188,7 +188,7 @@ sub	aggregate
 		}
 		close(TXT);
 	}
-	printf "#### LAST_DATE : $LAST_DATE\n";
+	dp::dp "#### LAST_DATE : $LAST_DATE\n" if($DEBUG > 1);
 		
 	open(SRC, ">$src_file") || die "cannot create $src_file\n";
 	print SRC "<HTML>\n";

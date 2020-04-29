@@ -18,8 +18,8 @@ use csvgpl;
 use jhccse;
 use dp;
 use params;
-use ft;
-use rate;
+#use ft;
+#use rate;
 
 
 #

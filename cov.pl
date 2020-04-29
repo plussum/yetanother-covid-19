@@ -40,7 +40,7 @@ my $WIN_PATH = "/mnt/f/OneDrive/cov";
 my $INDEX_HTML = "$WIN_PATH/covid_index.html";
 my $FRAME_HTML = "$WIN_PATH/covid_frame.html";
 my $DIR = "/mnt/f/OneDrive/cov";
-my @src_list = qw (jhccse who jag);
+my @src_list = qw (jhccse who jag jagtotal);
 my @mode_list = qw (NC ND);
 my @submode_list = qw (COUNT FT RT);
 my @aggr_list = qw (DAY POP);
@@ -84,7 +84,7 @@ foreach my $src (@src_list){
 		foreach my $aggr (@aggr_list){
 			foreach my $mode (@mode_list){
 				next if($aggr eq "POP" && ($sub ne "COUNT" || $src ne "jhccse"));
-				next if($src eq "jag" && $mode eq "ND");
+				next if($src =~ /jag/ && $mode eq "ND");
 				my $relp = join("_", $src, $mode, $sub, $aggr) . ".html";
 
 				print FRAME "<li><a href =\"HTML/$relp\" target=\"graph\">$relp</a></li>\n";

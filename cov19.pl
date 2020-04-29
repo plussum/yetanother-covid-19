@@ -40,6 +40,7 @@ use params;
 use ccse;
 use who;
 use jag;
+use jagtotal;
 
 
 #
@@ -55,11 +56,13 @@ my $SRC_FILE = "";
 my $MODE = "";
 my $DOWNLOAD = 0;
 my $COPY = 0;
+my $FULL_SOURCE = 0;
 
 my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
+my @FULL_DATA_SOURCES = qw (ccse who jag jagtotal);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
@@ -67,30 +70,39 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$DOWNLOAD = 1 if(/-DL/i);
 	$COPY = 1 if(/-copy/);
 
-	$DATA_SOURCE = "ccse" if(/-ccse/);
-	$DATA_SOURCE = "who" if(/-who/);
-	$DATA_SOURCE = "jag" if(/-jag/);
+	$DATA_SOURCE = "ccse" if(/-ccse/i);
+	$DATA_SOURCE = "who" if(/-who/i);
+	$DATA_SOURCE = "jag" if(/-jag/i);
+	$DATA_SOURCE = "jagtotal" if(/-jagtotal/i);
 
-	push(@MODE_LIST, "ND") if(/-ND/);
-	push(@MODE_LIST, "NC") if(/-NC/);
-	push(@SUB_MODE_LIST, "FT") if(/-FT/);
-	push(@SUB_MODE_LIST, "RT") if(/-RT/);
-	push(@AGGR_LIST, "POP") if(/-POP/);
-	if(/-ALL/i){
+	push(@MODE_LIST, "ND") if(/-ND/i);
+	push(@MODE_LIST, "NC") if(/-NC/i);
+	push(@SUB_MODE_LIST, "FT") if(/-FT/i);
+	push(@SUB_MODE_LIST, "RT") if(/-RT/i);
+	push(@AGGR_LIST, "POP") if(/-POP/i);
+	$FULL_SOURCE = 1 if(/-FULL/i);
+	if(/-all/){
 		push(@MODE_LIST, "ND", "NC");
 		push(@SUB_MODE_LIST, "COUNT", "FT", "RT");
 		push(@AGGR_LIST, "DAY", "POP");
 	}
+}
+if($FULL_SOURCE){
+	foreach my $src (@FULL_DATA_SOURCES){
+		system("$0 -$src -all");
+	}
+	exit(0);
 }
 
 my $mep = ""; 
 $mep = ccse::new() if($DATA_SOURCE eq "ccse");
 $mep = who::new()  if($DATA_SOURCE eq "who");
 $mep = jag::new()  if($DATA_SOURCE eq "jag");
+$mep = jagtotal::new()  if($DATA_SOURCE eq "jagtotal");
 die "no package for $DATA_SOURCE\n" if(! $mep);
 
 
-dp::dp join(",", "DATA SOURCE:[$DATA_SOURCE] ", $mep->{src}, "[" . $mep->{comment} . "]") . "\n";
+dp::dp join(",", "DATA SOURCE:[$DATA_SOURCE] ", $mep->{src}, "[" . $mep->{comment} . "]") . "\n" if($DEBUG);
 
 if($COPY){
 	my $copy = $mep->{copy};
@@ -124,7 +136,7 @@ my $SOURCE_DATA = $mep->{src};
 foreach my $AGGR_MODE (@AGGR_LIST){
 	foreach my $MODE (@MODE_LIST){
 		foreach my $SUB_MODE (@SUB_MODE_LIST){
-			dp::dp "AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n";
+			dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n";
 
 			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");
 			my $SRC_FILE = $mep->{src_file}{$MODE};
@@ -188,9 +200,9 @@ sub	daily
 
 	#my $prefix = $mep->{prefix};
 	my $name = ($fp->{mode} eq "NC") ? "NEW CASE" : "NEW DEATH"; 
-	dp::dp "name: $name\n";
+	#dp::dp "name: $name\n";
 	my $csvlist = {
-		name => $name,
+		name => $name . "(" . $fp->{aggr_mode} .")",
 		csvf => $fp->{stage1_csvf}, 
 		htmlf => $fp->{htmlf},
 		kind => $fp->{mode},
@@ -204,6 +216,7 @@ sub	daily
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
+		csv_aggr_mode => (defined $mep->{csv_aggr_mode} ? $mep->{csv_aggr_mode} : ""),
 	);
 	#dp::dp "### daily: " . Dumper(%params) . "\n";
 	csvgpl::csvgpl(\%params);
