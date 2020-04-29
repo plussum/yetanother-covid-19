@@ -28,7 +28,6 @@ use rate;
 my $DEBUG = 0;
 my $DLM = $config::DLM;
 my $WIN_PATH = $config::WIN_PATH;
-my $INFO_PATH = $config::INFO_PATH->{ccse};
 
 my $EXCLUSION = "Others,US";
 my $EXC_POP = "San Marino,Holy See";
@@ -38,7 +37,7 @@ my $infopath = $config::INFOPATH->{ccse} ;
 
 my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 
-our $PARAMS = {
+our $PARAMS = {			# MODULE PARETER        $mep
 	comment => "**** CCSE PARAMS ****",
 	src => "Johns Hopkins CSSE",
 	src_url => "https://github.com/beoutbreakprepared/nCoV2019",
@@ -53,12 +52,13 @@ our $PARAMS = {
 	aggregate => \&aggregate,
 	download => \&download,
 	copy => \&copy,
-	DLM => ",",
+	DLM => $DLM,
 
 
-	COUNT => {
+	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "US",
-		graphp => [@params::PARAMS_COUNT, 
+		graphp => [		# GPL PARAMETER         $gplp
+			@params::PARAMS_COUNT, 
 			{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
 			{ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
 		],
@@ -73,7 +73,6 @@ our $PARAMS = {
 	},
 	RT => {
 		EXC => "Others",
-		ymin => 10,
 		ip => 5,
 		lp => 8,
 		average_date => 7,

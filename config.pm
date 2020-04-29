@@ -17,6 +17,8 @@ our $CSV_PATH  = "$WIN_PATH/CSV";
 our $PNG_PATH  = "$WIN_PATH/PNG";
 our $PNG_REL_PATH  = "../PNG";		# HTML からの相対パス
 our $CSV_REL_PATH  = "../CSV";		# HTML からの相対パス
+our $RT_IP = 5;
+our $RT_LP = 8;
 our $DLM = ",";
 
 my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";

@@ -19,13 +19,13 @@ my $WIN_PATH = "";
 my $NO_DATA = "NaN";
 sub	csvgpl
 {
-	my ($para) = @_;
+	my ($csvgplp) = @_;
  
-	$DEBUG = csvlib::valdef($para->{debug} , $DEBUG);
+	$DEBUG = csvlib::valdef($csvgplp->{debug} , $DEBUG);
 	if($DEBUG){
 		print "###### csvgpl #####\n";
 		open(PARA, "> param.txt") || die "param.txt";
-		print PARA Dumper $para ;
+		print PARA Dumper $csvgplp ;
 		close(PARA);
 	}
 
@@ -38,9 +38,9 @@ sub	csvgpl
 	my $CSS = $config::CSS;
 	my $class = $config::CLASS;
 
-	my $clp = $para->{clp};
-	my $grp = $para->{params};
-	my $plist = $para->{plist};
+	my $clp = $csvgplp->{clp};
+	my $gplp = $csvgplp->{gplp};
+	my $mep = $csvgplp->{mep};
 
 	my $src_url = $clp->{src_url};
     my $src_ref = "<a href=\"$src_url\">$src_url</a>";
@@ -58,15 +58,15 @@ sub	csvgpl
 
 	#print HTML "SOURCE: <a href = \"$WHO_PAGE\"> WHO situation Reports</a>\n<br>\n";
 
-	foreach my $p (@$grp){
-		# $p->{kind} = $clp->{name};
-		if($p->{ext} eq "EOD"){
+	foreach my $gplitem (@$gplp){
+		# $gplitem->{kind} = $clp->{name};
+		if($gplitem->{ext} eq "EOD"){
 			print "#### EOD ###\n";
 			last;
 		}
-		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $p, $clp, $plist);
+		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep);
 
-		print HTML "<!-- " . $p->{ext} . " -->\n";
+		print HTML "<!-- " . $gplitem->{ext} . " -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
 		print HTML "<img src=\"$IMG_PATH/$png\">\n";
 		print HTML "<br>\n";
@@ -119,12 +119,13 @@ sub	csvgpl
 #
 sub	csv2graph
 {
-	my ($csvf, $png_path, $kind, $p, $clp, $plist) = @_;
+	my ($csvf, $png_path, $kind, $gplitem, $clp, $mep) = @_;
 
-	dp::dp join(", ", $p->{ext}, $p->{start_day}, $p->{lank}[0], $p->{lank}[1], $p->{exclusion}, "[" . $clp->{src} . "]"), "\n" if($DEBUG > 1);
+	dp::dp join(", ", $gplitem->{ext}, $gplitem->{start_day}, $gplitem->{lank}[0], $gplitem->{lank}[1], $gplitem->{exclusion}, 
+			"[" . $clp->{src} . "]", $mep->{prefix}), "\n" if($DEBUG > 1);
 	
-	my $src = csvlib::valdefs($p->{src}, "");
-	my $ext = $plist->{prefix} . " " . $p->{ext};
+	my $src = csvlib::valdefs($gplitem->{src}, "");
+	my $ext = $mep->{prefix} . " " . $gplitem->{ext};
 	$ext =~ s/#KIND#/$kind/;
 	$ext =~ s/#SRC#/$src/;
 	my $fname = $ext;
@@ -194,7 +195,7 @@ sub	csv2graph
 	#
 	#	Graph Parameter set
 	#
-	my $std = defined($p->{start_day}) ? $p->{start_day} : 0;
+	my $std = defined($gplitem->{start_day}) ? $gplitem->{start_day} : 0;
 	if($std =~ /[0-9]+\/[0-9]+/){
 		my $n = csvlib::search_list($std, @COL);
 		#dp::dp ">>>> $std: $n " . $COL[$n-1] . "\n";
@@ -209,16 +210,17 @@ sub	csv2graph
 	}	
 	my $end = $DATE_NUMBER;
 	my $dates = $end - $std + 1;
-	my $tgcs = $p->{lank}[0];						# 対象ランク
-	my $tgce = $p->{lank}[1];						# 対象ランク 
+	my $tgcs = $gplitem->{lank}[0];						# 対象ランク
+	my $tgce = $gplitem->{lank}[1];						# 対象ランク 
 	$tgce = $COUNTRY_NUMBER if($tgce > $COUNTRY_NUMBER);
 
-	my @exclusion = split(/,/, $p->{exclusion});	# 除外国
-	my @target = split(/,/, csvlib::valdefs($p->{target}, ""));			# 明示的対象国
-	my @add_target = split(/,/, csvlib::valdefs($p->{add_target}, ""));	# 追加する対象国
+	my @exclusion = split(/,/, $gplitem->{exclusion});	# 除外国
+	my @target = split(/,/, csvlib::valdefs($gplitem->{target}, ""));			# 明示的対象国
+	my @add_target = split(/,/, csvlib::valdefs($gplitem->{add_target}, ""));	# 追加する対象国
 
-	dp::dp "TARGET: " , $p->{target}, "  " . $#target, "\n" if($DEBUG > 1);
-	dp::dp "ADD_TARGET: " , $p->{add_target}, "  " . $#add_target, "\n" if($DEBUG > 1);
+	dp::dp "EXCLUS: " , $gplitem->{exclusion}, "  " . $#exclusion, "\n" if($DEBUG > 1);
+	dp::dp "TARGET: " , $gplitem->{target}, "  " . $#target, "\n" if($DEBUG > 1);
+	dp::dp "ADD_TARGET: " , $gplitem->{add_target}, "  " . $#add_target, "\n" if($DEBUG > 1);
 
 	my @DATES = @COL[$std..$end];
 	dp::dp "DATES: ", join(",", @DATES) , "\n" if($DEBUG > 1);
@@ -260,8 +262,9 @@ sub	csv2graph
 	foreach my $country (sort {$CTG{$b} <=> $CTG{$a}} keys %CTG){
 		$rn++;
 		next if($#exclusion >= 0 && csvlib::search_list($country, @exclusion));
-		next if($#target >= 0 && $#exclusion >= 0 && ! csvlib::search_list($country, @target));
-		dp::dp "Yes, Target $CNT $tgcs $tgce\n" if($DEBUG > 1);
+		#next if($#target >= 0 && $#exclusion >= 0 && ! csvlib::search_list($country, @target));
+		next if($#target >= 0 && ! csvlib::search_list($country, @target));
+		dp::dp "Yes, Target $CNT $country [$tgcs, $tgce]\n" if($DEBUG && $#target >= 0);
 
 		$CNT++;
 		if($CNT < $tgcs || $CNT > $tgce){
@@ -293,13 +296,13 @@ sub	csv2graph
 	#
 	#	グラフの生成 CSV
 	#
-	#dp::dp "AVERAGE_DATE : [" . $p->{average_date} . "]\n";
+	#dp::dp "AVERAGE_DATE : [" . $gplitem->{average_date} . "]\n";
 	my @record = ();
 	my $max_data = 0;
 	for(my $dt = 0; $dt <= $#DATES; $dt++){
 		my $dts  = $DATES[$dt];
 		$dts =~ s#([0-9]{4})([0-9]{2})([0-9]{2})#$1/$2/$3#;
-		$dts = $dt if(defined $p->{ft});
+		$dts = $dt if(defined $gplitem->{ft});
 		#print "[[$DATES[$dt]][$dts]\n";
 		my @data = ();
 		for (my $i = 1; $i <= $#Dataset; $i++){
@@ -308,13 +311,13 @@ sub	csv2graph
 			#print "### [$country]: ";
 			my $item_number = $TOTAL{$country};
 			#dp::dp "###### $item_number : $dt";
-			if(defined $p->{average_date}){
+			if(defined $gplitem->{average_date}){
 				my $av = 0;
 				if($dt > $item_number){
 					$v = $NO_DATA;			# for FT, set nodata
 				}
 				else {
-					for(my $ma = $dt - $p->{average_date}; $ma <= $dt; $ma++){
+					for(my $ma = $dt - $gplitem->{average_date}; $ma <= $dt; $ma++){
 						my $d = $Dataset[$i][$dt];
 						if($ma >= 0) {
 							$d = $Dataset[$i][$ma];
@@ -322,9 +325,9 @@ sub	csv2graph
 						$av += $d;
 						#dp::dp "($i: $dt $ma $av)";
 					}
-					$v = int(0.5 + $av) / $p->{average_date};
-					#$v = int(100 * $av / $p->{average_date}) / 100;
-					#$v = 1 if($v < 1 && defined $p->{logscale});
+					$v = int(0.5 + $av) / $gplitem->{average_date};
+					#$v = int(100 * $av / $gplitem->{average_date}) / 100;
+					#$v = 1 if($v < 1 && defined $gplitem->{logscale});
 				}
 				#print "--> $v\n";
 			}
@@ -369,12 +372,12 @@ sub	csv2graph
 
 	my $DATE_FORMAT = "set xdata time\nset timefmt '%m/%d'\nset format x '%m/%d'\n";
 	my $XRANGE = "set xrange ['$START_DATE':'$LAST_DATE']";
-	if(defined $p->{series}){
+	if(defined $gplitem->{series}){
 		$DATE_FORMAT = "";
 		$XRANGE = "set xrange [1:" . $final_rec . "]";
 	}
-	my $TERM_XSIZE = csvlib::valdef($p->{term_xsize}, 1000) ;
-	my $TERM_YSIZE = csvlib::valdef($p->{term_ysize}, 300);
+	my $TERM_XSIZE = csvlib::valdef($gplitem->{term_xsize}, 1000) ;
+	my $TERM_YSIZE = csvlib::valdef($gplitem->{term_ysize}, 300);
 
 my $PARAMS = << "_EOD_";
 set datafile separator ','
@@ -411,29 +414,29 @@ _EOD_
 			);
 	}
 	my $pn = join(",", @w); 
-	if(defined $p->{additional_plot} && $p->{additional_plot}){
-		#dp::dp "additional_plot: " . $p->{additional_plot} . "\n";
-		$pn .= ", " . $p->{additional_plot};
+	if(defined $gplitem->{additional_plot} && $gplitem->{additional_plot}){
+		#dp::dp "additional_plot: " . $gplitem->{additional_plot} . "\n";
+		$pn .= ", " . $gplitem->{additional_plot};
 	}
 	$PARAMS =~ s/#PLOT_PARAM#/$pn/;	
 
-	my $ymin = csvlib::valdef($p->{ymin}, "");
-	my $ymax = csvlib::valdef($p->{ymax}, "");
-	if(! $ymax && defined $p->{logscale}){
-		$ymax = csvlib::calc_max($max_data, defined $p->{logscale});
+	my $ymin = csvlib::valdef($gplitem->{ymin}, "");
+	my $ymax = csvlib::valdef($gplitem->{ymax}, "");
+	if(! $ymax && defined $gplitem->{logscale}){
+		$ymax = csvlib::calc_max($max_data, defined $gplitem->{logscale});
 	}
 	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/;	
 	my $logs = "nologscale";
-	$logs = "logscale " . $p->{logscale} if(defined $p->{logscale});
+	$logs = "logscale " . $gplitem->{logscale} if(defined $gplitem->{logscale});
 	$PARAMS =~ s/#LOGSCALE#/$logs/;
 
 	my $xtics = 3600 * 24;
-	if(defined $p->{series}){
-		$xtics = csvlib::valdef($p->{y_label_skip}, 1);
+	if(defined $gplitem->{series}){
+		$xtics = csvlib::valdef($gplitem->{y_label_skip}, 1);
 	}
 	else {
-		if(defined $p->{label_skip}){
-			$xtics = $p->{label_skip} * 3600 * 24;;
+		if(defined $gplitem->{label_skip}){
+			$xtics = $gplitem->{label_skip} * 3600 * 24;;
 		}
 	}
 	$PARAMS =~ s/#XTICKS#/$xtics/;

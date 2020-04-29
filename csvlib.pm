@@ -11,6 +11,7 @@ use Exporter;
 use strict;
 use warnings;
 use Time::Local 'timelocal';
+use dp;
 
 
 
@@ -87,13 +88,15 @@ sub search_list
 {
     my ($sk, @w) = @_;
 
+    #dp::dp "search_list: $sk:" . join(",", @w) . "\n";
     for(my $i = 0; $i <= $#w; $i++){
 		my $ntc = $w[$i];
         if($sk =~ /$ntc/){
-            #print "search_list: $sk:$ntc\n" ;
-            return $i + 1;
+           #dp::dp "search_list: $sk:$ntc\n";
+           return $i + 1;
         }
     }
+    #dp::dp "Not in the list: $sk\n" ;
     return "";
 }
 

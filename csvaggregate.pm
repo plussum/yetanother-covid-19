@@ -23,6 +23,7 @@ use Data::Dumper;
 use Time::Local 'timelocal';
 use csvgpl;
 use csvlib;
+use dp;
 
 my $DEBUG = 1;
 
@@ -51,32 +52,32 @@ my %item_name_col = ();
 my $DLM = ",";
 sub	csv_aggregate
 {
-	my ($p) = @_;
+	my ($agrp) = @_;
 	
 	my %select_items= ();
 	my %count_ymd = ();
 	my %total_ymd = ();
 	my $total = 0;
 	my $count = 0;
-	$DLM = $p->{deleimiter} if(defined $p->{delimiter}); # "," "\t";
+	$DLM = $agrp->{deleimiter} if(defined $agrp->{delimiter}); # "," "\t";
 
 	my $start_time = time;
 		
-	print "### open $p->{input_file}: " . (time - $start_time) . "\n";
-	open(TRN, $p->{input_file}) || die "cannot open $p->{input_file} file\n";
+	dp::dp "### open $agrp->{input_file}: " . (time - $start_time) . "\n";
+	open(TRN, $agrp->{input_file}) || die "cannot open $agrp->{input_file} file\n";
 
 	$_ = <TRN>; chop;
 	&item_name_and_col($_);
 
-	my $datetime = $item_name_col{$p->{date_item}};
-	my @date_fmt = @{$p->{date_format}};	# mm/dd/yyyy を yy/mm/dd で見た位置
+	my $datetime = $item_name_col{$agrp->{date_item}};
+	my @date_fmt = @{$agrp->{date_format}};	# mm/dd/yyyy を yy/mm/dd で見た位置
 	my $select_items_col = "";
 	my $select_item_names = "";
 	my $select_keys = ();
-	$select_item_names = csvlib::valdef($p->{select_item}, "");
+	$select_item_names = csvlib::valdef($agrp->{select_item}, "");
 	if($select_item_names){
 		$select_items_col = $item_name_col{$select_item_names};
-		$select_keys  = (defined $p->{select_keys}) ? [@{$p->{select_keys}}] : "";
+		$select_keys  = (defined $agrp->{select_keys}) ? [@{$agrp->{select_keys}}] : "";
 	}
 	my $total_item_col = ""; #  $item_name_col{somthing};
 	my %date_ymd = ();
@@ -89,7 +90,7 @@ sub	csv_aggregate
 	my $date_start = 9999999999;
 	my $date_final = 0;
 	my @date_list = ();
-	print "### start read data $p->{input_file}: " . (time - $start_time) . "\n" ;
+	dp::dp "### start read data $agrp->{input_file}: " . (time - $start_time) . "\n" ;
 	while(<TRN>){
 		chop;
 		my @w = split(/,/, $_);
@@ -120,12 +121,12 @@ sub	csv_aggregate
 		$total += $v;
 	}
 	close(TRN);
-	print "### close $p->{input_file}: " . (time - $start_time) . "\n";
+	dp::dp "### close $agrp->{input_file}: " . (time - $start_time) . "\n";
 
 	#
 	#	欠損している日時に補完するために最小から最大までの日をセットする
 	#
-	print "### make no data date \n";
+	dp::dp "### make no data date \n";
 	for(my $tm = $date_start; $tm <= $date_final; $tm += 60 * 60 * 24){
 		my $ymd = csvlib::ut2d4($tm, "");
 		push(@date_list, $ymd);
@@ -134,7 +135,7 @@ sub	csv_aggregate
 	#
 	#	日付けでsortし、データを出力
 	#
-	print "### set sort key : " . (time - $start_time) . "\n";
+	dp::dp "### set sort key : " . (time - $start_time) . "\n";
 	
 	#	選択した項目をソートして配列に入れておく（ソートを一回で済ますため）I
 	my @sorted_select_items = (sort {$select_items{$b} <=> $select_items{$a}} keys %select_items);
@@ -151,7 +152,7 @@ sub	csv_aggregate
 	#
 	#	CSVの出力	
 	#
-	open(CSV, "> $p->{output_file}") || die "cannot create $p->{output_file}";
+	open(CSV, "> $agrp->{output_file}") || die "cannot create $agrp->{output_file}";
 
 	#	1行目：項目名など
 	print CSV "#" . join($DLM, "date", "total", @dts), "\n";
@@ -160,7 +161,7 @@ sub	csv_aggregate
 	#	1日分のデータの出力
 	#
 	my $rn = 0;
-	my $aggr_mode = csvlib::valdefs($p->{aggr_mode}, "");
+	my $aggr_mode = csvlib::valdefs($agrp->{aggr_mode}, "");
 	if(! $aggr_mode){
 		foreach my $sk (@sorted_select_items){
 			my @records = ();
@@ -201,7 +202,7 @@ sub	csv_aggregate
 	}
 	close(CSV);
 
-	print "### done sort : " . (time - $start_time) . "\n";
+	dp::dp "### done sort : " . (time - $start_time) . "\n";
 	print join($DLM, "total", $count, $total), "\n";
 
 	return ($#date_list, $rn , $date_list[0], $date_list[$#date_list]) ;
