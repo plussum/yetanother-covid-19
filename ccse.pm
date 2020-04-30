@@ -1,8 +1,14 @@
 #!/usr/bin/perl
-#	COVID-19 のデータをダウンロードして、CSVとグラフを生成する
 #
-#	beoutbreakprepared
-#	https://github.com/beoutbreakprepared/nCoV2019
+#	src => "Johns Hopkins CSSE",
+#	src_url => "https://github.com/beoutbreakprepared/nCoV2019",
+#	prefix => "jhccse_",
+#
+#	Functions must define
+#	new => \&new,
+#	aggregate => \&aggregate,
+#	download => \&download,
+#	copy => \&copy,
 #
 #
 package ccse;
@@ -18,23 +24,20 @@ use csvgpl;
 use jhccse;
 use dp;
 use params;
-#use ft;
-#use rate;
-
 
 #
-#	初期化など
+#	Initial 
 #
 my $DEBUG = 0;
 my $DLM = $config::DLM;
 my $WIN_PATH = $config::WIN_PATH;
-
-my $EXCLUSION = "Others,US";
-my $EXC_POP = "San Marino,Holy See";
-my $FT_TD = "#FT_TD#";
-my $RT_TD = "#RT_TD#"; #"ip($ip)lp($lp)moving avr($average_date) (#LD#) src $SOURCE_DATA";
 my $infopath = $config::INFOPATH->{ccse} ;
 
+
+#
+#	Parameter set
+#
+my $EXCLUSION = "Others,US";
 my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 
 our $PARAMS = {			# MODULE PARETER        $mep
@@ -54,6 +57,8 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	copy => \&copy,
 	DLM => $DLM,
 
+	AGGR_MODE => {DAY => 1, POP => 1},
+	DATA_KIND => {NC => 1, ND => 1},		#
 
 	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "US",
@@ -71,7 +76,7 @@ our $PARAMS = {			# MODULE PARETER        $mep
 			@params::PARMS_FT
 		],
 	},
-	RT => {
+	ERN => {
 		EXC => "Others",
 		ip => 5,
 		lp => 8,
@@ -80,17 +85,35 @@ our $PARAMS = {			# MODULE PARETER        $mep
 			@params::PARMS_RT
 		],
 	},
-	POP => {
-		EXC => "San Marino,Holy See",
-		graphp => [
-			@prams::PRAMS_POP
-		],
-	},
 };
 
+#
+#	For initial (first call from cov19.pl)
+#
 sub	new 
 {
 	return $PARAMS;
+}
+
+#
+#	Download data from the data source
+#
+sub	download
+{
+	my ($info_path) = @_;
+	system("(cd ../COVID-19; git pull origin master)");
+	&copy($info_path);
+	
+}
+
+#
+#	Copy download data to Windows Path
+#
+sub	copy
+{
+	my ($info_path) = @_;
+	my $BASE_DIR = $info_path->{base_dir};
+	system("cp $BASE_DIR/*.csv $WIN_PATH/CSV");
 }
 
 #
@@ -117,19 +140,5 @@ sub	aggregate
 	}
 	return @{$JHCCSE{$aggr_mode}};
 }
-
-sub	download
-{
-	my ($info_path) = @_;
-	system("(cd ../COVID-19; git pull origin master)");
-	&copy($info_path);
 	
-}
-
-sub	copy
-{
-	my ($info_path) = @_;
-	my $BASE_DIR = $info_path->{base_dir};
-	system("cp $BASE_DIR/*.csv $WIN_PATH/CSV");
-}
 1;

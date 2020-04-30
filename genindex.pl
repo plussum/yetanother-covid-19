@@ -1,48 +1,18 @@
 #!/usr/bin/perl
-#	COVID-19 のデータをダウンロードして、CSVとグラフを生成する
 #
-#	beoutbreakprepared
-#	https://github.com/beoutbreakprepared/nCoV2019
-#
+#	Generate HTML INDEX  file
 #
 use strict;
 use warnings;
 use config;
 
-my $DEBUG = 0;
-my $download = 0;
-my $gen = 1;
-
-for(my $i = 0; $i <= $#ARGV; $i++){
-	$_ = $ARGV[$i];
-	$DEBUG = 1 if(/^-debug/);
-	$download = 1 if(/-DL/i);
-	$gen = "" if(/-NG/i);
-	
-}
-
-if($gen){
-	system("(cd ../COVID-19; git pull origin master)") if($download);
-	system("./ccse.pl -all");
-
-	my $gwflag = ($download) ? "-dl" : "";
-	system("./getwho.pl $gwflag");
-
-	system("./japan.pl $gwflag");
-	system("./jprate.pl $gwflag");
-	system("./jpft.pl $gwflag");
-	system("./jpcomp.pl $gwflag");
-	system("cp COV/jpcomp.html .");
-}
-
-
-my $WIN_PATH = "/mnt/f/OneDrive/cov";
+my $WIN_PATH = $config::WIN_PATH;
 my $INDEX_HTML = "$WIN_PATH/covid_index.html";
 my $FRAME_HTML = "$WIN_PATH/covid_frame.html";
-my $DIR = "/mnt/f/OneDrive/cov";
+
 my @src_list = qw (jhccse who jag jagtotal);
 my @mode_list = qw (NC ND);
-my @submode_list = qw (COUNT FT RT);
+my @submode_list = qw (COUNT FT ERN);
 my @aggr_list = qw (DAY POP);
 
 my $INDEX = << "_EOI_";
@@ -84,10 +54,12 @@ foreach my $src (@src_list){
 		foreach my $aggr (@aggr_list){
 			foreach my $mode (@mode_list){
 				next if($aggr eq "POP" && ($sub ne "COUNT" || $src ne "jhccse"));
+				next if($mode eq "ND" && $sub eq "ERN"); 
 				next if($src =~ /jag/ && $mode eq "ND");
 				my $relp = join("_", $src, $mode, $sub, $aggr) . ".html";
 
 				print FRAME "<li><a href =\"HTML/$relp\" target=\"graph\">$relp</a></li>\n";
+				print $relp . "\n";
 			}
 		}
 	}

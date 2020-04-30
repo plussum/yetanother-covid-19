@@ -8,10 +8,10 @@
 #	thresh
 #	average
 
-package rate;
+package ern;
 use Exporter;
 @ISA = (Exporter);
-@EXOIORT = qw(rate);
+@EXOIORT = qw(ern);
 
 use strict;
 use warnings;
@@ -21,7 +21,7 @@ use dp;
 
 my $DEBUG = 0;
 
-sub	rate
+sub	ern
 {
 	my ($p) = @_;
 

@@ -1,3 +1,9 @@
+#	
+#	FT.pm
+#
+#	Finatial Times Likeな対数グラフを作るためのデータ生成
+#
+#	各国が$p->{thresh} を超えた日からの相対日で、データを生成
 #
 #	input_file
 #	output_file
@@ -69,17 +75,24 @@ sub	ft
 	#
 	#	各国が閾値を超えた日を求める
 	#
-	print join($dlm, "Country", "Total", @COUNTRY_LIST), "\n" if($DEBUG);
+	#dp::dp "AVR_DATE: $avr_date" . "\n";	
+	dp::dp join($dlm, "Country", "Total", @COUNTRY_LIST), "\n" if($DEBUG);
+	my $avr_start = 0; #int($avr_date / 2);
+	my $avr_end = $avr_date; #$avr_date - $avr_start; 
 	for(my $cn = 0; $cn <= $#COUNTRY_LIST; $cn++){
 		my $country = $COUNTRY_LIST[$cn];
 
 		for(my $dt = 0; $dt <= $date_number; $dt++){
+			my $as = ($dt < $avr_start) ? 0 : $avr_start;
+			my $ae = (($dt + $avr_end) > $date_number) ? $date_number - $dt : $avr_end;
+
 			my $dtn = $IMF_DATA[$cn][$dt]; 		#	平均を求める
-			for(my $i = $dt - $avr_date + 1; $i < $dt; $i++){
-				my $dtnw = ($i >= 0 ? $IMF_DATA[$cn][$i]: $IMF_DATA[$cn][$dt]);
+			for(my $i = $dt - $as; $i < $dt + $ae; $i++){
+				my $dtnw =  $IMF_DATA[$cn][$dt];
+				$dtnw = $IMF_DATA[$cn][$i] if($i >= 0 && $i <= $date_number);
 				$dtn += $dtnw;
 			}
-			my $avr = int(0.999999 + $dtn / $avr_date);
+			my $avr = int(0.999999 + $dtn / ($ae - $as + 1));
 			$ABS[$cn][$dt] = $avr;		# 平均値のセット
 
 			# 平均が閾値以上の場合、そこをその国の最初の日とする
@@ -93,7 +106,7 @@ sub	ft
 				$ABS[$cn][$dt] = 0 if($avr < 1);	# たぶん、NaNにしたい。。不明
 			}
 		}
-		print join(", ", $country, @{$ABS[$cn]}[0..$date_number]), "\n" x 2  if($ln < 3 && $DEBUG > 1);
+		dp::dp join(", ", $country, $FIRST{$country}, @{$ABS[$cn]}[0..$date_number]), "\n" x 2  if($ln < 3 && $DEBUG > 1);
 	}
 
 	#
@@ -121,11 +134,12 @@ sub	ft
 	print FT "\n";
 	for(my $cn = 0; $cn <= $#COUNTRY_LIST; $cn++){
 		my $country = $COUNTRY_LIST[$cn];
-		next if(! $FIRST{$country});
+		next if(! defined $FIRST{$country});
 
 		my $first = $FIRST{$country};
 		# dp::dp "FIRST: [$country:$first]\n";
-		if($DEBUG && $country =~ /Japan/){
+		if(($DEBUG) && $country =~ /Japan/){
+			dp::dp "###################\n";
 			dp::dp "first: $country: $first,$end,$date_number,$MIN_FIRST  " ;
 			dp::dp join($dlm, @{$ABS[$cn]}[$first..$end]), "\n";
 			dp::dp join($dlm, @{$ABS[$cn]}), "\n";
