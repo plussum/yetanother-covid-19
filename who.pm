@@ -28,7 +28,7 @@ use dp;
 #	Initial
 #
 
-my $DEBUG = 1;
+my $DEBUG = 0;
 my $DLM = $config::DLM;
 my $WIN_PATH = $config::WIN_PATH;
 my $INFO_PATH = $config::INFO_PATH->{ccse};
