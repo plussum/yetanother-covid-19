@@ -54,6 +54,8 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	copy => \&copy,
 	DLM => $DLM,
 
+	AGGR_MODE => {DAY => 1, POP => 1},
+	DATA_KIND => {NC => 1, ND => 1},		#
 
 	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "US",
@@ -78,12 +80,6 @@ our $PARAMS = {			# MODULE PARETER        $mep
 		average_date => 7,
 		graphp => [
 			@params::PARMS_RT
-		],
-	},
-	POP => {
-		EXC => "San Marino,Holy See",
-		graphp => [
-			@prams::PRAMS_POP
 		],
 	},
 };

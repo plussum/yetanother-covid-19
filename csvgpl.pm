@@ -333,6 +333,9 @@ sub	csv2graph
 				}
 				#print "--> $v\n";
 			}
+			if($gplitem->{logscale}){
+				$v = $NO_DATA if($v < 1);
+			}
 			push(@data, $v);
 			$max_data = $v if($v > $max_data);
 		}
@@ -422,10 +425,12 @@ _EOD_
 	}
 	$PARAMS =~ s/#PLOT_PARAM#/$pn/;	
 
-	my $ymin = csvlib::valdef($gplitem->{ymin}, "");
+	my $ymin = csvlib::valdef($gplitem->{ymin}, 0);
 	my $ymax = csvlib::valdef($gplitem->{ymax}, "");
-	if(! $ymax && defined $gplitem->{logscale}){
-		$ymax = csvlib::calc_max($max_data, defined $gplitem->{logscale});
+	if($gplitem->{logscale}){
+		$ymax = csvlib::calc_max($max_data, defined $gplitem->{logscale}) if(! $ymax);
+		$ymin = 1 if($ymin < 1);
+		# dp::dp "YRANGE [$ymin:$ymax]\n";
 	}
 	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/;	
 	my $logs = "nologscale";

@@ -52,6 +52,8 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	download => \&download,
 	copy => \&copy,
 
+	AGGR_MODE => {DAY => 1},	# NO POP
+	DATA_KIND => {NC => 1},		# NO ND => 1
 	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "US",
 		graphp => [		# GPL PARAMETER         $gplp
@@ -395,10 +397,10 @@ sub	molding
 	print $txtd , "\n" if($DEBUG > 2);
 	open(TXD, ">$txtd") || die "cannot create $txtd";
 	for(my $n = 0; $n < $ln; $n++){
-		print "## $n $RECORD[$n]\n" if($DEBUG);
+		print "## $n $RECORD[$n]\n" if($DEBUG > 1);
 		my @w = @{$RECORD[$n]};
 		print TXD join(",", @w[0..5]), "\n";
-		print join(",", @w), "\n" if($DEBUG);
+		print join(",", @w), "\n" if($DEBUG > 1);
 
 	}
 	close(TXD);

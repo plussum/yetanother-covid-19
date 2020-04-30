@@ -41,6 +41,8 @@ use ccse;
 use who;
 use jag;
 use jagtotal;
+use ft;
+use rate;
 
 
 #
@@ -70,17 +72,17 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$DOWNLOAD = 1 if(/-DL/i);
 	$COPY = 1 if(/-copy/);
 
-	$DATA_SOURCE = "ccse" if(/-ccse/i);
-	$DATA_SOURCE = "who" if(/-who/i);
-	$DATA_SOURCE = "jag" if(/-jag/i);
-	$DATA_SOURCE = "jagtotal" if(/-jagtotal/i);
+	$DATA_SOURCE = "ccse" if(/ccse/i);
+	$DATA_SOURCE = "who" if(/who/i);
+	$DATA_SOURCE = "jag" if(/jag/i);
+	$DATA_SOURCE = "jagtotal" if(/jagtotal/i);
 
 	push(@MODE_LIST, "ND") if(/-ND/i);
 	push(@MODE_LIST, "NC") if(/-NC/i);
 	push(@SUB_MODE_LIST, "FT") if(/-FT/i);
 	push(@SUB_MODE_LIST, "RT") if(/-RT/i);
 	push(@AGGR_LIST, "POP") if(/-POP/i);
-	$FULL_SOURCE = 1 if(/-FULL/i);
+	$FULL_SOURCE = $_ if(/-FULL/i);
 	if(/-all/){
 		push(@MODE_LIST, "ND", "NC");
 		push(@SUB_MODE_LIST, "COUNT", "FT", "RT");
@@ -88,8 +90,9 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	}
 }
 if($FULL_SOURCE){
+	my $dl = "-dl" if($FULL_SOURCE =~ /FULL/);
 	foreach my $src (@FULL_DATA_SOURCES){
-		system("$0 -$src -all");
+		system("$0 $src -all $dl");
 	}
 	exit(0);
 }
@@ -133,12 +136,22 @@ my 	$FUNCS = {
 
 my $DLM = $mep->{DLM};
 my $SOURCE_DATA = $mep->{src};
+
 foreach my $AGGR_MODE (@AGGR_LIST){
+	if(! csvlib::valdef($mep->{AGGR_MODE}{$AGGR_MODE},"")){
+		dp::dp "no function defined: $DATA_SOURCE: AGGR_MODE[$AGGR_MODE]\n";
+		next;
+	}
+
 	foreach my $MODE (@MODE_LIST){
+		if(! csvlib::valdef($mep->{DATA_KIND}{$MODE},"")){
+			dp::dp "no function defined: $DATA_SOURCE: MODE[$MODE]\n";
+			next;
+		}
+			
 		foreach my $SUB_MODE (@SUB_MODE_LIST){
 			dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n";
-
-			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");
+			#next if($DATA_SOURCE ne "ccse" && $AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");
 			my $SRC_FILE = $mep->{src_file}{$MODE};
 			my $STG1_CSVF   = $config::CSV_PATH  . "/" . $mep->{prefix} . join("_", $MODE, $AGGR_MODE) . ".csv.txt";
 			
@@ -223,9 +236,9 @@ sub	daily
 }
 
 #
+#	現在は、popを使っていないが、将来的に、分離する可能性があるので、タグだけ残しておく
 #
-#
-sub	pop
+sub	pop_not_in_use
 {
 	my ($fp) = @_;
 	my $mep = $fp->{mep};

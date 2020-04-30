@@ -94,12 +94,16 @@ sub	csv_aggregate
 	while(<TRN>){
 		chop;
 		my @w = split(/,/, $_);
+		next if($#w < 0 || ! $w[0] =~ /[0-9]/);
+
 		my $v = ($total_item_col) ? $w[$total_item_col] : 1;	# 1 -> count the records
 		
 		#
 		#	Date format convert
 		#
 		my $dt_raw = $w[$datetime];
+		dp::dp "dt_raw: [$dt_raw] $datetime $#w " . join(",", @w) . " " . $agrp->{input_file} . "\n$_\n" if(! defined $dt_raw);
+
 		if(!defined $date_ymd{$dt_raw}) {						# Date format 
 			next if(!$dt_raw);
 
