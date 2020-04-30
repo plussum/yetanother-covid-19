@@ -1,7 +1,17 @@
 #!/usr/bin/perl
 #
-#	WHO のデータ(pdf)をWHOからダウンロードして、CSVを生成する
+#	comment => "**** WHO PARAMS ****",
+#	src => "Who situation report",
+#	src_url => "https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports/",
+#	prefix => "who_",
 #
+#	Functions must define
+#	new => \&new,
+#	aggregate => \&aggregate,
+#	download => \&download,
+#	copy => \&copy,
+#
+
 package who;
 use Exporter;
 @ISA = (Exporter);
@@ -9,31 +19,28 @@ use Exporter;
 
 use strict;
 use warnings;
-
 use config;
 use csvgpl;
 use params;
 use dp;
-#use ft;
-#use rate;
+
+#
+#	Initial
+#
 
 my $DEBUG = 1;
 my $DLM = $config::DLM;
 my $WIN_PATH = $config::WIN_PATH;
 my $INFO_PATH = $config::INFO_PATH->{ccse};
 
+#
+#	Parameter set
+#
 my $WHO_PAGE = "https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports/";
 my $BASE_URL = "https://www.who.int";
 my $DL_DIR = "$WIN_PATH/whodata";
 
-
-#dp::dp "WIN_PATH: $WIN_PATH \n";
-
 my $REPORT_MAIN = $WIN_PATH . "/who_report_main.html";
-
-my $EXCLUSION = "Others,US";
-my $EXC_POP = "San Marino,Holy See";
-my $infopath = $config::INFOPATH->{who} ;
 
 our $PARAMS = {			# MODULE PARETER        $mep
 	comment => "**** WHO PARAMS ****",
@@ -53,7 +60,7 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	copy => \&copy,
 
 	AGGR_MODE => {DAY => 1},	# NO POP
-	DATA_KIND => {NC => 1},		# NO ND => 1
+	DATA_KIND => {NC => 1, ND => 1},		# NO ND => 1
 	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "US",
 		graphp => [		# GPL PARAMETER         $gplp
@@ -68,7 +75,7 @@ our $PARAMS = {			# MODULE PARETER        $mep
 			@params::PARMS_FT
 		],
 	},
-	RT => {
+	ERN => {
 		EXC => "Others",
 		ymin => 10,
 		ip => 5,
@@ -81,25 +88,33 @@ our $PARAMS = {			# MODULE PARETER        $mep
 };
 
 #
-#
+#	For initial (first call from cov19.pl)
 #
 sub	new 
 {
 	return $PARAMS;
 }
 
+#
+#	Download data from the data source
+#
 sub	download
 {
 	my ($info_path) = @_;
 	system("wget $WHO_PAGE -O $REPORT_MAIN");	
 }
+
+#
+#	Copy download data to Windows Path
+#
 sub	copy
 {
 	my ($info_path) = @_;
 }
 
 #
-#
+#	Aggregate WHO Situation Report 
+#		Most duty part of this program set
 #
 my $START_DATE = 20200301;	# 20200220以前はフォーマットが違う
 my $END_DATE   = 99999999;		
@@ -158,12 +173,17 @@ sub	aggregate
 			my $region;
 			my $country;
 			($region, $country, @w)  = split(/,/, $_);
+			#dp::dp "[$country] " if($country =~ /Koso/);
+
 			next if($country =~ /regions International/i);
 			next if($country =~ /regions/);
 			$country = "Iran" if($country =~ /Iran/);
 			$country = "USA"  if($country =~ /United States of America/);
 			$country = "UK"  if($country =~ /The United Kingdom/);
 			$country =~ s/ *transmission *//;
+			$country =~ s/ *\[[0-9]*\] *//;
+			#dp::dp "[$country] \n" if($country =~ /Koso/);
+			
 			print "### COUNTRY($date):" . join(",", $region, $country, @w) . " \n" if($country =~ /^[0-9]+$/);
 
 			my $k = join("\t", $date, $country);

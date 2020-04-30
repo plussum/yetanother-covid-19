@@ -1,9 +1,25 @@
 #!/usr/bin/perl
 #	COVID-19 のデータをダウンロードして、CSVとグラフを生成する
 #
-#	beoutbreakprepared
-#	https://github.com/beoutbreakprepared/nCoV2019
 #
+#	cov19.pl [ccse who jag jagtotal] -NC -ND -POP -FT -RT -FULL -full -dl
+#		-NC 		New cases
+#		-ND 		New deathes
+#		-POP		count/population (M)
+#		-FT			Finatial Times like graph
+#		-ERN(RT)	Effective reproduction number
+#		-full		do all all data srouces and functions 
+#		-FULL		-full with download
+#
+#	cov19.pl -> ccse	 ccse.pm 	John Hopkins univ. ccse
+#			 -> who		 who.pm		WHO situation report
+#			 -> jag		 jag.pm		J.A.G Japan data of Japan
+#			 -> jagtotal jagtotal.pm	Total of all prefectures on J.A.A Japan 
+#
+#		DAY				Daily count of the source data
+#		POP				Daily count / population (M)
+#		FT(ft.pm)		Finatial Times like 
+#		ERN(ern.pm)		Effective reproduction number
 #
 #
 ##
@@ -42,7 +58,7 @@ use who;
 use jag;
 use jagtotal;
 use ft;
-use rate;
+use ern;
 
 
 #
@@ -80,12 +96,12 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	push(@MODE_LIST, "ND") if(/-ND/i);
 	push(@MODE_LIST, "NC") if(/-NC/i);
 	push(@SUB_MODE_LIST, "FT") if(/-FT/i);
-	push(@SUB_MODE_LIST, "RT") if(/-RT/i);
+	push(@SUB_MODE_LIST, "ERN") if(/-RT/i || /-ERN/);
 	push(@AGGR_LIST, "POP") if(/-POP/i);
 	$FULL_SOURCE = $_ if(/-FULL/i);
 	if(/-all/){
 		push(@MODE_LIST, "ND", "NC");
-		push(@SUB_MODE_LIST, "COUNT", "FT", "RT");
+		push(@SUB_MODE_LIST, "COUNT", "FT", "ERN");
 		push(@AGGR_LIST, "DAY", "POP");
 	}
 }
@@ -130,7 +146,7 @@ push(@SUB_MODE_LIST, "COUNT") if($#SUB_MODE_LIST < 0);
 my 	$FUNCS = {
 	COUNT => \&daily,
 	FT => \&ft,
-	RT => \&rate,
+	ERN => \&ern,
 	#POP => \&pop,
 };
 
@@ -151,7 +167,9 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 			
 		foreach my $SUB_MODE (@SUB_MODE_LIST){
 			dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n";
-			#next if($DATA_SOURCE ne "ccse" && $AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");
+			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");
+			next if($SUB_MODE ne "ERN" && $MODE eq "ND");
+
 			my $SRC_FILE = $mep->{src_file}{$MODE};
 			my $STG1_CSVF   = $config::CSV_PATH  . "/" . $mep->{prefix} . join("_", $MODE, $AGGR_MODE) . ".csv.txt";
 			
@@ -212,7 +230,7 @@ sub	daily
 	#
 
 	#my $prefix = $mep->{prefix};
-	my $name = ($fp->{mode} eq "NC") ? "NEW CASE" : "NEW DEATH"; 
+	my $name = ($fp->{mode} eq "NC") ? "NEW CASES" : "NEW DEATHS"; 
 	#dp::dp "name: $name\n";
 	my $csvlist = {
 		name => $name . "(" . $fp->{aggr_mode} .")",
@@ -254,7 +272,7 @@ sub	pop_not_in_use
 	#
 	#	PARAMS for POP
 	#
-	my $name = ($fp->{mode} eq "NC") ? "POP NEW CASE" : "POP NEW DEATH"; 
+	my $name = ($fp->{mode} eq "NC") ? "POP NEW CASES" : "POP NEW DEATHS"; 
 	dp::dp "NAME: $name \n";
 	my $csvlist = {
 		name => $name,
@@ -286,6 +304,7 @@ sub	ft
 {
 	my ($fp) = @_;
 	my $mep = $fp->{mep};
+	my $mode = $fp->{mode};
 
 	#
 	#	Load CCSE CSV
@@ -296,13 +315,13 @@ sub	ft
 	#
 	#	Create FT CSV
 	#
-	my $THRESH_DAY = ($fp->{mode} eq "NC") ? 9 : 5;	# 10 : 1
+	#dp::dp "THRESH($mode): [" . $config::THRESH_FT->{$mode} . "]\n";	
 
 	my $FT_PARAM = {
 		input_file => $fp->{stage1_csvf},
 		output_file => $fp->{stage2_csvf},
 		average_date => $fp->{funcp}{average_date},
-		thresh => $THRESH_DAY,
+		thresh => $config::THRESH_FT->{$mode},	# ($fp->{mode} eq "NC") ? 9 : 5;	# 10 : 1
 		delimiter => $mep->{DLM},
 	};
 	#dp::dp "FT_PARAM: " . Dumper $FT_PARAM;
@@ -314,7 +333,7 @@ sub	ft
 	my $guide = ft::exp_guide(2,10, 10, 'linecolor "#808080"');
    	my $FT_TD = "($record)";
     $FT_TD =~ s#/#.#g;
-	my $name = ($fp->{mode} eq "NC") ? "FT NEW CASE" : "FT NEW DEATH"; 
+	my $name = ($mode eq "NC") ? "FT NEW CASES" : "FT NEW DEATHS"; 
 	my $csvlist = {
 		name => $name,
 		csvf => $fp->{stage2_csvf},
@@ -354,7 +373,7 @@ sub	ft
 #	
 #		source		https://qiita.com/oki_mebarun/items/e68b34b604235b1f28a1
 #
-sub	rate
+sub	ern
 {
 	my ($fp) = @_;
 	my $mep = $fp->{mep};
@@ -370,7 +389,7 @@ sub	rate
 		ip 		=> $fp->{funcp}{ip},
 		lp 		=> $fp->{funcp}{lp},	
 	};
-	rate::rate($RATE_PARAM);
+	ern::ern($RATE_PARAM);
 
 	#
 	#	グラフとHTMLの作成
@@ -381,7 +400,7 @@ sub	rate
 	$RT_TD =~ s#/#.#g;
 
 	my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
-	my $name = ($fp->{mode} eq "NC") ? "RATE NEW CASE" : "RATE NEW DEATH"; 
+	my $name = ($fp->{mode} eq "NC") ? "ERN NEW CASES" : "ERN NEW DEATHS"; 
 	my $csvlist = { 
 		name => $name,
 		csvf => $fp->{stage2_csvf}, 
@@ -404,5 +423,4 @@ sub	rate
 	);
 	csvgpl::csvgpl(\%params);
 }
-
 

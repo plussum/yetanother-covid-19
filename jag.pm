@@ -1,6 +1,19 @@
 #!/usr/bin/perl
 #
+#	comment => "**** J.A.G JAPAN PARAMS ****",
+#	src => "JAG JAPAN",
+#	src_url => $src_url,
+#  	prefix => "jag_",
+#	$transaction = "$CSV_PATH/gis-jag-japan.csv.txt",
+#	$src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv";
 #
+#	Functions must define
+#	new => \&new,
+#	aggregate => \&aggregate,
+#	download => \&download,
+#	copy => \&copy,
+#
+
 package jag;
 use Exporter;
 @ISA = (Exporter);
@@ -13,21 +26,24 @@ use Data::Dumper;
 use csvgpl;
 use csvaggregate;
 use csvlib;
-#use ft;
 
+#
+#	Initial
+#
 my $WIN_PATH = $config::WIN_PATH;
 my $CSV_PATH = $config::CSV_PATH;
 my $DLM = $config::DLM;
 
 my $DEBUG = 1;
 
-#my $aggr_total = "$WIN_PATH/Japan_total.csv.txt";
-#my $TOTAL_CSVF = "$WIN_PATH/japan_total$MODE" . ".csv.txt";
-#my $TOTAL_GRAPH_HTML = "$WIN_PATH/japan_total$MODE" . ".html";
-my $transaction = "$CSV_PATH/gis-jag-japan.csv.txt",
-my $src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv";
 
-my $EXCLUSION = "";
+#
+#	Parameter set
+#
+our $transaction = "$CSV_PATH/gis-jag-japan.csv.txt",
+our $src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv";
+our $EXCLUSION = "";
+
 our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** J.A.G JAPAN PARAMS ****",
     src => "JAG JAPAN",
@@ -74,7 +90,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1},
 		],
 	},
-	RT => {
+	ERN => {
 		EXEC => "",
         ip => $config::RT_IP,
 		lp => $config::RT_LP,,
@@ -92,7 +108,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 
 
 #
-#
+#	For initial (first call from cov19.pl)
 #
 sub	new 
 {
@@ -100,7 +116,7 @@ sub	new
 }
 
 #
-#	Download CSV file
+#	Download data from the data source
 #
 sub	download
 {
@@ -110,6 +126,9 @@ sub	download
 	system("wget $src_url -O $transaction");
 }
 
+#
+#	Copy download data to Windows Path
+#
 sub	copy
 {
 	my ($info_path) = @_;
@@ -118,7 +137,7 @@ sub	copy
 }
 
 #
-#	パラメータの設定と集計の実施
+#	Aggregate J.A.G Japan  
 #
 sub	aggregate
 {

@@ -1,5 +1,20 @@
 #!/usr/bin/perl
 #
+#	Same dataset with jag.pm, but this use total data insetead of prefectures.
+#
+#   comment => "**** J.A.G JAPAN PARAMS FOR TOAL ****",
+#	src => "JAG JAPAN",
+#	src_url => $src_url,
+#  	prefix => "jag_",
+#	$transaction = "$CSV_PATH/gis-jag-japan.csv.txt",
+#	$src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv";
+#
+#	Functions must define
+#	new => \&new,
+#	aggregate => \&aggregate,
+#	download => \&download,
+#	copy => \&copy,
+#
 #
 package jagtotal;
 use Exporter;
@@ -13,23 +28,27 @@ use Data::Dumper;
 use csvgpl;
 use csvaggregate;
 use csvlib;
-#use ft;
 
+use jag;
+
+#
+#	Initial
+#
 my $WIN_PATH = $config::WIN_PATH;
 my $CSV_PATH = $config::CSV_PATH;
 my $DLM = $config::DLM;
 
+#
+#	Parameter set
+#
 my $DEBUG = 1;
+my $transaction = $jag::transaction;
+my $src_url = $jag::src_url;
 
-#my $aggr_total = "$WIN_PATH/Japan_total.csv.txt";
-#my $TOTAL_CSVF = "$WIN_PATH/japan_total$MODE" . ".csv.txt";
-#my $TOTAL_GRAPH_HTML = "$WIN_PATH/japan_total$MODE" . ".html";
-my $transaction = "$CSV_PATH/gis-jag-japan.csv.txt",
-my $src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv";
+my $EXCLUSION = $jag::EXCLUSION;
 
-my $EXCLUSION = "";
 our $PARAMS = {			# MODULE PARETER		$mep
-    comment => "**** J.A.G JAPAN PARAMS ****",
+    comment => "**** J.A.G JAPAN PARAMS FOR TOAL ****",
     src => "JAG JAPAN",
 	src_url => $src_url,
     prefix => "jagtotal_",
@@ -38,13 +57,12 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		ND => "",
     },
     base_dir => "",
-	csv_aggr_mode => "TOTAL", 	# "" or TOTAL
+	csv_aggr_mode => "TOTAL", 	# SET TOTAL for data aggregation
 
-    new => \&new,
-    aggregate => \&aggregate,
-    download => \&download,
-    copy => \&copy,
-
+    new => \&new,				
+    aggregate => \&aggregate,	 
+    download => \&jag::download,	# Use jag func
+    copy => \&jag::copy,			# Use jag func
 
 	AGGR_MODE => {DAY => 1},	# NO POP =>1
 	DATA_KIND => {NC => 1},		# NO ND => 1
@@ -68,7 +86,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1},
 		],
 	},
-	RT => {
+	ERN => {
 		EXEC => "",
         ip => $config::RT_IP,
 		lp => $config::RT_LP,,
@@ -82,9 +100,8 @@ our $PARAMS = {			# MODULE PARETER		$mep
 	},
 };
 
-
 #
-#
+#	For initial (first call from cov19.pl)
 #
 sub	new 
 {
@@ -92,25 +109,7 @@ sub	new
 }
 
 #
-#	Download CSV file
-#
-sub	download
-{
-	my ($info_path) = @_;
-
-	print("wget $src_url -O $transaction\n");
-	system("wget $src_url -O $transaction");
-}
-
-sub	copy
-{
-	my ($info_path) = @_;
-
-	system("cp $transaction $CSV_PATH/");
-}
-
-#
-#	パラメータの設定と集計の実施
+#	Aggregate J.A.G Japan  
 #
 sub	aggregate
 {

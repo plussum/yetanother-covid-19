@@ -14,6 +14,7 @@ use warnings;
 my $EXCLUSION = "Others,China,US";
 my $NONE_EXC = "Others";
 my $EXC_POP = "San Marino,Holy See";
+my $EXC_FT = "";
 
 our @PARAMS_COUNT = (
     {ext => "#KIND# all with US(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 3, graph => "lines"},
@@ -57,16 +58,16 @@ our @PARAMS_COUNT = (
 );
 
 our	@PARMS_FT = (
-	{ext => "#KIND# Japan and others #FT_TD#", start_day => 0, lank =>[0, 999] , exclusion => $EXCLUSION, add_target => "Japan",
+	{ext => "#KIND# Japan and others #FT_TD#", start_day => 0, lank =>[0, 999] , exclusion => $EXC_FT, add_target => "",
 		target => "Japan,Korea,US,Spain,Italy,France,Germany,United Kingdom,Iran,Turkey,Belgium,Switzeland",
 		label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
-	{ext => "#KIND# TOP5 #FT_TD#", start_day => 0, lank =>[0, 5] , exclusion => $EXCLUSION, target => "", 
+	{ext => "#KIND# TOP5 #FT_TD#", start_day => 0, lank =>[0, 5] , exclusion => $EXC_FT, target => "", 
 		label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
-	{ext => "#KIND# TOP10 #FT_TD#", start_day => 0, lank =>[0, 10] , exclusion => $EXCLUSION, target => "", 
+	{ext => "#KIND# TOP10 #FT_TD#", start_day => 0, lank =>[0, 10] , exclusion => $EXC_FT, target => "", 
 		label_skip => 7, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
-	{ext => "#KIND# 10-20 #FT_TD#", start_day => 0, lank =>[10, 19] , exclusion => $EXCLUSION, target => "",
+	{ext => "#KIND# 10-20 #FT_TD#", start_day => 0, lank =>[10, 19] , exclusion => $EXC_FT, target => "",
 		label_skip => 7, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
-	{ext => "#KIND# Japn Koria #FT_TD#", start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan,Korea- South",
+	{ext => "#KIND# Japn Koria #FT_TD#", start_day => 0, lank =>[0, 99] , exclusion => $EXC_FT, target => "Japan,Korea",
 			label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
 );
 
