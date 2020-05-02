@@ -292,14 +292,10 @@ sub	aggregate
 }
 
 #
-#
+#	Get WHO situation report home page HTML and list up the url of the situation report (PDF)
 #
 sub	get_situation_list
 {
-
-	#
-	#
-	#
 	open(HTML, $REPORT_MAIN) || die "cannot open $REPORT_MAIN";
 	while(<HTML>){
 		while(s/"[^"]+\.pdf\?[^"]+"//){
@@ -321,6 +317,36 @@ sub	get_situation_list
 	}
 }
 
+#
+#	Textized WHO situation report (PDF) to csv data
+#		Most durty cord in this source code.
+#
+##### CASE 1
+#
+#	El Salvador                                   395                  18                    9                   0       Clusters of cases                         0 
+#   Venezuela (Bolivarian Republic 
+#   of)                                           331                    2                 10                    0       Clusters of cases                         0 
+#   Paraguay                                      249                  10                    9                   0   Community transmission                        0 
+#
+##### CASE 2
+#
+#   Niger                                         719                    6                 32                    0       Clusters of cases                         0 
+#   Burkina Faso                                  645                    7                 43                    1   Community transmission                        0 
+#   Democratic Republic of the 
+#   Congo                                         572                  72                  31                    0       Clusters of cases                         0 
+#   Mali                                          490                    8                 26                    1       Clusters of cases                         0 
+#
+##### CASE 3
+#	Territoriesii 
+#	occupied Palestinian territory 344 0 2 0 Clusters of cases 1 
+#	Europe 
+#	Spain 213435 518 24543 268 Community transmission 0 
+#
+#
+#
+#
+#
+#
 sub	molding
 {
 	my ($txtf, $txtd, $date) = @_;
@@ -333,118 +359,133 @@ sub	molding
 	my $ln = 0;
 	my $post_c = "";
 
-	print "##### $txtf\n";
+	dp::dp "##### $txtf\n";
 
 	open(TXT, $txtf) || die "cannot open $txtf\n";
 	while(<TXT>){
+		dp::dp "[$dataf] $_" if($DEBUG > 2);
+
 		s/ *[\r\n]+$//;
 		if(/^ +Community$/){
-			print "#" x 20 . "Community\n";
+			dp::dp "#" x 20 . "Community\n";
 			next;
 		}
 		s/^ +//;
 		if(/Region of the Americas/){
-			print "-" x 20 , $_ , "\n";
+			dp::dp "-" x 20 , $_ , "\n";
 			$post_c = "";
 			$LAST_W = 0;
 			next;
 		}
 
 
-		$dataf = 1 if(/^SURVEILLANCE/);
+		$dataf = 1 if(/^ *SURVEILLANCE/i);
 		$dataf = 2 if(/^Western Pacific Region/ && $dataf == 1);
+		$dataf = 2 if(/^ *Reporting Country/ && $dataf == 1);		# 2020/05/01
 		$dataf = 3 if(/^Grand total/);
 
 		next if($dataf <= 1);
-		if(/††/ || /[\*]{2}/ || /Territories/){
+		next if(/^ *Reporting Country/ && $dataf == 2);		# 2020/05/01
+
+		if(/††/ || /[\*]{2}/ || /Territories/ || /^ *Territory\/Area/){
 			$LAST_W = -1;
+			$post_c = "";
 			next;
 		}
 
 		s/†//;
 		s/\^+//;
 
-		print "[$dataf]" . $_ , "\n" if($DEBUG);
+		# dp::dp "[$dataf]" . $_ , "\n" if($DEBUG);
 		s/\(([0-9]+)\)/ $1 /g if($date <= 20200301);		# format
 		my @w = split(/ {2,999}/, $_);
 
+		#
+		#	Set record
+		#
 		if($#w > 1){
 			if($post_c){
 				$w[0] = $post_c . " " . $w[0];
-				print "---> " . $w[0] , "\n" if($DEBUG);
+				dp::dp "---> " . $w[0] , "\n" if($DEBUG > 1);
 				$post_c = "";
 			}
-			print "[DATA] $ln " . join(",", @w) , "\n" if($DEBUG);
+
+			#	Adjust Coutry name
+			$w[0] =~ s/Africa // if($w[0] =~ /Africa South Africa/);
+			dp::dp "[DATA] $ln " . join(",", @w) , "\n" if($DEBUG > 1);
+
 			$RECORD[$ln][0] = $REGION;
-			if($date >= 20200227){
+			my $check = 0;
+			if($date >= 20200227){	# after 2020/02/27
 				for(my $i = 0; $i <= 4; $i++){
+					if(! defined $w[$i] ){
+						dp::dp "ERROR at data set (w):" .  join(",", @w) . "\n" if($DEBUG);
+						$check ++;
+					}
+					elsif(($i >= 1 && $i <= 4) && $w[$i] =~ /[^0-9]/){
+						dp::dp "ERROR at data set:[". $w[$i] ."] " . join(",", @w) . "\n" if($DEBUG);
+						$check++;
+					}
 					$RECORD[$ln][$i+1] = $w[$i];
 				}
 			}
-			else {
+			else {			# old data befor 2020/02/27
 				$RECORD[$ln][1] = $w[1];
 				$RECORD[$ln][2] = $w[2];
 				$RECORD[$ln][3] = $w[11];
 				$RECORD[$ln][4] = $w[12];
 			}
-			$ln++;
+			if(!$check){
+				$ln++;
+			}
+			
+			#	05/02
+			$post_c = "";		
+			my $c = $w[0];
+			if($c =~ /Burkina Faso/ || $c =~ /El Salvador/){
+				@w = ();
+			}
 		}
-		elsif(/Region/){
+		elsif(/Region/ || /^ *Europe$/){ 
 			$REGION = $w[0];
 			$post_c = "";
 		}
 		elsif(/Diamond Princess/){
-			print ">> $ln " . $RECORD[$ln-1][0] ;
-			print "($w[0])" , "\n";
+			dp::dp ">> $ln " . $RECORD[$ln-1][0] ;
+			dp::dp "($w[0])" , "\n";
 			$RECORD[$ln-1][0] .= " " . $w[0];
-			print "<< " . $RECORD[$ln-1][0] , "\n";
+			dp::dp "<< " . $RECORD[$ln-1][0] , "\n";
 		}
-		elsif(defined $w[0]){
-			if($LAST_W > 1){
-				$RECORD[$ln-1][1] .= " " . $w[0];
-				print "#PRE:$LAST_W# $RECORD[$ln-1][1]\n" if($DEBUG);
+		#
+		#	only first colum is set (basically, a part of country
+		#
+		elsif(defined $w[0]){			# 
+			if($LAST_W > 1){							# if last raw has the data 
+				$RECORD[$ln-1][1] .= " " . $w[0];		# add $w[0] to last country
+				dp::dp "#PRE:$LAST_W# $RECORD[$ln-1][1]\n" if($DEBUG > 0);
 			}
 			else {
-				$post_c .= $w[0];   #  $_ ;
-				print "#POST:$LAST_W# $post_c\n" if($DEBUG);
+				$post_c .= $w[0];   					# Set post country  ;
+				dp::dp "#POST:$LAST_W# $post_c\n" if($DEBUG > 1);
 			}
 		}
 		last if($dataf == 3);
-		$LAST_W = $#w;
+		$LAST_W = $#w;				# number of columns
 	}
 	close(TXT);
 
-	print $txtd , "\n" if($DEBUG > 2);
+	dp::dp $txtd , "\n" if($DEBUG > 0);
 	open(TXD, ">$txtd") || die "cannot create $txtd";
 	for(my $n = 0; $n < $ln; $n++){
-		print "## $n $RECORD[$n]\n" if($DEBUG > 1);
+		#dp::dp "## $n $RECORD[$n]\n" if($DEBUG > 1);
 		my @w = @{$RECORD[$n]};
+		if(! defined $w[5]){
+			dp::dp "ERROR: $txtf". join(",", @w) . "\n";
+		} 
 		print TXD join(",", @w[0..5]), "\n";
-		print join(",", @w), "\n" if($DEBUG > 1);
-
+		dp::dp "$n:  " . join(",", @w), "\n" if($DEBUG > 0);
 	}
 	close(TXD);
 }
 
-sub	get_population
-{
-	my $PPL = "../population.txt";
-	open(P, $PPL) || die "Cannot open $PPL\n";
-	while(<P>){
-		chop;
-		next if(!$_);
-
-		s/^[^A-Za-z]+//;
-		s/\[.\]//;
-		s/\([A-Za-z ]+\)//;
-		my($c, $p) = split(/\t/, $_);
-		$c =~ s/^ +//;
-		$p =~ s/,//g;
-		#print "[$c:$p]";
-		$POP{$c} = $p / 1000000;	# 1M
-	}
-	print "\n";
-	close(P);
-
-}
 1;
