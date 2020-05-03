@@ -130,10 +130,10 @@ sub	jhccse
 
 		for(my $dt = 0; $dt <= $#COL; $dt++){
 			my $dtn = $COUNT{$country}[$dt] - ($dt == 0 ? 0 : $COUNT{$country}[$dt-1]);	# 累計 -> 日次
-			if($p->{aggr_mode} eq "POP"){															# 人口比に置き換え
+			if($p->{aggr_mode} eq "POP"){											# 人口比に置き換え
 				if(defined $CNT_POP{$country}){
 					#dp::dp "[" . $p->{aggr_mode} . "]";
-					$dtn = $dtn / ($CNT_POP{$country} / (1000*1000));			# 100万人当たり
+					$dtn = $dtn / ($CNT_POP{$country} / $config::POP_BASE);	# 100万人当たり
 				}
 				else {
 					$NO_POP{$country}++;										# エラー。国名が見つからない

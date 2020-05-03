@@ -168,7 +168,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 		foreach my $SUB_MODE (@SUB_MODE_LIST){
 			dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n";
 			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");
-			next if($SUB_MODE ne "ERN" && $MODE eq "ND");
+			next if($SUB_MODE eq "ERN" && $MODE eq "ND");
 
 			my $SRC_FILE = $mep->{src_file}{$MODE};
 			my $STG1_CSVF   = $config::CSV_PATH  . "/" . $mep->{prefix} . join("_", $MODE, $AGGR_MODE) . ".csv.txt";
@@ -247,6 +247,7 @@ sub	daily
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
+		aggr_mode => $fp->{aggr_mode},
 		csv_aggr_mode => (defined $mep->{csv_aggr_mode} ? $mep->{csv_aggr_mode} : ""),
 	);
 	#dp::dp "### daily: " . Dumper(%params) . "\n";

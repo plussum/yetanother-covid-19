@@ -17,6 +17,9 @@ my $DEBUG = 1;
 my $VERBOSE = 0;
 my $WIN_PATH = "";
 my $NO_DATA = "NaN";
+
+my %CNT_POP = ();
+
 sub	csvgpl
 {
 	my ($csvgplp) = @_;
@@ -28,7 +31,11 @@ sub	csvgpl
 		print PARA Dumper $csvgplp ;
 		close(PARA);
 	}
-
+	my $aggr_mode = csvlib::valdefs($csvgplp->{aggr_mode});		# Added 05/03 for Population
+	if($aggr_mode eq "POP"){
+		csvlib::cnt_pop(\%CNT_POP);
+		dp::dp( "###### $aggr_mode\n") if($DEBUG > 1);
+	}
 
 	$WIN_PATH = $config::WIN_PATH;
 	my $PNG_PATH = $config::PNG_PATH; 
@@ -64,7 +71,7 @@ sub	csvgpl
 			print "#### EOD ###\n";
 			last;
 		}
-		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep);
+		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode);
 
 		print HTML "<!-- " . $gplitem->{ext} . " -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
@@ -119,7 +126,7 @@ sub	csvgpl
 #
 sub	csv2graph
 {
-	my ($csvf, $png_path, $kind, $gplitem, $clp, $mep) = @_;
+	my ($csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode) = @_;
 
 	dp::dp join(", ", $gplitem->{ext}, $gplitem->{start_day}, $gplitem->{lank}[0], $gplitem->{lank}[1], $gplitem->{exclusion}, 
 			"[" . $clp->{src} . "]", $mep->{prefix}), "\n" if($DEBUG > 1);
@@ -267,6 +274,9 @@ sub	csv2graph
 		#next if($#target >= 0 && $#exclusion >= 0 && ! csvlib::search_list($country, @target));
 		next if($#target >= 0 && ! csvlib::search_list($country, @target));
 		dp::dp "Yes, Target $CNT $country [$tgcs, $tgce]\n" if($DEBUG && $#target >= 0);
+		if($aggr_mode eq "POP"){			# if aggr_mode eq POP, ignore if country population < $POP_THRESH
+			next if($CNT_POP{$country} < $config::POP_THRESH);
+		}
 
 		$CNT++;
 		if($CNT < $tgcs || $CNT > $tgce){
