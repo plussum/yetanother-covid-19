@@ -47,25 +47,31 @@ sub	jhccse
 	#
 	#	1行目：日付の読み込み
 	#
+	my $DT_S = 4;					# データカラムの最初
+	my $COUNTRY_COL = 1; 			# "Country/Region";
 	$_ = <FD>; chop;
 	my @COL = ();
 	my @w = split(/,/, $_);
 	
-	for (@w[4..$#w]){
+	for(my $i = $DT_S; $i <= $#w; $i++){
+		$_ =  $w[$i];
+
 		#s#/[0-9]+$##;		# Date Format 2/10/20 -> 2/10 
 		my ($m, $d, $y) = split(/\//, $_);
 		#dp::dp "[$_]($y,$m,$d)";
 		#$_ = sprintf("%04d/%02d/%02d", $y + 2000, $m, $d);
-		$_ = sprintf("%02d/%02d", $m, $d);
+
+		$_ = sprintf("%02d/%02d", $m, $d); 
 		
 		push(@COL, $_);
 	}
-	my $ITEMS = $#COL;		# $ITEMS はCSVのカラム数（全数）
-	my $DT_S = 4;			# データカラムの最初
-	for(my $i = 0; $i < $DT_S; $i++){
-		shift(@COL);		# カラム名（日付）の0から日付けが始まるようにシフト
-	}
-	my $DT_E = $#COL;		# データの最終カラム
+	my $ITEMS = $#COL;			# $ITEMS はデータの数 
+	my $DT_E = $DT_S + $ITEMS;	# データの最終カラム = 全カラム数
+
+	#dp::dp "COL: " . join(",", @COL) . "\n";			## 上記for loopでshift済みなので削除
+	#for(my $i = 0; $i < $DT_S; $i++){
+	#	shift(@COL);		# カラム名（日付）の0から日付けが始まるようにシフト
+	#}
 
 	#
 	#	データの読み込み CSV File -> @DATA[][]
@@ -75,16 +81,18 @@ sub	jhccse
 	while(<FD>){
 		dp::dp $_ if($DEBUG > 2);
 		if(/"/){
-			s/"([^",]+),([^"]+)"/$1-$2/;	# データ中の,を- ,"aa,bb", -> aa-bb 
+			s/"([^",]+),([^"]+)"/$1-$2/;	# ,"aa,bb", -> aa-bb 
 		}
+		s/[\r\n]+$//;
 		my @LINE = split(/,/, $_);
-		for(my $cn = 0; $cn <= $ITEMS; $cn++){
+		for(my $cn = 0; $cn <= $DT_E; $cn++){
 			$DATA[$RN][$cn] = $LINE[$cn];
 		}
 		$RN++;
 	}
 	close(FD);
 
+	dp::dp join(",", $ITEMS, $DT_E , "[" . $DATA[1][$DT_E] . "]"). "\n" if($DEBUG > 1);
 	for(; $DT_E > $DT_S; $DT_E--){
 		last if(defined $DATA[1][$DT_E]);	# 最終カラムが日付だけのことがあるため
 	}
@@ -94,16 +102,17 @@ sub	jhccse
 	#		元データは、国を複数のリージョンに分けているところがある
 	#		ここでは、国ごとのデータを見たいため、国ごとにマージしている
 	#
-	my $CR = 1; 							# "Country/Region";
 	my %COUNTRY = ();
 	my %COUNT = ();
 	my %COUNT_D = ();
 	my %NO_POP = ();
 
+	dp::dp join(",", "DT_S: $DT_S", "DT_E: $DT_E", "#COL: ". $#COL) . "\n" if($DEBUG > 1);
+
 	for(my $rn = 0; $rn < $RN; $rn++){
-		my $country = $DATA[$rn][$CR];
+		my $country = $DATA[$rn][$COUNTRY_COL];
 		dp::dp "[$rn:$RN:$country]\n" if($DEBUG > 1);
-		for(my $dt = $DT_S; $dt <= $ITEMS; $dt++){
+		for(my $dt = $DT_S; $dt <= $DT_E; $dt++){
 			$COUNT{$country}[$dt-$DT_S] += $DATA[$rn][$dt];		# 複数のレコードになっている国があるので += 
 		}
 		$COUNTRY{$country} += $DATA[$rn][$DT_E];
@@ -126,9 +135,9 @@ sub	jhccse
 		next if($country =~ /Diamond Princess/ || $country =~ /MS Zaandam/);	# 国以外のデータを除外
 		next if(! $country || !$country =~ /^[A-Za-z]/);						# エラーデータの除外
 
-		dp::dp (join(", ", $country, $COUNTRY{$country}, @{$COUNT{$country}}[0..$#COL]), "\n")  if($ln < 3 && $DEBUG > 1);
+		dp::dp (join(", ", $country, $COUNTRY{$country}, @{$COUNT{$country}}[0..$ITEMS]), "\n")  if(($ln < 3 && $DEBUG > 1));
 
-		for(my $dt = 0; $dt <= $#COL; $dt++){
+		for(my $dt = 0; $dt <= $ITEMS; $dt++){			
 			my $dtn = $COUNT{$country}[$dt] - ($dt == 0 ? 0 : $COUNT{$country}[$dt-1]);	# 累計 -> 日次
 			if($p->{aggr_mode} eq "POP"){											# 人口比に置き換え
 				if(defined $CNT_POP{$country}){
@@ -144,7 +153,7 @@ sub	jhccse
 		}
 		#print CSV $country. $DLM . $COUNTRY{$country}. $DLM;					# 国、トータル
 		print CSV join($DLM, $country, $COUNTRY{$country}, @{$COUNT_D{$country}}), "\n";						# 1行分（国）のデータの出力
-		dp::dp (join(", ", $country, $COUNTRY{$country}, @{$COUNT_D{$country}}[0..$#COL]), "\n" x 2 ) if($ln < 3 && $DEBUG > 1);
+		dp::dp (join(", ", $country, "DIFF :", $COUNTRY{$country}, @{$COUNT_D{$country}}[0..$ITEMS]), "\n" x 2 ) if(($ln < 3 && $DEBUG > 1));
 		$ln++;
 	}
 	close(CSV);
@@ -159,7 +168,7 @@ sub	jhccse
 	#
 	#	戻り値: カラム数、レコード数、最初の日付け、最後の日付
 	#
-	return ($DT_E, $RN, $COL[0], $COL[$#COL]);
+	return ($DT_E, $RN, $COL[0], $COL[$ITEMS]);
 }
 
 1;
