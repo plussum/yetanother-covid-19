@@ -10,9 +10,38 @@ use Exporter;
 
 use strict;
 use warnings;
+use Data::Dumper;
 use Time::Local 'timelocal';
 use dp;
 
+
+#
+#
+#
+sub	sum
+{
+	my ($data, $s, $e) = @_;
+	
+	#for(my $i = $s; $i < $e; $i++){
+	#	print "[" . $data->[$i] . "]";
+	#}
+
+	my $sum = 0;
+	for(my $i = $s; $i <= $e; $i++){
+		$sum += $data->[$i];
+	}
+	#print "i=> $sum\n";
+	return $sum;
+}
+
+sub	avr
+{
+	my ($data, $s, $e) = @_;
+	
+	my $sum = &sum($data, $s, $e);
+	my $avr = $sum / ($e - $s + 1);
+	return $avr;
+}
 
 
 #

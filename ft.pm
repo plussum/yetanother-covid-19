@@ -68,7 +68,7 @@ sub	ft
 	}
 	close(IMF) ;
 	my $country_number = $#COUNTRY_LIST;
-	my $date_number = $#DATE_LIST;
+	my $date_number = $#DATE_LIST - $avr_date;
 	#dp::dp Dumper $IMF_DATA[0] . "\n";
 	#dp::dp "IMF_DATGA: " . join(",", @{$IMF_DATA[0]}) . "\n";
 
@@ -82,18 +82,11 @@ sub	ft
 	for(my $cn = 0; $cn <= $#COUNTRY_LIST; $cn++){
 		my $country = $COUNTRY_LIST[$cn];
 
-		for(my $dt = 0; $dt <= $date_number; $dt++){
-			my $as = ($dt < $avr_start) ? 0 : $avr_start;
-			my $ae = (($dt + $avr_end) > $date_number) ? $date_number - $dt : $avr_end;
-
-			my $dtn = $IMF_DATA[$cn][$dt]; 		#	平均を求める
-			for(my $i = $dt - $as; $i < $dt + $ae; $i++){
-				my $dtnw =  $IMF_DATA[$cn][$dt];
-				$dtnw = $IMF_DATA[$cn][$i] if($i >= 0 && $i <= $date_number);
-				$dtn += $dtnw;
-			}
-			my $avr = int(0.999999 + $dtn / ($ae - $as + 1));
-			$ABS[$cn][$dt] = $avr;		# 平均値のセット
+		#for(my $dt = 0; $dt <= $date_number; $dt++){					# 
+		#	my $avr = csvlib::avr($IMF_DATA[$cn], $dt, $dt + $avr_date);
+		for(my $dt = $avr_date; $dt <= ($date_number + $avr_date); $dt++){
+			my $avr = csvlib::avr($IMF_DATA[$cn], $dt - $avr_date, $dt);
+			$ABS[$cn][$dt] = int(0.999999 + $avr);		# 平均値のセット
 
 			# 平均が閾値以上の場合、そこをその国の最初の日とする
 			if($avr >= $thresh && !defined $FIRST{$country}){
@@ -103,7 +96,7 @@ sub	ft
 			}
 
 			if(defined $FIRST{$country}){
-				$ABS[$cn][$dt] = 0 if($avr < 1);	# たぶん、NaNにしたい。。不明
+				$ABS[$cn][$dt] = 0 if($avr < 1);	# logでエラーになるためと、NaNにセットするため
 			}
 		}
 		dp::dp join(", ", $country, $FIRST{$country}, @{$ABS[$cn]}[0..$date_number]), "\n" x 2  if($ln < 3 && $DEBUG > 1);
@@ -181,6 +174,4 @@ sub	exp_guide
 
 	return $guide;
 }
-
 1;
-
