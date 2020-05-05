@@ -240,6 +240,8 @@ sub	csv2graph
 	my %COUNT_D = ();
 	my %TOTAL = ();
 	my @COUNTRY = ();
+	my $avr_date = csvlib::valdef($gplitem->{avr_date});
+
 	#
 	#	ソート用の配列の作成
 	#
@@ -259,6 +261,12 @@ sub	csv2graph
 				dp::dp "DATA ERROR at $country($dn) $c\n" if($DEBUG);
 				$tl = -1;
 				last;
+			}
+			if($avr_date){
+				my $pp = $p - $DATE_COL_NO;
+				my $s = ($pp > $avr_date) ? ($p - $avr_date + 1): $DATE_COL_NO;
+				my $e = $p;
+				$c = csvlib::avr($DATA[$cn], $s, $e);
 			}
 			$COUNT_D{$country}[$dn] = $c;
 			$tl += $c;

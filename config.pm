@@ -31,9 +31,9 @@ our $MODE_NAME = {
 	NC => "NEW CASES",
 	ND => "NEW DEATHS",
 	NR => "NEW RECOVERS",
-	ACC => "ACCM CASES",
-	ACD => "ACCM DEATHS",
-	ACR => "ACCM RECOVERS",
+	CC => "CCM CASES",
+	CD => "CCM DEATHS",
+	CR => "CCM RECOVERS",
 };
 
 my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";

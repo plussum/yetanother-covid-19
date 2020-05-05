@@ -45,7 +45,7 @@ sub	ft
 	my $avr_date = $p->{average_date};
 	$DEBUG = csvlib::valdef($p->{DEBUG}, 0);
 
-	if(!defined $p->{thresh}){
+	if(! defined $p->{thresh}){
 		dp::dp "#### $thresh\n";
 		return;
 	}

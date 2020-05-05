@@ -12,7 +12,7 @@ my $INDEX_HTML = "$WIN_PATH/covid_index.html";
 my $FRAME_HTML = "$WIN_PATH/covid_frame.html";
 
 my @src_list = qw (jhccse who jag jagtotal);
-my @mode_list = qw (NC ND ACC ACD NR ACR);
+my @mode_list = qw (NC ND CC CD NR CR);
 my @submode_list = qw (COUNT FT ERN);
 my @aggr_list = qw (DAY POP);
 
@@ -60,8 +60,8 @@ foreach my $src (@src_list){
 				if($mode =~ /NR/){
 					next if($sub ne "COUNT" || !( $src =~ /ccse/));
 				}
-				if($mode =~ /^AC/){ 
-					next if($mode =~ /ACR/ && $src =~ /who/);
+				if($mode =~ /^C/){ 
+					next if($mode =~ /CR/ && $src =~ /who/);
 					next if($sub ne "COUNT" || !( $src =~ /ccse/ || $src =~ /who/));
 				}
 				next if($src =~ /jag/ && $mode eq "ND");

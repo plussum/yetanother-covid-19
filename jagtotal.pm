@@ -54,7 +54,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
     prefix => "jagtotal_",
     src_file => {
 		NC => $transaction,
-		ND => "",
+		#ND => "",
     },
     base_dir => "",
 	csv_aggr_mode => "TOTAL", 	# SET TOTAL for data aggregation
@@ -65,11 +65,13 @@ our $PARAMS = {			# MODULE PARETER		$mep
     copy => \&jag::copy,			# Use jag func
 
 	AGGR_MODE => {DAY => 1},
-	MODE => {NC => 1, ND => 1},
+	#MODE => {NC => 1, ND => 1},
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
 		graphp => [		# GPL PARAMETER			$gplp
 			{ext => "#KIND# TOTAL Japan 02/15(#LD#) #SRC#", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC# mvavr", start_day => "03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines",
+				avr_date => 7, term_ysize => 600},
 			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC#", start_day => "03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 			{ext => "#KIND# TOTAL Japan 3w(#LD#) #SRC#", start_day => -21,  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 			{ext => "#KIND# TOTAL Japan log (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines",

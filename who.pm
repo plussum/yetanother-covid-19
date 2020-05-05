@@ -50,8 +50,8 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	src_file => {
 		NC => "$WIN_PATH/CSV/who_situation_report_NC.html",		# 表示用　実際にはプログラム中でファイルを生成している
 		ND => "$WIN_PATH/CSV/who_situation_report_ND.html",		# jhccseの場合は、実際にCSVがあるので、このパラメータを読み込みに利用している
-		ACC => "$WIN_PATH/CSV/who_situation_report_NC.html",		# 表示用　実際にはプログラム中でファイルを生成している
-		ACD => "$WIN_PATH/CSV/who_situation_report_ND.html",		# jhccseの場合は、実際にCSVがあるので、このパラメータを読み込みに利用している
+		CC => "$WIN_PATH/CSV/who_situation_report_NC.html",		# 表示用　実際にはプログラム中でファイルを生成している
+		CD => "$WIN_PATH/CSV/who_situation_report_ND.html",		# jhccseの場合は、実際にCSVがあるので、このパラメータを読み込みに利用している
 	},
 	base_dir => "",
 	DLM => ",",
@@ -62,7 +62,7 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	copy => \&copy,
 
 	AGGR_MODE => {DAY => 1},
-	MODE => {NC => 1, ND => 1, ACC => 1, ACD => 1},
+	#MODE => {NC => 1, ND => 1, CC => 1, CD => 1},
 
 	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "US",
@@ -76,10 +76,10 @@ our $PARAMS = {			# MODULE PARETER        $mep
 			ND => [
 				@params::PARAMS_COUNT, 
 			],
-			ACC => [
+			CC => [
 				 @params::ACCD_PARAMS, 
 			],
-			ACD => [
+			CD => [
 				 @params::ACCD_PARAMS, 
 			],
 		},
@@ -206,11 +206,11 @@ sub	aggregate
 			my $k = join("\t", $date, $country);
 
 			my $c = 0;
-			if($mode =~ /^N[A-Z]/ || $mode =~ /^AC[A-Z]/){
+			if($mode =~ /^N[A-Z]/ || $mode =~ /^C[A-Z]/){
 				$c = csvlib::valdef($w[1], 0) if($mode eq "NC");
 				$c = csvlib::valdef($w[3], 0) if($mode eq "ND");
-				$c = csvlib::valdef($w[1], 0) if($mode eq "ACC");	# for total count, must be daily data
-				$c = csvlib::valdef($w[3], 0) if($mode eq "ACD");	# for total count, must be daily data
+				$c = csvlib::valdef($w[1], 0) if($mode eq "CC");	# for total count, must be daily data
+				$c = csvlib::valdef($w[3], 0) if($mode eq "CD");	# for total count, must be daily data
 				if($c =~ /transmission/ || $c =~ /[67][5289] /){
 					dp::dp "find trasnmission [$c][$txtd] $_\n";
 				}
@@ -284,8 +284,8 @@ sub	aggregate
 			my $c;
 			$c = csvlib::valdef($NEW_CASE{$k}, 0) if($mode eq "NC");
 			$c = csvlib::valdef($NEW_DETH{$k}, 0) if($mode eq "ND");
-			$c = csvlib::valdef($TOTAL_CASE{$k}, 0) if($mode eq "ACC");
-			$c = csvlib::valdef($TOTAL_DEATH{$k}, 0) if($mode eq "ACD");
+			$c = csvlib::valdef($TOTAL_CASE{$k}, 0) if($mode eq "CC");
+			$c = csvlib::valdef($TOTAL_DEATH{$k}, 0) if($mode eq "CD");
 			if($PP){
 				if(defined $POP{$country}){
 					$c /= $POP{$country};
@@ -435,7 +435,7 @@ sub	molding
 
 			#	Adjust Coutry name
 			$w[0] =~ s/Africa // if($w[0] =~ /Africa South Africa/);
-			dp::dp "[DATA] $ln " . join(",", @w) , "\n" if($DEBUG > 1);
+			dp::dp "[DATA] $ln " . join(",", @w) , "\n" if($DEBUG && $w[0] =~ /America/);
 
 			$RECORD[$ln][0] = $REGION;
 			my $check = 0;
@@ -445,7 +445,7 @@ sub	molding
 						dp::dp "ERROR at data set (w):" .  join(",", @w) . "\n" if($DEBUG);
 						$check ++;
 					}
-					elsif(($i >= 1 && $i <= 4) && $w[$i] =~ /[^0-9]/){
+					elsif(($i >= 1 && $i <= 4) && $w[$i] =~ /[^0-9\-]/){
 						dp::dp "ERROR at data set:[". $w[$i] ."] " . join(",", @w) . "\n" if($DEBUG);
 						$check++;
 					}
@@ -506,7 +506,7 @@ sub	molding
 			dp::dp "ERROR: $txtf". join(",", @w) . "\n";
 		} 
 		print TXD join(",", @w[0..5]), "\n";
-		dp::dp "$n:  " . join(",", @w), "\n" if($DEBUG > 0);
+		dp::dp "$n:  " . join(",", @w), "\n" if($DEBUG > 1);
 	}
 	close(TXD);
 }

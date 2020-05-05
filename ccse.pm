@@ -50,10 +50,10 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	src_file => {
 		NC => "$CCSE_BASE_DIR/time_series_covid19_confirmed_global.csv",
 		ND => "$CCSE_BASE_DIR/time_series_covid19_deaths_global.csv",
-		ACC => "$CCSE_BASE_DIR/time_series_covid19_confirmed_global.csv",
-		ACD => "$CCSE_BASE_DIR/time_series_covid19_deaths_global.csv",
+		CC => "$CCSE_BASE_DIR/time_series_covid19_confirmed_global.csv",
+		CD => "$CCSE_BASE_DIR/time_series_covid19_deaths_global.csv",
 		NR  => "$CCSE_BASE_DIR/time_series_covid19_recovered_global.csv",
-		ACR => "$CCSE_BASE_DIR/time_series_covid19_recovered_global.csv",
+		CR => "$CCSE_BASE_DIR/time_series_covid19_recovered_global.csv",
 	},
 	base_dir => $CCSE_BASE_DIR,
 
@@ -63,17 +63,17 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	copy => \&copy,
 	DLM => $DLM,
 
-	AGGR_MODE => {DAY => 1, POP => 1},
-	MODE => {NC => 1, ND => 1, ACC => 1, ACD => 1, NR => 1, ACR => 1},		#
+	AGGR_MODE => {DAY => 1, POP => 1},									# Effective AGGR MODE
+	#MODE => {NC => 1, ND => 1, CC => 1, CD => 1, NR => 1, CR => 1},		# Effective MODE
 
 	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "US",
-		graphp => [		# GPL PARAMETER         $gplp
+		graphp => [		# GPL PARAMETER         $gplp					# Old version of graph parameter
 			@params::PARAMS_COUNT, 
 			{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
 			{ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
 		],
-		graphp_mode => {
+		graphp_mode => {												# New version of graph pamaeter for each MODE
 			NC => [
 				@params::PARAMS_COUNT, 
 				{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
@@ -84,10 +84,10 @@ our $PARAMS = {			# MODULE PARETER        $mep
 				{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
 				{ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
 			],
-			ACC => [
+			CC => [
 				 @params::ACCD_PARAMS, 
 			],
-			ACD => [
+			CD => [
 				 @params::ACCD_PARAMS, 
 			],
 		},

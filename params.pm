@@ -23,6 +23,8 @@ our @PARAMS_COUNT = (
 
     {ext => "#KIND# Japan (#LD#) #SRC#", start_day => 0,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 3, graph => "lines"},
     {ext => "#KIND# Japan 3weeks (#LD#) #SRC#", start_day => -21,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# Japan 0301 (#LD#) #SRC# mvavr", start_day => "03/01",  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 1, graph => "lines",
+		avr_date => 7},
 
     {ext => "#KIND# TOP20-122 (#LD#) #SRC#", start_day => 0, lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", term_ysize => 600},
 
@@ -126,14 +128,14 @@ our	@PARAMS_POP = (
 );
 
 our @ACCD_PARAMS = (
-	{ext => "#KIND# ACCM TOP5+Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
+	{ext => "#KIND# CCM TOP5+Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
 		label_skip => 3, graph => "lines", add_target => "Japan"},
-	{ext => "#KIND# ACCM TOP5+Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
+	{ext => "#KIND# CCM TOP5+Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
 		label_skip => 3, graph => "lines", add_target => "Japan", logscale => "y"},
 
-	{ext => "#KIND# ACCM Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "Japan", 
+	{ext => "#KIND# CCM Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "Japan", 
 		label_skip => 3, graph => "lines"}, 
-	{ext => "#KIND# ACCM Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "Japan", 
+	{ext => "#KIND# CCM Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "Japan", 
 		label_skip => 3, graph => "lines", logscale => "y"}, 
 );
 1;

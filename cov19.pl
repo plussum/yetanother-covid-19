@@ -1,13 +1,22 @@
 #!/usr/bin/perl
-#	COVID-19 のデータをダウンロードして、CSVとグラフを生成する
 #
+#	Download COVID-19 data and generate graphs
+#		Require gnuplot
 #
-#	cov19.pl [ccse who jag jagtotal] -NC -ND -POP -FT -RT -FULL -full -dl
+#	cov19.pl [ccse who jag jagtotal] 
 #		-NC 		New cases
 #		-ND 		New deathes
-#		-POP		count/population (M)
-#		-FT			Finatial Times like graph
-#		-ERN(RT)	Effective reproduction number
+#		-NR			New recovers
+#		-CC			Cumelative cases toll
+#		-CD			Cumelative deathes toll
+#		-CR			Cumelative recovers
+#
+#		--POP		count/population (M)
+#		--FT		Finatial Times like graph
+#		--ERN		Effective reproduction number
+#
+#		-dl			Download data
+#
 #		-full		do all all data srouces and functions 
 #		-FULL		-full with download
 #
@@ -28,8 +37,10 @@
 #	MODE
 #		NC				New Cases
 #		ND				New Deaths
-#		ACC				Accumulative Cases
-#		ACD				Accumulative Deatheas
+#		NR				New Recoverd
+#		CC				Ccumulative Cases
+#		CD				Ccumulative Deatheas
+#		CR				Ccumulative Deatheas
 #
 #
 ##
@@ -113,7 +124,7 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 		$FULL_SOURCE = $_ if(/-FULL/i);
 	}
 	elsif(/-all/){
-		push(@MODE_LIST, "ND", "NC", "ACC", "ACD", "NR", "ACR");
+		push(@MODE_LIST, "ND", "NC", "CC", "CD", "NR", "CR");
 		push(@SUB_MODE_LIST, "COUNT", "FT", "ERN");
 		push(@AGGR_LIST, "DAY", "POP");
 	}
@@ -188,7 +199,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 	}
 
 	foreach my $MODE (@MODE_LIST){
-		if(! csvlib::valdef($mep->{MODE}{$MODE},"")){
+		if(! csvlib::valdef($mep->{src_file}{$MODE},"")){
 			dp::dp "no function defined: $DATA_SOURCE: MODE[$MODE]\n";
 			next;
 		}
@@ -197,7 +208,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 			dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n";
 			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");		# POP affect only COUNT (no FT, ERN)
 			next if($SUB_MODE eq "ERN" && $MODE eq "ND");				# Newdeath does not make sense for ERN
-			next if($SUB_MODE ne "COUNT" && $MODE =~ /^AC/);			# Only count for ACC, ACD 
+			next if($SUB_MODE ne "COUNT" && $MODE =~ /^C/);				# Only count for CC, CD 
 
 			next if(!defined $mep->{src_file}{$MODE});
 
