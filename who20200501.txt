@@ -1,0 +1,212 @@
+Western Pacific Region,China,84373,4,4643,0
+Western Pacific Region,Singapore,15641,690,14,0
+Western Pacific Region,Japan,14088,236,415,26
+Western Pacific Region,Republic of Korea,10765,4,247,1
+Western Pacific Region,Philippines,8212,254,558,28
+Western Pacific Region,Australia,6746,8,90,2
+Western Pacific Region,Malaysia,5945,94,100,0
+Western Pacific Region,New Zealand,1129,3,19,0
+Western Pacific Region,Viet Nam,270,0,0,0
+Western Pacific Region,Brunei Darussalam,138,0,1,0
+Western Pacific Region,Cambodia,122,0,0,0
+Western Pacific Region,Mongolia,38,0,0,0
+Western Pacific Region,Lao People's Democratic Republic,19,0,0,0
+Western Pacific Region,Fiji,18,0,0,0
+Western Pacific Region,Papua New Guinea,8,0,0,0
+Western Pacific Region,Guam,141,1,5,0
+Western Pacific Region,French Polynesia,58,0,0,0
+Western Pacific Region,New Caledonia,18,0,0,0
+Western Pacific Region,Northern Mariana Islands,14,0,2,0
+European Region,Spain transmission,212917,2144,24275,453
+European Region,Italy transmission,203591,2086,27682,323
+European Region,The United Kingdom transmission,165225,4076,26097,4419
+European Region,Germany transmission,159119,1478,6288,173
+European Region,France transmission,127066,1602,24054,427
+European Region,Turkey transmission,117589,2936,3081,89
+European Region,Russian Federation,106498,7099,1073,101
+European Region,Belgium transmission,47859,525,7501,170
+European Region,Netherlands transmission,38802,386,4711,145
+European Region,Switzerland transmission,29324,143,1407,28
+European Region,Portugal transmission,24505,183,973,25
+European Region,Sweden transmission,20302,681,2462,107
+European Region,Ireland transmission,20253,376,1190,31
+European Region,Israel,15782,0,212,0
+European Region,Austria transmission,15364,50,580,11
+European Region,Belarus,13181,973,84,5
+European Region,Poland transmission,12640,422,624,28
+European Region,Romania transmission,11978,362,675,25
+European Region,Ukraine transmission,10406,540,261,11
+European Region,Denmark,9008,157,443,9
+European Region,Serbia,8724,227,173,5
+European Region,Norway,7667,62,202,7
+European Region,Czechia transmission,7579,75,227,0
+European Region,Finland,4906,166,206,7
+European Region,Republic of Moldova,3771,133,116,7
+European Region,Luxembourg,3769,28,89,0
+European Region,Kazakhstan,3333,255,25,0
+European Region,Hungary,2775,48,312,12
+European Region,Greece transmission,2576,42,139,3
+European Region,Armenia,2066,134,32,2
+European Region,Croatia transmission,2062,15,67,4
+European Region,Uzbekistan,2031,76,9,1
+European Region,Iceland transmission,1797,2,10,0
+European Region,Azerbaijan,1766,49,23,1
+European Region,Bosnia and Herzegovina,1689,101,64,2
+European Region,Estonia,1666,6,50,0
+European Region,Bulgaria,1447,48,64,6
+European Region,North Macedonia,1442,21,73,2
+European Region,Slovenia transmission,1418,10,89,3
+European Region,Slovakia,1391,7,22,2
+European Region,Lithuania transmission,1375,0,45,1
+European Region,Latvia transmission,849,13,15,2
+European Region,Cyprus,843,6,20,0
+European Region,Albania,773,7,31,1
+European Region,Andorra transmission,753,0,41,0
+European Region,Kyrgyzstan,746,17,8,0
+European Region,San Marino transmission,563,10,41,0
+European Region,Georgia transmission,539,22,6,0
+European Region,Malta,463,13,4,0
+European Region,Montenegro,322,1,7,0
+European Region,Liechtenstein,83,0,1,0
+European Region,Monaco,68,0,1,0
+European Region,Holy See,10,0,0,0
+European Region,[1] Kosovo transmission,799,9,22,0
+European Region,Isle of Man,309,1,21,1
+European Region,Jersey,284,1,20,1
+European Region,Guernsey transmission,247,0,13,0
+European Region,Faroe Islands,187,0,0,0
+European Region,Gibraltar,141,0,0,0
+European Region,Greenland,11,0,0,0
+South-East Asia Region,India,33050,1718,1074,67
+South-East Asia Region,Indonesia transmission,9771,260,784,11
+South-East Asia Region,Bangladesh,7103,641,163,8
+South-East Asia Region,Thailand,2954,7,54,0
+South-East Asia Region,Sri Lanka,649,30,7,0
+South-East Asia Region,Maldives,256,11,0,0
+South-East Asia Region,Myanmar,150,0,6,1
+South-East Asia Region,Nepal,57,3,0,0
+South-East Asia Region,Timor-Leste,24,0,0,0
+South-East Asia Region,Bhutan,7,0,0,0
+Eastern Mediterranean Region,Iran (Islamic Republic of),93657,1073,5957,80
+Eastern Mediterranean Region,Saudi Arabia,21402,1325,157,5
+Eastern Mediterranean Region,Pakistan,15759,874,346,19
+Eastern Mediterranean Region,Qatar,12564,643,10,0
+Eastern Mediterranean Region,United Arab Emirates,11929,549,98,9
+Eastern Mediterranean Region,Egypt,5268,226,380,21
+Eastern Mediterranean Region,Morocco,4359,107,168,3
+Eastern Mediterranean Region,Kuwait,3740,300,24,1
+Eastern Mediterranean Region,Bahrain,2921,110,8,0
+Eastern Mediterranean Region,Oman,2348,74,10,0
+Eastern Mediterranean Region,Iraq,2003,75,92,2
+Eastern Mediterranean Region,Afghanistan,1827,0,60,0
+Eastern Mediterranean Region,Djibouti,1077,5,2,0
+Eastern Mediterranean Region,Tunisia transmission,980,5,40,0
+Eastern Mediterranean Region,Lebanon,721,4,24,0
+Eastern Mediterranean Region,Somalia,582,54,28,0
+Eastern Mediterranean Region,Jordan,451,2,8,0
+Eastern Mediterranean Region,Sudan,375,57,28,3
+Eastern Mediterranean Region,Libya,61,0,2,0
+Eastern Mediterranean Region,Syrian Arab Republic transmission,43,0,3,0
+Eastern Mediterranean Region,Yemen,6,5,0,0
+Eastern Mediterranean Region,occupied Palestinian territory,344,1,2,0
+Eastern Mediterranean Region,United States of America,1003974,20517,52428,1936
+Eastern Mediterranean Region,Brazil transmission,71886,5385,5017,474
+Eastern Mediterranean Region,Canada transmission,50363,1349,2904,138
+Eastern Mediterranean Region,Peru transmission,31190,2491,854,72
+Eastern Mediterranean Region,Ecuador transmission,24675,417,883,12
+Eastern Mediterranean Region,Mexico transmission,16752,1223,1569,135
+Eastern Mediterranean Region,Chile transmission,14885,520,216,9
+Eastern Mediterranean Region,Dominican Republic transmission,6652,236,293,7
+Eastern Mediterranean Region,Panama transmission,6200,179,176,9
+Eastern Mediterranean Region,Colombia transmission,5949,352,269,16
+Eastern Mediterranean Region,Argentina transmission,4201,182,207,10
+Eastern Mediterranean Region,Cuba,1467,30,58,0
+Eastern Mediterranean Region,Bolivia (Plurinational State of),1053,39,55,2
+Eastern Mediterranean Region,Honduras,738,36,66,2
+Eastern Mediterranean Region,Costa Rica,705,8,6,0
+Eastern Mediterranean Region,Uruguay,625,5,15,0
+Eastern Mediterranean Region,Guatemala,557,27,16,1
+Eastern Mediterranean Region,Jamaica,381,17,7,0
+Eastern Mediterranean Region,El Salvador,377,32,9,1
+Eastern Mediterranean Region,Venezuela (Bolivarian Republic of),329,0,10,0
+Eastern Mediterranean Region,Paraguay transmission,239,9,9,0
+Eastern Mediterranean Region,Trinidad and Tobago,116,0,8,0
+Eastern Mediterranean Region,Bahamas,80,0,11,0
+Eastern Mediterranean Region,Barbados,80,0,6,0
+Eastern Mediterranean Region,Haiti,76,0,6,0
+Eastern Mediterranean Region,Guyana,75,1,8,0
+Eastern Mediterranean Region,Antigua and Barbuda,24,0,3,0
+Eastern Mediterranean Region,Grenada,19,1,0,0
+Eastern Mediterranean Region,Belize,18,0,2,0
+Eastern Mediterranean Region,Saint Lucia,17,2,0,0
+Eastern Mediterranean Region,Dominica,16,0,0,0
+Eastern Mediterranean Region,Saint Vincent and the Grenadines,16,1,0,0
+Eastern Mediterranean Region,Saint Kitts and Nevis,15,0,0,0
+Eastern Mediterranean Region,Nicaragua,13,0,3,0
+Eastern Mediterranean Region,Suriname,10,0,1,0
+Eastern Mediterranean Region,Puerto Rico,1433,33,54,0
+Eastern Mediterranean Region,Martinique,175,0,14,0
+Eastern Mediterranean Region,Guadeloupe,151,2,11,0
+Eastern Mediterranean Region,French Guiana,125,1,1,0
+Eastern Mediterranean Region,Bermuda,111,1,6,0
+Eastern Mediterranean Region,Aruba,100,0,2,0
+Eastern Mediterranean Region,Sint Maarten,75,0,13,0
+Eastern Mediterranean Region,Cayman Islands,73,3,1,0
+Eastern Mediterranean Region,United States Virgin Islands,62,3,4,0
+Eastern Mediterranean Region,Saint Martin,38,0,3,0
+Eastern Mediterranean Region,Curaçao,16,0,1,0
+Eastern Mediterranean Region,Falkland Islands (Malvinas),13,0,0,0
+Eastern Mediterranean Region,Turks and Caicos Islands,12,0,1,0
+Eastern Mediterranean Region,Montserrat,11,0,1,0
+Eastern Mediterranean Region,Bonaire, Sint Eustatius and Saba,6,0,0,0
+Eastern Mediterranean Region,British Virgin Islands,6,0,1,0
+Eastern Mediterranean Region,Saint Barthélemy,6,0,0,0
+Eastern Mediterranean Region,Anguilla,3,0,0,0
+Eastern Mediterranean Region,Saint Pierre and Miquelon,1,0,0,0
+African Region,South Africa transmission,5350,354,103,10
+African Region,Algeria transmission,3848,199,444,7
+African Region,Cameroon,1806,101,59,1
+African Region,Ghana,1671,0,16,0
+African Region,Nigeria transmission,1532,195,44,4
+African Region,Guinea transmission,1351,111,7,0
+African Region,Côte d’Ivoire,1238,55,14,0
+African Region,Senegal,882,59,9,0
+African Region,Niger,713,4,32,1
+African Region,Burkina Faso,638,0,42,0
+African Region,transmission Democratic Republic of the Congo,500,9,31,1
+African Region,Mali,482,58,25,1
+African Region,United Republic of Tanzania,480,180,16,6
+African Region,Kenya,384,10,15,1
+African Region,Mauritius transmission,332,0,10,0
+African Region,Equatorial Guinea,315,0,1,0
+African Region,Gabon,276,38,3,0
+African Region,Rwanda,225,13,0,0
+African Region,Congo,220,13,9,1
+African Region,Liberia,141,0,16,0
+African Region,Ethiopia,130,4,3,0
+African Region,Madagascar,128,0,0,0
+African Region,Sierra Leone,116,12,5,1
+African Region,Cabo Verde,113,0,1,0
+African Region,Togo,109,10,7,1
+African Region,Zambia,97,2,3,0
+African Region,Eswatini,91,20,1,0
+African Region,Uganda,79,0,0,0
+African Region,Guinea-Bissau,77,4,1,0
+African Region,Mozambique,76,0,0,0
+African Region,Benin,69,5,2,1
+African Region,Chad,52,0,2,0
+African Region,Central African Republic,50,0,0,0
+African Region,Eritrea,39,0,0,0
+African Region,Malawi,36,0,3,0
+African Region,South Sudan,34,0,0,0
+African Region,Zimbabwe,32,0,4,0
+African Region,Angola,27,0,2,0
+African Region,Botswana,23,0,1,0
+African Region,Namibia,16,0,0,0
+African Region,Burundi,15,0,1,0
+African Region,Gambia,11,1,1,0
+African Region,São Tomé and Príncipe,11,0,0,0
+African Region,Seychelles,11,0,0,0
+African Region,Mauritania,7,0,1,0
+African Region,Mayotte,460,0,4,0
+African Region,Réunion,420,3,0,0

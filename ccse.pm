@@ -40,6 +40,19 @@ my $infopath = $config::INFOPATH->{ccse} ;
 my $EXCLUSION = "Others,US";
 my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 
+
+my $ACCD_PARAMS = [
+	{ext => "#KIND# ACCM TOP5+Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
+		label_skip => 3, graph => "lines", add_target => "Japan"},
+	{ext => "#KIND# ACCM TOP5+Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
+		label_skip => 3, graph => "lines", add_target => "Japan", logscale => "y"},
+
+	{ext => "#KIND# ACCM Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "Japan", 
+		label_skip => 3, graph => "lines"}, 
+	{ext => "#KIND# ACCM Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "Japan", 
+		label_skip => 3, graph => "lines", logscale => "y"}, 
+];
+
 our $PARAMS = {			# MODULE PARETER        $mep
 	comment => "**** CCSE PARAMS ****",
 	src => "Johns Hopkins CSSE",
@@ -48,6 +61,8 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	src_file => {
 		NC => "$CCSE_BASE_DIR/time_series_covid19_confirmed_global.csv",
 		ND => "$CCSE_BASE_DIR/time_series_covid19_deaths_global.csv",
+		ACC => "$CCSE_BASE_DIR/time_series_covid19_confirmed_global.csv",
+		ACD => "$CCSE_BASE_DIR/time_series_covid19_deaths_global.csv",
 	},
 	base_dir => $CCSE_BASE_DIR,
 
@@ -58,7 +73,7 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	DLM => $DLM,
 
 	AGGR_MODE => {DAY => 1, POP => 1},
-	DATA_KIND => {NC => 1, ND => 1},		#
+	MODE => {NC => 1, ND => 1, ACC => 1, ACD => 1},		#
 
 	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "US",
@@ -67,6 +82,25 @@ our $PARAMS = {			# MODULE PARETER        $mep
 			{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
 			{ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
 		],
+		graphp_mode => {
+			NC => [
+				@params::PARAMS_COUNT, 
+				{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
+				{ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
+			],
+			ND => [
+				@params::PARAMS_COUNT, 
+				{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
+				{ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
+			],
+			ACC => [
+				 @$ACCD_PARAMS, 
+			],
+			ACD => [
+				 @$ACCD_PARAMS, 
+			],
+		},
+
 	},
 	FT => {
 		EXC => "Others",  # "Others,China,USA";
@@ -130,6 +164,7 @@ sub	aggregate
 
 	if(1 || ! defined $JHCCSE{$aggr_mode}){
 		my $param = {
+			mode => $fp->{mode},
 			input_file => $fp->{src_file},
 			output_file => $fp->{stage1_csvf},
 			aggr_mode	=> $fp->{aggr_mode},

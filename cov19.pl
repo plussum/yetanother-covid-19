@@ -16,10 +16,20 @@
 #			 -> jag		 jag.pm		J.A.G Japan data of Japan
 #			 -> jagtotal jagtotal.pm	Total of all prefectures on J.A.A Japan 
 #
+#	AGGR_MODE
 #		DAY				Daily count of the source data
 #		POP				Daily count / population (M)
+#
+#	SUB_MODE
+#		COUNT			Simply count
 #		FT(ft.pm)		Finatial Times like 
 #		ERN(ern.pm)		Effective reproduction number
+#
+#	MODE
+#		NC				New Cases
+#		ND				New Deaths
+#		ACC				Accumulative Cases
+#		ACD				Accumulative Deatheas
 #
 #
 ##
@@ -95,12 +105,15 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 
 	push(@MODE_LIST, "ND") if(/-ND/i);
 	push(@MODE_LIST, "NC") if(/-NC/i);
+	push(@MODE_LIST, "ACC") if(/-ACC/i);
+	push(@MODE_LIST, "ACD") if(/-ACD/i);
+
 	push(@SUB_MODE_LIST, "FT") if(/-FT/i);
 	push(@SUB_MODE_LIST, "ERN") if(/-RT/i || /-ERN/);
 	push(@AGGR_LIST, "POP") if(/-POP/i);
 	$FULL_SOURCE = $_ if(/-FULL/i);
 	if(/-all/){
-		push(@MODE_LIST, "ND", "NC");
+		push(@MODE_LIST, "ND", "NC", "ACC", "ACD");
 		push(@SUB_MODE_LIST, "COUNT", "FT", "ERN");
 		push(@AGGR_LIST, "DAY", "POP");
 	}
@@ -160,20 +173,23 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 	}
 
 	foreach my $MODE (@MODE_LIST){
-		if(! csvlib::valdef($mep->{DATA_KIND}{$MODE},"")){
+		if(! csvlib::valdef($mep->{MODE}{$MODE},"")){
 			dp::dp "no function defined: $DATA_SOURCE: MODE[$MODE]\n";
 			next;
 		}
 			
 		foreach my $SUB_MODE (@SUB_MODE_LIST){
 			dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n";
-			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");
-			next if($SUB_MODE eq "ERN" && $MODE eq "ND");
+			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");		# POP affect only COUNT (no FT, ERN)
+			next if($SUB_MODE eq "ERN" && $MODE eq "ND");				# Newdeath does not make sense for ERN
+			next if($SUB_MODE ne "COUNT" && $MODE =~ /^AC[CD]/);		# Only count for ACC, ACD 
+
+			next if(!defined $mep->{src_file}{$MODE});
 
 			my $SRC_FILE = $mep->{src_file}{$MODE};
 			my $STG1_CSVF   = $config::CSV_PATH  . "/" . $mep->{prefix} . join("_", $MODE, $AGGR_MODE) . ".csv.txt";
 			
-			my $STG2_CSVF = $config::CSV_PATH  . "/" . $mep->{prefix} . join("_", $SUB_MODE, $AGGR_MODE) . ".csv.txt";
+			my $STG2_CSVF = $config::CSV_PATH  . "/" . $mep->{prefix} . join("_", $MODE, $SUB_MODE, $AGGR_MODE) . ".csv.txt";
 			my $HTMLF = $config::HTML_PATH . "/" . $mep->{prefix} . join("_", $MODE, $SUB_MODE, $AGGR_MODE) . ".html";
 
 			if($VERBOSE || $DEBUG){
@@ -189,6 +205,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 					next;
 				}
 				my $funcp = {
+					mode => $MODE,
 					mep => $mep,
 					funcp => $mep->{$SUB_MODE},
 
@@ -230,7 +247,9 @@ sub	daily
 	#
 
 	#my $prefix = $mep->{prefix};
-	my $name = ($fp->{mode} eq "NC") ? "NEW CASES" : "NEW DEATHS"; 
+	my $mode = $fp->{mode};
+	my $name = csvlib::valdef($config::MODE_NAME{$mode}, "-- $mode --");
+
 	#dp::dp "name: $name\n";
 	my $csvlist = {
 		name => $name . "(" . $fp->{aggr_mode} .")",
@@ -241,12 +260,17 @@ sub	daily
 		src => $mep->{src},
 		src_url => $mep->{src_url},
 	};
+	my $funcp = $fp->{funcp};
+	my $mode = $fp->{mode};
+	my $graphp = csvlib::valdef($funcp->{graphp_mode}{$mode}, $funcp->{graphp});
+
+	#dp::dp Dumper $graphp;
 
 	my %params = (
 		debug => $DEBUG,
 		clp => $csvlist,
 		mep => $mep,
-		gplp => $fp->{funcp}{graphp},
+		gplp => $graphp,	# $fp->{funcp}{graphp},
 		aggr_mode => $fp->{aggr_mode},
 		csv_aggr_mode => (defined $mep->{csv_aggr_mode} ? $mep->{csv_aggr_mode} : ""),
 	);
@@ -273,7 +297,9 @@ sub	pop_not_in_use
 	#
 	#	PARAMS for POP
 	#
-	my $name = ($fp->{mode} eq "NC") ? "POP NEW CASES" : "POP NEW DEATHS"; 
+	my $mode = $fp->{mode};
+	my $name = csvlib::valdef($config::MODE_NAME{$mode}, "-- $mode --");
+
 	dp::dp "NAME: $name \n";
 	my $csvlist = {
 		name => $name,
@@ -334,7 +360,9 @@ sub	ft
 	my $guide = ft::exp_guide(2,10, 10, 'linecolor "#808080"');
    	my $FT_TD = "($record)";
     $FT_TD =~ s#/#.#g;
-	my $name = ($mode eq "NC") ? "FT NEW CASES" : "FT NEW DEATHS"; 
+	my $mode = $fp->{mode};
+	my $name = "FT " . csvlib::valdef($config::MODE_NAME{$mode}, "-- $mode --");
+
 	my $csvlist = {
 		name => $name,
 		csvf => $fp->{stage2_csvf},
@@ -401,7 +429,8 @@ sub	ern
 	$RT_TD =~ s#/#.#g;
 
 	my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
-	my $name = ($fp->{mode} eq "NC") ? "ERN NEW CASES" : "ERN NEW DEATHS"; 
+	my $mode = $fp->{mode};
+	my $name = "ERN " . csvlib::valdef($config::MODE_NAME{$mode}, "-- $mode --");
 	my $csvlist = { 
 		name => $name,
 		csvf => $fp->{stage2_csvf}, 

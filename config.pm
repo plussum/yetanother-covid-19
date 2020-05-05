@@ -27,6 +27,12 @@ our $POP_THRESH = 100 * 1000;		# 人口が少ないと振れ幅が大きいの�
 
 our $DLM = ",";
 
+our $MODE_NAME = {
+	NC => "NEW CASES",
+	ND => "NEW DEATHS",
+	ACC => "ACCM CASES",
+	ACD => "ACCM DEATHS",
+};
 
 my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 
