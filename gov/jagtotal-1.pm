@@ -29,8 +29,6 @@ use csvgpl;
 use csvaggregate;
 use csvlib;
 
-use jag;
-
 #
 #	Initial
 #
@@ -42,11 +40,10 @@ my $DLM = $config::DLM;
 #	Parameter set
 #
 my $DEBUG = 1;
-my $transaction = $jag::transaction;
-my $src_url = $jag::src_url;
+my $transaction = "$CSV_PATH/gis-jag-japan.csv.txt",
+my $src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv";
 
-my $EXCLUSION = $jag::EXCLUSION;
-
+my $EXCLUSION = "";
 our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** J.A.G JAPAN PARAMS FOR TOAL ****",
     src => "JAG JAPAN",
@@ -54,24 +51,23 @@ our $PARAMS = {			# MODULE PARETER		$mep
     prefix => "jagtotal_",
     src_file => {
 		NC => $transaction,
-		#ND => "",
+		ND => "",
     },
     base_dir => "",
 	csv_aggr_mode => "TOTAL", 	# SET TOTAL for data aggregation
 
-    new => \&new,				
-    aggregate => \&aggregate,	 
-    download => \&jag::download,	# Use jag func
-    copy => \&jag::copy,			# Use jag func
+    new => \&new,
+    aggregate => \&aggregate,
+    download => \&download,
+    copy => \&copy,
 
-	AGGR_MODE => {DAY => 1},
-	#MODE => {NC => 1, ND => 1},
+
+	AGGR_MODE => {DAY => 1},	# NO POP =>1
+	DATA_KIND => {NC => 1},		# NO ND => 1
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
 		graphp => [		# GPL PARAMETER			$gplp
 			{ext => "#KIND# TOTAL Japan 02/15(#LD#) #SRC#", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
-			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC# mvavr", start_day => "03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines",
-				avr_date => 7, term_ysize => 600},
 			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC#", start_day => "03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 			{ext => "#KIND# TOTAL Japan 3w(#LD#) #SRC#", start_day => -21,  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 			{ext => "#KIND# TOTAL Japan log (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines",
@@ -88,7 +84,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				series => 1, average => 7, logscale => "y", term_ysize => 600, ft => 1},
 		],
 	},
-	ERN => {
+	RT => {
 		EXEC => "",
         ip => $config::RT_IP,
 		lp => $config::RT_LP,,
@@ -102,12 +98,34 @@ our $PARAMS = {			# MODULE PARETER		$mep
 	},
 };
 
+
 #
 #	For initial (first call from cov19.pl)
 #
 sub	new 
 {
 	return $PARAMS;
+}
+
+#
+#	Download data from the data source
+#
+sub	download
+{
+	my ($info_path) = @_;
+
+	print("wget $src_url -O $transaction\n");
+	system("wget $src_url -O $transaction");
+}
+
+#
+#	Copy download data to Windows Path
+#
+sub	copy
+{
+	my ($info_path) = @_;
+
+	system("cp $transaction $CSV_PATH/");
 }
 
 #

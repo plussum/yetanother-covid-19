@@ -51,7 +51,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
     prefix => "jag_",
     src_file => {
 		NC => $transaction,
-		ND => "",
+		#ND => "",
     },
     base_dir => "",
 	csv_aggr_mode => "", 	# "" or TOTAL
@@ -62,8 +62,9 @@ our $PARAMS = {			# MODULE PARETER		$mep
     copy => \&copy,
 
 
-	AGGR_MODE => {DAY => 1},		# NO POP
-	DATA_KIND => {NC => 1},		# NO ND => 1
+	AGGR_MODE => {DAY => 1},
+	#MODE => {NC => 1, ND => 1},
+
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
 		graphp => [		# GPL PARAMETER			$gplp
@@ -76,8 +77,10 @@ our $PARAMS = {			# MODULE PARETER		$mep
 			{ext => "#KIND# Japan 01-10 log (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines",
 				 logscale => "y", average => 7},
 
-			{ext => "#KIND# taget cities  (#LD#) #SRC#", start_day => "02/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
-				target => "東京,大阪,神戸,北海道", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# taget cities  (#LD#) #SRC# 02/01", start_day => "02/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
+				target => "東京,大阪,神戸,北海道,神奈川,埼玉,千葉", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# taget cities  (#LD#) #SRC# 03/01 mvavr", start_day => "03/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
+				target => "東京,大阪,神戸,北海道,神奈川,埼玉,千葉", label_skip => 2, graph => "lines", avr_date => 7, term_ysize => 300},
 		],
 
 	},

@@ -14,6 +14,7 @@ use Data::Dumper;
 use Time::Local 'timelocal';
 use dp;
 
+my $DEBUG = 0;
 
 #
 #
@@ -22,15 +23,18 @@ sub	sum
 {
 	my ($data, $s, $e) = @_;
 	
-	#for(my $i = $s; $i < $e; $i++){
-	#	print "[" . $data->[$i] . "]";
-	#}
+	if($DEBUG){
+		print "($s:$e:" . ($e - $s + 1) . ")";
+		for(my $i = $s; $i <= $e; $i++){
+			print "[" . $data->[$i] . "]";
+		}
+	}
 
 	my $sum = 0;
 	for(my $i = $s; $i <= $e; $i++){
 		$sum += $data->[$i];
 	}
-	#print "i=> $sum\n";
+	print "i=> $sum\n" if($DEBUG);
 	return $sum;
 }
 
@@ -241,3 +245,5 @@ sub	cnt_pop
 		}
 	}
 }
+
+1;

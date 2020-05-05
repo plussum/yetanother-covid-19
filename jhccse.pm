@@ -36,6 +36,8 @@ sub	jhccse
 		csvlib::cnt_pop(\%CNT_POP);
 		dp::dp( "###### $p->{aggr_mode}\n") if($DEBUG > 1);
 	}
+	#dp::dp "[" . $p->{mode} . "]\n";
+	#dp::dp Dumper $p;
 
 	my $DLM = csvlib::valdefs($p->{delimiter} , ",");
 	
@@ -129,6 +131,7 @@ sub	jhccse
 	dp::dp (join($DLM, "Country", "Total", @COL), "\n") if($DEBUG > 1);
 	print CSV join($DLM, "Country", "Total", @COL), "\n" ;
 
+	my $cout_mode = ($p->{mode} =~ /^N[A-Z]/) ? "DAY" : "CCM";
 	my $ln = 0;
 	foreach my $country (sort {$COUNTRY{$b} <=> $COUNTRY{$a}} keys %COUNTRY){	# 累計の降順ソート
 		dp::dp( join($DLM, $country, $COUNTRY{$country}), "\n") if($DEBUG > 1);
@@ -138,11 +141,14 @@ sub	jhccse
 		dp::dp (join(", ", $country, $COUNTRY{$country}, @{$COUNT{$country}}[0..$ITEMS]), "\n")  if(($ln < 3 && $DEBUG > 1));
 
 		for(my $dt = 0; $dt <= $ITEMS; $dt++){			
-			my $dtn = $COUNT{$country}[$dt] - ($dt == 0 ? 0 : $COUNT{$country}[$dt-1]);	# 累計 -> 日次
-			if($p->{aggr_mode} eq "POP"){											# 人口比に置き換え
+			my $dtn = $COUNT{$country}[$dt];									# $aggr_mode eq "CCM"
+			if($cout_mode eq "DAY"){
+				$dtn = $dtn - ($dt == 0 ? 0 : $COUNT{$country}[$dt-1]);			# 累計 -> 日次
+			}
+			if($p->{aggr_mode} eq "POP"){									# 人口比に置き換え
 				if(defined $CNT_POP{$country}){
 					#dp::dp "[" . $p->{aggr_mode} . "]";
-					$dtn = $dtn / ($CNT_POP{$country} / $config::POP_BASE);	# 100万人当たり
+					$dtn = $dtn / ($CNT_POP{$country} / $config::POP_BASE);		# 100万人当たり
 				}
 				else {
 					$NO_POP{$country}++;										# エラー。国名が見つからない

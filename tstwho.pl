@@ -10,8 +10,9 @@ use who;
 
 
 my @files = (
-	"./COV/whodata/20200501-covid-19-sitrep.txt",
-	"./COV/whodata/20200430-sitrep-101-covid-19.txt",
+	"./COV/whodata/20200504-covid-19-sitrep-105.txt",
+#	"./COV/whodata/20200501-covid-19-sitrep.txt",
+#	"./COV/whodata/20200430-sitrep-101-covid-19.txt",
 );
 
 my $date = 20200501;			# format
