@@ -247,6 +247,7 @@ sub	csv2graph
 		my $country = $DATA[$cn][0];
 		next if(! $country);
 
+		#dp::dp join(",", @{$DATA[$cn]}) . "\n" if($country =~ /Sint/ || $country =~ /Japan/);
 		my $tl = 0;
 		for(my $dn = 0; $dn < $dates; $dn++){
 			my $p = $dn+$std+$DATE_COL_NO;
@@ -254,11 +255,18 @@ sub	csv2graph
 			if($c =~ /[^0-9]\-\./){
 				dp::dp "($dn:$std:$p:$c:$csvf)\n";
 			}
+			if($c =~ /^[^0-9]+$/){			# Patch for bug of former data, may be
+				dp::dp "DATA ERROR at $country($dn) $c\n" if($DEBUG);
+				$tl = -1;
+				last;
+			}
 			$COUNT_D{$country}[$dn] = $c;
 			$tl += $c;
 		}
-		$CTG{$country} = $tl;
-		$TOTAL{$country} = $DATA[$cn][1];
+		if($tl > 0){
+			$CTG{$country} = $tl;
+			$TOTAL{$country} = $DATA[$cn][1];
+		}
 		#dp::dp "$country : " . $TOTAL{$country} . "\n";
 	}
 

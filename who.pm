@@ -50,6 +50,8 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	src_file => {
 		NC => "$WIN_PATH/CSV/who_situation_report_NC.html",		# 表示用　実際にはプログラム中でファイルを生成している
 		ND => "$WIN_PATH/CSV/who_situation_report_ND.html",		# jhccseの場合は、実際にCSVがあるので、このパラメータを読み込みに利用している
+		ACC => "$WIN_PATH/CSV/who_situation_report_NC.html",		# 表示用　実際にはプログラム中でファイルを生成している
+		ACD => "$WIN_PATH/CSV/who_situation_report_ND.html",		# jhccseの場合は、実際にCSVがあるので、このパラメータを読み込みに利用している
 	},
 	base_dir => "",
 	DLM => ",",
@@ -60,13 +62,27 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	copy => \&copy,
 
 	AGGR_MODE => {DAY => 1},
-	MODE => {NC => 1, ND => 1},
+	MODE => {NC => 1, ND => 1, ACC => 1, ACD => 1},
 
 	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "US",
 		graphp => [		# GPL PARAMETER         $gplp
 			@params::PARAMS_COUNT, 
 		],
+		graphp_mode => {
+			NC => [
+				@params::PARAMS_COUNT, 
+			],
+			ND => [
+				@params::PARAMS_COUNT, 
+			],
+			ACC => [
+				 @params::ACCD_PARAMS, 
+			],
+			ACD => [
+				 @params::ACCD_PARAMS, 
+			],
+		},
 	},
 	FT => {
 		EXC => "Others",  # "Others,China,USA";
@@ -126,7 +142,7 @@ my @DLF_LIST = ();
 
 my %TOTAL_CASE = ();
 my %NEW_CASE = ();
-my %TOTAL_DETH = ();
+my %TOTAL_DEATH = ();
 my %NEW_DETH = ();
 my %DATES = ();
 my %COUNTRY = ();
@@ -159,9 +175,9 @@ sub	aggregate
 		$txtf =~ s/\.pdf/.txt/;
 		my $txtd = $txtf;
 		$txtd =~ s/.txt/-d.txt/;
-		print $txtf , "\n" if($DEBUG > 2);
+		dp::dp $txtf , "\n" if($DEBUG > 2);
 
-		print "DL: $html\n" if($DEBUG > 2);
+		dp::dp "DL: $html\n" if($DEBUG > 2);
 		system("wget $html -O $dlf")    if(! -f $dlf);
 		system("ps2ascii $dlf > $txtf") if(! -f $txtf);
 		&molding($txtf, $txtd, $date)   if(! -f $txtd);
@@ -185,14 +201,16 @@ sub	aggregate
 			$country =~ s/ *\[[0-9]*\] *//;
 			#dp::dp "[$country] \n" if($country =~ /Koso/);
 			
-			print "### COUNTRY($date):" . join(",", $region, $country, @w) . " \n" if($country =~ /^[0-9]+$/);
+			dp::dp "### COUNTRY($date):" . join(",", $region, $country, @w) . " \n" if($country =~ /^[0-9]+$/);
 
 			my $k = join("\t", $date, $country);
 
-			my $c;
-			if($mode eq "NC" || $mode eq "ND"){
+			my $c = 0;
+			if($mode =~ /^N[A-Z]/ || $mode =~ /^AC[A-Z]/){
 				$c = csvlib::valdef($w[1], 0) if($mode eq "NC");
 				$c = csvlib::valdef($w[3], 0) if($mode eq "ND");
+				$c = csvlib::valdef($w[1], 0) if($mode eq "ACC");	# for total count, must be daily data
+				$c = csvlib::valdef($w[3], 0) if($mode eq "ACD");	# for total count, must be daily data
 				if($c =~ /transmission/ || $c =~ /[67][5289] /){
 					dp::dp "find trasnmission [$c][$txtd] $_\n";
 				}
@@ -206,7 +224,7 @@ sub	aggregate
 
 			$TOTAL_CASE{$k} = csvlib::valdef($w[0], 0);	# Total case
 			$NEW_CASE{$k}   = csvlib::valdef($w[1], 0);	# new case
-			$TOTAL_DETH{$k} = csvlib::valdef($w[2], 0);	# Total deth
+			$TOTAL_DEATH{$k} = csvlib::valdef($w[2], 0);	# Total deth
 			$NEW_DETH{$k}   = csvlib::valdef($w[3], 0);	# new death 
 		}
 		close(TXT);
@@ -233,10 +251,10 @@ sub	aggregate
 	print SRC "</BODY>\n</HTML>\n";
 	close(SRC);
 
-	#print "#### " . $COUNTRY{Plurinational} , "###\n";
-	#print join("\n", keys %COUNTRY);
+	#dp::dp "#### " . $COUNTRY{Plurinational} , "###\n";
+	#dp::dp join("\n", keys %COUNTRY);
 	#for(keys %COUNTRY){
-	#	print $_ . "\n" if(/International/);
+	#	dp::dp $_ . "\n" if(/International/);
 	#}
 
 	#
@@ -246,9 +264,9 @@ sub	aggregate
 	my @COL = ();
 	my %COUNT_D = ();
 
-	unlink($report_csvf) || print STDERR "cannot remove $report_csvf\n";
+	dp::dp "Report_csv $report_csvf\n" if($DEBUG > 0);
+	unlink($report_csvf) || dp::dp STDERR "cannot remove $report_csvf $!\n";
 	open(CSV, ">$report_csvf") || die "cannot create $report_csvf\n";
-
 	foreach my $dt (sort keys %DATES){
 		#push(@COL, join("/", substr($dt, 0, 4), substr($dt, 4, 2), substr($dt, 6, 2)));
 		push(@COL, join("/", substr($dt, 4, 2), substr($dt, 6, 2)));
@@ -266,27 +284,31 @@ sub	aggregate
 			my $c;
 			$c = csvlib::valdef($NEW_CASE{$k}, 0) if($mode eq "NC");
 			$c = csvlib::valdef($NEW_DETH{$k}, 0) if($mode eq "ND");
+			$c = csvlib::valdef($TOTAL_CASE{$k}, 0) if($mode eq "ACC");
+			$c = csvlib::valdef($TOTAL_DEATH{$k}, 0) if($mode eq "ACD");
 			if($PP){
 				if(defined $POP{$country}){
 					$c /= $POP{$country};
 				}
 				else {
-					#print "No population data for [$country]\n" if(! defined $NODATA{$country});
-					print "$country\n" if(! defined $NODATA{$country});
+					#dp::dp "No population data for [$country]\n" if(! defined $NODATA{$country});
+					dp::dp "$country\n" if(! defined $NODATA{$country});
 					$NODATA{$country}++;
 				}
 			}
 			
 			if($mode eq "DR"){
 				$c = 0;
-				$c = int(10000 * csvlib::valdef($TOTAL_DETH{$k}, 0) / csvlib::valdef($TOTAL_CASE{$k}, 0)/100) if(csvlib::valdef($TOTAL_CASE{$k}, 0) > 0);
+				$c = int(10000 * csvlib::valdef($TOTAL_DEATH{$k}, 0) / csvlib::valdef($TOTAL_CASE{$k}, 0)/100) if(csvlib::valdef($TOTAL_CASE{$k}, 0) > 0);
 			
-				print join("," , $dt, $country, csvlib::valdef($TOTAL_DETH{$k}, 0), csvlib::valdef($TOTAL_CASE{$k}, 0), $c) , "\n" if($DEBUG);
+				dp::dp join("," , $dt, $country, csvlib::valdef($TOTAL_DEATH{$k}, 0), csvlib::valdef($TOTAL_CASE{$k}, 0), $c) , "\n" if($DEBUG);
 			}
 			print CSV $c , ",";
 			$COUNT_D{$country}[$i] = $c;
 			$i++;
 		}
+		#dp::dp join(",", @{$COUNT_D{$country}}) . "\n" if($country =~ /Japan/);
+
 		print CSV "\n";
 	}
 	close(CSV);
@@ -306,7 +328,7 @@ sub	get_situation_list
 
 			my $dlf = $pdf;
 			$dlf =~s#.+/(.+pdf)\?.*$#$1#;
-			print length($_) . " " , $pdf . "\n", $dlf . "\n" if($DEBUG > 1);
+			dp::dp length($_) . " " , $pdf . "\n", $dlf . "\n" if($DEBUG > 2);
 		
 			my $date = $dlf;
 			$date =~ s/-.*$//;

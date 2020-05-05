@@ -6,6 +6,7 @@ use strict;
 use warnings;
 use config;
 
+my $DEBUG = 0;
 my $WIN_PATH = $config::WIN_PATH;
 my $INDEX_HTML = "$WIN_PATH/covid_index.html";
 my $FRAME_HTML = "$WIN_PATH/covid_frame.html";
@@ -34,6 +35,7 @@ my $CSS = $config::CSS;
 my $TBL_SIZE = 10;
 my $class = "class=\"c\"";
 
+print "Generate index.html and frame.html\n";
 open(INDEX, ">$INDEX_HTML") || die "cannot create file $INDEX_HTML";
 print INDEX $INDEX;
 close(INDEX);
@@ -55,14 +57,18 @@ foreach my $src (@src_list){
 			foreach my $mode (@mode_list){
 				next if($aggr eq "POP" && ($sub ne "COUNT" || $src ne "jhccse"));
 				next if($mode eq "ND" && $sub eq "ERN"); 
-				if($mode =~ /^AC/ || $mode =~ /NR/){
+				if($mode =~ /NR/){
 					next if($sub ne "COUNT" || !( $src =~ /ccse/));
+				}
+				if($mode =~ /^AC/){ 
+					next if($mode =~ /ACR/ && $src =~ /who/);
+					next if($sub ne "COUNT" || !( $src =~ /ccse/ || $src =~ /who/));
 				}
 				next if($src =~ /jag/ && $mode eq "ND");
 				my $relp = join("_", $src, $mode, $sub, $aggr) . ".html";
 
 				print FRAME "<li><a href =\"HTML/$relp\" target=\"graph\">$relp</a></li>\n";
-				print $relp . "\n";
+				print $relp . "\n" if($DEBUG);
 			}
 		}
 		print FRAME "<br>\n";

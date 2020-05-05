@@ -137,6 +137,7 @@ if($FULL_SOURCE){
 	foreach my $src (@FULL_DATA_SOURCES){
 		system("$0 $src -all $dl");
 	}
+	system("./genindex.pl");
 	exit(0);
 }
 
@@ -196,7 +197,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 			dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n";
 			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");		# POP affect only COUNT (no FT, ERN)
 			next if($SUB_MODE eq "ERN" && $MODE eq "ND");				# Newdeath does not make sense for ERN
-			next if($SUB_MODE ne "COUNT" && $MODE =~ /^AC/);		# Only count for ACC, ACD 
+			next if($SUB_MODE ne "COUNT" && $MODE =~ /^AC/);			# Only count for ACC, ACD 
 
 			next if(!defined $mep->{src_file}{$MODE});
 

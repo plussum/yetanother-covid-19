@@ -125,4 +125,15 @@ our	@PARAMS_POP = (
 	{ext => "#KIND# China (#LD#)", start_day => 0,  lank =>[0, 100] , exclusion => "Others", target => "China", label_skip => 2, graph => "lines"},
 );
 
+our @ACCD_PARAMS = (
+	{ext => "#KIND# ACCM TOP5+Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
+		label_skip => 3, graph => "lines", add_target => "Japan"},
+	{ext => "#KIND# ACCM TOP5+Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
+		label_skip => 3, graph => "lines", add_target => "Japan", logscale => "y"},
+
+	{ext => "#KIND# ACCM Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "Japan", 
+		label_skip => 3, graph => "lines"}, 
+	{ext => "#KIND# ACCM Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "Japan", 
+		label_skip => 3, graph => "lines", logscale => "y"}, 
+);
 1;

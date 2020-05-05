@@ -41,17 +41,6 @@ my $EXCLUSION = "Others,US";
 my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 
 
-my $ACCD_PARAMS = [
-	{ext => "#KIND# ACCM TOP5+Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
-		label_skip => 3, graph => "lines", add_target => "Japan"},
-	{ext => "#KIND# ACCM TOP5+Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
-		label_skip => 3, graph => "lines", add_target => "Japan", logscale => "y"},
-
-	{ext => "#KIND# ACCM Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "Japan", 
-		label_skip => 3, graph => "lines"}, 
-	{ext => "#KIND# ACCM Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "Japan", 
-		label_skip => 3, graph => "lines", logscale => "y"}, 
-];
 
 our $PARAMS = {			# MODULE PARETER        $mep
 	comment => "**** CCSE PARAMS ****",
@@ -96,10 +85,10 @@ our $PARAMS = {			# MODULE PARETER        $mep
 				{ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
 			],
 			ACC => [
-				 @$ACCD_PARAMS, 
+				 @params::ACCD_PARAMS, 
 			],
 			ACD => [
-				 @$ACCD_PARAMS, 
+				 @params::ACCD_PARAMS, 
 			],
 		},
 
