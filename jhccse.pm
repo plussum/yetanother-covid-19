@@ -131,7 +131,7 @@ sub	jhccse
 	dp::dp (join($DLM, "Country", "Total", @COL), "\n") if($DEBUG > 1);
 	print CSV join($DLM, "Country", "Total", @COL), "\n" ;
 
-	my $cout_mode = ($p->{mode} =~ /^N[CD]/) ? "DAY" : "ACCM";
+	my $cout_mode = ($p->{mode} =~ /^N[A-Z]/) ? "DAY" : "ACCM";
 	my $ln = 0;
 	foreach my $country (sort {$COUNTRY{$b} <=> $COUNTRY{$a}} keys %COUNTRY){	# 累計の降順ソート
 		dp::dp( join($DLM, $country, $COUNTRY{$country}), "\n") if($DEBUG > 1);

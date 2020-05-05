@@ -63,6 +63,8 @@ our $PARAMS = {			# MODULE PARETER        $mep
 		ND => "$CCSE_BASE_DIR/time_series_covid19_deaths_global.csv",
 		ACC => "$CCSE_BASE_DIR/time_series_covid19_confirmed_global.csv",
 		ACD => "$CCSE_BASE_DIR/time_series_covid19_deaths_global.csv",
+		NR  => "$CCSE_BASE_DIR/time_series_covid19_recovered_global.csv",
+		ACR => "$CCSE_BASE_DIR/time_series_covid19_recovered_global.csv",
 	},
 	base_dir => $CCSE_BASE_DIR,
 
@@ -73,7 +75,7 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	DLM => $DLM,
 
 	AGGR_MODE => {DAY => 1, POP => 1},
-	MODE => {NC => 1, ND => 1, ACC => 1, ACD => 1},		#
+	MODE => {NC => 1, ND => 1, ACC => 1, ACD => 1, NR => 1, ACR => 1},		#
 
 	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "US",

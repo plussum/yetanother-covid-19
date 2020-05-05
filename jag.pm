@@ -62,8 +62,9 @@ our $PARAMS = {			# MODULE PARETER		$mep
     copy => \&copy,
 
 
-	AGGR_MODE => {DAY => 1},		# NO POP
-	DATA_KIND => {NC => 1},		# NO ND => 1
+	AGGR_MODE => {DAY => 1},
+	MODE => {NC => 1, ND => 1},
+
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
 		graphp => [		# GPL PARAMETER			$gplp

@@ -59,8 +59,9 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	download => \&download,
 	copy => \&copy,
 
-	AGGR_MODE => {DAY => 1},	# NO POP
-	DATA_KIND => {NC => 1, ND => 1},		# NO ND => 1
+	AGGR_MODE => {DAY => 1},
+	MODE => {NC => 1, ND => 1},
+
 	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "US",
 		graphp => [		# GPL PARAMETER         $gplp

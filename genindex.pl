@@ -11,7 +11,7 @@ my $INDEX_HTML = "$WIN_PATH/covid_index.html";
 my $FRAME_HTML = "$WIN_PATH/covid_frame.html";
 
 my @src_list = qw (jhccse who jag jagtotal);
-my @mode_list = qw (NC ND ACC ACD);
+my @mode_list = qw (NC ND ACC ACD NR ACR);
 my @submode_list = qw (COUNT FT ERN);
 my @aggr_list = qw (DAY POP);
 
@@ -50,12 +50,12 @@ print FRAME "<span class=\"c\"> ";
 print FRAME "<H1>INDEX COVID-19</H1>\n";
 print FRAME "<ul type=\"disc\">\n";
 foreach my $src (@src_list){
-	foreach my $sub (@submode_list){
-		foreach my $aggr (@aggr_list){
+	foreach my $aggr (@aggr_list){
+		foreach my $sub (@submode_list){
 			foreach my $mode (@mode_list){
 				next if($aggr eq "POP" && ($sub ne "COUNT" || $src ne "jhccse"));
 				next if($mode eq "ND" && $sub eq "ERN"); 
-				if($mode =~ /AC[CD]/ ){
+				if($mode =~ /^AC/ || $mode =~ /NR/){
 					next if($sub ne "COUNT" || !( $src =~ /ccse/));
 				}
 				next if($src =~ /jag/ && $mode eq "ND");
@@ -65,8 +65,9 @@ foreach my $src (@src_list){
 				print $relp . "\n";
 			}
 		}
+		print FRAME "<br>\n";
 	}
-	print FRAME "<br>\n";
+	#print FRAME "<br>\n";
 }
 print FRAME "</ul>\n";
 print FRAME "</span>\n";

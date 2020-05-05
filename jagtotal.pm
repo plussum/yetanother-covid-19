@@ -64,8 +64,8 @@ our $PARAMS = {			# MODULE PARETER		$mep
     download => \&jag::download,	# Use jag func
     copy => \&jag::copy,			# Use jag func
 
-	AGGR_MODE => {DAY => 1},	# NO POP =>1
-	DATA_KIND => {NC => 1},		# NO ND => 1
+	AGGR_MODE => {DAY => 1},
+	MODE => {NC => 1, ND => 1},
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
 		graphp => [		# GPL PARAMETER			$gplp

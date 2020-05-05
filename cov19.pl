@@ -94,29 +94,43 @@ my @FULL_DATA_SOURCES = qw (ccse who jag jagtotal);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
-	$DEBUG = 1 if(/^-debug/);
-	$DOWNLOAD = 1 if(/-DL/i);
-	$COPY = 1 if(/-copy/);
 
 	$DATA_SOURCE = "ccse" if(/ccse/i);
 	$DATA_SOURCE = "who" if(/who/i);
 	$DATA_SOURCE = "jag" if(/jag/i);
 	$DATA_SOURCE = "jagtotal" if(/jagtotal/i);
 
-	push(@MODE_LIST, "ND") if(/-ND/i);
-	push(@MODE_LIST, "NC") if(/-NC/i);
-	push(@MODE_LIST, "ACC") if(/-ACC/i);
-	push(@MODE_LIST, "ACD") if(/-ACD/i);
-
-	push(@SUB_MODE_LIST, "FT") if(/-FT/i);
-	push(@SUB_MODE_LIST, "ERN") if(/-RT/i || /-ERN/);
-	push(@AGGR_LIST, "POP") if(/-POP/i);
-	$FULL_SOURCE = $_ if(/-FULL/i);
-	if(/-all/){
-		push(@MODE_LIST, "ND", "NC", "ACC", "ACD");
+	if(/-debug/i){
+		$DEBUG = 1;
+	}
+	elsif(/-copy/){
+		$COPY = 1; 
+	}
+	elsif(/-DL/i){
+		$DOWNLOAD = 1;
+	}
+	elsif(/-FULL/i){
+		$FULL_SOURCE = $_ if(/-FULL/i);
+	}
+	elsif(/-all/){
+		push(@MODE_LIST, "ND", "NC", "ACC", "ACD", "NR", "ACR");
 		push(@SUB_MODE_LIST, "COUNT", "FT", "ERN");
 		push(@AGGR_LIST, "DAY", "POP");
 	}
+	elsif(/^-[A-Za-z]/){
+		s/^-//;
+		push(@MODE_LIST, $_);
+	}
+	if(/^--[A-Za-z]/){
+		s/^--//;
+		if(/POP/i){
+			push(@AGGR_LIST, $_);
+		}
+		else {
+			push(@SUB_MODE_LIST, $_);
+		}
+	}
+
 }
 if($FULL_SOURCE){
 	my $dl = "-dl" if($FULL_SOURCE =~ /FULL/);
@@ -182,7 +196,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 			dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n";
 			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");		# POP affect only COUNT (no FT, ERN)
 			next if($SUB_MODE eq "ERN" && $MODE eq "ND");				# Newdeath does not make sense for ERN
-			next if($SUB_MODE ne "COUNT" && $MODE =~ /^AC[CD]/);		# Only count for ACC, ACD 
+			next if($SUB_MODE ne "COUNT" && $MODE =~ /^AC/);		# Only count for ACC, ACD 
 
 			next if(!defined $mep->{src_file}{$MODE});
 
@@ -206,11 +220,12 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 				}
 				my $funcp = {
 					mode => $MODE,
+					sub_mode => $SUB_MODE,
+					aggr_mode => $AGGR_MODE,
+
 					mep => $mep,
 					funcp => $mep->{$SUB_MODE},
 
-					mode => $MODE,
-					aggr_mode => $AGGR_MODE,
 					src_file => $SRC_FILE,
 					stage1_csvf => $STG1_CSVF,
 					stage2_csvf => $STG2_CSVF,
@@ -248,9 +263,9 @@ sub	daily
 
 	#my $prefix = $mep->{prefix};
 	my $mode = $fp->{mode};
-	my $name = csvlib::valdef($config::MODE_NAME{$mode}, "-- $mode --");
+	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $fp->{aggr_mode}) ;
+	#dp::dp "[$mode] $name\n";
 
-	#dp::dp "name: $name\n";
 	my $csvlist = {
 		name => $name . "(" . $fp->{aggr_mode} .")",
 		csvf => $fp->{stage1_csvf}, 
@@ -298,7 +313,7 @@ sub	pop_not_in_use
 	#	PARAMS for POP
 	#
 	my $mode = $fp->{mode};
-	my $name = csvlib::valdef($config::MODE_NAME{$mode}, "-- $mode --");
+	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $fp->{aggr_mode}) ;
 
 	dp::dp "NAME: $name \n";
 	my $csvlist = {
@@ -361,7 +376,7 @@ sub	ft
    	my $FT_TD = "($record)";
     $FT_TD =~ s#/#.#g;
 	my $mode = $fp->{mode};
-	my $name = "FT " . csvlib::valdef($config::MODE_NAME{$mode}, "-- $mode --");
+	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $fp->{aggr_mode}) ;
 
 	my $csvlist = {
 		name => $name,
@@ -430,7 +445,7 @@ sub	ern
 
 	my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
 	my $mode = $fp->{mode};
-	my $name = "ERN " . csvlib::valdef($config::MODE_NAME{$mode}, "-- $mode --");
+	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $fp->{aggr_mode}) ;
 	my $csvlist = { 
 		name => $name,
 		csvf => $fp->{stage2_csvf}, 
