@@ -11,13 +11,14 @@ use warnings;
 #use ccse;
 #use who;
 
-our $WIN_PATH = "/mnt/f/OneDrive/cov";
+our $WIN_PATH = "/mnt/f/OneDrive/cov/plussum.github.io";
 our $HTML_PATH = "$WIN_PATH/HTML";
 our $CSV_PATH  = "$WIN_PATH/CSV";
 our $PNG_PATH  = "$WIN_PATH/PNG";
 our $PNG_REL_PATH  = "../PNG";		# HTML からの相対パス
 our $CSV_REL_PATH  = "../CSV";		# HTML からの相対パス
 
+our $WHO_INDEX = "who_index.html";
 our $RT_IP = 5;
 our $RT_LP = 8;
 our $THRESH_FT = {NC => 9, ND => 3, NR => 3};

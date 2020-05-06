@@ -63,7 +63,7 @@ sub	csv_aggregate
 
 	my $start_time = time;
 		
-	dp::dp "### open [" . $agrp->{input_file} . "]: " . (time - $start_time) . "\n" if(1 || $DEBUG > 1);
+	dp::dp "### open [" . $agrp->{input_file} . "]: " . (time - $start_time) . "\n" if($DEBUG > 1);
 	open(TRN, $agrp->{input_file}) || die "cannot open $agrp->{input_file} file\n";
 
 	$_ = <TRN>; chop;

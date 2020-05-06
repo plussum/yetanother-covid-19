@@ -69,13 +69,22 @@ our $PARAMS = {			# MODULE PARETER		$mep
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
 		graphp => [		# GPL PARAMETER			$gplp
-			{ext => "#KIND# TOTAL Japan 02/15(#LD#) #SRC#", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
-			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC# mvavr", start_day => "03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines",
-				avr_date => 7, term_ysize => 600},
-			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC#", start_day => "03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
-			{ext => "#KIND# TOTAL Japan 3w(#LD#) #SRC#", start_day => -21,  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
-			{ext => "#KIND# TOTAL Japan log (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines",
-				 logscale => "y", average => 7},
+			{ext => "#KIND# TOTAL Japan 02/15(#LD#) #SRC#", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, 
+				target => "", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# TOTAL Japan 02/15(#LD#) #SRC# mvavr", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, 
+				target => "", label_skip => 2, graph => "lines", avr_date => 7},
+
+			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC#", start_day => "03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, 
+				target => "", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC# mvavr", start_day => "03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, 
+				target => "", label_skip => 2, graph => "lines", avr_date => 7, term_ysize => 300},
+
+			{ext => "#KIND# TOTAL Japan 3w(#LD#) #SRC#", start_day => -21,  lank =>[0, 1] , exclusion => $EXCLUSION, 
+				target => "", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# TOTAL Japan 3w(#LD#) #SRC# mvavr", start_day => -21,  lank =>[0, 1] , exclusion => $EXCLUSION, 
+				target => "", label_skip => 2, graph => "lines", avr_date => 7},
+			{ext => "#KIND# TOTAL Japan log (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, 
+				target => "", label_skip => 2, graph => "lines", logscale => "y", avr_date => 7},
 		],
 
 	},

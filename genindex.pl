@@ -8,8 +8,9 @@ use config;
 
 my $DEBUG = 0;
 my $WIN_PATH = $config::WIN_PATH;
-my $INDEX_HTML = "$WIN_PATH/covid_index.html";
+my $INDEX_HTML = "$WIN_PATH/index.html";
 my $FRAME_HTML = "$WIN_PATH/covid_frame.html";
+my $WHO_INDEX  = "who_situation_report_NC.html";	# Generate by who.pm
 
 my @src_list = qw (jhccse who jag jagtotal);
 my @mode_list = qw (NC ND CC CD NR CR);
@@ -24,7 +25,7 @@ my $INDEX = << "_EOI_";
 
 <frameset cols="300,*">
     <frame src="covid_frame.html" name="index">
-    <frame src="covid_frame.html" name="graph">
+    <frame src="about.html" name="graph">
     </frameset>
 </frameset>
 </html> 
@@ -75,6 +76,9 @@ foreach my $src (@src_list){
 	}
 	#print FRAME "<br>\n";
 }
+print FRAME "<li><a href =\"HTML/$config::WHO_INDEX\" target=\"graph\">WHO_INDEX</a></li>\n";
+print FRAME "<br>\n";
+print FRAME "<li><a href =\"about.html\" target=\"graph\">about</a></li>\n";
 print FRAME "</ul>\n";
 print FRAME "</span>\n";
 print FRAME "</BODY>\n";

@@ -1,5 +1,9 @@
 #	Download COVID-19 data and generate graphs
-		Require gnuplot
+		Require 
+				gnuplot		for drawing graphs
+				wget 		get data from web page
+				git			get data from Johns Hopkins CCSE data
+				ps2ascii	combert pdf to text
 
 	cov19.pl [ccse who jag jagtotal] 
 		-NC 		New cases
