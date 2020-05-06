@@ -79,6 +79,8 @@ our $PARAMS = {			# MODULE PARETER		$mep
 
 			{ext => "#KIND# taget cities  (#LD#) #SRC# 02/01", start_day => "02/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
 				target => "東京,大阪,神戸,北海道,神奈川,埼玉,千葉", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# taget cities  (#LD#) #SRC# 03/01 ", start_day => "03/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
+				target => "東京,大阪,神戸,北海道,神奈川,埼玉,千葉", label_skip => 2, graph => "lines", term_ysize => 300},
 			{ext => "#KIND# taget cities  (#LD#) #SRC# 03/01 mvavr", start_day => "03/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
 				target => "東京,大阪,神戸,北海道,神奈川,埼玉,千葉", label_skip => 2, graph => "lines", avr_date => 7, term_ysize => 300},
 		],

@@ -168,7 +168,7 @@ sub	aggregate
 		my $dlf  = "$DL_DIR/" . $DLF_LIST[$i];
 		my $txtf = $dlf;
 		$date = $DLF_LIST[$i];
-		$date =~ s/-.*$//;
+		$date =~ s/[^0-9].+$//;
 		$DATES{$date}++;
 		$LAST_DATE = $date if($date > $LAST_DATE);
 
@@ -231,7 +231,9 @@ sub	aggregate
 	}
 	dp::dp "#### LAST_DATE : $LAST_DATE\n" if($DEBUG > 1);
 		
-	open(SRC, ">$src_file") || die "cannot create $src_file\n";
+	my $whoindexf = $config::HTML_PATH . "/" . $config::WHO_INDEX;
+
+	open(SRC, ">$whoindexf") || die "Cannot create $whoindexf\n";
 	print SRC "<HTML>\n";
 	print SRC "<HEAD>\n";
 	print SRC $config::CSS;
@@ -328,10 +330,11 @@ sub	get_situation_list
 
 			my $dlf = $pdf;
 			$dlf =~s#.+/(.+pdf)\?.*$#$1#;
-			dp::dp length($_) . " " , $pdf . "\n", $dlf . "\n" if($DEBUG > 2);
+			dp::dp length($_) . " " , "PDF:$pdf" . "\n", "DLF:$dlf" . "\n" if($DEBUG > 2);
 		
 			my $date = $dlf;
-			$date =~ s/-.*$//;
+			$date =~ s/[^0-9].+$//;
+			#dp::dp "[$date]\n";
 			next if($date < $START_DATE || $date > $END_DATE);		# 2/20 以前はフォーマットが違うため
 
 			push(@HTML_LIST, $pdf);
