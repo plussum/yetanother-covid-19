@@ -25,7 +25,7 @@ my $INDEX = << "_EOI_";
 
 <frameset cols="300,*">
     <frame src="covid_frame.html" name="index">
-    <frame src="covid_frame.html" name="graph">
+    <frame src="about.html" name="graph">
     </frameset>
 </frameset>
 </html> 
@@ -76,8 +76,9 @@ foreach my $src (@src_list){
 	}
 	#print FRAME "<br>\n";
 }
-print FRAME "<br>\n";
 print FRAME "<li><a href =\"HTML/$config::WHO_INDEX\" target=\"graph\">WHO_INDEX</a></li>\n";
+print FRAME "<br>\n";
+print FRAME "<li><a href =\"about.html\" target=\"graph\">about</a></li>\n";
 print FRAME "</ul>\n";
 print FRAME "</span>\n";
 print FRAME "</BODY>\n";

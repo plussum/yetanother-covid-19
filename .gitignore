@@ -1,3 +1,4 @@
 COV
 gov/*
 .*.swp
+test*.pl
