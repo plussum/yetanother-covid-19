@@ -96,6 +96,7 @@ my $MODE = "";
 my $DOWNLOAD = 0;
 my $COPY = 0;
 my $FULL_SOURCE = 0;
+my $UPLOAD = 0;
 
 my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
@@ -119,6 +120,9 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	}
 	elsif(/-DL/i){
 		$DOWNLOAD = 1;
+	}
+	elsif(/-UL/i || /-upload/i){
+		$UPLOAD = 1;
 	}
 	elsif(/-FULL/i){
 		$FULL_SOURCE = $_ if(/-FULL/i);
@@ -149,6 +153,10 @@ if($FULL_SOURCE){
 		system("$0 $src -all $dl");
 	}
 	system("./genindex.pl");
+	exit(0);
+}
+if($UPLOAD){
+	system("cd $config::WIN_PATH; git add .; git commit -m 'update'");
 	exit(0);
 }
 

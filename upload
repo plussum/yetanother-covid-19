@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+
+eval `ssh-agent`　　　　　　　　　　　　　
+ssh-add ~/.ssh/pls_git 
+
+git add .
+git commit -m "update"
+
+git push origin master

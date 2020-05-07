@@ -69,7 +69,8 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		EXEC => "",
 		graphp => [		# GPL PARAMETER			$gplp
 			{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
-			{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# Japan 01-05 (#LD#) #SRC# mvavr", start_day => "02/15",  lank =>[0, 4] , exclusion => $EXCLUSION,
+				 target => "", label_skip => 2, graph => "lines", avr_date => 7},
 			{ext => "#KIND# Japan 02-05 (#LD#) #SRC#", start_day => "02/15",  lank =>[1, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 			{ext => "#KIND# Japan 06-10 (#LD#) #SRC#", start_day => "02/15",  lank =>[5, 9] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 			{ext => "#KIND# Japan 11-15 (#LD#) #SRC#", start_day => "02/15",  lank =>[10, 14] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
