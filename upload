@@ -1,7 +1,9 @@
 #!/bin/bash
 #
 
-eval `ssh-agent`　　　　　　　　　　　　　
+cd $1
+
+eval `ssh-agent`
 ssh-add ~/.ssh/pls_git 
 
 git add .

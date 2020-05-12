@@ -177,7 +177,7 @@ sub	aggregate
 		$txtd =~ s/.txt/-d.txt/;
 		dp::dp $txtf , "\n" if($DEBUG > 2);
 
-		dp::dp "DL: $html\n" if($DEBUG > 2);
+		dp::dp "DL: $html --> $txtf,$txtd\n" if($DEBUG > 2);
 		system("wget $html -O $dlf")    if(! -f $dlf);
 		system("ps2ascii $dlf > $txtf") if(! -f $txtf);
 		&molding($txtf, $txtd, $date)   if(! -f $txtd);
@@ -233,10 +233,13 @@ sub	aggregate
 		
 	my $whoindexf = $config::HTML_PATH . "/" . $config::WHO_INDEX;
 
+	dp::dp "WHO LIST: $whoindexf\n";
 	open(SRC, ">$whoindexf") || die "Cannot create $whoindexf\n";
 	print SRC "<HTML>\n";
 	print SRC "<HEAD>\n";
 	print SRC $config::CSS;
+	print SRC '<meta http-equiv="Pragma" content="no-cache">' . "\n";
+	print SRC '<meta http-equiv="Cache-Control" content="no-cache">' . "\n";
 	print SRC "</HEAD>\n";
 	print SRC "<BODY>\n";
 	print SRC "<span class=\"c\">\n";
@@ -424,6 +427,11 @@ sub	molding
 
 		# dp::dp "[$dataf]" . $_ , "\n" if($DEBUG);
 		s/\(([0-9]+)\)/ $1 /g if($date <= 20200301);		# format
+		if(/[0-9] [0-9]/){
+			my $a = $_;
+			s/([0-9]) ([0-9])/$1$2/g;
+			#dp::dp "[$a:$_]\n";
+		}
 		my @w = split(/ {2,999}/, $_);
 
 		#

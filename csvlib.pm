@@ -208,7 +208,7 @@ sub	calc_max
 sub	cnt_pop
 {
 	my ($cnt_pop) = @_;
-	my $popf = "COV/pop.csv";
+	my $popf = "$config::WIN_PATH/pop.csv";
 
 	my %JHU_CN = ();
 	my %WHO_CN = ();

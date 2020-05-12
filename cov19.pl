@@ -155,8 +155,9 @@ if($FULL_SOURCE){
 	system("./genindex.pl");
 	exit(0);
 }
-if($UPLOAD){
-	system("cd $config::WIN_PATH; git add .; git commit -m 'update'");
+if($UPLOAD){		# upload web data to github.io
+	dp::dp "UPLOAD github.io\n";
+	system("./upload.pl");
 	exit(0);
 }
 

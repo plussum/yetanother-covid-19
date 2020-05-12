@@ -11,7 +11,7 @@ use warnings;
 #use ccse;
 #use who;
 
-our $WIN_PATH = "/mnt/f/OneDrive/cov/plussum.github.io";
+our $WIN_PATH = "/mnt/f/cov/plussum.github.io";
 our $HTML_PATH = "$WIN_PATH/HTML";
 our $CSV_PATH  = "$WIN_PATH/CSV";
 our $PNG_PATH  = "$WIN_PATH/PNG";
