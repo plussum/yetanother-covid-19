@@ -285,11 +285,14 @@ sub	daily
 
 	#my $prefix = $mep->{prefix};
 	my $mode = $fp->{mode};
-	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $fp->{aggr_mode}) ;
+	my $aggr_mode = $fp->{aggr_mode};
+	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $aggr_mode) ;
 	#dp::dp "[$mode] $name\n";
 
+	my $m = csvlib::valdef($mep->{AGGR_MODE}{$aggr_mode}, 0);
+	$name .= "*$m" . "days)" if($m > 1);
 	my $csvlist = {
-		name => $name . "(" . $fp->{aggr_mode} .")",
+		name => $name, 
 		csvf => $fp->{stage1_csvf}, 
 		htmlf => $fp->{htmlf},
 		kind => $fp->{mode},

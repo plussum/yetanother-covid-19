@@ -146,6 +146,7 @@ sub	csv2graph
 	my $ext = $mep->{prefix} . " " . $gplitem->{ext};
 	$ext =~ s/#KIND#/$kind/;
 	$ext =~ s/#SRC#/$src/;
+	dp::dp $ext . "\n";
 	my $fname = $ext;
 	$fname =~ s/#LD#//;
 	$fname =~ s#/#-#g;
@@ -325,7 +326,7 @@ sub	csv2graph
 			my $dtn = $COUNT_D{$country}[$i];
 			if($aggr_mode eq "POP"){
 				$dtn /= ($CNT_POP{$country} / $config::POP_BASE) ;
-				$COUNT_D{$country}[$i] = $dtn;
+				$COUNT_D{$country}[$i] = $dtn * $mep->{AGGR_MODE}{POP};
 			}
 			$MAX_COUNT = $dtn if(defined $dtn && $dtn > $MAX_COUNT);
 		}
