@@ -33,8 +33,19 @@ sub	csvgpl
 	}
 	my $aggr_mode = csvlib::valdefs($csvgplp->{aggr_mode});		# Added 05/03 for Population
 	if($aggr_mode eq "POP"){
-		csvlib::cnt_pop(\%CNT_POP);
-		dp::dp( "###### $aggr_mode\n") if($DEBUG > 1);
+		dp::dp( "###### $aggr_mode: " . $csvgplp->{src} . "\n") if(1 || $DEBUG > 1);
+		if($csvgplp->{src} eq "ccse"){
+			dp::dp "POP:ccse\n";
+			csvlib::cnt_pop(\%CNT_POP);
+		}
+		elsif($csvgplp->{src} eq "jag"){
+			dp::dp "POP:ccse\n";
+			csvlib::cnt_pop_jp(\%CNT_POP);
+		}
+		else {
+			dp::dp "ERROR at POP\n";
+			exit 1;
+		}
 	}
 
 	$WIN_PATH = $config::WIN_PATH;
@@ -284,6 +295,7 @@ sub	csv2graph
 	my @Dataset = (\@DATES);
 	my $CNT = -1;
 	my $rn = 0;
+	#open(POPT, "> $config::WIN_PATH/poptest.csv") || die "Cannot create $config::WIN_PATH/poptest.csv";
 	foreach my $country (sort {$CTG{$b} <=> $CTG{$a}} keys %CTG){
 		$rn++;
 		next if($#exclusion >= 0 && csvlib::search_list($country, @exclusion));
@@ -291,6 +303,8 @@ sub	csv2graph
 		next if($#target >= 0 && ! csvlib::search_list($country, @target));
 		dp::dp "Yes, Target $CNT $country [$tgcs, $tgce]\n" if($DEBUG && $#target >= 0);
 		if($aggr_mode eq "POP"){			# if aggr_mode eq POP, ignore if country population < $POP_THRESH
+			next if(!defined $CNT_POP{$country});
+			# dp::dp "[$country][" . $CNT_POP{$country} . "]\n";
 			next if($CNT_POP{$country} < $config::POP_THRESH);
 		}
 
@@ -303,13 +317,24 @@ sub	csv2graph
 		}
 
 		push(@LEGEND_KEYS, sprintf("%02d:%s", $rn, $country));
-		foreach my $dtn (@{$COUNT_D{$country}}){
+		#foreach my $dtn (@{$COUNT_D{$country}}){
+		#dp::dp "COUNT: " .$#{$COUNT_D{$country}} . "\n";
+		#print POPT join(",", $country, $CNT_POP{$country}) . "\n";
+		#print POPT "ORG,", join (",", @{$COUNT_D{$country}}) . "\n" ;
+		for(my $i = 0; $i <= $#{$COUNT_D{$country}}; $i++){
+			my $dtn = $COUNT_D{$country}[$i];
+			if($aggr_mode eq "POP"){
+				$dtn /= ($CNT_POP{$country} / $config::POP_BASE) ;
+				$COUNT_D{$country}[$i] = $dtn;
+			}
 			$MAX_COUNT = $dtn if(defined $dtn && $dtn > $MAX_COUNT);
 		}
+		#print POPT "POP,", join (",", @{$COUNT_D{$country}}) . "\n" ;
 		push(@Dataset, [@{$COUNT_D{$country}}]);
 		push(@COUNTRY, $country);
 		dp::dp "COUNT_D: ", join (",", @{$COUNT_D{$country}}) , "\n" if($DEBUG > 1);
 	}
+	#close(POPT);
 
 	if($DEBUG > 1){
 		dp::dp "Dataset: " . $#Dataset, "\n";

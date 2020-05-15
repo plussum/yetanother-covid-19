@@ -240,6 +240,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 					next;
 				}
 				my $funcp = {
+					src => $DATA_SOURCE,
 					mode => $MODE,
 					sub_mode => $SUB_MODE,
 					aggr_mode => $AGGR_MODE,
@@ -304,6 +305,7 @@ sub	daily
 
 	my %params = (
 		debug => $DEBUG,
+		src => $fp->{src},
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $graphp,	# $fp->{funcp}{graphp},
@@ -348,6 +350,7 @@ sub	pop_not_in_use
 	};
 
 	my %params = (
+		src => $fp->{src},
 		debug => $DEBUG,
 		clp => $csvlist,
 		mep => $mep,
@@ -420,6 +423,7 @@ sub	ft
 
 	my %params = (
 		debug => $DEBUG,
+		src => $fp->{src},
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
@@ -483,6 +487,7 @@ sub	ern
 	}
 	my %params = (
 		debug => $DEBUG,
+		src => $fp->{src},
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},

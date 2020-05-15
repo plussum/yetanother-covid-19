@@ -62,13 +62,16 @@ our $PARAMS = {			# MODULE PARETER		$mep
     copy => \&copy,
 
 
-	AGGR_MODE => {DAY => 1},
+	AGGR_MODE => {DAY => 1, POP => 1},
 	#MODE => {NC => 1, ND => 1},
 
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
 		graphp => [		# GPL PARAMETER			$gplp
 			{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+
+			# {ext => "EOD"},
+
 			{ext => "#KIND# Japan 01-05 (#LD#) #SRC# mvavr", start_day => "02/15",  lank =>[0, 4] , exclusion => $EXCLUSION,
 				 target => "", label_skip => 2, graph => "lines", avr_date => 7},
 			{ext => "#KIND# Japan 02-05 (#LD#) #SRC#", start_day => "02/15",  lank =>[1, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},

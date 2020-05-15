@@ -208,7 +208,7 @@ sub	calc_max
 sub	cnt_pop
 {
 	my ($cnt_pop) = @_;
-	my $popf = "$config::WIN_PATH/pop.csv";
+	my $popf = "$config::POPF";
 
 	my %JHU_CN = ();
 	my %WHO_CN = ();
@@ -245,5 +245,34 @@ sub	cnt_pop
 		}
 	}
 }
+
+#
+#01	北海道		Hokkaido	5320	2506	2814
+#02	青森県		Aomori-ken	1278	600	678
+#03	岩手県		Iwate-ken	1255	604	651
+#04	宮城県		Miyagi-ken	2323	1136	1188
+sub	cnt_pop_jp
+{
+	my ($cnt_pop) = @_;
+	my $popf = "$config::POPF_JP";
+
+	my %JHU_CN = ();
+	my %WHO_CN = ();
+	open(FD, $popf) || die "cannot open $popf\n";
+	<FD>;
+	while(<FD>){
+		chop;
+		next if(! /^[0-9]/);
+		
+		my($no, $pref, $pref_e, $total, $m, $fm) = split(/[ \t]+/, $_);
+
+		#dp::dp join(",", $no, $pref, $pref_e, $total, $m, $fm) . "\n";
+		$cnt_pop->{$pref} = $total * 1000;
+		$cnt_pop->{$pref_e} = $total * 1000;
+		#dp::dp join(",", $pref, $pref_e, $cnt_pop->{$pref}) . "\n";
+	}
+	close(FD);
+}
+
 
 1;
