@@ -96,6 +96,7 @@ my $MODE = "";
 my $DOWNLOAD = 0;
 my $COPY = 0;
 my $FULL_SOURCE = 0;
+my $UPLOAD = 0;
 
 my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
@@ -119,6 +120,9 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	}
 	elsif(/-DL/i){
 		$DOWNLOAD = 1;
+	}
+	elsif(/-UL/i || /-upload/i){
+		$UPLOAD = 1;
 	}
 	elsif(/-FULL/i){
 		$FULL_SOURCE = $_ if(/-FULL/i);
@@ -149,6 +153,11 @@ if($FULL_SOURCE){
 		system("$0 $src -all $dl");
 	}
 	system("./genindex.pl");
+	exit(0);
+}
+if($UPLOAD){		# upload web data to github.io
+	dp::dp "UPLOAD github.io\n";
+	system("./upload.pl");
 	exit(0);
 }
 
@@ -231,6 +240,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 					next;
 				}
 				my $funcp = {
+					src => $DATA_SOURCE,
 					mode => $MODE,
 					sub_mode => $SUB_MODE,
 					aggr_mode => $AGGR_MODE,
@@ -275,11 +285,14 @@ sub	daily
 
 	#my $prefix = $mep->{prefix};
 	my $mode = $fp->{mode};
-	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $fp->{aggr_mode}) ;
+	my $aggr_mode = $fp->{aggr_mode};
+	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $aggr_mode) ;
 	#dp::dp "[$mode] $name\n";
 
+	my $m = csvlib::valdef($mep->{AGGR_MODE}{$aggr_mode}, 0);
+	$name .= "*$m" . "days)" if($m > 1);
 	my $csvlist = {
-		name => $name . "(" . $fp->{aggr_mode} .")",
+		name => $name, 
 		csvf => $fp->{stage1_csvf}, 
 		htmlf => $fp->{htmlf},
 		kind => $fp->{mode},
@@ -295,6 +308,7 @@ sub	daily
 
 	my %params = (
 		debug => $DEBUG,
+		src => $fp->{src},
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $graphp,	# $fp->{funcp}{graphp},
@@ -339,6 +353,7 @@ sub	pop_not_in_use
 	};
 
 	my %params = (
+		src => $fp->{src},
 		debug => $DEBUG,
 		clp => $csvlist,
 		mep => $mep,
@@ -411,6 +426,7 @@ sub	ft
 
 	my %params = (
 		debug => $DEBUG,
+		src => $fp->{src},
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
@@ -451,7 +467,7 @@ sub	ern
 	#	グラフとHTMLの作成
 	#
 
-	my $RT_TD = sprintf("ip(%d)lp(%d)mv-avr(%d) (#LD#)", $fp->{funcp}{ip}, $fp->{funcp}{lp}, $fp->{funcp}{average_date});
+	my $RT_TD = sprintf("ip(%d)lp(%d)rl-avr(%d) (#LD#)", $fp->{funcp}{ip}, $fp->{funcp}{lp}, $fp->{funcp}{average_date});
 	dp::dp "RT_TD :" . $RT_TD. "\n";
 	$RT_TD =~ s#/#.#g;
 
@@ -474,6 +490,7 @@ sub	ern
 	}
 	my %params = (
 		debug => $DEBUG,
+		src => $fp->{src},
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},

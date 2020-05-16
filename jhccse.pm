@@ -31,11 +31,11 @@ sub	jhccse
 {
 	my ($p) = @_;
 
-	my %CNT_POP = ();
-	if($p->{aggr_mode} eq "POP"){
-		csvlib::cnt_pop(\%CNT_POP);
-		dp::dp( "###### $p->{aggr_mode}\n") if($DEBUG > 1);
-	}
+	#my %CNT_POP = ();
+	#if($p->{aggr_mode} eq "POP"){
+	#	csvlib::cnt_pop(\%CNT_POP);
+	#	dp::dp( "###### $p->{aggr_mode}\n") if($DEBUG > 1);
+	#}
 	#dp::dp "[" . $p->{mode} . "]\n";
 	#dp::dp Dumper $p;
 
@@ -107,7 +107,7 @@ sub	jhccse
 	my %COUNTRY = ();
 	my %COUNT = ();
 	my %COUNT_D = ();
-	my %NO_POP = ();
+	#my %NO_POP = ();
 
 	dp::dp join(",", "DT_S: $DT_S", "DT_E: $DT_E", "#COL: ". $#COL) . "\n" if($DEBUG > 1);
 
@@ -145,16 +145,16 @@ sub	jhccse
 			if($cout_mode eq "DAY"){
 				$dtn = $dtn - ($dt == 0 ? 0 : $COUNT{$country}[$dt-1]);			# 累計 -> 日次
 			}
-			if($p->{aggr_mode} eq "POP"){									# 人口比に置き換え
-				if(defined $CNT_POP{$country}){
-					#dp::dp "[" . $p->{aggr_mode} . "]";
-					$dtn = $dtn / ($CNT_POP{$country} / $config::POP_BASE);		# 100万人当たり
-				}
-				else {
-					$NO_POP{$country}++;										# エラー。国名が見つからない
-					$dtn = 10**20 - 1;											# 大きな値をセットして、上位に来ないようにする
-				}
-			}
+			#if($p->{aggr_mode} eq "POP"){									# 人口比に置き換え
+			#	if(defined $CNT_POP{$country}){
+			#		#dp::dp "[" . $p->{aggr_mode} . "]";
+			#		$dtn = $dtn / ($CNT_POP{$country} / $config::POP_BASE);		# 100万人当たり
+			#	}
+			#	else {
+			#		$NO_POP{$country}++;										# エラー。国名が見つからない
+			#		$dtn = 10**20 - 1;											# 大きな値をセットして、上位に来ないようにする
+			#	}
+			#}
 			$COUNT_D{$country}[$dt] = $dtn;										# データを COUNT_D セット
 		}
 		#print CSV $country. $DLM . $COUNTRY{$country}. $DLM;					# 国、トータル
@@ -167,9 +167,9 @@ sub	jhccse
 	#
 	#	人口比の場合に、未登録の国を出力
 	#
-	foreach my $c (sort %NO_POP){
-		print STDERR "#### Nopoulatopn [$c], [$NO_POP{$c}]\n";
-	}
+	#foreach my $c (sort %NO_POP){
+	#	print STDERR "#### Nopoulatopn [$c], [$NO_POP{$c}]\n";
+	#}
 
 	#
 	#	戻り値: カラム数、レコード数、最初の日付け、最後の日付

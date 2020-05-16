@@ -11,7 +11,7 @@ use warnings;
 #use ccse;
 #use who;
 
-our $WIN_PATH = "/mnt/f/OneDrive/cov/plussum.github.io";
+our $WIN_PATH = "/mnt/f/cov/plussum.github.io";
 our $HTML_PATH = "$WIN_PATH/HTML";
 our $CSV_PATH  = "$WIN_PATH/CSV";
 our $PNG_PATH  = "$WIN_PATH/PNG";
@@ -23,8 +23,11 @@ our $RT_IP = 5;
 our $RT_LP = 8;
 our $THRESH_FT = {NC => 9, ND => 3, NR => 3};
 
-our $POP_BASE = 1000 * 1000;		# 100万人当たりのケース数
+our $POPF = "$WIN_PATH/pop.csv";
+our $POPF_JP = "$WIN_PATH/popjp.txt";
+our $POP_BASE = 100 * 1000;			# 10万人当たりのケース数
 our $POP_THRESH = 100 * 1000;		# 人口が少ないと振れ幅が大きいので、この人口より少ない国は対象外にする
+
 
 our $DLM = ",";
 

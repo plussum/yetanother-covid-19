@@ -56,7 +56,10 @@ foreach my $src (@src_list){
 	foreach my $aggr (@aggr_list){
 		foreach my $sub (@submode_list){
 			foreach my $mode (@mode_list){
-				next if($aggr eq "POP" && ($sub ne "COUNT" || $src ne "jhccse"));
+				if($aggr eq "POP"){
+					next if($sub ne "COUNT");
+					next if($src ne "jhccse" && $src ne "jag");
+				}
 				next if($mode eq "ND" && $sub eq "ERN"); 
 				if($mode =~ /NR/){
 					next if($sub ne "COUNT" || !( $src =~ /ccse/));

@@ -33,8 +33,19 @@ sub	csvgpl
 	}
 	my $aggr_mode = csvlib::valdefs($csvgplp->{aggr_mode});		# Added 05/03 for Population
 	if($aggr_mode eq "POP"){
-		csvlib::cnt_pop(\%CNT_POP);
-		dp::dp( "###### $aggr_mode\n") if($DEBUG > 1);
+		#dp::dp( "###### $aggr_mode: " . $csvgplp->{src} . "\n") if(1 || $DEBUG > 1);
+		if($csvgplp->{src} eq "ccse"){
+			#dp::dp "POP:ccse\n";
+			csvlib::cnt_pop(\%CNT_POP);
+		}
+		elsif($csvgplp->{src} eq "jag"){
+			#dp::dp "POP:ccse\n";
+			csvlib::cnt_pop_jp(\%CNT_POP);
+		}
+		else {
+			dp::dp "ERROR at POP\n";
+			exit 1;
+		}
 	}
 
 	$WIN_PATH = $config::WIN_PATH;
@@ -135,6 +146,7 @@ sub	csv2graph
 	my $ext = $mep->{prefix} . " " . $gplitem->{ext};
 	$ext =~ s/#KIND#/$kind/;
 	$ext =~ s/#SRC#/$src/;
+	#dp::dp $ext . "\n";
 	my $fname = $ext;
 	$fname =~ s/#LD#//;
 	$fname =~ s#/#-#g;
@@ -284,6 +296,7 @@ sub	csv2graph
 	my @Dataset = (\@DATES);
 	my $CNT = -1;
 	my $rn = 0;
+	#open(POPT, "> $config::WIN_PATH/poptest.csv") || die "Cannot create $config::WIN_PATH/poptest.csv";
 	foreach my $country (sort {$CTG{$b} <=> $CTG{$a}} keys %CTG){
 		$rn++;
 		next if($#exclusion >= 0 && csvlib::search_list($country, @exclusion));
@@ -291,6 +304,8 @@ sub	csv2graph
 		next if($#target >= 0 && ! csvlib::search_list($country, @target));
 		dp::dp "Yes, Target $CNT $country [$tgcs, $tgce]\n" if($DEBUG && $#target >= 0);
 		if($aggr_mode eq "POP"){			# if aggr_mode eq POP, ignore if country population < $POP_THRESH
+			next if(!defined $CNT_POP{$country});
+			# dp::dp "[$country][" . $CNT_POP{$country} . "]\n";
 			next if($CNT_POP{$country} < $config::POP_THRESH);
 		}
 
@@ -303,13 +318,24 @@ sub	csv2graph
 		}
 
 		push(@LEGEND_KEYS, sprintf("%02d:%s", $rn, $country));
-		foreach my $dtn (@{$COUNT_D{$country}}){
+		#foreach my $dtn (@{$COUNT_D{$country}}){
+		#dp::dp "COUNT: " .$#{$COUNT_D{$country}} . "\n";
+		#print POPT join(",", $country, $CNT_POP{$country}) . "\n";
+		#print POPT "ORG,", join (",", @{$COUNT_D{$country}}) . "\n" ;
+		for(my $i = 0; $i <= $#{$COUNT_D{$country}}; $i++){
+			my $dtn = $COUNT_D{$country}[$i];
+			if($aggr_mode eq "POP"){
+				$dtn /= ($CNT_POP{$country} / $config::POP_BASE) ;
+				$COUNT_D{$country}[$i] = $dtn * $mep->{AGGR_MODE}{POP};
+			}
 			$MAX_COUNT = $dtn if(defined $dtn && $dtn > $MAX_COUNT);
 		}
+		#print POPT "POP,", join (",", @{$COUNT_D{$country}}) . "\n" ;
 		push(@Dataset, [@{$COUNT_D{$country}}]);
 		push(@COUNTRY, $country);
 		dp::dp "COUNT_D: ", join (",", @{$COUNT_D{$country}}) , "\n" if($DEBUG > 1);
 	}
+	#close(POPT);
 
 	if($DEBUG > 1){
 		dp::dp "Dataset: " . $#Dataset, "\n";
@@ -419,7 +445,6 @@ set mytics 2
 set grid xtics ytics mxtics mytics
 set key below
 # second ax
-#set y2tics
 #
 set title '$TITLE' font "IPAexゴシック,12" enhanced
 set xlabel '$XLABEL'
@@ -430,7 +455,9 @@ set xtics #XTICKS#
 $XRANGE
 set yrange [#YRANGE#]
 set terminal pngcairo size $TERM_XSIZE, $TERM_YSIZE font "IPAexゴシック,8" enhanced
-set #LOGSCALE#
+#LOGSCALE#
+#LOGSCALE2#
+set y2tics
 set output '$plot_pngf'
 plot #PLOT_PARAM#
 exit
@@ -460,8 +487,13 @@ _EOD_
 	}
 	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/;	
 	my $logs = "nologscale";
-	$logs = "logscale " . $gplitem->{logscale} if(defined $gplitem->{logscale});
-	$PARAMS =~ s/#LOGSCALE#/$logs/;
+	if(defined $gplitem->{logscale}){
+		$logs = "logscale " . $gplitem->{logscale}; 
+		$PARAMS =~ s/#LOGSCALE#/set $logs/;
+
+		$logs = "logscale " . $gplitem->{logscale} . "2";
+		$PARAMS =~ s/#LOGSCALE2#/set $logs/;
+	}
 
 	my $xtics = 3600 * 24;
 	if(defined $gplitem->{series}){

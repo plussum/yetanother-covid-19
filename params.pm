@@ -23,7 +23,7 @@ our @PARAMS_COUNT = (
 
     {ext => "#KIND# Japan (#LD#) #SRC#", start_day => 0,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 3, graph => "lines"},
     {ext => "#KIND# Japan 3weeks (#LD#) #SRC#", start_day => -21,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# Japan 0301 (#LD#) #SRC# mvavr", start_day => "03/01",  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 1, graph => "lines",
+    {ext => "#KIND# Japan 0301 (#LD#) #SRC# rl-avr", start_day => "03/01",  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 1, graph => "lines",
 		avr_date => 7},
 
     {ext => "#KIND# TOP20-122 (#LD#) #SRC#", start_day => 0, lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", term_ysize => 600},
@@ -51,11 +51,20 @@ our @PARAMS_COUNT = (
 		label_skip => 3, graph => "lines", logscale => "y", avr_date => 5, add_target => "Japan"},
 	{ext => "#KIND# TOP5 -211 ALL logscale (#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", additional_target => "Japan",
 		label_skip => 3, graph => "lines", logscale => "y", avr_date => 5, add_target => "Japan"},
-    {ext => "#KIND# Sweden  (#LD#) #SRC#", start_day => 0,  lank =>[0, 999] , exclusion => $EXCLUSION, target => "Sweden", label_skip => 3, graph => "lines"},
-#    {ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0,  lank =>[0, 999] , exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
-#    {ext => "$PP#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
 
-    {ext => "#KIND# Japan 0301ASIA (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, target => "Japan,Taiwan,Malaysia,Philip,India,Korea,Singapore,Indonesia ", label_skip => 2, graph => "lines"},
+#    {ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0,  lank =>[0, 999] , exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
+#    {ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
+
+    {ext => "#KIND# Gernam 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
+		target => "German", label_skip => 2, graph => "lines"},
+    {ext => "#KIND# UK 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
+		target => "UK,United Kingdom", label_skip => 2, graph => "lines"},
+    {ext => "#KIND# Sweden  (#LD#) #SRC#", start_day => 0,  lank =>[0, 999] , exclusion => $EXCLUSION, 
+		target => "Sweden", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# Finland 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
+		target => "Finland", label_skip => 2, graph => "lines"},
+    {ext => "#KIND# ASIA 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
+		target => "Japan,Taiwan,Malaysia,Philip,India,Korea,Singapore,Indonesia ", label_skip => 2, graph => "lines"},
     {ext => "#KIND# Japan 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, target => "Japan", label_skip => 2, graph => "lines"},
 );
 
@@ -63,6 +72,9 @@ our	@PARMS_FT = (
 	{ext => "#KIND# Japan and others #FT_TD#", start_day => 0, lank =>[0, 999] , exclusion => $EXC_FT, add_target => "",
 		target => "Japan,Korea,US,Spain,Italy,France,Germany,United Kingdom,Iran,Turkey,Belgium,Switzeland",
 		label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
+	{ext => "#KIND# Japan and TOP10 #FT_TD#", start_day => 0, lank =>[0, 9] , exclusion => $EXC_FT, add_target => "",
+		target => "", add_target => "Japan", label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
+
 	{ext => "#KIND# TOP5 #FT_TD#", start_day => 0, lank =>[0, 5] , exclusion => $EXC_FT, target => "", 
 		label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
 	{ext => "#KIND# TOP10 #FT_TD#", start_day => 0, lank =>[0, 10] , exclusion => $EXC_FT, target => "", 
