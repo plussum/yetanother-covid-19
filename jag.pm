@@ -73,9 +73,9 @@ our $PARAMS = {			# MODULE PARETER		$mep
 
 			# {ext => "EOD"},
 
-			{ext => "#KIND# Japan 01-05 (#LD#) #SRC# mvavr", start_day => "02/15",  lank =>[0, 4] , exclusion => $EXCLUSION,
+			{ext => "#KIND# Japan 01-05 (#LD#) #SRC# rl-avr", start_day => "02/15",  lank =>[0, 4] , exclusion => $EXCLUSION,
 				 target => "", label_skip => 2, graph => "lines", avr_date => 7},
-			{ext => "#KIND# Japan 01-05 (#LD#) #SRC# mvavr ymax", start_day => "02/15",  lank =>[0, 4] , exclusion => $EXCLUSION,
+			{ext => "#KIND# Japan 01-05 (#LD#) #SRC# rl-avr ymax", start_day => "02/15",  lank =>[0, 4] , exclusion => $EXCLUSION,
 				 target => "", label_skip => 2, graph => "lines", avr_date => 7, ymax => 2},
 			{ext => "#KIND# Japan 02-05 (#LD#) #SRC#", start_day => "02/15",  lank =>[1, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 			{ext => "#KIND# Japan 06-10 (#LD#) #SRC#", start_day => "02/15",  lank =>[5, 9] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
@@ -88,7 +88,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				target => "東京,大阪,神戸,北海道,神奈川,埼玉,千葉", label_skip => 2, graph => "lines"},
 			{ext => "#KIND# taget cities  (#LD#) #SRC# 03/01 ", start_day => "03/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
 				target => "東京,大阪,神戸,北海道,神奈川,埼玉,千葉", label_skip => 2, graph => "lines", term_ysize => 300},
-			{ext => "#KIND# taget cities  (#LD#) #SRC# 03/01 mvavr", start_day => "03/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
+			{ext => "#KIND# taget cities  (#LD#) #SRC# 03/01 rl-avr", start_day => "03/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
 				target => "東京,大阪,神戸,北海道,神奈川,埼玉,千葉", label_skip => 2, graph => "lines", avr_date => 7, term_ysize => 300},
 		],
 

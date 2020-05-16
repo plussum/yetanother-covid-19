@@ -111,7 +111,7 @@ my $RATE_PARAM = {
 ($colum, $record , $start_day, $last_day) = rate::rate($RATE_PARAM);
 
 my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
-$TD = "ip($ip)lp($lp)moving avr($average_date) ($last_day) $src";
+$TD = "ip($ip)lp($lp)rolling avr($average_date) ($last_day) $src";
 my @RATE_PARAMS = (
 	{ext => "$mode RATE Japan 0301 $TD", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, label_skip => 2, graph => "lines", additional_plot => $R0_LINE},
 );

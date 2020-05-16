@@ -33,13 +33,13 @@ sub	csvgpl
 	}
 	my $aggr_mode = csvlib::valdefs($csvgplp->{aggr_mode});		# Added 05/03 for Population
 	if($aggr_mode eq "POP"){
-		dp::dp( "###### $aggr_mode: " . $csvgplp->{src} . "\n") if(1 || $DEBUG > 1);
+		#dp::dp( "###### $aggr_mode: " . $csvgplp->{src} . "\n") if(1 || $DEBUG > 1);
 		if($csvgplp->{src} eq "ccse"){
-			dp::dp "POP:ccse\n";
+			#dp::dp "POP:ccse\n";
 			csvlib::cnt_pop(\%CNT_POP);
 		}
 		elsif($csvgplp->{src} eq "jag"){
-			dp::dp "POP:ccse\n";
+			#dp::dp "POP:ccse\n";
 			csvlib::cnt_pop_jp(\%CNT_POP);
 		}
 		else {
@@ -146,7 +146,7 @@ sub	csv2graph
 	my $ext = $mep->{prefix} . " " . $gplitem->{ext};
 	$ext =~ s/#KIND#/$kind/;
 	$ext =~ s/#SRC#/$src/;
-	dp::dp $ext . "\n";
+	#dp::dp $ext . "\n";
 	my $fname = $ext;
 	$fname =~ s/#LD#//;
 	$fname =~ s#/#-#g;
@@ -445,7 +445,6 @@ set mytics 2
 set grid xtics ytics mxtics mytics
 set key below
 # second ax
-#set y2tics
 #
 set title '$TITLE' font "IPAexゴシック,12" enhanced
 set xlabel '$XLABEL'
@@ -456,7 +455,9 @@ set xtics #XTICKS#
 $XRANGE
 set yrange [#YRANGE#]
 set terminal pngcairo size $TERM_XSIZE, $TERM_YSIZE font "IPAexゴシック,8" enhanced
-set #LOGSCALE#
+#LOGSCALE#
+#LOGSCALE2#
+set y2tics
 set output '$plot_pngf'
 plot #PLOT_PARAM#
 exit
@@ -486,8 +487,13 @@ _EOD_
 	}
 	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/;	
 	my $logs = "nologscale";
-	$logs = "logscale " . $gplitem->{logscale} if(defined $gplitem->{logscale});
-	$PARAMS =~ s/#LOGSCALE#/$logs/;
+	if(defined $gplitem->{logscale}){
+		$logs = "logscale " . $gplitem->{logscale}; 
+		$PARAMS =~ s/#LOGSCALE#/set $logs/;
+
+		$logs = "logscale " . $gplitem->{logscale} . "2";
+		$PARAMS =~ s/#LOGSCALE2#/set $logs/;
+	}
 
 	my $xtics = 3600 * 24;
 	if(defined $gplitem->{series}){
