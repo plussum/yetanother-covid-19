@@ -467,7 +467,7 @@ sub	ern
 	#	グラフとHTMLの作成
 	#
 
-	my $RT_TD = sprintf("ip(%d)lp(%d)mv-avr(%d) (#LD#)", $fp->{funcp}{ip}, $fp->{funcp}{lp}, $fp->{funcp}{average_date});
+	my $RT_TD = sprintf("ip(%d)lp(%d)rl-avr(%d) (#LD#)", $fp->{funcp}{ip}, $fp->{funcp}{lp}, $fp->{funcp}{average_date});
 	dp::dp "RT_TD :" . $RT_TD. "\n";
 	$RT_TD =~ s#/#.#g;
 
