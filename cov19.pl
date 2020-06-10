@@ -153,6 +153,7 @@ if($FULL_SOURCE){
 		system("$0 $src -all $dl");
 	}
 	system("./genindex.pl");
+	system("$0 -upload");
 	exit(0);
 }
 if($UPLOAD){		# upload web data to github.io
@@ -290,7 +291,7 @@ sub	daily
 	#dp::dp "[$mode] $name\n";
 
 	my $m = csvlib::valdef($mep->{AGGR_MODE}{$aggr_mode}, 0);
-	$name .= "*$m" . "days)" if($m > 1);
+	$name .= "*$m" . "days" if($m > 1);
 	my $csvlist = {
 		name => $name, 
 		csvf => $fp->{stage1_csvf}, 

@@ -61,16 +61,25 @@ our @PARAMS_COUNT = (
 		target => "UK,United Kingdom", label_skip => 2, graph => "lines"},
     {ext => "#KIND# Sweden  (#LD#) #SRC#", start_day => 0,  lank =>[0, 999] , exclusion => $EXCLUSION, 
 		target => "Sweden", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# Sweden and other (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 600,
+		target => "Sweden,US,United Kingdom,UK,Italy,France,Spain,Belgium,Germany,Netherlands,Switzerland", label_skip => 3, graph => "lines"},
+
     {ext => "#KIND# Finland 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
 		target => "Finland", label_skip => 2, graph => "lines"},
+    {ext => "#KIND# Slovakia 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
+		target => "Slovakia", label_skip => 2, graph => "lines"},
     {ext => "#KIND# ASIA 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
 		target => "Japan,Taiwan,Malaysia,Philip,India,Korea,Singapore,Indonesia ", label_skip => 2, graph => "lines"},
+
+    {ext => "#KIND# Focusing cuntry 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
+		target => "India,Peru,Chile,Mexico,Pakistan,Qatar,Bangladesh,South Africa", label_skip => 2, graph => "lines"},
+
     {ext => "#KIND# Japan 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, target => "Japan", label_skip => 2, graph => "lines"},
 );
 
 our	@PARMS_FT = (
 	{ext => "#KIND# Japan and others #FT_TD#", start_day => 0, lank =>[0, 999] , exclusion => $EXC_FT, add_target => "",
-		target => "Japan,Korea,US,Spain,Italy,France,Germany,United Kingdom,Iran,Turkey,Belgium,Switzeland",
+		target => "Japan,Korea,US,Spain,Italy,France,Germany,United Kingdom,Iran,Turkey,Belgium,Switzeland,Russia,Brazil",
 		label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
 	{ext => "#KIND# Japan and TOP10 #FT_TD#", start_day => 0, lank =>[0, 9] , exclusion => $EXC_FT, add_target => "",
 		target => "", add_target => "Japan", label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
