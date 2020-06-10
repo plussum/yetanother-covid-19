@@ -259,7 +259,6 @@ sub	cnt_pop_jp
 	my %JHU_CN = ();
 	my %WHO_CN = ();
 	open(FD, $popf) || die "cannot open $popf\n";
-	<FD>;
 	while(<FD>){
 		chop;
 		next if(! /^[0-9]/);

@@ -13,7 +13,7 @@ use config;
 use csvlib;
 use dp;
 
-my $DEBUG = 1;
+my $DEBUG = 0;
 my $VERBOSE = 0;
 my $WIN_PATH = "";
 my $NO_DATA = "NaN";
@@ -304,9 +304,14 @@ sub	csv2graph
 		next if($#target >= 0 && ! csvlib::search_list($country, @target));
 		dp::dp "Yes, Target $CNT $country [$tgcs, $tgce]\n" if($DEBUG && $#target >= 0);
 		if($aggr_mode eq "POP"){			# if aggr_mode eq POP, ignore if country population < $POP_THRESH
-			next if(!defined $CNT_POP{$country});
-			# dp::dp "[$country][" . $CNT_POP{$country} . "]\n";
-			next if($CNT_POP{$country} < $config::POP_THRESH);
+			if(!defined $CNT_POP{$country}){
+				#dp::dp "NO COUNTRY DEFINED at POP[$country][" . $CNT_POP{$country} . "]\n";
+				next;
+			}
+			if($CNT_POP{$country} < $config::POP_THRESH){
+				#dp::dp "POP leth than $config::POP_THRESH: [$country][" . $CNT_POP{$country} . "]\n";
+				next;
+			}
 		}
 
 		$CNT++;

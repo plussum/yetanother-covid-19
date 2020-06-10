@@ -80,7 +80,7 @@ use jag;
 use jagtotal;
 use ft;
 use ern;
-
+use kvalue;
 
 #
 #	初期化など
@@ -129,7 +129,7 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	}
 	elsif(/-all/){
 		push(@MODE_LIST, "ND", "NC", "CC", "CD", "NR", "CR");
-		push(@SUB_MODE_LIST, "COUNT", "FT", "ERN");
+		push(@SUB_MODE_LIST, "COUNT", "FT", "ERN", "KV");
 		push(@AGGR_LIST, "DAY", "POP");
 	}
 	elsif(/^-[A-Za-z]/){
@@ -153,6 +153,7 @@ if($FULL_SOURCE){
 		system("$0 $src -all $dl");
 	}
 	system("./genindex.pl");
+	system("$0 -upload");
 	exit(0);
 }
 if($UPLOAD){		# upload web data to github.io
@@ -195,6 +196,7 @@ my 	$FUNCS = {
 	COUNT => \&daily,
 	FT => \&ft,
 	ERN => \&ern,
+	KV => \&kv,
 	#POP => \&pop,
 };
 
@@ -218,6 +220,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");		# POP affect only COUNT (no FT, ERN)
 			next if($SUB_MODE eq "ERN" && $MODE eq "ND");				# Newdeath does not make sense for ERN
 			next if($SUB_MODE ne "COUNT" && $MODE =~ /^C/);				# Only count for CC, CD 
+			next if($SUB_MODE eq "KV" && $MODE ne "NC");				# Newdeath does not make sense for ERN
 
 			next if(!defined $mep->{src_file}{$MODE});
 
@@ -290,7 +293,7 @@ sub	daily
 	#dp::dp "[$mode] $name\n";
 
 	my $m = csvlib::valdef($mep->{AGGR_MODE}{$aggr_mode}, 0);
-	$name .= "*$m" . "days)" if($m > 1);
+	$name .= "*$m" . "days" if($m > 1);
 	my $csvlist = {
 		name => $name, 
 		csvf => $fp->{stage1_csvf}, 
@@ -497,4 +500,67 @@ sub	ern
 	);
 	csvgpl::csvgpl(\%params);
 }
+
+#
+#	K値
+#
+#	・X=累計感染者数
+#	・Y=1週間前の累計感染者数
+#
+#	とおき、“画期的な”指標である「K値」を
+#
+#	・K=(X-Y)/X=1-Y/X
+#
+#		source		https://note.com/yagena/n/n22215ecd9175
+#
+sub	kv
+{
+	my ($fp) = @_;
+	my $mep = $fp->{mep};
+
+	dp::dp "------ KV ---------\n";
+	my $aggr_func = $mep->{aggregate};
+	my ($colum, $record , $start_day, $last_day) = $aggr_func->($fp);
+
+	my $RATE_PARAM = {
+		input_file => $fp->{stage1_csvf},
+		output_file => $fp->{stage2_csvf},
+		delimiter => $mep->{DLM},
+		average_date => $fp->{funcp}{average_date},
+	};
+	kvalue::kvalue($RATE_PARAM);
+
+	#
+	#	グラフとHTMLの作成
+	#
+
+	my $RT_TD = sprintf("ip(%d)lp(%d)rl-avr(%d) (#LD#)", $fp->{funcp}{ip}, $fp->{funcp}{lp}, $fp->{funcp}{average_date});
+	dp::dp "RT_TD :" . $RT_TD. "\n";
+	$RT_TD =~ s#/#.#g;
+
+	my $mode = $fp->{mode};
+	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $fp->{aggr_mode}) ;
+	my $csvlist = { 
+		name => $name,
+		csvf => $fp->{stage2_csvf}, 
+		htmlf => $fp->{htmlf}, 
+		kind => $fp->{mode},
+		src_file => $fp->{src_file},
+		src => $mep->{src},
+		src_url => $mep->{src_url},
+	};
+
+	foreach my $gp (@{$fp->{funcp}{graphp}}){
+		$gp->{ext} =~ s/#RT_TD#/$RT_TD/;
+	}
+	my %params = (
+		debug => $DEBUG,
+		src => $fp->{src},
+		clp => $csvlist,
+		mep => $mep,
+		gplp => $fp->{funcp}{graphp},
+	);
+	csvgpl::csvgpl(\%params);
+}
+
 

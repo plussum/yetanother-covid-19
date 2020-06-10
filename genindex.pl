@@ -14,7 +14,7 @@ my $WHO_INDEX  = "who_situation_report_NC.html";	# Generate by who.pm
 
 my @src_list = qw (jhccse who jag jagtotal);
 my @mode_list = qw (NC ND CC CD NR CR);
-my @submode_list = qw (COUNT FT ERN);
+my @submode_list = qw (COUNT FT ERN KV);
 my @aggr_list = qw (DAY POP);
 
 my $INDEX = << "_EOI_";
@@ -60,6 +60,7 @@ foreach my $src (@src_list){
 					next if($sub ne "COUNT");
 					next if($src ne "jhccse" && $src ne "jag");
 				}
+				next if($sub eq "KV" && $mode ne "NC");
 				next if($mode eq "ND" && $sub eq "ERN"); 
 				if($mode =~ /NR/){
 					next if($sub ne "COUNT" || !( $src =~ /ccse/));

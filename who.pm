@@ -101,7 +101,13 @@ our $PARAMS = {			# MODULE PARETER        $mep
 		graphp => [
 			@params::PARMS_RT
 		],
-	}
+	},
+	KV => {
+		EXC => "Others",
+		graphp => [
+			@params::PARAMS_KV
+		],
+	},
 };
 
 #
@@ -184,7 +190,9 @@ sub	aggregate
 		push(@src_list, "$txtf\t$txtd");
 
 		open(TXT, $txtd) || die "Cannot open $txtd";
+		my $ln = 0;
 		while(<TXT>){
+			$ln++;
 			chop;
 			my @w = ();
 			my $region;
@@ -213,6 +221,9 @@ sub	aggregate
 				$c = csvlib::valdef($w[3], 0) if($mode eq "CD");	# for total count, must be daily data
 				if($c =~ /transmission/ || $c =~ /[67][5289] /){
 					dp::dp "find trasnmission [$c][$txtd] $_\n";
+				}
+				if(!($c =~ /^-[0-9]+$/) && $c =~ /[^0-9]/){
+					dp::dp "[$ln]" . join(",", $country, "[$c]", @w, $txtd) . "\n";
 				}
 				$COUNTRY{$country} += $c;	# 累計
 			}
@@ -429,10 +440,10 @@ sub	molding
 		s/\(([0-9]+)\)/ $1 /g if($date <= 20200301);		# format
 		if(/[0-9] [0-9]/){
 			my $a = $_;
-			s/([0-9\-]) {1,2}([0-9])/$1$2/g;
+			s/([0-9\-]) {1,4}([0-9])/$1$2/g;			# 1,2 -> 1,4 
 			#dp::dp "[$a:$_]\n";
 		}
-		my @w = split(/ {2,999}/, $_);
+		my @w = split(/ {4,999}/, $_);		# 2,999 -> 4,999
 
 		#
 		#	Set record
