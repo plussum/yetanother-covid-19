@@ -101,7 +101,13 @@ our $PARAMS = {			# MODULE PARETER        $mep
 		graphp => [
 			@params::PARMS_RT
 		],
-	}
+	},
+	KV => {
+		EXC => "Others",
+		graphp => [
+			@params::PARAMS_KV
+		],
+	},
 };
 
 #

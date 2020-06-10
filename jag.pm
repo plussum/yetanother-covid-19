@@ -132,6 +132,26 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				label_skip => 2, graph => "lines", term_ysize => 600, ymax => 10},
 		],
 	},
+	KV => {
+		EXC => "Others",
+		graphp => [
+			{ext => "#KIND# from 03/01 (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
+				target => "東京,大阪,神戸,北海道,神奈川,埼玉,福岡,千葉", label_skip => 3, graph => "lines"},
+			{ext => "#KIND# from 4/1(#LD#) #SRC#", start_day => "04/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
+				target => "東京,大阪,神戸,北海道,神奈川,埼玉,福岡,千葉", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# from 3week(#LD#) #SRC#", start_day => -21,  lank =>[0, 999], exclusion => $EXCLUSION, 
+				target => "東京,大阪,神戸,北海道,神奈川,埼玉,福岡,千葉", label_skip => 1, graph => "lines"},
+
+			{ext => "#KIND# from 03/01 Tokyo (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
+				target => "東京", label_skip => 3, graph => "lines"},
+			{ext => "#KIND# from 4/1(#LD#)  Tokyo#SRC#", start_day => "04/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
+				target => "東京", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# from 3week(#LD#)  Tokyo#SRC#", start_day => -21,  lank =>[0, 999], exclusion => $EXCLUSION, 
+				target => "東京", label_skip => 1, graph => "lines"},
+#			{ext => "#KIND# from 03/01 log(#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
+#				target => "東京,大阪,神戸,北海道,神奈川,埼玉,福岡,千葉", label_skip => 3, graph => "lines", logscale => "y"},
+		],
+	},
 };
 
 

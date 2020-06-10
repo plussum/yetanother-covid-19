@@ -109,6 +109,17 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
 		],
 	},
+	KV => {
+		EXC => "Others",
+		graphp => [
+			{ext => "#KIND# from 03/01 (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
+				target => "", label_skip => 3, graph => "lines"},
+			{ext => "#KIND# from 4/1(#LD#) #SRC#", start_day => "04/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
+				target => "", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# from 3week(#LD#) #SRC#", start_day => -21,  lank =>[0, 999], exclusion => $EXCLUSION, 
+				target => "", label_skip => 1, graph => "lines"},
+		],
+	},
 };
 
 #

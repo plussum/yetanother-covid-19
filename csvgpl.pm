@@ -13,7 +13,7 @@ use config;
 use csvlib;
 use dp;
 
-my $DEBUG = 1;
+my $DEBUG = 0;
 my $VERBOSE = 0;
 my $WIN_PATH = "";
 my $NO_DATA = "NaN";

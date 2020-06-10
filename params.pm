@@ -159,4 +159,19 @@ our @ACCD_PARAMS = (
 	{ext => "#KIND# CCM Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "Japan", 
 		label_skip => 3, graph => "lines", logscale => "y"}, 
 );
+
+my $EXEC_KV = "";
+our @PARAMS_KV = (
+	{ext => "#KIND# KV Japan/US(#LD#) #SRC#", start_day => 0,  lank =>[0, 999], exclusion => $EXEC_KV, 
+		target => "US,Japan,Korea", label_skip => 3, graph => "lines"},
+	{ext => "#KIND# KV Japan/US KV (#LD#) 04/01 #SRC#", start_day => "04/01",  lank =>[0, 999], exclusion => $EXEC_KV, 
+		target => "US,Japan,Korea", label_skip => 2, graph => "lines"},
+	{ext => "#KIND# KV JAPAN/US (#LD#) 3w #SRC# ", start_day => -21,  lank =>[0, 999], exclusion => $EXEC_KV, 
+		target => "US,Japan,Korea", label_skip => 1, graph => "lines"},
+	{ext => "#KIND# KV ALL (#LD#) 04/01 #SRC#", start_day => "04/01",  lank =>[0, 9], exclusion => $EXEC_KV, 
+		target => "", label_skip => 2, graph => "lines"},
+	{ext => "#KIND# KV 3w (#LD#) 04/01 #SRC#", start_day => -21,  lank =>[0, 9], exclusion => $EXEC_KV, 
+		target => "", label_skip => 2, graph => "lines"},
+);
+
 1;
