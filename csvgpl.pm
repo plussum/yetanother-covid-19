@@ -13,7 +13,7 @@ use config;
 use csvlib;
 use dp;
 
-my $DEBUG = 0;
+my $DEBUG = 2;
 my $VERBOSE = 0;
 my $WIN_PATH = "";
 my $NO_DATA = "NaN";
@@ -338,7 +338,7 @@ sub	csv2graph
 		#print POPT "POP,", join (",", @{$COUNT_D{$country}}) . "\n" ;
 		push(@Dataset, [@{$COUNT_D{$country}}]);
 		push(@COUNTRY, $country);
-		dp::dp "COUNT_D: ", join (",", @{$COUNT_D{$country}}) , "\n" if($DEBUG > 1);
+		dp::dp "COUNT_D: ". join (",", @{$COUNT_D{$country}}) . "\n" if($DEBUG > 1);
 	}
 	#close(POPT);
 
@@ -367,7 +367,7 @@ sub	csv2graph
 		for (my $i = 1; $i <= $#Dataset; $i++){
 			my $v = $Dataset[$i][$dt];
 			my $country = $COUNTRY[$i-1];
-			#print "### [$country]: ";
+			#dp::dp "### [$country]: ";
 			my $item_number = $TOTAL{$country};
 			#dp::dp "###### $item_number : $dt";
 			if(defined $gplitem->{average_date}){

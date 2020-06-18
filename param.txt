@@ -1,0 +1,171 @@
+$VAR1 = {
+          'csv_aggr_mode' => '',
+          'mep' => {
+                     'ERN' => {
+                                'EXC' => '',
+                                'average_date' => 7,
+                                'ip' => 5,
+                                'lp' => 8,
+                                'graphp' => [
+                                              {
+                                                'lank' => [
+                                                            0,
+                                                            19
+                                                          ],
+                                                'target' => '',
+                                                'start_day' => 0,
+                                                'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
+                                                'label_skip' => 3,
+                                                'exclusion' => '',
+                                                'graph' => 'lines'
+                                              }
+                                            ]
+                              },
+                     'base_dir' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series',
+                     'comment' => '**** CCSE PARAMS ****',
+                     'copy' => sub { "DUMMY" },
+                     'src_file' => {
+                                     'NC' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv.csv',
+                                     'ND' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
+                                     'CD' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
+                                     'CR' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_US.csv',
+                                     'NR' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_US.csv',
+                                     'CC' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv'
+                                   },
+                     'prefix' => 'jhccse_US_',
+                     'download' => sub { "DUMMY" },
+                     'aggregate' => sub { "DUMMY" },
+                     'FT' => {
+                               'graphp' => [
+                                             {
+                                               'target' => '',
+                                               'lank' => [
+                                                           0,
+                                                           19
+                                                         ],
+                                               'start_day' => 0,
+                                               'exclusion' => '',
+                                               'label_skip' => 3,
+                                               'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
+                                               'graph' => 'lines'
+                                             }
+                                           ],
+                               'average_date' => 7,
+                               'EXC' => '',
+                               'ymin' => 10
+                             },
+                     'COUNT' => {
+                                  'EXEC' => '',
+                                  'graphp' => [
+                                                {
+                                                  'start_day' => 0,
+                                                  'lank' => [
+                                                              0,
+                                                              19
+                                                            ],
+                                                  'target' => '',
+                                                  'graph' => 'lines',
+                                                  'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
+                                                  'label_skip' => 3,
+                                                  'exclusion' => ''
+                                                }
+                                              ],
+                                  'graphp_mode' => {
+                                                     'CD' => [
+                                                               {
+                                                                 'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
+                                                                 'label_skip' => 3,
+                                                                 'exclusion' => '',
+                                                                 'graph' => 'lines',
+                                                                 'lank' => [
+                                                                             0,
+                                                                             19
+                                                                           ],
+                                                                 'target' => '',
+                                                                 'start_day' => 0
+                                                               }
+                                                             ],
+                                                     'ND' => [
+                                                               {
+                                                                 'exclusion' => '',
+                                                                 'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
+                                                                 'label_skip' => 3,
+                                                                 'graph' => 'lines',
+                                                                 'target' => '',
+                                                                 'lank' => [
+                                                                             0,
+                                                                             19
+                                                                           ],
+                                                                 'start_day' => 0
+                                                               }
+                                                             ],
+                                                     'NC' => [
+                                                               {
+                                                                 'graph' => 'lines',
+                                                                 'label_skip' => 3,
+                                                                 'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
+                                                                 'exclusion' => '',
+                                                                 'start_day' => 0,
+                                                                 'lank' => [
+                                                                             0,
+                                                                             19
+                                                                           ],
+                                                                 'target' => ''
+                                                               }
+                                                             ],
+                                                     'CC' => [
+                                                               {
+                                                                 'target' => '',
+                                                                 'lank' => [
+                                                                             0,
+                                                                             19
+                                                                           ],
+                                                                 'start_day' => 0,
+                                                                 'exclusion' => '',
+                                                                 'label_skip' => 3,
+                                                                 'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
+                                                                 'graph' => 'lines'
+                                                               }
+                                                             ]
+                                                   }
+                                },
+                     'new' => sub { "DUMMY" },
+                     'src_url' => 'https://github.com/beoutbreakprepared/nCoV2019',
+                     'DLM' => ',',
+                     'AGGR_MODE' => {
+                                      'DAY' => 1,
+                                      'POP' => 1
+                                    },
+                     'src' => 'Johns Hopkins CSSE',
+                     'KV' => {
+                               'graphp' => [
+                                             {
+                                               'start_day' => 0,
+                                               'lank' => [
+                                                           0,
+                                                           19
+                                                         ],
+                                               'target' => '',
+                                               'graph' => 'lines',
+                                               'label_skip' => 3,
+                                               'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
+                                               'exclusion' => ''
+                                             }
+                                           ],
+                               'EXC' => 'Others'
+                             }
+                   },
+          'aggr_mode' => 'DAY',
+          'src' => 'usa',
+          'debug' => 0,
+          'clp' => {
+                     'name' => 'NEW DEATHS-COUNT-DAY',
+                     'htmlf' => '/mnt/f/cov/plussum.github.io/HTML/jhccse_US_ND_COUNT_DAY.html',
+                     'src' => 'Johns Hopkins CSSE',
+                     'kind' => 'ND',
+                     'csvf' => '/mnt/f/cov/plussum.github.io/CSV/jhccse_US_ND_DAY.csv.txt',
+                     'src_file' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
+                     'src_url' => 'https://github.com/beoutbreakprepared/nCoV2019'
+                   },
+          'gplp' => $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'ND'}
+        };

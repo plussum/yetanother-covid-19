@@ -44,13 +44,17 @@ sub	jhccse
 	#
 	#	jh ccse data to csv
 	#
+	#dp::dp "INPUT :" . $p->{input_file} . "\n";
 	open(FD, $p->{input_file}) || die "Cannot open " . $p->{input_file} . "\n";
 	
 	#
 	#	1行目：日付の読み込み
 	#
-	my $DT_S = 4;					# データカラムの最初
-	my $COUNTRY_COL = 1; 			# "Country/Region";
+	my $DT_S = csvlib::valdef($p->{data_start_col}, 4);					# データカラムの最初
+	my $COUNTRY_COL = csvlib::valdef($p->{country_col}, 1); 			# "Country/Region";
+	#dp::dp "$DT_S, $COUNTRY_COL\n";
+
+
 	$_ = <FD>; chop;
 	my @COL = ();
 	my @w = split(/,/, $_);
@@ -60,7 +64,7 @@ sub	jhccse
 
 		#s#/[0-9]+$##;		# Date Format 2/10/20 -> 2/10 
 		my ($m, $d, $y) = split(/\//, $_);
-		#dp::dp "[$_]($y,$m,$d)";
+		#dp::dp "[$i:$_]($y,$m,$d)";
 		#$_ = sprintf("%04d/%02d/%02d", $y + 2000, $m, $d);
 
 		$_ = sprintf("%02d/%02d", $m, $d); 
@@ -83,7 +87,9 @@ sub	jhccse
 	while(<FD>){
 		dp::dp $_ if($DEBUG > 2);
 		if(/"/){
-			s/"([^",]+),([^"]+)"/$1-$2/;	# ,"aa,bb", -> aa-bb 
+			s/"([^",]+), *([^",]+), *([^",]+)"/$1-$2-$3/g;	# ,"aa,bb,cc", -> aa-bb-cc
+			s/"([^",]+),([^"]+)"/$1-$2/g;	# ,"aa,bb", -> aa-bb 
+			#dp::dp $_ ;
 		}
 		s/[\r\n]+$//;
 		my @LINE = split(/,/, $_);
@@ -113,7 +119,7 @@ sub	jhccse
 
 	for(my $rn = 0; $rn < $RN; $rn++){
 		my $country = $DATA[$rn][$COUNTRY_COL];
-		dp::dp "[$rn:$RN:$country]\n" if($DEBUG > 1);
+		dp::dp "[$rn:$RN:$country:$DT_S:$DT_E]\n" if($DEBUG > 1);
 		for(my $dt = $DT_S; $dt <= $DT_E; $dt++){
 			$COUNT{$country}[$dt-$DT_S] += $DATA[$rn][$dt];		# 複数のレコードになっている国があるので += 
 		}
@@ -126,6 +132,7 @@ sub	jhccse
 	#
 	#	日次csvの作成 累計値から日次への変換
 	#
+	#dp::dp "CSV OUTPUT :" . $p->{output_file} . "\n";
 	open(CSV, "> $p->{output_file}") || die "Cannot create " . $p->{output_file} . "\n";
 
 	dp::dp (join($DLM, "Country", "Total", @COL), "\n") if($DEBUG > 1);

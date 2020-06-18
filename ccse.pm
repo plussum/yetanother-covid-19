@@ -166,6 +166,8 @@ sub	aggregate
 			output_file => $fp->{stage1_csvf},
 			aggr_mode	=> $fp->{aggr_mode},
 			delimiter => $fp->{dlm},
+			data_start_col => 4,
+			country_col => 1,
 		};
 		($colum, $record , $start_day, $last_day) = jhccse::jhccse($param);
 		$JHCCSE{$aggr_mode} = [$colum, $record , $start_day, $last_day];
