@@ -40,6 +40,7 @@ sub	jhccse
 	#dp::dp Dumper $p;
 
 	my $DLM = csvlib::valdefs($p->{delimiter} , ",");
+	my $us_state = csvlib::valdef($p->{us_sate}, "");
 	
 	#
 	#	jh ccse data to csv
@@ -119,6 +120,11 @@ sub	jhccse
 
 	for(my $rn = 0; $rn < $RN; $rn++){
 		my $country = $DATA[$rn][$COUNTRY_COL];
+		if($us_state){
+			my @w = split(/-/, $country);
+			#dp::dp "$country: ". join(",", @w) . "\n";
+			$country = $w[1];
+		}
 		dp::dp "[$rn:$RN:$country:$DT_S:$DT_E]\n" if($DEBUG > 1);
 		for(my $dt = $DT_S; $dt <= $DT_E; $dt++){
 			$COUNT{$country}[$dt-$DT_S] += $DATA[$rn][$dt];		# 複数のレコードになっている国があるので += 

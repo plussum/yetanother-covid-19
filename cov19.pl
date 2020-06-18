@@ -82,6 +82,7 @@ use ft;
 use ern;
 use kvalue;
 use usa;
+use usast;
 
 #
 #	初期化など
@@ -108,11 +109,12 @@ my @FULL_DATA_SOURCES = qw (ccse who jag jagtotal);
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
 
-	$DATA_SOURCE = "ccse" if(/ccse/i);
-	$DATA_SOURCE = "who" if(/who/i);
-	$DATA_SOURCE = "jag" if(/jag/i);
-	$DATA_SOURCE = "jagtotal" if(/jagtotal/i);
-	$DATA_SOURCE = "usa" if(/usa/i);
+	$DATA_SOURCE = "ccse" if(/^ccse/i);
+	$DATA_SOURCE = "who" if(/^who/i);
+	$DATA_SOURCE = "jag" if(/^jag/i);
+	$DATA_SOURCE = "jagtotal" if(/^jagtotal/i);
+	$DATA_SOURCE = "usast" if(/^usast/i);
+	$DATA_SOURCE = "usa" if(/^usa$/i);
 
 	if(/-debug/i){
 		$DEBUG = 1;
@@ -167,6 +169,7 @@ if($UPLOAD){		# upload web data to github.io
 my $mep = ""; 
 $mep = ccse::new() if($DATA_SOURCE eq "ccse");
 $mep = usa::new() if($DATA_SOURCE eq "usa");
+$mep = usast::new() if($DATA_SOURCE eq "usast");
 $mep = who::new()  if($DATA_SOURCE eq "who");
 $mep = jag::new()  if($DATA_SOURCE eq "jag");
 $mep = jagtotal::new()  if($DATA_SOURCE eq "jagtotal");

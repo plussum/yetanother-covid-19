@@ -59,7 +59,7 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	comment => "**** CCSE PARAMS ****",
 	src => "Johns Hopkins CSSE",
 	src_url => "https://github.com/beoutbreakprepared/nCoV2019",
-	prefix => "usa_",
+	prefix => "usast_",
 	src_file => {
 		NC => "$CCSE_BASE_DIR/time_series_covid19_confirmed_US.csv",
 		ND => "$CCSE_BASE_DIR/time_series_covid19_deaths_US.csv",
@@ -176,6 +176,7 @@ sub	aggregate
 			delimiter => $fp->{dlm},
 			data_start_col => $ds,
 			country_col => 10,
+			us_sate => 1,
 		};
 		#dp::dp  "MODE: " . $fp->{mode} . "\n";
 		($colum, $record , $start_day, $last_day) = jhccse::jhccse($param);
