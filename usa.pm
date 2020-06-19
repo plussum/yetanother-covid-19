@@ -53,6 +53,8 @@ my @usa_params = (
 	{ext => "#KIND# TOP 10 05/01 Oklahoma (#LD#) #SRC#", start_day => "05/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "Oklahoma", label_skip => 3, graph => "lines"},
 	{ext => "#KIND# TOP 10 05/01 Oregon (#LD#) #SRC#", start_day => "05/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "Oregon", label_skip => 3, graph => "lines"},
 	{ext => "#KIND# TOP 10 05/01 Texas (#LD#) #SRC#", start_day => "05/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "Texas", label_skip => 3, graph => "lines"},
+	{ext => "#KIND# Montgomery-Maryland  (#LD#) #SRC#", start_day => 0, lank =>[0, 9], exclusion => $EXCLUSION, target => "Montgomery-Maryland", label_skip => 3, graph => "lines"},
+	{ext => "#KIND# Montgomery-Maryland 04/01 (#LD#) #SRC#", start_day => "04/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "Montgomery-Maryland", label_skip => 3, graph => "lines"},
 );
 
 our $PARAMS = {			# MODULE PARETER        $mep
@@ -176,6 +178,7 @@ sub	aggregate
 			delimiter => $fp->{dlm},
 			data_start_col => $ds,
 			country_col => 10,
+			us_sate => "",
 		};
 		#dp::dp  "MODE: " . $fp->{mode} . "\n";
 		($colum, $record , $start_day, $last_day) = jhccse::jhccse($param);
