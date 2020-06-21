@@ -105,7 +105,10 @@ our $PARAMS = {			# MODULE PARETER        $mep
 		ymin => 10,
 		average_date => 7,
 		graphp => [
-			{ext => "#KIND# TOP 10 (#LD#) #SRC#", start_day => 0, lank =>[0, 19], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+			{ext => "#KIND# US TOP 10#FT_TD#", start_day => 0, lank =>[0, 9] , exclusion => "", add_target => "",
+				target => "",label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
+			{ext => "#KIND# US TOP 20#FT_TD#", start_day => 0, lank =>[10, 19] , exclusion => "", add_target => "",
+				target => "",label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
 		],
 	},
 	ERN => {
@@ -114,13 +117,20 @@ our $PARAMS = {			# MODULE PARETER        $mep
 		lp => 8,
 		average_date => 7,
 		graphp => [
-			@usa_params,
+			{ext => "#KIND# US 01/23 #RT_TD#", start_day => 0, lank =>[0, 9] , exclusion => "", target => "", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# US 2month #RT_TD#", start_day => -62, lank =>[0, 9] , exclusion => "", target => "", label_skip => 2, graph => "lines"},
+			{ext => "#KIND# US 1month #RT_TD#", start_day => -31, lank =>[0, 9] , exclusion => "", target => "", label_skip => 2, graph => "lines"},
 		],
 	},
 	KV => {
 		EXC => "",
 		graphp => [
-			@usa_params,
+			{ext => "#KIND# USA (#LD#) #SRC#", start_day => "03/15",  lank =>[0, 9], exclusion => "", target => "", label_skip => 3, graph => "lines"},
+			{ext => "#KIND# USA 11-20(#LD#) #SRC#", start_day => "03/15",  lank =>[10, 19], exclusion => "", target => "", label_skip => 3, graph => "lines"},
+			{ext => "#KIND# USA 2month(#LD#) #SRC#", start_day => -62,  lank =>[0, 9], exclusion => "", target => "", label_skip => 3, graph => "lines"},
+			{ext => "#KIND# USA 11-20 2month(#LD#) #SRC#", start_day => -62,  lank =>[10, 19], exclusion => "", target => "", label_skip => 3, graph => "lines"},
+			{ext => "#KIND# USA 1month(#LD#) #SRC#", start_day => -31,  lank =>[0, 9], exclusion => "", target => "", label_skip => 3, graph => "lines"},
+			{ext => "#KIND# USA 11-20 1month(#LD#) #SRC#", start_day => -31,  lank =>[10, 19], exclusion => "", target => "", label_skip => 3, graph => "lines"},
 		],
 	},
 };

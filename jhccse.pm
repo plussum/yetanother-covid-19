@@ -88,7 +88,7 @@ sub	jhccse
 	while(<FD>){
 		dp::dp $_ if($DEBUG > 2);
 		if(/"/){
-			s/"([^",]+), *([^",]+), *([^",]+)"/$1-$2-$3/g;	# ,"aa,bb,cc", -> aa-bb-cc
+			s/"([^",]+), *([^",]+), *([^",]+)"/$1;$2;$3/g;	# ,"aa,bb,cc", -> aa-bb-cc
 			s/"([^",]+),([^"]+)"/$1-$2/g;	# ,"aa,bb", -> aa-bb 
 			#dp::dp $_ ;
 		}
@@ -121,15 +121,18 @@ sub	jhccse
 	for(my $rn = 0; $rn < $RN; $rn++){
 		my $country = $DATA[$rn][$COUNTRY_COL];
 		if($us_state){
-			my @w = split(/-/, $country);
-			#dp::dp "$country: ". join(",", @w) . "\n";
+			my @w = split(/;/, $country);
+			
+			#dp::dp "$country: ". join(",", @w) . "[" . $w[1] . "]\n";
 			$country = $w[1];
 		}
-		dp::dp "[$rn:$RN:$country:$DT_S:$DT_E]\n" if($DEBUG > 1);
-		for(my $dt = $DT_S; $dt <= $DT_E; $dt++){
-			$COUNT{$country}[$dt-$DT_S] += $DATA[$rn][$dt];		# 複数のレコードになっている国があるので += 
+		if($country){
+			dp::dp "[$rn:$RN:$country:$DT_S:$DT_E]\n" if($DEBUG > 1);
+			for(my $dt = $DT_S; $dt <= $DT_E; $dt++){
+				$COUNT{$country}[$dt-$DT_S] += $DATA[$rn][$dt];		# 複数のレコードになっている国があるので += 
+			}
+			$COUNTRY{$country} += $DATA[$rn][$DT_E];
 		}
-		$COUNTRY{$country} += $DATA[$rn][$DT_E];
 	}
 	my $cn =  keys %COUNTRY;
 	dp::dp( "country: " , join(", ", $cn),"\n") if($DEBUG > 1);

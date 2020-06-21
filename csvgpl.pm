@@ -162,6 +162,7 @@ sub	csv2graph
 		dp::dp "DST CMD [$plot_cmdf]\n";
 		dp::dp "DST PNG [$plot_pngf]\n";
 	}
+	my $style = csvlib::valdef($gplitem->{graph}, "lines");
 
 #	$plot_pngf =~ s/[\(\) ]//g;
 	#
@@ -431,6 +432,10 @@ sub	csv2graph
 	my $YLABEL = "";
 	my $START_DATE = $DATES[0];
 	$LAST_DATE = $DATES[$#DATES];
+	if($style eq "boxes"){
+		$START_DATE = &date_offset($START_DATE, -24 * 60 * 60);
+		$LAST_DATE  = &date_offset($LAST_DATE,   24 * 60 * 60);
+	}
 
 	my $DATE_FORMAT = "set xdata time\nset timefmt '%m/%d'\nset format x '%m/%d'\n";
 	my $XRANGE = "set xrange ['$START_DATE':'$LAST_DATE']";
@@ -462,6 +467,7 @@ set yrange [#YRANGE#]
 set terminal pngcairo size $TERM_XSIZE, $TERM_YSIZE font "IPAexゴシック,8" enhanced
 #LOGSCALE#
 #LOGSCALE2#
+#FILLSTYLE#
 set y2tics
 set output '$plot_pngf'
 plot #PLOT_PARAM#
@@ -469,12 +475,23 @@ exit
 _EOD_
 
 	my @w = ();
+	if($style eq "boxes"){
+		my $fs = 'set style fill solid border lc rgb "white"';
+		$PARAMS =~ s/#FILLSTYLE#/$fs/;
+	}
 	for(my $i = 0; $i <= $#LEGEND_KEYS; $i++){
 		my $country = $LEGEND_KEYS[$i];
 		$country =~ s/'//g;
-		push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d ", 
-					$plot_csvf, $i+$DATE_COL_NO, $country, ($i < 5) ? 2 : 1)
+		if($style eq "boxes"){
+			push(@w, sprintf("'%s' using 1:%d with boxes title '%s' ", 
+						$plot_csvf, $i+$DATE_COL_NO, $country)
+				);
+		}
+		else {
+			push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d ", 
+						$plot_csvf, $i+$DATE_COL_NO, $country, ($i < 8) ? 2 : 1)
 			);
+		}
 	}
 	my $pn = join(",", @w); 
 	if(defined $gplitem->{additional_plot} && $gplitem->{additional_plot}){
@@ -524,5 +541,19 @@ _EOD_
 	$plot_csvf =~ s#.*/##;
 #	return ("$fname.png", "$fname-plot.txt", "$fname-plot.csv", @LEGEND_KEYS);
 	return ($plot_pngf, $plot_cmdf, $plot_csvf, @LEGEND_KEYS);
+}
+
+sub	date_offset
+{
+	my($dt, $offset) = @_;
+
+	my ($m, $d) = split("/", $dt);
+	my $ut = csvlib::ymd2tm(2020, $m, $d, 0, 0, 0); 
+	my $ld = csvlib::ut2d4($ut + $offset, "/");
+
+	$ld =~ s#^[0-9]{4}/##;
+	#dp::dp "DATE: $dt : $ld\n";
+
+	return $ld;
 }
 1;
