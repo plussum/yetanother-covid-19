@@ -58,7 +58,8 @@ foreach my $src (@src_list){
 			foreach my $mode (@mode_list){
 				if($aggr eq "POP"){
 					next if($sub ne "COUNT");
-					next if($src ne "jhccse" && $src ne "jag");
+					#next if($src ne "jhccse" && $src ne "jag");
+					next if($src eq "who"); 
 				}
 				next if($sub eq "KV" && $mode ne "NC");
 				next if($mode eq "ND" && $sub eq "ERN"); 

@@ -24,7 +24,8 @@ our $RT_LP = 8;
 our $THRESH_FT = {NC => 9, ND => 3, NR => 3};
 
 our $POPF = "$WIN_PATH/pop.csv";
-our $POPF_JP = "$WIN_PATH/popjp.txt";
+#our $POPF_JP = "$WIN_PATH/popjp.txt";
+#our $POPF_US = "$WIN_PATH/popus.txt";
 our $POP_BASE = 100 * 1000;			# 10万人当たりのケース数
 our $POP_THRESH = 100 * 1000;		# 人口が少ないと振れ幅が大きいので、この人口より少ない国は対象外にする
 

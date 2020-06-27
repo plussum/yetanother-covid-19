@@ -7,7 +7,7 @@
 07	福島県	Fukushima-ken	1882	932	951
 08	茨城県	Ibaraki-ken	2892	1442	1450
 09	栃木県	Tochigi-ken	1957	974	983
-10	群馬県	Gumma-ken	1960	968	992
+10	群馬県	Gunma-ken	1960	968	992
 11	埼玉県	Saitama-ken	7310	3648	3662
 12	千葉県	Chiba-ken	6246	3103	3143
 13	東京都	Tokyo-to	13724	6760	6964

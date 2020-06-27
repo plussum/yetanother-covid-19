@@ -39,18 +39,21 @@ sub	csvgpl
 	my $aggr_mode = csvlib::valdefs($csvgplp->{aggr_mode});		# Added 05/03 for Population
 	if($aggr_mode eq "POP"){
 		#dp::dp( "###### $aggr_mode: " . $csvgplp->{src} . "\n") if(1 || $DEBUG > 1);
-		if($csvgplp->{src} eq "ccse"){
-			#dp::dp "POP:ccse\n";
-			csvlib::cnt_pop(\%CNT_POP);
-		}
-		elsif($csvgplp->{src} eq "jag"){
-			#dp::dp "POP:ccse\n";
-			csvlib::cnt_pop_jp(\%CNT_POP);
-		}
-		else {
-			dp::dp "ERROR at POP\n";
-			exit 1;
-		}
+		csvlib::cnt_pop(\%CNT_POP);
+
+		#									pop.csvにすべての人口データをセットに変更
+		#if($csvgplp->{src} eq "ccse"){
+		#	#dp::dp "POP:ccse\n";
+		#	csvlib::cnt_pop(\%CNT_POP);
+		#}
+		#elsif($csvgplp->{src} eq "jag"){
+		#	#dp::dp "POP:ccse\n";
+		#	csvlib::cnt_pop_jp(\%CNT_POP);
+		#}
+		#else {
+		#	dp::dp "ERROR at POP\n";
+		#	exit 1;
+		#}
 	}
 
 	$WIN_PATH = $config::WIN_PATH;
@@ -157,7 +160,7 @@ sub	csv2graph
 	my $sub_mode = $mep->{sub_mode};
 	$ext =~ s/#KIND#/$kind/;
 	$ext =~ s/#SRC#/$src/;
-	dp::dp $ext . "\n";
+	#dp::dp $ext . "\n";
 	my $fname = $ext;
 	$fname =~ s/#LD#//;
 	$fname =~ s#/#-#g;
@@ -337,6 +340,7 @@ sub	csv2graph
 	my @Dataset = (\@DATES);
 	my $CNT = -1;
 	my $rn = 0;
+	my $pop_thresh = (defined $mep->{POP_THRESH}) ? $mep->{POP_THRESH} : $config::POP_THRESH;
 	#open(POPT, "> $config::WIN_PATH/poptest.csv") || die "Cannot create $config::WIN_PATH/poptest.csv";
 	foreach my $country (sort {$CTG{$b} <=> $CTG{$a}} keys %CTG){
 		$rn++;
@@ -346,11 +350,11 @@ sub	csv2graph
 		dp::dp "Yes, Target $CNT $country [$tgcs, $tgce]\n" if($DEBUG && $#target >= 0);
 		if($aggr_mode eq "POP"){			# if aggr_mode eq POP, ignore if country population < $POP_THRESH
 			if(!defined $CNT_POP{$country}){
-				#dp::dp "NO COUNTRY DEFINED at POP[$country][" . $CNT_POP{$country} . "]\n";
+				dp::dp "NO COUNTRY DEFINED at POP[$country][" . $CNT_POP{$country} . "]\n" if(! $country =~ /Unassigned/);
 				next;
 			}
-			if($CNT_POP{$country} < $config::POP_THRESH){
-				#dp::dp "POP leth than $config::POP_THRESH: [$country][" . $CNT_POP{$country} . "]\n";
+			if($CNT_POP{$country} < $pop_thresh){
+				dp::dp "POP leth than $pop_thresh: [$country][" . $CNT_POP{$country} . "]\n";
 				next;
 			}
 		}

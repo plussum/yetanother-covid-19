@@ -219,40 +219,16 @@ sub	cnt_pop
 	my ($cnt_pop) = @_;
 	my $popf = "$config::POPF";
 
-	my %JHU_CN = ();
-	my %WHO_CN = ();
 	open(FD, $popf) || die "cannot open $popf\n";
 	<FD>;
 	while(<FD>){
 		chop;
 		
-		my($jhu, $who, $un, $pn, @w) = split(",", $_);
+		my($name, $pn) = split(",", $_);
 
-		$JHU_CN{$jhu}++;
-		$WHO_CN{$who}++;
-		$cnt_pop->{$un} = $pn;
-		foreach my $sn (@w){
-			$cnt_pop->{$sn} = $pn;
-		}
+		$cnt_pop->{$name} = $pn;
 	}
 	close(FD);
-
-	foreach my $c (sort keys %JHU_CN){
-		if(defined $cnt_pop->{$c}){
-			#print "$c\t" . $cnt_pop->{$c}, "\n";
-		}
-		else {
-			#print $c , "\n";
-		}
-	}
-	foreach my $c (sort keys %WHO_CN){
-		if(defined $cnt_pop->{$c}){
-			#print "$c\t" . $cnt_pop->{$c}, "\n";
-		}
-		else {
-			#print $c , "\n";
-		}
-	}
 }
 
 #
