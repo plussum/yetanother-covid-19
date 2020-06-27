@@ -298,7 +298,7 @@ sub	daily
 	my $mode = $fp->{mode};
 	my $aggr_mode = $fp->{aggr_mode};
 	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $aggr_mode) ;
-	#dp::dp "[$mode] $name\n";
+	dp::dp "[$mode] $name\n";
 
 	my $m = csvlib::valdef($mep->{AGGR_MODE}{$aggr_mode}, 0);
 	$name .= "*$m" . "days" if($m > 1);
@@ -321,6 +321,7 @@ sub	daily
 		debug => $DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
+		fp => $fp,
 		mep => $mep,
 		gplp => $graphp,	# $fp->{funcp}{graphp},
 		aggr_mode => $fp->{aggr_mode},
@@ -441,10 +442,11 @@ sub	ft
 		debug => $DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
+		fp => $fp,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
-		sort_balance => 0.6,		# 0.0 
-		sort_wight => 0.10,			# 0.0
+		sort_balance => 0.7,	# -0.7 0.6,		# 0.0 
+		sort_wight => 0.30,			# 0.0
 	);
 	csvgpl::csvgpl(\%params);
 }
@@ -507,6 +509,7 @@ sub	ern
 		debug => $DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
+		fp => $fp,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
 		sort_balance => 0.7,
@@ -571,6 +574,7 @@ sub	kv
 		debug => $DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
+		fp => $fp,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
 		sort_balance => 0.5,

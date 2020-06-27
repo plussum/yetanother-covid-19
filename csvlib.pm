@@ -29,10 +29,13 @@ sub	sum
 			print "[" . $data->[$i] . "]";
 		}
 	}
+	dp::dp "sum($s, $e)\n" if($s =~ /[^0-9]/ || $e =~ /[^0-9]/);
+	dp::dp "sum($s, $e)\n" if($s > $e);
+	dp::dp "sum($s, $e) OUT OF RANGE(" . scalar(@$data) . ")\n" if($s < 0 || $e > scalar(@$data));
 
 	my $sum = 0;
 	for(my $i = $s; $i <= $e; $i++){
-		$sum += $data->[$i];
+		$sum += (defined $data->[$i]) ? $data->[$i] : 0;
 	}
 	print "i=> $sum\n" if($DEBUG);
 	return $sum;

@@ -298,10 +298,10 @@ sub	aggregate
 		foreach my $dt (sort keys %DATES){
 			my $k = join("\t", $dt, $country);
 			my $c;
-			$c = csvlib::valdef($NEW_CASE{$k}, 0) if($mode eq "NC");
-			$c = csvlib::valdef($NEW_DETH{$k}, 0) if($mode eq "ND");
-			$c = csvlib::valdef($TOTAL_CASE{$k}, 0) if($mode eq "CC");
-			$c = csvlib::valdef($TOTAL_DEATH{$k}, 0) if($mode eq "CD");
+			$c = csvlib::valdef($NEW_CASE{$k}, 0) if($mode =~ /[CN]C/);
+			$c = csvlib::valdef($NEW_DETH{$k}, 0) if($mode =~ /[CN]D/);
+			# $c = csvlib::valdef($TOTAL_CASE{$k}, 0) if($mode eq "CC");		# csvgpl.pmに移動
+			# $c = csvlib::valdef($TOTAL_DEATH{$k}, 0) if($mode eq "CD");		# csvgpl.pmに移動
 			if($PP){
 				if(defined $POP{$country}){
 					$c /= $POP{$country};

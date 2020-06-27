@@ -1,171 +1,482 @@
 $VAR1 = {
-          'csv_aggr_mode' => '',
           'mep' => {
-                     'ERN' => {
-                                'EXC' => '',
-                                'average_date' => 7,
-                                'ip' => 5,
-                                'lp' => 8,
-                                'graphp' => [
-                                              {
-                                                'lank' => [
-                                                            0,
-                                                            19
-                                                          ],
-                                                'target' => '',
-                                                'start_day' => 0,
-                                                'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
-                                                'label_skip' => 3,
-                                                'exclusion' => '',
-                                                'graph' => 'lines'
-                                              }
-                                            ]
-                              },
-                     'base_dir' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series',
-                     'comment' => '**** CCSE PARAMS ****',
                      'copy' => sub { "DUMMY" },
-                     'src_file' => {
-                                     'NC' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv.csv',
-                                     'ND' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
-                                     'CD' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
-                                     'CR' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_US.csv',
-                                     'NR' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_US.csv',
-                                     'CC' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv'
-                                   },
-                     'prefix' => 'jhccse_US_',
-                     'download' => sub { "DUMMY" },
-                     'aggregate' => sub { "DUMMY" },
-                     'FT' => {
-                               'graphp' => [
-                                             {
-                                               'target' => '',
-                                               'lank' => [
-                                                           0,
-                                                           19
-                                                         ],
-                                               'start_day' => 0,
-                                               'exclusion' => '',
-                                               'label_skip' => 3,
-                                               'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
-                                               'graph' => 'lines'
-                                             }
-                                           ],
-                               'average_date' => 7,
-                               'EXC' => '',
-                               'ymin' => 10
-                             },
+                     'base_dir' => '',
                      'COUNT' => {
-                                  'EXEC' => '',
-                                  'graphp' => [
-                                                {
-                                                  'start_day' => 0,
-                                                  'lank' => [
-                                                              0,
-                                                              19
-                                                            ],
-                                                  'target' => '',
-                                                  'graph' => 'lines',
-                                                  'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
-                                                  'label_skip' => 3,
-                                                  'exclusion' => ''
-                                                }
-                                              ],
                                   'graphp_mode' => {
-                                                     'CD' => [
-                                                               {
-                                                                 'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
-                                                                 'label_skip' => 3,
-                                                                 'exclusion' => '',
-                                                                 'graph' => 'lines',
-                                                                 'lank' => [
-                                                                             0,
-                                                                             19
-                                                                           ],
-                                                                 'target' => '',
-                                                                 'start_day' => 0
-                                                               }
-                                                             ],
-                                                     'ND' => [
-                                                               {
-                                                                 'exclusion' => '',
-                                                                 'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
-                                                                 'label_skip' => 3,
-                                                                 'graph' => 'lines',
-                                                                 'target' => '',
-                                                                 'lank' => [
-                                                                             0,
-                                                                             19
-                                                                           ],
-                                                                 'start_day' => 0
-                                                               }
-                                                             ],
                                                      'NC' => [
                                                                {
-                                                                 'graph' => 'lines',
-                                                                 'label_skip' => 3,
-                                                                 'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
                                                                  'exclusion' => '',
-                                                                 'start_day' => 0,
+                                                                 'ext' => '#KIND# Japan TOP20 (#LD#) #SRC#',
+                                                                 'label_skip' => 2,
+                                                                 'start_day' => '02/15',
+                                                                 'graph' => 'lines',
                                                                  'lank' => [
                                                                              0,
                                                                              19
                                                                            ],
                                                                  'target' => ''
-                                                               }
-                                                             ],
-                                                     'CC' => [
+                                                               },
                                                                {
+                                                                 'lank' => [
+                                                                             0,
+                                                                             4
+                                                                           ],
+                                                                 'target' => '',
+                                                                 'graph' => 'lines',
+                                                                 'ext' => '#KIND# Japan 01-05 (#LD#) #SRC#',
+                                                                 'label_skip' => 2,
+                                                                 'start_day' => '02/15',
+                                                                 'exclusion' => ''
+                                                               },
+                                                               {
+                                                                 'lank' => [
+                                                                             0,
+                                                                             7
+                                                                           ],
+                                                                 'target' => '',
+                                                                 'additional_plot' => '0.5',
+                                                                 'start_day' => '02/15',
+                                                                 'ext' => '#KIND# Japan 01-08 (#LD#) #SRC# rl-avr',
+                                                                 'label_skip' => 2,
+                                                                 'avr_date' => 7,
+                                                                 'exclusion' => '',
+                                                                 'graph' => 'lines'
+                                                               },
+                                                               {
+                                                                 'additional_plot' => '0.5',
+                                                                 'lank' => [
+                                                                             0,
+                                                                             7
+                                                                           ],
+                                                                 'target' => '',
+                                                                 'avr_date' => 7,
+                                                                 'exclusion' => '',
+                                                                 'start_day' => '02/15',
+                                                                 'label_skip' => 2,
+                                                                 'ext' => '#KIND# Japan 01-08 (#LD#) #SRC# rl-avr ymax',
+                                                                 'graph' => 'lines',
+                                                                 'ymax' => 2
+                                                               },
+                                                               {
+                                                                 'lank' => [
+                                                                             0,
+                                                                             7
+                                                                           ],
+                                                                 'target' => '',
+                                                                 'additional_plot' => '0.5',
+                                                                 'ext' => '#KIND# Japan 01-08 (#LD#) #SRC# 3w rl-avr ymax',
+                                                                 'label_skip' => 1,
+                                                                 'start_day' => -21,
+                                                                 'exclusion' => '',
+                                                                 'avr_date' => 7,
+                                                                 'graph' => 'lines',
+                                                                 'ymax' => 2
+                                                               },
+                                                               {
+                                                                 'additional_plot' => '0.5',
                                                                  'target' => '',
                                                                  'lank' => [
                                                                              0,
-                                                                             19
+                                                                             7
                                                                            ],
-                                                                 'start_day' => 0,
                                                                  'exclusion' => '',
-                                                                 'label_skip' => 3,
-                                                                 'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
+                                                                 'start_day' => -21,
+                                                                 'label_skip' => 1,
+                                                                 'ext' => '#KIND# Japan 01-08 (#LD#) #SRC# 3w',
                                                                  'graph' => 'lines'
+                                                               },
+                                                               {
+                                                                 'graph' => 'lines',
+                                                                 'lank' => [
+                                                                             1,
+                                                                             4
+                                                                           ],
+                                                                 'target' => '',
+                                                                 'exclusion' => '',
+                                                                 'ext' => '#KIND# Japan 02-05 (#LD#) #SRC#',
+                                                                 'label_skip' => 2,
+                                                                 'start_day' => '02/15'
+                                                               },
+                                                               {
+                                                                 'exclusion' => '',
+                                                                 'start_day' => '02/15',
+                                                                 'ext' => '#KIND# Japan 06-10 (#LD#) #SRC#',
+                                                                 'label_skip' => 2,
+                                                                 'graph' => 'lines',
+                                                                 'target' => '',
+                                                                 'lank' => [
+                                                                             5,
+                                                                             9
+                                                                           ]
+                                                               },
+                                                               {
+                                                                 'exclusion' => '',
+                                                                 'label_skip' => 2,
+                                                                 'ext' => '#KIND# Japan 11-15 (#LD#) #SRC#',
+                                                                 'start_day' => '02/15',
+                                                                 'graph' => 'lines',
+                                                                 'lank' => [
+                                                                             10,
+                                                                             14
+                                                                           ],
+                                                                 'target' => ''
+                                                               },
+                                                               {
+                                                                 'lank' => [
+                                                                             15,
+                                                                             20
+                                                                           ],
+                                                                 'target' => '',
+                                                                 'graph' => 'lines',
+                                                                 'start_day' => '02/15',
+                                                                 'label_skip' => 2,
+                                                                 'ext' => '#KIND# Japan 16-20 (#LD#) #SRC#',
+                                                                 'exclusion' => ''
+                                                               },
+                                                               {
+                                                                 'start_day' => '02/15',
+                                                                 'label_skip' => 2,
+                                                                 'ext' => '#KIND# Japan 01-10 log (#LD#) #SRC#',
+                                                                 'exclusion' => '',
+                                                                 'lank' => [
+                                                                             0,
+                                                                             9
+                                                                           ],
+                                                                 'target' => '',
+                                                                 'average_date' => 7,
+                                                                 'graph' => 'lines',
+                                                                 'logscale' => 'y'
+                                                               },
+                                                               {
+                                                                 'start_day' => '02/01',
+                                                                 'label_skip' => 2,
+                                                                 'ext' => '#KIND# taget cities  (#LD#) #SRC# 02/01',
+                                                                 'exclusion' => '',
+                                                                 'target' => '東京,大阪,神戸,北海道,神奈川,埼玉,千葉,北海道',
+                                                                 'lank' => [
+                                                                             0,
+                                                                             99
+                                                                           ],
+                                                                 'graph' => 'lines'
+                                                               },
+                                                               {
+                                                                 'term_ysize' => 300,
+                                                                 'graph' => 'lines',
+                                                                 'ext' => '#KIND# taget cities  (#LD#) #SRC# 03/01 ',
+                                                                 'label_skip' => 2,
+                                                                 'start_day' => '03/01',
+                                                                 'exclusion' => '',
+                                                                 'lank' => [
+                                                                             0,
+                                                                             99
+                                                                           ],
+                                                                 'target' => '東京,大阪,神戸,北海道,神奈川,埼玉,千葉,北海道'
+                                                               },
+                                                               {
+                                                                 'lank' => [
+                                                                             0,
+                                                                             99
+                                                                           ],
+                                                                 'target' => '東京,大阪,神戸,北海道,神奈川,埼玉,千葉,北海道',
+                                                                 'exclusion' => '',
+                                                                 'avr_date' => 7,
+                                                                 'ext' => '#KIND# taget cities  (#LD#) #SRC# 03/01 rl-avr',
+                                                                 'label_skip' => 2,
+                                                                 'start_day' => '03/01',
+                                                                 'graph' => 'lines',
+                                                                 'term_ysize' => 300
+                                                               },
+                                                               {
+                                                                 'exclusion' => '',
+                                                                 'label_skip' => 2,
+                                                                 'ext' => '#KIND# Fukuoka,Hokaido (#LD#) #SRC# 03/01',
+                                                                 'start_day' => '03/01',
+                                                                 'lank' => [
+                                                                             0,
+                                                                             99
+                                                                           ],
+                                                                 'target' => '福岡,北海道',
+                                                                 'term_ysize' => 300,
+                                                                 'graph' => 'lines'
+                                                               },
+                                                               {
+                                                                 'target' => '福岡,北海道',
+                                                                 'lank' => [
+                                                                             0,
+                                                                             99
+                                                                           ],
+                                                                 'exclusion' => '',
+                                                                 'avr_date' => 7,
+                                                                 'label_skip' => 2,
+                                                                 'ext' => '#KIND# Fukuoka,Hokaido (#LD#) #SRC# 03/01 rl-avr',
+                                                                 'start_day' => '03/01',
+                                                                 'graph' => 'lines',
+                                                                 'term_ysize' => 300
                                                                }
+                                                             ],
+                                                     'CC' => [
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[0],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[1],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[2],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[3],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[4],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[5],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[6],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[7],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[8],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[9],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[10],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[11],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[12],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[13],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[14],
+                                                               $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[15]
                                                              ]
-                                                   }
+                                                   },
+                                  'EXEC' => '',
+                                  'graphp' => [
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[0],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[1],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[2],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[3],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[4],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[5],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[6],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[7],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[8],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[9],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[10],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[11],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[12],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[13],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[14],
+                                                $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'NC'}[15]
+                                              ]
                                 },
+                     'ERN' => {
+                                'average_date' => 7,
+                                'lp' => 8,
+                                'ip' => 5,
+                                'graphp' => [
+                                              {
+                                                'exclusion' => '',
+                                                'start_day' => '02/01',
+                                                'label_skip' => 2,
+                                                'ext' => '#KIND# Japan 0301 #RT_TD#',
+                                                'lank' => [
+                                                            0,
+                                                            5
+                                                          ],
+                                                'ymax' => 10,
+                                                'term_ysize' => 300,
+                                                'taget' => '',
+                                                'graph' => 'lines'
+                                              },
+                                              {
+                                                'graph' => 'lines',
+                                                'ymax' => 10,
+                                                'term_ysize' => 300,
+                                                'lank' => [
+                                                            0,
+                                                            4
+                                                          ],
+                                                'target' => '',
+                                                'label_skip' => 2,
+                                                'ext' => '#KIND# TOP 5 3w #RT_TD#',
+                                                'start_day' => -21,
+                                                'exclusion' => ''
+                                              },
+                                              {
+                                                'exclusion' => '',
+                                                'ext' => '#KIND# TOP10 3w #RT_TD#',
+                                                'label_skip' => 2,
+                                                'start_day' => -21,
+                                                'target' => '',
+                                                'lank' => [
+                                                            0,
+                                                            9
+                                                          ],
+                                                'term_ysize' => 300,
+                                                'ymax' => 10,
+                                                'graph' => 'lines'
+                                              },
+                                              {
+                                                'graph' => 'lines',
+                                                'term_ysize' => 300,
+                                                'ymax' => 10,
+                                                'lank' => [
+                                                            0,
+                                                            5
+                                                          ],
+                                                'target' => '東京,大阪,神戸,北海道',
+                                                'exclusion' => '',
+                                                'label_skip' => 2,
+                                                'ext' => '#KIND# Tokyo 0301 #RT_TD#',
+                                                'start_day' => '02/01'
+                                              },
+                                              {
+                                                'start_day' => -21,
+                                                'label_skip' => 2,
+                                                'ext' => '#KIND# Tokyo 3w #RT_TD#',
+                                                'exclusion' => '',
+                                                'target' => '東京,大阪,神戸,北海道',
+                                                'lank' => [
+                                                            0,
+                                                            5
+                                                          ],
+                                                'ymax' => 10,
+                                                'term_ysize' => 300,
+                                                'graph' => 'lines'
+                                              }
+                                            ],
+                                'EXEC' => ''
+                              },
                      'new' => sub { "DUMMY" },
-                     'src_url' => 'https://github.com/beoutbreakprepared/nCoV2019',
-                     'DLM' => ',',
+                     'aggregate' => sub { "DUMMY" },
+                     'src_url' => 'https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv',
+                     'src_file' => {
+                                     'CC' => '/mnt/f/cov/plussum.github.io/CSV/gis-jag-japan.csv.txt',
+                                     'NC' => '/mnt/f/cov/plussum.github.io/CSV/gis-jag-japan.csv.txt'
+                                   },
+                     'csv_aggr_mode' => '',
+                     'comment' => '**** J.A.G JAPAN PARAMS ****',
+                     'src' => 'JAG JAPAN',
                      'AGGR_MODE' => {
                                       'DAY' => 1,
-                                      'POP' => 1
+                                      'POP' => 7
                                     },
-                     'src' => 'Johns Hopkins CSSE',
+                     'FT' => {
+                               'graphp' => [
+                                             {
+                                               'series' => 1,
+                                               'ft' => 1,
+                                               'target' => '',
+                                               'lank' => [
+                                                           0,
+                                                           20
+                                                         ],
+                                               'exclusion' => 'Others',
+                                               'label_skip' => 3,
+                                               'average' => 7,
+                                               'ext' => '#KIND# ALL Japan all FT (#LD#) #SRC#',
+                                               'start_day' => 0,
+                                               'graph' => 'lines',
+                                               'logscale' => 'y',
+                                               'term_ysize' => 600
+                                             }
+                                           ],
+                               'EXEC' => '',
+                               'average_date' => 7,
+                               'ymin' => 10
+                             },
+                     'download' => sub { "DUMMY" },
                      'KV' => {
                                'graphp' => [
                                              {
-                                               'start_day' => 0,
                                                'lank' => [
                                                            0,
-                                                           19
+                                                           999
                                                          ],
-                                               'target' => '',
+                                               'target' => '東京,大阪,神戸,北海道,神奈川,埼玉,福岡,千葉',
                                                'graph' => 'lines',
+                                               'start_day' => '03/01',
+                                               'ext' => '#KIND# from 03/01 (#LD#) #SRC#',
                                                'label_skip' => 3,
-                                               'ext' => '#KIND# TOP 10 (#LD#) #SRC#',
                                                'exclusion' => ''
+                                             },
+                                             {
+                                               'exclusion' => '',
+                                               'ext' => '#KIND# from 4/1(#LD#) #SRC#',
+                                               'label_skip' => 2,
+                                               'start_day' => '04/01',
+                                               'graph' => 'lines',
+                                               'target' => '東京,大阪,神戸,北海道,神奈川,埼玉,福岡,千葉',
+                                               'lank' => [
+                                                           0,
+                                                           999
+                                                         ]
+                                             },
+                                             {
+                                               'target' => '東京,大阪,神戸,北海道,神奈川,埼玉,福岡,千葉',
+                                               'lank' => [
+                                                           0,
+                                                           999
+                                                         ],
+                                               'graph' => 'lines',
+                                               'start_day' => -21,
+                                               'ext' => '#KIND# from 3week(#LD#) #SRC#',
+                                               'label_skip' => 1,
+                                               'exclusion' => ''
+                                             },
+                                             {
+                                               'graph' => 'lines',
+                                               'lank' => [
+                                                           0,
+                                                           999
+                                                         ],
+                                               'target' => '東京',
+                                               'exclusion' => '',
+                                               'start_day' => '03/01',
+                                               'ext' => '#KIND# from 03/01 Tokyo (#LD#) #SRC#',
+                                               'label_skip' => 3
+                                             },
+                                             {
+                                               'ext' => '#KIND# from 4/1(#LD#)  Tokyo#SRC#',
+                                               'label_skip' => 2,
+                                               'start_day' => '04/01',
+                                               'exclusion' => '',
+                                               'target' => '東京',
+                                               'lank' => [
+                                                           0,
+                                                           999
+                                                         ],
+                                               'graph' => 'lines'
+                                             },
+                                             {
+                                               'graph' => 'lines',
+                                               'target' => '東京',
+                                               'lank' => [
+                                                           0,
+                                                           999
+                                                         ],
+                                               'exclusion' => '',
+                                               'start_day' => -31,
+                                               'label_skip' => 1,
+                                               'ext' => '#KIND# from 1month(#LD#)  Tokyo#SRC#'
                                              }
                                            ],
                                'EXC' => 'Others'
-                             }
+                             },
+                     'prefix' => 'jag_'
+                   },
+          'sort_wight' => '0.01',
+          'src' => 'jag',
+          'clp' => {
+                     'name' => 'CCM CASES-COUNT-DAY',
+                     'src_url' => 'https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv',
+                     'src_file' => '/mnt/f/cov/plussum.github.io/CSV/gis-jag-japan.csv.txt',
+                     'kind' => 'CC',
+                     'htmlf' => '/mnt/f/cov/plussum.github.io/HTML/jag_CC_COUNT_DAY.html',
+                     'csvf' => '/mnt/f/cov/plussum.github.io/CSV/jag_CC_DAY.csv.txt',
+                     'src' => 'JAG JAPAN'
                    },
           'aggr_mode' => 'DAY',
-          'src' => 'usa',
-          'debug' => 0,
-          'clp' => {
-                     'name' => 'NEW DEATHS-COUNT-DAY',
-                     'htmlf' => '/mnt/f/cov/plussum.github.io/HTML/jhccse_US_ND_COUNT_DAY.html',
-                     'src' => 'Johns Hopkins CSSE',
-                     'kind' => 'ND',
-                     'csvf' => '/mnt/f/cov/plussum.github.io/CSV/jhccse_US_ND_DAY.csv.txt',
-                     'src_file' => '/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv',
-                     'src_url' => 'https://github.com/beoutbreakprepared/nCoV2019'
-                   },
-          'gplp' => $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'ND'}
+          'csv_aggr_mode' => '',
+          'debug' => 1,
+          'gplp' => $VAR1->{'mep'}{'COUNT'}{'graphp_mode'}{'CC'},
+          'sort_balance' => '0.5',
+          'fp' => {
+                    'funcp' => $VAR1->{'mep'}{'COUNT'},
+                    'mode' => 'CC',
+                    'sub_mode' => 'COUNT',
+                    'src' => 'jag',
+                    'mep' => $VAR1->{'mep'},
+                    'stage2_csvf' => '/mnt/f/cov/plussum.github.io/CSV/jag_CC_COUNT_DAY.csv.txt',
+                    'src_file' => '/mnt/f/cov/plussum.github.io/CSV/gis-jag-japan.csv.txt',
+                    'htmlf' => '/mnt/f/cov/plussum.github.io/HTML/jag_CC_COUNT_DAY.html',
+                    'dlm' => undef,
+                    'stage1_csvf' => '/mnt/f/cov/plussum.github.io/CSV/jag_CC_DAY.csv.txt',
+                    'aggr_mode' => 'DAY'
+                  }
         };

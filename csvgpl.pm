@@ -64,6 +64,7 @@ sub	csvgpl
 	my $clp = $csvgplp->{clp};
 	my $gplp = $csvgplp->{gplp};
 	my $mep = $csvgplp->{mep};
+	my $fp = $csvgplp->{fp};
 
 	my $src_url = $clp->{src_url};
     my $src_ref = "<a href=\"$src_url\">$src_url</a>";
@@ -83,14 +84,14 @@ sub	csvgpl
 	my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
 	#print HTML "SOURCE: <a href = \"$WHO_PAGE\"> WHO situation Reports</a>\n<br>\n";
-
+#
 	foreach my $gplitem (@$gplp){
 		# $gplitem->{kind} = $clp->{name};
 		if($gplitem->{ext} eq "EOD"){
 			print "#### EOD ###\n";
 			last;
 		}
-		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode);
+		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode, $fp);
 
 		print HTML "<!-- " . $gplitem->{ext} . " -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
@@ -145,16 +146,18 @@ sub	csvgpl
 #
 sub	csv2graph
 {
-	my ($csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode) = @_;
+	my ($csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode, $fp) = @_;
 
 	dp::dp join(", ", $gplitem->{ext}, $gplitem->{start_day}, $gplitem->{lank}[0], $gplitem->{lank}[1], $gplitem->{exclusion}, 
 			"[" . $clp->{src} . "]", $mep->{prefix}), "\n" if($DEBUG > 1);
 	
 	my $src = csvlib::valdefs($gplitem->{src}, "");
 	my $ext = $mep->{prefix} . " " . $gplitem->{ext};
+	#dp::dp $ext . ":$kind\n";
+	my $sub_mode = $mep->{sub_mode};
 	$ext =~ s/#KIND#/$kind/;
 	$ext =~ s/#SRC#/$src/;
-	#dp::dp $ext . "\n";
+	dp::dp $ext . "\n";
 	my $fname = $ext;
 	$fname =~ s/#LD#//;
 	$fname =~ s#/#-#g;
@@ -242,6 +245,7 @@ sub	csv2graph
 	my $dates = $end - $std + 1;
 	my $tgcs = $gplitem->{lank}[0];						# 対象ランク
 	my $tgce = $gplitem->{lank}[1];						# 対象ランク 
+	#dp::dp "[$tgcs:$tgce]\n";
 	$tgce = $COUNTRY_NUMBER if($tgce > $COUNTRY_NUMBER);
 
 	my @exclusion = split(/,/, $gplitem->{exclusion});	# 除外国
@@ -262,6 +266,8 @@ sub	csv2graph
 	my %TOTAL = ();
 	my @COUNTRY = ();
 	my $avr_date = csvlib::valdef($gplitem->{avr_date});
+	#dp::dp "mode: " . $clp->{kind} . "\n";
+	my $count_mode = ($clp->{kind} =~ /^N[A-Z]/) ? "DAY" : "CCM";					# 日次/累計 Cumelative
 
 	#
 	#	ソート用の配列の作成
@@ -272,8 +278,13 @@ sub	csv2graph
 
 		#dp::dp join(",", @{$DATA[$cn]}) . "\n" if($country =~ /Sint/ || $country =~ /Japan/);
 		my $tl = 0;
+		my $ccmt = 0;
 		my $swc = 0;
 		my $sw_start = int($dates * $SORT_BALANCE + 0.5);
+		if($fp->{sub_mode} eq "FT"){
+			my $as = scalar(@{$DATA[$cn]});					####	for FT 2020.06.27 データ数が違うので配列サイズで計算
+			$sw_start = int($as * $SORT_BALANCE + 0.5);		####	for FT 2020.06.27
+		}
 		for(my $dn = 0; $dn < $dates; $dn++){
 			my $p = $dn+$std+$DATE_COL_NO;
 			my $c = csvlib::valdef($DATA[$cn][$p], 0);
@@ -291,10 +302,27 @@ sub	csv2graph
 				my $e = $p;
 				$c = csvlib::avr($DATA[$cn], $s, $e);
 			}
+			if($count_mode eq "CCM"){
+				$ccmt += $c;
+				$c = $ccmt;
+			}
+
 			$COUNT_D{$country}[$dn] = $c;
 			if($dn >= $sw_start){			# 新しい情報を優先してソートする
 				$tl += $c + $c * $SORT_WEIGHT * ($dn - $sw_start);  # 後半に比重を置く
 			}
+		}
+		#
+		#	-$SORT_BALANCE と最終データの比で傾きをソートの鍵としたい
+		#
+		if($SORT_BALANCE < 0 && $tl > 0){
+			my $as = scalar(@{$DATA[$cn]});
+			my $sp = int(-$SORT_BALANCE * $as + 0.5);
+			my $sw = int($as * $SORT_WEIGHT + 1);
+			my $v1 = csvlib::avr($DATA[$cn], $sp - $sw , $sp);
+			my $v2 = csvlib::avr($DATA[$cn], $as - $sw , $as);
+			#dp::dp "FT SORT: as:$as, sp:$sp, sw:$sw, v1:$v1, v2:$v2\n";
+			$tl = ($v1 == 0) ? $v2 * 2 : $v2 / $v1;
 		}
 		if($tl > 0){
 			$CTG{$country} = $tl;
@@ -385,7 +413,7 @@ sub	csv2graph
 			#dp::dp "###### $item_number : $dt";
 			if(defined $gplitem->{average_date}){
 				my $av = 0;
-				if($dt > $item_number){
+				if($dt > $item_number){ 
 					$v = $NO_DATA;			# for FT, set nodata
 				}
 				else {
