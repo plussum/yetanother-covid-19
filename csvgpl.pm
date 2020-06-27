@@ -20,6 +20,11 @@ my $NO_DATA = "NaN";
 
 my %CNT_POP = ();
 
+my $DEFUALT_SORT_BALANCE = 0.5;		# ALL = 0; 0.7 = 後半の30%のデータでソート
+my $DEFUALT_SORT_WEIGHT  = 0.05;	# 0: No Weight, 0.1: 10%　Weight -0.1: -10% Wight
+my $SORT_BALANCE = 0;		# ALL = 0; 0.7 = 後半の30%のデータでソート
+my $SORT_WEIGHT  = 0;	# 0: No Weight, 0.1: 10%　Weight -0.1: -10% Wight
+
 sub	csvgpl
 {
 	my ($csvgplp) = @_;
@@ -63,6 +68,9 @@ sub	csvgpl
 	my $src_url = $clp->{src_url};
     my $src_ref = "<a href=\"$src_url\">$src_url</a>";
 	my $TBL_SIZE = 10;
+
+	$SORT_BALANCE = csvlib::valdef($csvgplp->{sort_balance}, $DEFUALT_SORT_BALANCE);
+	$SORT_WEIGHT  = csvlib::valdef($csvgplp->{sort_weight}, $DEFUALT_SORT_WEIGHT);
 
 	dp::dp "TITLE: $clp->{name} \n $clp->{htmlf}\n" if($VERBOSE);
 	open(HTML, "> $clp->{htmlf}") || die "Cannot create file $clp->{htmlf}";
@@ -222,7 +230,7 @@ sub	csv2graph
 		my $n = csvlib::search_list($std, @DATE_LABEL);
 		#dp::dp ">>>> $std: $n " . $DATE_LABEL[$n-1] . "\n";
 		#dp::dp ">>> " . join(",", @DATE_LABEL) . "\n";
-		if($n > 0){
+		if($n && $n > 0){
 			$std = $n - 1;
 		}
 	}
@@ -264,6 +272,8 @@ sub	csv2graph
 
 		#dp::dp join(",", @{$DATA[$cn]}) . "\n" if($country =~ /Sint/ || $country =~ /Japan/);
 		my $tl = 0;
+		my $swc = 0;
+		my $sw_start = int($dates * $SORT_BALANCE + 0.5);
 		for(my $dn = 0; $dn < $dates; $dn++){
 			my $p = $dn+$std+$DATE_COL_NO;
 			my $c = csvlib::valdef($DATA[$cn][$p], 0);
@@ -282,7 +292,9 @@ sub	csv2graph
 				$c = csvlib::avr($DATA[$cn], $s, $e);
 			}
 			$COUNT_D{$country}[$dn] = $c;
-			$tl += $c;
+			if($dn >= $sw_start){			# 新しい情報を優先してソートする
+				$tl += $c + $c * $SORT_WEIGHT * ($dn - $sw_start);  # 後半に比重を置く
+			}
 		}
 		if($tl > 0){
 			$CTG{$country} = $tl;
@@ -489,7 +501,7 @@ _EOD_
 		}
 		else {
 			push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d ", 
-						$plot_csvf, $i+$DATE_COL_NO, $country, ($i < 8) ? 2 : 1)
+						$plot_csvf, $i+$DATE_COL_NO, $country, ($i < 7) ? 2 : 1)
 			);
 		}
 	}

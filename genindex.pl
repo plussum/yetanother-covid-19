@@ -67,7 +67,7 @@ foreach my $src (@src_list){
 				}
 				if($mode =~ /^C/){ 
 					next if($mode =~ /CR/ && $src =~ /who/);
-					next if($sub ne "COUNT" || !( $src =~ /ccse/ || $src =~ /who/));
+					next if($sub ne "COUNT" || !( $src =~ /ccse/ || $src =~ /who/ || $src =~ /usa/));
 				}
 				next if($src =~ /jag/ && $mode eq "ND");
 				my $relp = join("_", $src, $mode, $sub, $aggr) . ".html";

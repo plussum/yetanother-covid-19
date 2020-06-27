@@ -60,6 +60,7 @@ sub	jhccse
 	my @COL = ();
 	my @w = split(/,/, $_);
 	
+	#dp::dp "[$_]\n" if(/Population/);
 	for(my $i = $DT_S; $i <= $#w; $i++){
 		$_ =  $w[$i];
 

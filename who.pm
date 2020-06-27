@@ -244,7 +244,7 @@ sub	aggregate
 		
 	my $whoindexf = $config::HTML_PATH . "/" . $config::WHO_INDEX;
 
-	dp::dp "WHO LIST: $whoindexf\n";
+	#dp::dp "WHO LIST: $whoindexf\n";
 	open(SRC, ">$whoindexf") || die "Cannot create $whoindexf\n";
 	print SRC "<HTML>\n";
 	print SRC "<HEAD>\n";

@@ -25,7 +25,7 @@ use Data::Dumper;
 use	csvlib;
 use dp;
 
-my $DEBUG = 2;
+my $DEBUG = 0;
 
 sub	ft
 {

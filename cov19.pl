@@ -104,7 +104,7 @@ my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
-my @FULL_DATA_SOURCES = qw (ccse who jag jagtotal);
+my @FULL_DATA_SOURCES = qw (ccse who jag jagtotal usast usa);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
@@ -154,7 +154,9 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 if($FULL_SOURCE){
 	my $dl = "-dl" if($FULL_SOURCE =~ /FULL/);
 	foreach my $src (@FULL_DATA_SOURCES){
-		system("$0 $src -all $dl");
+		$_ = $src;
+		my $d = (/ccse/ || /who/ || /jag/ || /usat/) ? $dl : "";
+		system("$0 $src -all $d");
 	}
 	system("./genindex.pl");
 	system("$0 -upload");
@@ -323,6 +325,8 @@ sub	daily
 		gplp => $graphp,	# $fp->{funcp}{graphp},
 		aggr_mode => $fp->{aggr_mode},
 		csv_aggr_mode => (defined $mep->{csv_aggr_mode} ? $mep->{csv_aggr_mode} : ""),
+		sort_balance => 0.5,
+		sort_wight => 0.01,
 	);
 	#dp::dp "### daily: " . Dumper(%params) . "\n";
 	csvgpl::csvgpl(\%params);
@@ -439,6 +443,8 @@ sub	ft
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
+		sort_balance => 0.6,		# 0.0 
+		sort_wight => 0.10,			# 0.0
 	);
 	csvgpl::csvgpl(\%params);
 }
@@ -503,6 +509,8 @@ sub	ern
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
+		sort_balance => 0.7,
+		sort_wight => 0.1,
 	);
 	csvgpl::csvgpl(\%params);
 }
@@ -565,6 +573,8 @@ sub	kv
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
+		sort_balance => 0.5,
+		sort_wight => 0.01,
 	);
 	csvgpl::csvgpl(\%params);
 }
