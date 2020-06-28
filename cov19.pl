@@ -83,6 +83,7 @@ use ern;
 use kvalue;
 use usa;
 use usast;
+use tko;
 
 #
 #	初期化など
@@ -104,7 +105,7 @@ my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
-my @FULL_DATA_SOURCES = qw (ccse who jag jagtotal usast usa);
+my @FULL_DATA_SOURCES = qw (ccse who tko jag jagtotal usast usa);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
@@ -115,6 +116,8 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$DATA_SOURCE = "jagtotal" if(/^jagtotal/i);
 	$DATA_SOURCE = "usast" if(/^usast/i);
 	$DATA_SOURCE = "usa" if(/^usa$/i);
+	$DATA_SOURCE = "tko" if(/^tko$/i);
+
 
 	if(/-debug/i){
 		$DEBUG = 1;
@@ -175,6 +178,7 @@ $mep = usast::new() if($DATA_SOURCE eq "usast");
 $mep = who::new()  if($DATA_SOURCE eq "who");
 $mep = jag::new()  if($DATA_SOURCE eq "jag");
 $mep = jagtotal::new()  if($DATA_SOURCE eq "jagtotal");
+$mep = tko::new()  if($DATA_SOURCE eq "tko");
 die "no package for $DATA_SOURCE\n" if(! $mep);
 
 

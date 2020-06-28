@@ -52,13 +52,13 @@ my @jag_param = (
 
 	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# rl-avr", start_day => "02/15",  lank =>[0, 7] , exclusion => $EXCLUSION,
 		 target => "", label_skip => 2, graph => "lines", avr_date => 7, additional_plot => 0.5},
-	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# rl-avr ymax", start_day => "02/15",  lank =>[0, 7] , exclusion => $EXCLUSION,
-		 target => "", label_skip => 2, graph => "lines", avr_date => 7, ymax => 2, additional_plot => 0.5},
+#	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# rl-avr ymax", start_day => "02/15",  lank =>[0, 7] , exclusion => $EXCLUSION,
+#		 target => "", label_skip => 2, graph => "lines", avr_date => 7, ymax => 2, additional_plot => 0.5},
 
-	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# 3w rl-avr ymax", start_day => -21,  lank =>[0, 7] , exclusion => $EXCLUSION,
+	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# 1m rl-avr ymax", start_day => -31,  lank =>[0, 7] , exclusion => $EXCLUSION,
 		 target => "", label_skip => 1, graph => "lines", ymax => 2, avr_date => 7, additional_plot => 0.5},
-	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# 3w", start_day => -21,  lank =>[0, 7] , exclusion => $EXCLUSION,
-		 target => "", label_skip => 1, graph => "lines", additional_plot => 0.5},
+#	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# 1m", start_day => -31,  lank =>[0, 7] , exclusion => $EXCLUSION,
+#		 target => "", label_skip => 1, graph => "lines", additional_plot => 0.5},
 
 	{ext => "#KIND# Japan 02-05 (#LD#) #SRC#", start_day => "02/15",  lank =>[1, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 	{ext => "#KIND# Japan 06-10 (#LD#) #SRC#", start_day => "02/15",  lank =>[5, 9] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
@@ -74,10 +74,10 @@ my @jag_param = (
 	{ext => "#KIND# taget cities  (#LD#) #SRC# 03/01 rl-avr", start_day => "03/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
 		target => "東京,大阪,神戸,北海道,神奈川,埼玉,千葉,北海道", label_skip => 2, graph => "lines", avr_date => 7, term_ysize => 300},
 
-	{ext => "#KIND# Fukuoka,Hokaido (#LD#) #SRC# 03/01", start_day => "03/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
-		target => "福岡,北海道", label_skip => 2, graph => "lines", term_ysize => 300},
-	{ext => "#KIND# Fukuoka,Hokaido (#LD#) #SRC# 03/01 rl-avr", start_day => "03/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
-		target => "福岡,北海道", label_skip => 2, graph => "lines", term_ysize => 300, avr_date => 7},
+#	{ext => "#KIND# Fukuoka,Hokaido (#LD#) #SRC# 03/01", start_day => "03/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
+#		target => "福岡,北海道", label_skip => 2, graph => "lines", term_ysize => 300},
+#	{ext => "#KIND# Fukuoka,Hokaido (#LD#) #SRC# 03/01 rl-avr", start_day => "03/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 
+#		target => "福岡,北海道", label_skip => 2, graph => "lines", term_ysize => 300, avr_date => 7},
 );
 
 our $PARAMS = {			# MODULE PARETER		$mep
@@ -136,14 +136,14 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		graphp => [	
 			{ext => "#KIND# Japan 0301 #RT_TD#", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, taget => "",
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
-			{ext => "#KIND# TOP 5 3w #RT_TD#", start_day => -21, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", 
+			{ext => "#KIND# TOP 5 1m #RT_TD#", start_day => -31, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
-			{ext => "#KIND# TOP10 3w #RT_TD#", start_day => -21, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", 
+			{ext => "#KIND# TOP10 1m #RT_TD#", start_day => -31, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
 
 			{ext => "#KIND# Tokyo 0301 #RT_TD#", start_day => "02/01", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
-			{ext => "#KIND# Tokyo 3w #RT_TD#", start_day => -21, lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
+			{ext => "#KIND# Tokyo 1m #RT_TD#", start_day => -31, lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
 		],
 	},
@@ -154,7 +154,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				target => "東京,大阪,神戸,北海道,神奈川,埼玉,福岡,千葉", label_skip => 3, graph => "lines"},
 			{ext => "#KIND# from 4/1(#LD#) #SRC#", start_day => "04/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
 				target => "東京,大阪,神戸,北海道,神奈川,埼玉,福岡,千葉", label_skip => 2, graph => "lines"},
-			{ext => "#KIND# from 3week(#LD#) #SRC#", start_day => -21,  lank =>[0, 999], exclusion => $EXCLUSION, 
+			{ext => "#KIND# from 1m(#LD#) #SRC#", start_day => -31,  lank =>[0, 999], exclusion => $EXCLUSION, 
 				target => "東京,大阪,神戸,北海道,神奈川,埼玉,福岡,千葉", label_skip => 1, graph => "lines"},
 
 			{ext => "#KIND# from 03/01 Tokyo (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
@@ -214,6 +214,7 @@ sub	aggregate
 	my $csv_aggr_mode = csvlib::valdef($fp->{csv_aggr_mode}, "");
 
 	my $agrp = {
+		mode => $mode,
 		input_file => $transaction,
 		output_file => $fp->{stage1_csvf},
 		delemiter => $fp->{dlm},
@@ -221,6 +222,7 @@ sub	aggregate
 		date_item => "確定日",
 		date_format => [2, 0, 1],
 		aggr_mode => "",		# "TOTAL",
+		death_item => "死者合計",
 		
 		select_item => "居住都道府県",
 	#	select_keys  => [qw(東京都 神奈川県)],	# 動作未検証
