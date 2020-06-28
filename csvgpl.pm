@@ -13,12 +13,17 @@ use config;
 use csvlib;
 use dp;
 
-my $DEBUG = 0;
+my $DEBUG = 2;
 my $VERBOSE = 0;
 my $WIN_PATH = "";
 my $NO_DATA = "NaN";
 
 my %CNT_POP = ();
+
+my $DEFUALT_SORT_BALANCE = 0.5;		# ALL = 0; 0.7 = 後半の30%のデータでソート
+my $DEFUALT_SORT_WEIGHT  = 0.05;	# 0: No Weight, 0.1: 10%　Weight -0.1: -10% Wight
+my $SORT_BALANCE = 0;		# ALL = 0; 0.7 = 後半の30%のデータでソート
+my $SORT_WEIGHT  = 0;	# 0: No Weight, 0.1: 10%　Weight -0.1: -10% Wight
 
 sub	csvgpl
 {
@@ -34,18 +39,21 @@ sub	csvgpl
 	my $aggr_mode = csvlib::valdefs($csvgplp->{aggr_mode});		# Added 05/03 for Population
 	if($aggr_mode eq "POP"){
 		#dp::dp( "###### $aggr_mode: " . $csvgplp->{src} . "\n") if(1 || $DEBUG > 1);
-		if($csvgplp->{src} eq "ccse"){
-			#dp::dp "POP:ccse\n";
-			csvlib::cnt_pop(\%CNT_POP);
-		}
-		elsif($csvgplp->{src} eq "jag"){
-			#dp::dp "POP:ccse\n";
-			csvlib::cnt_pop_jp(\%CNT_POP);
-		}
-		else {
-			dp::dp "ERROR at POP\n";
-			exit 1;
-		}
+		csvlib::cnt_pop(\%CNT_POP);
+
+		#									pop.csvにすべての人口データをセットに変更
+		#if($csvgplp->{src} eq "ccse"){
+		#	#dp::dp "POP:ccse\n";
+		#	csvlib::cnt_pop(\%CNT_POP);
+		#}
+		#elsif($csvgplp->{src} eq "jag"){
+		#	#dp::dp "POP:ccse\n";
+		#	csvlib::cnt_pop_jp(\%CNT_POP);
+		#}
+		#else {
+		#	dp::dp "ERROR at POP\n";
+		#	exit 1;
+		#}
 	}
 
 	$WIN_PATH = $config::WIN_PATH;
@@ -59,10 +67,14 @@ sub	csvgpl
 	my $clp = $csvgplp->{clp};
 	my $gplp = $csvgplp->{gplp};
 	my $mep = $csvgplp->{mep};
+	my $fp = $csvgplp->{fp};
 
 	my $src_url = $clp->{src_url};
     my $src_ref = "<a href=\"$src_url\">$src_url</a>";
 	my $TBL_SIZE = 10;
+
+	$SORT_BALANCE = csvlib::valdef($csvgplp->{sort_balance}, $DEFUALT_SORT_BALANCE);
+	$SORT_WEIGHT  = csvlib::valdef($csvgplp->{sort_weight}, $DEFUALT_SORT_WEIGHT);
 
 	dp::dp "TITLE: $clp->{name} \n $clp->{htmlf}\n" if($VERBOSE);
 	open(HTML, "> $clp->{htmlf}") || die "Cannot create file $clp->{htmlf}";
@@ -75,14 +87,14 @@ sub	csvgpl
 	my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
 	#print HTML "SOURCE: <a href = \"$WHO_PAGE\"> WHO situation Reports</a>\n<br>\n";
-
+#
 	foreach my $gplitem (@$gplp){
 		# $gplitem->{kind} = $clp->{name};
 		if($gplitem->{ext} eq "EOD"){
 			print "#### EOD ###\n";
 			last;
 		}
-		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode);
+		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode, $fp);
 
 		print HTML "<!-- " . $gplitem->{ext} . " -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
@@ -137,13 +149,15 @@ sub	csvgpl
 #
 sub	csv2graph
 {
-	my ($csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode) = @_;
+	my ($csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode, $fp) = @_;
 
 	dp::dp join(", ", $gplitem->{ext}, $gplitem->{start_day}, $gplitem->{lank}[0], $gplitem->{lank}[1], $gplitem->{exclusion}, 
 			"[" . $clp->{src} . "]", $mep->{prefix}), "\n" if($DEBUG > 1);
 	
 	my $src = csvlib::valdefs($gplitem->{src}, "");
 	my $ext = $mep->{prefix} . " " . $gplitem->{ext};
+	#dp::dp $ext . ":$kind\n";
+	my $sub_mode = $mep->{sub_mode};
 	$ext =~ s/#KIND#/$kind/;
 	$ext =~ s/#SRC#/$src/;
 	#dp::dp $ext . "\n";
@@ -162,6 +176,7 @@ sub	csv2graph
 		dp::dp "DST CMD [$plot_cmdf]\n";
 		dp::dp "DST PNG [$plot_pngf]\n";
 	}
+	my $style = csvlib::valdef($gplitem->{graph}, "lines");
 
 #	$plot_pngf =~ s/[\(\) ]//g;
 	#
@@ -221,7 +236,7 @@ sub	csv2graph
 		my $n = csvlib::search_list($std, @DATE_LABEL);
 		#dp::dp ">>>> $std: $n " . $DATE_LABEL[$n-1] . "\n";
 		#dp::dp ">>> " . join(",", @DATE_LABEL) . "\n";
-		if($n > 0){
+		if($n && $n > 0){
 			$std = $n - 1;
 		}
 	}
@@ -233,6 +248,7 @@ sub	csv2graph
 	my $dates = $end - $std + 1;
 	my $tgcs = $gplitem->{lank}[0];						# 対象ランク
 	my $tgce = $gplitem->{lank}[1];						# 対象ランク 
+	#dp::dp "[$tgcs:$tgce]\n";
 	$tgce = $COUNTRY_NUMBER if($tgce > $COUNTRY_NUMBER);
 
 	my @exclusion = split(/,/, $gplitem->{exclusion});	# 除外国
@@ -253,6 +269,8 @@ sub	csv2graph
 	my %TOTAL = ();
 	my @COUNTRY = ();
 	my $avr_date = csvlib::valdef($gplitem->{avr_date});
+	#dp::dp "mode: " . $clp->{kind} . "\n";
+	my $count_mode = ($clp->{kind} =~ /^N[A-Z]/) ? "DAY" : "CCM";					# 日次/累計 Cumelative
 
 	#
 	#	ソート用の配列の作成
@@ -263,6 +281,13 @@ sub	csv2graph
 
 		#dp::dp join(",", @{$DATA[$cn]}) . "\n" if($country =~ /Sint/ || $country =~ /Japan/);
 		my $tl = 0;
+		my $ccmt = 0;
+		my $swc = 0;
+		my $sw_start = int($dates * $SORT_BALANCE + 0.5);
+		if($fp->{sub_mode} eq "FT"){
+			my $as = scalar(@{$DATA[$cn]});					####	for FT 2020.06.27 データ数が違うので配列サイズで計算
+			$sw_start = int($as * $SORT_BALANCE + 0.5);		####	for FT 2020.06.27
+		}
 		for(my $dn = 0; $dn < $dates; $dn++){
 			my $p = $dn+$std+$DATE_COL_NO;
 			my $c = csvlib::valdef($DATA[$cn][$p], 0);
@@ -280,8 +305,27 @@ sub	csv2graph
 				my $e = $p;
 				$c = csvlib::avr($DATA[$cn], $s, $e);
 			}
+			if($count_mode eq "CCM"){
+				$ccmt += $c;
+				$c = $ccmt;
+			}
+
 			$COUNT_D{$country}[$dn] = $c;
-			$tl += $c;
+			if($dn >= $sw_start){			# 新しい情報を優先してソートする
+				$tl += $c + $c * $SORT_WEIGHT * ($dn - $sw_start);  # 後半に比重を置く
+			}
+		}
+		#
+		#	-$SORT_BALANCE と最終データの比で傾きをソートの鍵としたい
+		#
+		if($SORT_BALANCE < 0 && $tl > 0){
+			my $as = scalar(@{$DATA[$cn]});
+			my $sp = int(-$SORT_BALANCE * $as + 0.5);
+			my $sw = int($as * $SORT_WEIGHT + 1);
+			my $v1 = csvlib::avr($DATA[$cn], $sp - $sw , $sp);
+			my $v2 = csvlib::avr($DATA[$cn], $as - $sw , $as);
+			#dp::dp "FT SORT: as:$as, sp:$sp, sw:$sw, v1:$v1, v2:$v2\n";
+			$tl = ($v1 == 0) ? $v2 * 2 : $v2 / $v1;
 		}
 		if($tl > 0){
 			$CTG{$country} = $tl;
@@ -296,6 +340,7 @@ sub	csv2graph
 	my @Dataset = (\@DATES);
 	my $CNT = -1;
 	my $rn = 0;
+	my $pop_thresh = (defined $mep->{POP_THRESH}) ? $mep->{POP_THRESH} : $config::POP_THRESH;
 	#open(POPT, "> $config::WIN_PATH/poptest.csv") || die "Cannot create $config::WIN_PATH/poptest.csv";
 	foreach my $country (sort {$CTG{$b} <=> $CTG{$a}} keys %CTG){
 		$rn++;
@@ -305,11 +350,11 @@ sub	csv2graph
 		dp::dp "Yes, Target $CNT $country [$tgcs, $tgce]\n" if($DEBUG && $#target >= 0);
 		if($aggr_mode eq "POP"){			# if aggr_mode eq POP, ignore if country population < $POP_THRESH
 			if(!defined $CNT_POP{$country}){
-				#dp::dp "NO COUNTRY DEFINED at POP[$country][" . $CNT_POP{$country} . "]\n";
+				dp::dp "NO COUNTRY DEFINED at POP[$country][" . $CNT_POP{$country} . "]\n" if(! $country =~ /Unassigned/);
 				next;
 			}
-			if($CNT_POP{$country} < $config::POP_THRESH){
-				#dp::dp "POP leth than $config::POP_THRESH: [$country][" . $CNT_POP{$country} . "]\n";
+			if($CNT_POP{$country} < $pop_thresh){
+				dp::dp "POP leth than $pop_thresh: [$country][" . $CNT_POP{$country} . "]\n";
 				next;
 			}
 		}
@@ -338,7 +383,7 @@ sub	csv2graph
 		#print POPT "POP,", join (",", @{$COUNT_D{$country}}) . "\n" ;
 		push(@Dataset, [@{$COUNT_D{$country}}]);
 		push(@COUNTRY, $country);
-		dp::dp "COUNT_D: ", join (",", @{$COUNT_D{$country}}) , "\n" if($DEBUG > 1);
+		dp::dp "COUNT_D: ". join (",", @{$COUNT_D{$country}}) . "\n" if($DEBUG > 1);
 	}
 	#close(POPT);
 
@@ -367,12 +412,12 @@ sub	csv2graph
 		for (my $i = 1; $i <= $#Dataset; $i++){
 			my $v = $Dataset[$i][$dt];
 			my $country = $COUNTRY[$i-1];
-			#print "### [$country]: ";
+			#dp::dp "### [$country]: ";
 			my $item_number = $TOTAL{$country};
 			#dp::dp "###### $item_number : $dt";
 			if(defined $gplitem->{average_date}){
 				my $av = 0;
-				if($dt > $item_number){
+				if($dt > $item_number){ 
 					$v = $NO_DATA;			# for FT, set nodata
 				}
 				else {
@@ -431,6 +476,10 @@ sub	csv2graph
 	my $YLABEL = "";
 	my $START_DATE = $DATES[0];
 	$LAST_DATE = $DATES[$#DATES];
+	if($style eq "boxes"){
+		$START_DATE = &date_offset($START_DATE, -24 * 60 * 60);
+		$LAST_DATE  = &date_offset($LAST_DATE,   24 * 60 * 60);
+	}
 
 	my $DATE_FORMAT = "set xdata time\nset timefmt '%m/%d'\nset format x '%m/%d'\n";
 	my $XRANGE = "set xrange ['$START_DATE':'$LAST_DATE']";
@@ -462,6 +511,7 @@ set yrange [#YRANGE#]
 set terminal pngcairo size $TERM_XSIZE, $TERM_YSIZE font "IPAexゴシック,8" enhanced
 #LOGSCALE#
 #LOGSCALE2#
+#FILLSTYLE#
 set y2tics
 set output '$plot_pngf'
 plot #PLOT_PARAM#
@@ -469,12 +519,23 @@ exit
 _EOD_
 
 	my @w = ();
+	if($style eq "boxes"){
+		my $fs = 'set style fill solid border lc rgb "white"';
+		$PARAMS =~ s/#FILLSTYLE#/$fs/;
+	}
 	for(my $i = 0; $i <= $#LEGEND_KEYS; $i++){
 		my $country = $LEGEND_KEYS[$i];
 		$country =~ s/'//g;
-		push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d ", 
-					$plot_csvf, $i+$DATE_COL_NO, $country, ($i < 5) ? 2 : 1)
+		if($style eq "boxes"){
+			push(@w, sprintf("'%s' using 1:%d with boxes title '%s' ", 
+						$plot_csvf, $i+$DATE_COL_NO, $country)
+				);
+		}
+		else {
+			push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d ", 
+						$plot_csvf, $i+$DATE_COL_NO, $country, ($i < 7) ? 2 : 1)
 			);
+		}
 	}
 	my $pn = join(",", @w); 
 	if(defined $gplitem->{additional_plot} && $gplitem->{additional_plot}){
@@ -524,5 +585,19 @@ _EOD_
 	$plot_csvf =~ s#.*/##;
 #	return ("$fname.png", "$fname-plot.txt", "$fname-plot.csv", @LEGEND_KEYS);
 	return ($plot_pngf, $plot_cmdf, $plot_csvf, @LEGEND_KEYS);
+}
+
+sub	date_offset
+{
+	my($dt, $offset) = @_;
+
+	my ($m, $d) = split("/", $dt);
+	my $ut = csvlib::ymd2tm(2020, $m, $d, 0, 0, 0); 
+	my $ld = csvlib::ut2d4($ut + $offset, "/");
+
+	$ld =~ s#^[0-9]{4}/##;
+	#dp::dp "DATE: $dt : $ld\n";
+
+	return $ld;
 }
 1;

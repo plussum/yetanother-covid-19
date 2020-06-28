@@ -43,7 +43,7 @@ sub	ft
 	my $thresh = $p->{thresh};
 	my $dlm = csvlib::valdef($p->{delimiter}, ",");
 	my $avr_date = $p->{average_date};
-	$DEBUG = csvlib::valdef($p->{DEBUG}, 0);
+#	$DEBUG = csvlib::valdef($p->{DEBUG}, 0);
 
 	if(! defined $p->{thresh}){
 		dp::dp "#### $thresh\n";
@@ -79,7 +79,7 @@ sub	ft
 	#	各国が閾値を超えた日を求める
 	#
 	#dp::dp "AVR_DATE: $avr_date" . "\n";	
-	dp::dp join($dlm, "Country", "Total", @COUNTRY_LIST), "\n" if($DEBUG);
+	#dp::dp join($dlm, "Country", "Total", @COUNTRY_LIST), "\n" if($DEBUG);
 	my $avr_start = 0; #int($avr_date / 2);
 	my $avr_end = $avr_date; #$avr_date - $avr_start; 
 	for(my $cn = 0; $cn <= $#COUNTRY_LIST; $cn++){
@@ -122,6 +122,7 @@ sub	ft
 	#
 	#	Finatial Times形式のデータで出力
 	#
+	#dp::dp "OUTPUT_FILE: " .  $p->{output_file} . "\n";
 	open(FT, "> " . $p->{output_file}) || die "Cannot create " . $p->{output_file};
 	print FT join($dlm, "Country", "Total");
 	for(my $i = 0; $i <= $ITEM_COUNT; $i++){

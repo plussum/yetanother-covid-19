@@ -81,6 +81,8 @@ use jagtotal;
 use ft;
 use ern;
 use kvalue;
+use usa;
+use usast;
 
 #
 #	初期化など
@@ -102,15 +104,17 @@ my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
-my @FULL_DATA_SOURCES = qw (ccse who jag jagtotal);
+my @FULL_DATA_SOURCES = qw (ccse who jag jagtotal usast usa);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
 
-	$DATA_SOURCE = "ccse" if(/ccse/i);
-	$DATA_SOURCE = "who" if(/who/i);
-	$DATA_SOURCE = "jag" if(/jag/i);
-	$DATA_SOURCE = "jagtotal" if(/jagtotal/i);
+	$DATA_SOURCE = "ccse" if(/^ccse/i);
+	$DATA_SOURCE = "who" if(/^who/i);
+	$DATA_SOURCE = "jag" if(/^jag/i);
+	$DATA_SOURCE = "jagtotal" if(/^jagtotal/i);
+	$DATA_SOURCE = "usast" if(/^usast/i);
+	$DATA_SOURCE = "usa" if(/^usa$/i);
 
 	if(/-debug/i){
 		$DEBUG = 1;
@@ -150,7 +154,9 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 if($FULL_SOURCE){
 	my $dl = "-dl" if($FULL_SOURCE =~ /FULL/);
 	foreach my $src (@FULL_DATA_SOURCES){
-		system("$0 $src -all $dl");
+		$_ = $src;
+		my $d = (/ccse/ || /who/ || /jag/ || /usat/) ? $dl : "";
+		system("$0 $src -all $d");
 	}
 	system("./genindex.pl");
 	system("$0 -upload");
@@ -164,6 +170,8 @@ if($UPLOAD){		# upload web data to github.io
 
 my $mep = ""; 
 $mep = ccse::new() if($DATA_SOURCE eq "ccse");
+$mep = usa::new() if($DATA_SOURCE eq "usa");
+$mep = usast::new() if($DATA_SOURCE eq "usast");
 $mep = who::new()  if($DATA_SOURCE eq "who");
 $mep = jag::new()  if($DATA_SOURCE eq "jag");
 $mep = jagtotal::new()  if($DATA_SOURCE eq "jagtotal");
@@ -290,7 +298,7 @@ sub	daily
 	my $mode = $fp->{mode};
 	my $aggr_mode = $fp->{aggr_mode};
 	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $aggr_mode) ;
-	#dp::dp "[$mode] $name\n";
+	dp::dp "[$mode] $name\n";
 
 	my $m = csvlib::valdef($mep->{AGGR_MODE}{$aggr_mode}, 0);
 	$name .= "*$m" . "days" if($m > 1);
@@ -313,10 +321,13 @@ sub	daily
 		debug => $DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
+		fp => $fp,
 		mep => $mep,
 		gplp => $graphp,	# $fp->{funcp}{graphp},
 		aggr_mode => $fp->{aggr_mode},
 		csv_aggr_mode => (defined $mep->{csv_aggr_mode} ? $mep->{csv_aggr_mode} : ""),
+		sort_balance => 0.5,
+		sort_wight => 0.01,
 	);
 	#dp::dp "### daily: " . Dumper(%params) . "\n";
 	csvgpl::csvgpl(\%params);
@@ -431,8 +442,11 @@ sub	ft
 		debug => $DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
+		fp => $fp,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
+		sort_balance => 0.7,	# -0.7 0.6,		# 0.0 
+		sort_wight => 0.30,			# 0.0
 	);
 	csvgpl::csvgpl(\%params);
 }
@@ -495,8 +509,11 @@ sub	ern
 		debug => $DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
+		fp => $fp,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
+		sort_balance => 0.7,
+		sort_wight => 0.1,
 	);
 	csvgpl::csvgpl(\%params);
 }
@@ -557,8 +574,11 @@ sub	kv
 		debug => $DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
+		fp => $fp,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
+		sort_balance => 0.5,
+		sort_wight => 0.01,
 	);
 	csvgpl::csvgpl(\%params);
 }

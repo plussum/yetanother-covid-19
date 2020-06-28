@@ -12,7 +12,7 @@ my $INDEX_HTML = "$WIN_PATH/index.html";
 my $FRAME_HTML = "$WIN_PATH/covid_frame.html";
 my $WHO_INDEX  = "who_situation_report_NC.html";	# Generate by who.pm
 
-my @src_list = qw (jhccse who jag jagtotal);
+my @src_list = qw (jhccse who jag jagtotal usast usa);
 my @mode_list = qw (NC ND CC CD NR CR);
 my @submode_list = qw (COUNT FT ERN KV);
 my @aggr_list = qw (DAY POP);
@@ -58,7 +58,8 @@ foreach my $src (@src_list){
 			foreach my $mode (@mode_list){
 				if($aggr eq "POP"){
 					next if($sub ne "COUNT");
-					next if($src ne "jhccse" && $src ne "jag");
+					#next if($src ne "jhccse" && $src ne "jag");
+					next if($src eq "who"); 
 				}
 				next if($sub eq "KV" && $mode ne "NC");
 				next if($mode eq "ND" && $sub eq "ERN"); 
@@ -67,7 +68,7 @@ foreach my $src (@src_list){
 				}
 				if($mode =~ /^C/){ 
 					next if($mode =~ /CR/ && $src =~ /who/);
-					next if($sub ne "COUNT" || !( $src =~ /ccse/ || $src =~ /who/));
+					next if($sub ne "COUNT" || !( $src =~ /ccse/ || $src =~ /who/ || $src =~ /usa/ || $src =~ /ja/));
 				}
 				next if($src =~ /jag/ && $mode eq "ND");
 				my $relp = join("_", $src, $mode, $sub, $aggr) . ".html";

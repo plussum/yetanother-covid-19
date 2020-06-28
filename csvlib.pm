@@ -29,10 +29,13 @@ sub	sum
 			print "[" . $data->[$i] . "]";
 		}
 	}
+	dp::dp "sum($s, $e)\n" if($s =~ /[^0-9]/ || $e =~ /[^0-9]/);
+	dp::dp "sum($s, $e)\n" if($s > $e);
+	dp::dp "sum($s, $e) OUT OF RANGE(" . scalar(@$data) . ")\n" if($s < 0 || $e > scalar(@$data));
 
 	my $sum = 0;
 	for(my $i = $s; $i <= $e; $i++){
-		$sum += $data->[$i];
+		$sum += (defined $data->[$i]) ? $data->[$i] : 0;
 	}
 	print "i=> $sum\n" if($DEBUG);
 	return $sum;
@@ -50,7 +53,7 @@ sub	avr
 
 #
 #
-#
+#	unix_time, ":", -> "01:23:45"
 #
 sub ut2t
 {
@@ -60,6 +63,9 @@ sub ut2t
 	my $s = sprintf("%02d%s%02d%s%02d", $hour, $dlm, $min, $dlm, $sec);
 	return $s;
 }
+#
+#	unix_time, "/", -> "20/01/02"
+#
 sub ut2d
 {
 	my ($tm, $dlm) = @_;
@@ -69,6 +75,9 @@ sub ut2d
 	return $s;
 }
 
+#
+#	unix_time, "/", -> "2020/01/02"
+#
 sub ut2d4
 {
 	my ($tm, $dlm) = @_;
@@ -78,7 +87,7 @@ sub ut2d4
 }
 
 #
-#
+#	year, month, date, hour, min, sec -> unix_time
 #
 sub ymd2tm
 {
@@ -93,7 +102,7 @@ sub ymd2tm
 }
 
 #
-#
+#	"2020/01/02/hh/mm/ss", "/", 0, 1, 2, 3, 4, 5, 6 -> unix_time
 #
 sub	date2ut
 {
@@ -210,40 +219,16 @@ sub	cnt_pop
 	my ($cnt_pop) = @_;
 	my $popf = "$config::POPF";
 
-	my %JHU_CN = ();
-	my %WHO_CN = ();
 	open(FD, $popf) || die "cannot open $popf\n";
 	<FD>;
 	while(<FD>){
 		chop;
 		
-		my($jhu, $who, $un, $pn, @w) = split(",", $_);
+		my($name, $pn) = split(",", $_);
 
-		$JHU_CN{$jhu}++;
-		$WHO_CN{$who}++;
-		$cnt_pop->{$un} = $pn;
-		foreach my $sn (@w){
-			$cnt_pop->{$sn} = $pn;
-		}
+		$cnt_pop->{$name} = $pn;
 	}
 	close(FD);
-
-	foreach my $c (sort keys %JHU_CN){
-		if(defined $cnt_pop->{$c}){
-			#print "$c\t" . $cnt_pop->{$c}, "\n";
-		}
-		else {
-			#print $c , "\n";
-		}
-	}
-	foreach my $c (sort keys %WHO_CN){
-		if(defined $cnt_pop->{$c}){
-			#print "$c\t" . $cnt_pop->{$c}, "\n";
-		}
-		else {
-			#print $c , "\n";
-		}
-	}
 }
 
 #
