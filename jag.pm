@@ -45,14 +45,14 @@ our $src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv
 our $EXCLUSION = "";
 my @jag_param = (
 	# GPL PARAMETER			$gplp
-	{ext => "#KIND# Japan TOP20 (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
-	{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+	{ext => "#KIND# Japan TOP20 (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+	{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 
 	# {ext => "EOD"},
 
-	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# rl-avr", start_day => "02/15",  lank =>[0, 7] , exclusion => $EXCLUSION,
+	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# rl-avr", start_day => "03/01",  lank =>[0, 7] , exclusion => $EXCLUSION,
 		 target => "", label_skip => 2, graph => "lines", avr_date => 7, additional_plot => 0.5},
-#	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# rl-avr ymax", start_day => "02/15",  lank =>[0, 7] , exclusion => $EXCLUSION,
+#	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# rl-avr ymax", start_day => "03/01",  lank =>[0, 7] , exclusion => $EXCLUSION,
 #		 target => "", label_skip => 2, graph => "lines", avr_date => 7, ymax => 2, additional_plot => 0.5},
 
 	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# 1m rl-avr ymax", start_day => -31,  lank =>[0, 7] , exclusion => $EXCLUSION,
@@ -60,11 +60,11 @@ my @jag_param = (
 #	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# 1m", start_day => -31,  lank =>[0, 7] , exclusion => $EXCLUSION,
 #		 target => "", label_skip => 1, graph => "lines", additional_plot => 0.5},
 
-	{ext => "#KIND# Japan 02-05 (#LD#) #SRC#", start_day => "02/15",  lank =>[1, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
-	{ext => "#KIND# Japan 06-10 (#LD#) #SRC#", start_day => "02/15",  lank =>[5, 9] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
-	{ext => "#KIND# Japan 11-15 (#LD#) #SRC#", start_day => "02/15",  lank =>[10, 14] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
-	{ext => "#KIND# Japan 16-20 (#LD#) #SRC#", start_day => "02/15",  lank =>[15, 20] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
-	{ext => "#KIND# Japan 01-10 log (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines",
+	{ext => "#KIND# Japan 02-05 (#LD#) #SRC#", start_day => "03/01",  lank =>[1, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+	{ext => "#KIND# Japan 06-10 (#LD#) #SRC#", start_day => "03/01",  lank =>[5, 9] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+	{ext => "#KIND# Japan 11-15 (#LD#) #SRC#", start_day => "03/01",  lank =>[10, 14] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+	{ext => "#KIND# Japan 16-20 (#LD#) #SRC#", start_day => "03/01",  lank =>[15, 20] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+	{ext => "#KIND# Japan 01-10 log (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines",
 		 logscale => "y", average_date => 7},
 
 	{ext => "#KIND# taget cities  (#LD#) #SRC# 02/01", start_day => "02/01",  lank =>[0, 99] , exclusion => $EXCLUSION, 

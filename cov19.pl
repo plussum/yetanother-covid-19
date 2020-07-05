@@ -134,6 +134,10 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	elsif(/-FULL/i){
 		$FULL_SOURCE = $_ if(/-FULL/i);
 	}
+	elsif(/-tokyo/){
+		system("./tokyo.pl -DL; tokyo.pl -av7");
+		exit(0);
+	}
 	elsif(/-all/){
 		push(@MODE_LIST, "ND", "NC", "CC", "CD", "NR", "CR");
 		push(@SUB_MODE_LIST, "COUNT", "FT", "ERN", "KV");
@@ -158,9 +162,11 @@ if($FULL_SOURCE){
 	my $dl = "-dl" if($FULL_SOURCE =~ /FULL/);
 	foreach my $src (@FULL_DATA_SOURCES){
 		$_ = $src;
-		my $d = (/ccse/ || /who/ || /jag/ || /usat/) ? $dl : "";
+		my $d = (/jtagtotal/ || /usa/) ? "" : $dl;
 		system("$0 $src -all $d");
 	}
+	system("./tokyo.pl -DL; tokyo.pl -av7");
+	system("./tokyo.pl -av7");
 	system("./genindex.pl");
 	system("$0 -upload");
 	exit(0);

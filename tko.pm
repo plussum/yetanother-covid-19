@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 #
+#	kaz-ogiwara / covid19
+#	https://github.com/kaz-ogiwara/covid19
+#
 #
 #
 #
@@ -36,6 +39,10 @@ my @jag_param = (
 #{ext => "EOD"},
 	{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "03/12",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 
+	{ext => "#KIND# Japan 01-05 (#LD#) #SRC# rl-avr 7", start_day => "03/12",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+
+	{ext => "#KIND# Tokyo 01-05 (#LD#) #SRC# rl-avr 7", start_day => "03/12",  lank =>[0, 4] , exclusion => $EXCLUSION, 
+		target => "東京", label_skip => 2, graph => "lines", avr_date => 7},
 
 	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# rl-avr", start_day => "03/18",  lank =>[0, 7] , exclusion => $EXCLUSION,
 		 target => "", label_skip => 2, graph => "lines", avr_date => 7, additional_plot => 0.5},
