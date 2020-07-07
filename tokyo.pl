@@ -57,10 +57,10 @@ my $CSS = $config::CSS;
 my $IMG_PATH = $config::PNG_REL_PATH;
 my $class = $config::CLASS;
 
-my $pngf = "tpr_avr#avr#.png";
 my $plotf = "tpr-plot.txt";
 my $htmlf = "tokyo.html";
-my $csvf = "tpr.csv.txt";
+my $pngf = "tpr_avr#avr#.png";
+my $csvf = "tpr_avr#avr#.csv.txt";
 
 my $avr_date = 0;
 my $DLM = "\t";
@@ -89,8 +89,10 @@ my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 foreach my $avr_date(0, 7){
 	my $pngff = $pngf;
 	$pngff =~ s/#avr#/$avr_date/;
+	my $csvff = $csvf;
+	$csvff  =~ s/#avr#/$avr_date/;
 	my $pngfp = $config::PNG_PATH . "/$pngff";
-	my $csvfp = $config::CSV_PATH . "/$csvf";
+	my $csvfp = $config::CSV_PATH . "/$csvff";
 	my $plotfp = $config::PNG_PATH . "/$plotf";
 
 	&tokyo_info($avr_date, $csvfp, $pngfp, $plotfp);
@@ -162,13 +164,48 @@ sub	tokyo_info
 	close(CSV);
 	my $de = scalar(@data);
 
-	$y2 = int($y2 * 100 + 99.9) / 100;
-	my $last_date = $data[$rec-1]{diagnosed_date};
-	my $xrange = sprintf("['%s':'%s']", $data[$avr_date]{diagnosed_date}, $last_date);
-	my $date_sec = 3600 * 24 * 7;
+	my $gpara = {
+		csvf => $csvf,
+		pngf => $pngf,
+		plotf => $plotf,
+		first_date => $data[$avr_date]{diagnosed_date}, 
+		last_date   => $data[$rec-1]{diagnosed_date},
+		xtics => 60 * 60 * 24 * 7,
+		dlm => $DLM,
+		y2 => int($y2 + 0.999),
+		item_names => [@KEYS],
+		y2_items => ["positive_rate"],
+		plots => [
+				{colm => '($2+$3)', y => "y1", graph => "boxes fill",  title => $KEYS[1]},
+				{colm => '2', y => "y1", graph => "boxes fill",  title => $KEYS[2]},
+				{colm => '4', y => "y2", graph => "lines linewidth 2",  title => $KEYS[3]},
+		],
+		#$s = "'$csvf' using 1:" . '($2+$3)' . " axis x1$y with boxes title '" . $item_names->[$i] . "' fill " if($i == 1);
+		#$s = "'$csvf' using 1:2 axis x1$y with boxes title '" . $item_names->[$i] . "' fill " if($i == 2);
+		#$s = "'$csvf' using 1:4 axis x1$y with lines title '" . $item_names->[$i] . "' linewidth 2" if($i == 3);
+	};	
+	&graph($gpara);
+}
+
+sub	graph
+{
+	my ($gp) = @_;
+
+	my $csvf = $gp->{csvf};
+	my $pngf = $gp->{pngf};
+	my $plotf = $gp->{plotf};
+	my $item_names = $gp->{item_names};
+	my $item_number = scalar(@$item_names) - 1;
+	my $last_date = $gp->{last_date};
+	my $first_date = $gp->{first_date};
+	my $xrange = sprintf("['%s':'%s']", $first_date, $last_date);
+	my $xtics = $gp->{xtics};
+	my $dlm = $gp->{dlm};
+	my $y2 = $gp->{y2};
+	my $y2_items = $gp->{y2_items};
 
 	my $PARAMS = << "_EOD_";
-set datafile separator '$DLM'
+set datafile separator '$dlm'
 set style fill solid 0.2
 set xtics rotate by -90
 set xdata time
@@ -184,7 +221,7 @@ set title 'Tokyo Positive rate ($last_date)' font "IPAexゴシック,12" enhance
 set xlabel 'date'
 set ylabel 'ylabel'
 #
-set xtics $date_sec
+set xtics $xtics
 set terminal pngcairo size 1000, 300 font "IPAexゴシック,8" enhanced
 set y2tics
 set output '$pngf'
@@ -193,12 +230,17 @@ exit
 _EOD_
 
 	my @p= ();
-	for(my $i = 1; $i <= $#KEYS; $i++){
-		my $y = ($i < $#KEYS) ? "y1" : "y2";
-		my $s;
-		$s = "'$csvf' using 1:" . '($2+$3)' . " axis x1$y with boxes title '" . $KEYS[$i] . "' fill " if($i == 1);
-		$s = "'$csvf' using 1:2 axis x1$y with boxes title '" . $KEYS[$i] . "' fill " if($i == 2);
-		$s = "'$csvf' using 1:4 axis x1$y with lines title '" . $KEYS[$i] . "' linewidth 2" if($i == 3);
+	print join(",", $item_number, @$item_names) . ":\n";
+	for(my $i = 1; $i <= $item_number; $i++){
+		#my $y = ($i < $item_number) ? "y1" : "y2";
+		my $p = $gp->{plots}[$i-1];
+		#my $y = csvlib::search_list($item_names->[$i], @$y2_items) ? "y2" : "y1";
+		my $s = sprintf("'%s' using 1:%s axis x1%s with %s title '%s'", 
+				$csvf, $p->{colm}, $p->{y}, $p->{graph}, $p->{title});
+		
+		#$s = "'$csvf' using 1:" . '($2+$3)' . " axis x1$y with boxes title '" . $item_names->[$i] . "' fill " if($i == 1);
+		#$s = "'$csvf' using 1:2 axis x1$y with boxes title '" . $item_names->[$i] . "' fill " if($i == 2);
+		#$s = "'$csvf' using 1:4 axis x1$y with lines title '" . $item_names->[$i] . "' linewidth 2" if($i == 3);
 		push(@p, $s);
 	}
 	my $plot = join(",", @p);
@@ -207,10 +249,11 @@ _EOD_
 	open(PLOT, ">$plotf") || die "cannto create $plotf";
 	print PLOT $PARAMS;
 	close(PLOT);
-	#print $PARAMS;
+
+	print $csvf. "\n";
+	print $PARAMS;
 
 	system("gnuplot $plotf");
-
 }
 sub	valdef
 {
