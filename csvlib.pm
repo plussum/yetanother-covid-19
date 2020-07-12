@@ -141,6 +141,22 @@ sub search_list
     #dp::dp "Not in the list: $sk\n" ;
     return "";
 }
+sub search_listp
+{
+    my ($sk, $wp) = @_;
+
+	my $wn = scalar(@$wp);
+    #dp::dp "search_list: $sk:" . join(",", @$w) . "\n";
+    for(my $i = 0; $i <= $wn; $i++){
+		my $ntc = $wp->[$i];
+        if($sk =~ /$ntc/){
+           #dp::dp "search_list: $sk:$ntc\n";
+           return $i + 1;
+        }
+    }
+    #dp::dp "Not in the list: $sk\n" ;
+    return "";
+}
 
 sub valdef
 {

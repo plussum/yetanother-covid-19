@@ -48,6 +48,7 @@ use warnings;
 
 use config;
 use	csvlib;
+use dp;
 use JSON qw/encode_json decode_json/;
 use Data::Dumper;
 
@@ -65,6 +66,37 @@ my $csvf = "tpr_avr#avr#.csv.txt";
 my $avr_date = 0;
 my $DLM = "\t";
 
+my @PARAMS = (
+    {	
+		src => "$TKY_DIR/data/positive_rate.json",
+		dst => "tky_pr",
+		title => "Tokyo Positive Rate",
+		ylabel => "daiagnosed count",
+		y2label => "positive rate",
+		items => [qw (diagnosed_date positive_count negative_count positive_rate)],
+		y2max => "positive_rate",
+		plot => [
+			{colm => '($2+$3)', axis => "x1y1", graph => "boxes fill",  item_title => ""},
+			{colm => '2', axis => "x1y1", graph => "boxes fill",  item_title => ""},
+			{colm => '4', axis => "x1y2", graph => "lines linewidth 2",  item_title => ""},
+		],
+	},
+    {	
+		src => "$TKY_DIR/data/positive_status.json",
+		dst => "tky_st",
+		title => "Tokyo Number of Critical and Hospitalized",
+		ylabel => "hospitalized",
+		y2label => "serevre",
+		items => [qw(date hospitalized severe_case)], 
+		t2max => "severe_case",
+		plot => [
+			{colm => '3', axis => "x1y2", graph => "boxes fill",  item_title => "severe"},
+			{colm => '2', axis => "x1y1", graph => "lines linewidth 2",  item_title => "hospitalized"},
+		],
+	},
+
+);
+	
 #
 #
 #
@@ -86,23 +118,19 @@ print HTML $CSS;
 print HTML "</HEAD>\n";
 print HTML "<BODY>\n";
 my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
-foreach my $avr_date(0, 7){
-	my $pngff = $pngf;
-	$pngff =~ s/#avr#/$avr_date/;
-	my $csvff = $csvf;
-	$csvff  =~ s/#avr#/$avr_date/;
-	my $pngfp = $config::PNG_PATH . "/$pngff";
-	my $csvfp = $config::CSV_PATH . "/$csvff";
-	my $plotfp = $config::PNG_PATH . "/$plotf";
 
-	&tokyo_info($avr_date, $csvfp, $pngfp, $plotfp);
+foreach my $p (@PARAMS){
+	foreach my $avr_date(0, 7){
+		print $p->{title} . "avr_date $avr_date \n";
+		my $pngf = &tokyo_info($p, $avr_date);
 
-	print HTML "<!-- avr_date $avr_date -->\n";
-	print HTML "<span class=\"c\">$now</span><br>\n";
-	print HTML "<img src=\"$IMG_PATH/$pngff\">\n";
-	print HTML "<br>\n";
-	print HTML "<span $class> Data Source TOKYO OPEN DATA </span>\n";
-	print HTML "<hr>\n";
+		print HTML "<!-- avr_date $avr_date -->\n";
+		print HTML "<span class=\"c\">$now</span><br>\n";
+		print HTML "<img src=\"$IMG_PATH/$pngf\">\n";
+		print HTML "<br>\n";
+		print HTML "<span $class> Data Source TOKYO OPEN DATA </span>\n";
+		print HTML "<hr>\n";
+	}
 }
 print HTML "</BODY>\n";
 print HTML "</HTML>\n";
@@ -115,9 +143,19 @@ exit(0);
 
 sub	tokyo_info
 {
-	my ($avr_date, $csvf, $pngf, $plotf) = @_;
+	my ($p, $avr_date) = @_;
+
+	my $dst = $p->{dst} . "_avr$avr_date";
+	my $pngf = $config::PNG_PATH . "/$dst.png";
+	my $csvf = $config::CSV_PATH . "/$dst.csv.txt";
+	my $plotf = $config::PNG_PATH . "/$dst-plot.txt";
+	my @items = @{$p->{items}};
+
+	#
+	#	Read from JSON file
+	#
 	my $JSON = "";
-	open(FD, $POSITIVE) || die "cannot open $POSITIVE";
+	open(FD, $p->{src}) || die "cannot open " . $p->{src};
 	while(<FD>){
 		$JSON .= $_;
 	}
@@ -125,17 +163,17 @@ sub	tokyo_info
 
 	my $positive = decode_json($JSON);
 	#print Dumper $positive;
-	my @KEYS = qw(diagnosed_date positive_count negative_count positive_rate);
-
 
 	my @data = ();
-	my $y2 = 0;
 	my $rec = 0;
 	my @data0 = (@{$positive->{data}});
+	my %max = ();
+	my $date_name = $items[0];
 	foreach my $dt (@data0) {
-		foreach my $k (@KEYS){
+		foreach (my $itn = 0; $itn <= $#items; $itn++){
+			my $k = $items[$itn];
 			my $v = csvlib::valdef($dt->{$k});
-			if($k ne "diagnosed_date" && $avr_date > 0){
+			if($avr_date > 0 && $k ne $date_name){
 				if($rec < $avr_date){
 					$v = 0;
 				}
@@ -147,16 +185,18 @@ sub	tokyo_info
 				}
 			}
 			$data[$rec]{$k} = $v;
+			$max{$k} = $v if(!defined $max{$k} || ($itn > 0 && $v > $max{$k}));
 		}
-		$y2 = $dt->{positive_rate} if($dt->{positive_rate} > $y2);
 		$rec++;
 	}
+	my $y2k = $p->{y2max};
+	my $y2 = (defined $y2k && $y2k) ? $max{$y2k} : "";
 
 	open(CSV, "> $csvf") || die "cannto create $csvf";
-	print CSV join(",", "#" . $positive->{date}, @KEYS) . "\n"; 
+	print CSV join(",", "#" . $positive->{date}, @items) . "\n"; 
 	foreach my $dt (@data){
 		my @line = ();
-		foreach my $k (@KEYS){
+		foreach my $k (@items){
 			push(@line, $dt->{$k});
 		}
 		print CSV join($DLM , @line) . "\n";
@@ -168,41 +208,40 @@ sub	tokyo_info
 		csvf => $csvf,
 		pngf => $pngf,
 		plotf => $plotf,
-		first_date => $data[$avr_date]{diagnosed_date}, 
-		last_date   => $data[$rec-1]{diagnosed_date},
+		first_date => $data[$avr_date]{$date_name}, 
+		last_date   => $data[$rec-1]{$date_name},
 		xtics => 60 * 60 * 24 * 7,
 		dlm => $DLM,
-		y2 => int($y2 + 0.999),
-		item_names => [@KEYS],
-		y2_items => ["positive_rate"],
-		plots => [
-				{colm => '($2+$3)', y => "y1", graph => "boxes fill",  title => $KEYS[1]},
-				{colm => '2', y => "y1", graph => "boxes fill",  title => $KEYS[2]},
-				{colm => '4', y => "y2", graph => "lines linewidth 2",  title => $KEYS[3]},
-		],
-		#$s = "'$csvf' using 1:" . '($2+$3)' . " axis x1$y with boxes title '" . $item_names->[$i] . "' fill " if($i == 1);
-		#$s = "'$csvf' using 1:2 axis x1$y with boxes title '" . $item_names->[$i] . "' fill " if($i == 2);
-		#$s = "'$csvf' using 1:4 axis x1$y with lines title '" . $item_names->[$i] . "' linewidth 2" if($i == 3);
+		p => $p,
+		y2 => (defined $p->{y2items}) ? int($y2 + 0.999) : "",
 	};	
 	&graph($gpara);
+	return ("$dst.png");
 }
 
 sub	graph
 {
 	my ($gp) = @_;
 
+	my $p = $gp->{p};
 	my $csvf = $gp->{csvf};
 	my $pngf = $gp->{pngf};
 	my $plotf = $gp->{plotf};
-	my $item_names = $gp->{item_names};
-	my $item_number = scalar(@$item_names) - 1;
 	my $last_date = $gp->{last_date};
 	my $first_date = $gp->{first_date};
 	my $xrange = sprintf("['%s':'%s']", $first_date, $last_date);
 	my $xtics = $gp->{xtics};
+
+	my $item_names = $p->{items};
+	my $item_number = scalar(@$item_names) - 1;
 	my $dlm = $gp->{dlm};
+	my $title = $p->{title} . "($last_date)";
+	my $ylabel = $p->{ylabel};
+
+	my $y2_items = $p->{y2_items};
 	my $y2 = $gp->{y2};
-	my $y2_items = $gp->{y2_items};
+	my $y2range = (defined $y2 && $y2) ? "set y2range [0:$y2]" : "";
+	my $y2label = (defined $p->{y2label}) ? ("set y2label '" . $p->{y2label} . "'") : "";
 
 	my $PARAMS = << "_EOD_";
 set datafile separator '$dlm'
@@ -212,14 +251,15 @@ set xdata time
 set timefmt '%Y-%m-%d'
 set format x '%Y-%m-%d'
 set xrange $xrange
-set y2range [0:$y2]
+$y2range
+$y2label
 set mxtics 2
 set mytics 2
 set grid xtics ytics mxtics mytics
 set key below
-set title 'Tokyo Positive rate ($last_date)' font "IPAexゴシック,12" enhanced
+set title '$title' font "IPAexゴシック,12" enhanced
 set xlabel 'date'
-set ylabel 'ylabel'
+set ylabel '$ylabel'
 #
 set xtics $xtics
 set terminal pngcairo size 1000, 300 font "IPAexゴシック,8" enhanced
@@ -230,17 +270,16 @@ exit
 _EOD_
 
 	my @p= ();
-	print join(",", $item_number, @$item_names) . ":\n";
+	#dp::dp join(",", $item_number, @$item_names) . ":\n";
 	for(my $i = 1; $i <= $item_number; $i++){
-		#my $y = ($i < $item_number) ? "y1" : "y2";
-		my $p = $gp->{plots}[$i-1];
-		#my $y = csvlib::search_list($item_names->[$i], @$y2_items) ? "y2" : "y1";
-		my $s = sprintf("'%s' using 1:%s axis x1%s with %s title '%s'", 
-				$csvf, $p->{colm}, $p->{y}, $p->{graph}, $p->{title});
-		
-		#$s = "'$csvf' using 1:" . '($2+$3)' . " axis x1$y with boxes title '" . $item_names->[$i] . "' fill " if($i == 1);
-		#$s = "'$csvf' using 1:2 axis x1$y with boxes title '" . $item_names->[$i] . "' fill " if($i == 2);
-		#$s = "'$csvf' using 1:4 axis x1$y with lines title '" . $item_names->[$i] . "' linewidth 2" if($i == 3);
+		my $plp = $p->{plot}[$i-1];
+		#dp::dp "plp :\n " . Dumper $plp;
+		my $s = sprintf("'%s' using 1:%s %s with %s title '%s'", 
+				$csvf, $plp->{colm}, 
+				(defined $plp->{axis}) ? ("axis " . $plp->{axis}) : "", 
+				$plp->{graph}, 
+				(defined $plp->{item_title} && $plp->{item_title}) ? $plp->{item_title} : $item_names->[$i]
+		);
 		push(@p, $s);
 	}
 	my $plot = join(",", @p);
@@ -250,8 +289,8 @@ _EOD_
 	print PLOT $PARAMS;
 	close(PLOT);
 
-	print $csvf. "\n";
-	print $PARAMS;
+	#dp::dp $csvf. "\n";
+	#dp::dp $PARAMS;
 
 	system("gnuplot $plotf");
 }

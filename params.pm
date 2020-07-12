@@ -74,7 +74,11 @@ our @PARAMS_COUNT = (
 		target => "Sweden", label_skip => 3, graph => "boxes"},
 
     {ext => "#KIND#  New Zealand (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
-		target => "New Zealand", label_skip => 3, graph => "boxes"},
+		target => "New Zealand", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# Australia (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
+		target => "Australia", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# Spain (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
+		target => "Spain", label_skip => 3, graph => "lines"},
 #    {ext => "#KIND#  New Zealand 1month(#LD#) #SRC#", start_day => -31,  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
 #		target => "New Zealand", label_skip => 3, graph => "boxes"},
 

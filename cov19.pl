@@ -84,6 +84,7 @@ use kvalue;
 use usa;
 use usast;
 use tko;
+use tkoku;
 
 #
 #	初期化など
@@ -117,6 +118,7 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$DATA_SOURCE = "usast" if(/^usast/i);
 	$DATA_SOURCE = "usa" if(/^usa$/i);
 	$DATA_SOURCE = "tko" if(/^tko$/i);
+	$DATA_SOURCE = "ku" if(/^ku$/i);
 
 
 	if(/-debug/i){
@@ -185,6 +187,7 @@ $mep = who::new()  if($DATA_SOURCE eq "who");
 $mep = jag::new()  if($DATA_SOURCE eq "jag");
 $mep = jagtotal::new()  if($DATA_SOURCE eq "jagtotal");
 $mep = tko::new()  if($DATA_SOURCE eq "tko");
+$mep = tkoku::new()  if($DATA_SOURCE eq "ku");
 die "no package for $DATA_SOURCE\n" if(! $mep);
 
 
@@ -222,12 +225,14 @@ my $DLM = $mep->{DLM};
 my $SOURCE_DATA = $mep->{src};
 
 foreach my $AGGR_MODE (@AGGR_LIST){
+	dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE] \n";
 	if(! csvlib::valdef($mep->{AGGR_MODE}{$AGGR_MODE},"")){
 		dp::dp "no function defined: $DATA_SOURCE: AGGR_MODE[$AGGR_MODE]\n";
 		next;
 	}
 
 	foreach my $MODE (@MODE_LIST){
+		dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE]\n";
 		if(! csvlib::valdef($mep->{src_file}{$MODE},"")){
 			dp::dp "no function defined: $DATA_SOURCE: MODE[$MODE]\n";
 			next;

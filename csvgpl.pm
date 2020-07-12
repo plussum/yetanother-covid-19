@@ -347,14 +347,15 @@ sub	csv2graph
 		next if($#exclusion >= 0 && csvlib::search_list($country, @exclusion));
 		#next if($#target >= 0 && $#exclusion >= 0 && ! csvlib::search_list($country, @target));
 		next if($#target >= 0 && ! csvlib::search_list($country, @target));
-		dp::dp "Yes, Target $CNT $country [$tgcs, $tgce]\n" if($DEBUG && $#target >= 0);
+		#dp::dp "Yes, Target $CNT $country [$tgcs, $tgce]\n" if($DEBUG && $#target >= 0);
 		if($aggr_mode eq "POP"){			# if aggr_mode eq POP, ignore if country population < $POP_THRESH
+			#dp::dp "POP[$country][" . $CNT_POP{$country} . "]\n"; 
 			if(!defined $CNT_POP{$country}){
-				dp::dp "NO COUNTRY DEFINED at POP[$country][" . $CNT_POP{$country} . "]\n" if(! $country =~ /Unassigned/);
+				#dp::dp "NO COUNTRY DEFINED at POP[$country][" . $CNT_POP{$country} . "]\n" if(! $country =~ /Unassigned/);
 				next;
 			}
 			if($CNT_POP{$country} < $pop_thresh){
-				dp::dp "POP leth than $pop_thresh: [$country][" . $CNT_POP{$country} . "]\n";
+				#dp::dp "POP leth than $pop_thresh: [$country][" . $CNT_POP{$country} . "]\n";
 				next;
 			}
 		}
@@ -363,24 +364,19 @@ sub	csv2graph
 		if($CNT < $tgcs || $CNT > $tgce){
 			next if($#add_target < 0);
 			next if(! csvlib::search_list($country, @add_target));
-			#my $cr = csvlib::search_list($country, @add_target);
-			#dp::dp "[$cr] $country:" . join(",", @add_target) . "\n";
 		}
 
 		push(@LEGEND_KEYS, sprintf("%02d:%s", $rn, $country));
-		#foreach my $dtn (@{$COUNT_D{$country}}){
-		#dp::dp "COUNT: " .$#{$COUNT_D{$country}} . "\n";
-		#print POPT join(",", $country, $CNT_POP{$country}) . "\n";
-		#print POPT "ORG,", join (",", @{$COUNT_D{$country}}) . "\n" ;
 		for(my $i = 0; $i <= $#{$COUNT_D{$country}}; $i++){
 			my $dtn = $COUNT_D{$country}[$i];
 			if($aggr_mode eq "POP"){
+				my $v = $dtn;
 				$dtn /= ($CNT_POP{$country} / $config::POP_BASE) ;
 				$COUNT_D{$country}[$i] = $dtn * $mep->{AGGR_MODE}{POP};
+				# dp::dp join(", ", $country, $v, $dtn, $CNT_POP{$country}) . "\n";
 			}
 			$MAX_COUNT = $dtn if(defined $dtn && $dtn > $MAX_COUNT);
 		}
-		#print POPT "POP,", join (",", @{$COUNT_D{$country}}) . "\n" ;
 		push(@Dataset, [@{$COUNT_D{$country}}]);
 		push(@COUNTRY, $country);
 		dp::dp "COUNT_D: ". join (",", @{$COUNT_D{$country}}) . "\n" if($DEBUG > 1);
@@ -433,7 +429,6 @@ sub	csv2graph
 					#$v = int(100 * $av / $gplitem->{average_date}) / 100;
 					#$v = 1 if($v < 1 && defined $gplitem->{logscale});
 				}
-				#print "--> $v\n";
 			}
 			if($gplitem->{logscale}){
 				$v = $NO_DATA if($v < 1);
@@ -571,7 +566,7 @@ _EOD_
 		}
 	}
 	$PARAMS =~ s/#XTICKS#/$xtics/;
-#	print "[[[$PARAMS]]]\n";
+#	dp::dp "[[[$PARAMS]]]\n";
 
 	open(PLF, "> $plot_cmdf") || die "cannot create $plot_cmdf";
 	print PLF $PARAMS;
