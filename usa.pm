@@ -71,8 +71,8 @@ our $PARAMS = {			# MODULE PARETER        $mep
 		ND => "$CCSE_BASE_DIR/time_series_covid19_deaths_US.csv",
 		CC => "$CCSE_BASE_DIR/time_series_covid19_confirmed_US.csv",
 		CD => "$CCSE_BASE_DIR/time_series_covid19_deaths_US.csv",
-		NR  => "$CCSE_BASE_DIR/time_series_covid19_recovered_US.csv",
-		CR => "$CCSE_BASE_DIR/time_series_covid19_recovered_US.csv",
+	#	NR  => "$CCSE_BASE_DIR/time_series_covid19_recovered_US.csv",
+	#	CR => "$CCSE_BASE_DIR/time_series_covid19_recovered_US.csv",
 	},
 	base_dir => $CCSE_BASE_DIR,
 

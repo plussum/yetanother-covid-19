@@ -83,6 +83,8 @@ use ern;
 use kvalue;
 use usa;
 use usast;
+use tko;
+use tkoku;
 
 #
 #	初期化など
@@ -104,7 +106,7 @@ my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
-my @FULL_DATA_SOURCES = qw (ccse who jag jagtotal usast usa);
+my @FULL_DATA_SOURCES = qw (ccse who tko jag jagtotal usast usa);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
@@ -115,6 +117,9 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$DATA_SOURCE = "jagtotal" if(/^jagtotal/i);
 	$DATA_SOURCE = "usast" if(/^usast/i);
 	$DATA_SOURCE = "usa" if(/^usa$/i);
+	$DATA_SOURCE = "tko" if(/^tko$/i);
+	$DATA_SOURCE = "ku" if(/^ku$/i);
+
 
 	if(/-debug/i){
 		$DEBUG = 1;
@@ -130,6 +135,10 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	}
 	elsif(/-FULL/i){
 		$FULL_SOURCE = $_ if(/-FULL/i);
+	}
+	elsif(/-tokyo/){
+		system("./tokyo.pl -DL; tokyo.pl -av7");
+		exit(0);
 	}
 	elsif(/-all/){
 		push(@MODE_LIST, "ND", "NC", "CC", "CD", "NR", "CR");
@@ -155,9 +164,11 @@ if($FULL_SOURCE){
 	my $dl = "-dl" if($FULL_SOURCE =~ /FULL/);
 	foreach my $src (@FULL_DATA_SOURCES){
 		$_ = $src;
-		my $d = (/ccse/ || /who/ || /jag/ || /usat/) ? $dl : "";
+		my $d = (/jtagtotal/ || /usa/) ? "" : $dl;
 		system("$0 $src -all $d");
 	}
+	system("./tokyo.pl -DL; tokyo.pl -av7");
+	system("./tokyo.pl -av7");
 	system("./genindex.pl");
 	system("$0 -upload");
 	exit(0);
@@ -175,6 +186,8 @@ $mep = usast::new() if($DATA_SOURCE eq "usast");
 $mep = who::new()  if($DATA_SOURCE eq "who");
 $mep = jag::new()  if($DATA_SOURCE eq "jag");
 $mep = jagtotal::new()  if($DATA_SOURCE eq "jagtotal");
+$mep = tko::new()  if($DATA_SOURCE eq "tko");
+$mep = tkoku::new()  if($DATA_SOURCE eq "ku");
 die "no package for $DATA_SOURCE\n" if(! $mep);
 
 
@@ -212,12 +225,14 @@ my $DLM = $mep->{DLM};
 my $SOURCE_DATA = $mep->{src};
 
 foreach my $AGGR_MODE (@AGGR_LIST){
+	dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE] \n";
 	if(! csvlib::valdef($mep->{AGGR_MODE}{$AGGR_MODE},"")){
 		dp::dp "no function defined: $DATA_SOURCE: AGGR_MODE[$AGGR_MODE]\n";
 		next;
 	}
 
 	foreach my $MODE (@MODE_LIST){
+		dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE]\n";
 		if(! csvlib::valdef($mep->{src_file}{$MODE},"")){
 			dp::dp "no function defined: $DATA_SOURCE: MODE[$MODE]\n";
 			next;

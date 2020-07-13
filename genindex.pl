@@ -12,7 +12,7 @@ my $INDEX_HTML = "$WIN_PATH/index.html";
 my $FRAME_HTML = "$WIN_PATH/covid_frame.html";
 my $WHO_INDEX  = "who_situation_report_NC.html";	# Generate by who.pm
 
-my @src_list = qw (jhccse who jag jagtotal usast usa);
+my @src_list = qw (jhccse who jag jagtotal usast usa tko tkoku);
 my @mode_list = qw (NC ND CC CD NR CR);
 my @submode_list = qw (COUNT FT ERN KV);
 my @aggr_list = qw (DAY POP);
@@ -67,10 +67,10 @@ foreach my $src (@src_list){
 					next if($sub ne "COUNT" || !( $src =~ /ccse/));
 				}
 				if($mode =~ /^C/){ 
-					next if($mode =~ /CR/ && $src =~ /who/);
-					next if($sub ne "COUNT" || !( $src =~ /ccse/ || $src =~ /who/ || $src =~ /usa/ || $src =~ /ja/));
+					next if($mode =~ /CR/ && $src =~ /who|tko|/ );
+					next if($sub ne "COUNT" ); # || !( $src =~ /ccse/ || $src =~ /who/ || $src =~ /usa/ || $src =~ /ja/));
 				}
-				next if($src =~ /jag/ && $mode eq "ND");
+				next if($src =~ /jag|tkoku/ && $mode =~ /.D/);
 				my $relp = join("_", $src, $mode, $sub, $aggr) . ".html";
 
 				print FRAME "<li><a href =\"HTML/$relp\" target=\"graph\">$relp</a></li>\n";
@@ -81,6 +81,7 @@ foreach my $src (@src_list){
 	}
 	#print FRAME "<br>\n";
 }
+print FRAME "<li><a href =\"HTML/tokyo.html\" target=\"graph\">TOKYO OPEN DATA</a></li>\n";
 print FRAME "<li><a href =\"HTML/$config::WHO_INDEX\" target=\"graph\">WHO_INDEX</a></li>\n";
 print FRAME "<br>\n";
 print FRAME "<li><a href =\"about.html\" target=\"graph\">about</a></li>\n";

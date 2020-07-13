@@ -210,6 +210,9 @@ sub	csv_aggregate
 	dp::dp "### done sort : " . (time - $start_time) . "\n"if($DEBUG > 1);
 	dp::dp join($DLM, "total", $count, $total), "\n"if($DEBUG > 1);
 
+	#
+	#	Number of Dates, same ?, first Date'mm/dd', final Date 'mm/dd'
+	#
 	return ($#date_list, $rn , $date_list[0], $date_list[$#date_list]) ;
 }
 
