@@ -42,7 +42,7 @@ my $index_file = "$BASE_DIR/$index_html";
 my $pdf_dir = "content";
 my $transaction = "$CSV_PATH/tokyo-ku.csv.txt";
 
-
+my $EXC = "都外";
 our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** TOYO-KU  ****",
     src => "TOYO KU ONLINE",
@@ -63,6 +63,11 @@ our $PARAMS = {			# MODULE PARETER		$mep
 	POP_THRESH => 100,
 	AGGR_MODE => {DAY => 1, POP => 7},		# POP: 7 Days Total / POP
 	#MODE => {NC => 1, ND => 1},
+#	sort_balance =>0.7,  	# ALL = 0; 0.7 = 後半の30%のデータでソート
+#	sort_weight => 0.1,	# 0: No Weight, 0.1: 10%　Weight -0.1: -10% Wight
+	SORT_BALANCE => {
+		CC => [0.9, 0.1],
+	},
 
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
@@ -70,11 +75,29 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		],
 		graphp_mode => {												# New version of graph pamaeter for each MODE
 			NC => [
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "", target => "", 
+				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", 
+					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo TOP20 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[0, 19] , exclusion => $EXC, target => "", 
+					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 1-5 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[0, 4] , exclusion => $EXC, target => "", 
+					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 6-10 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[5, 9] , exclusion => $EXC, target => "", 
+					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 11-15 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[10, 14] , exclusion => $EXC, target => "", 
+					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 16-20 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[15, 19] , exclusion => $EXC, target => "", 
 					label_skip => 2, graph => "lines"},
 			],
 			CC => [
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "", target => "", 
+				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", 
+					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 1-5 (#LD#) #SRC#", start_day => 0,  lank =>[0, 4] , exclusion => $EXC, target => "", 
+					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 6-10 (#LD#) #SRC#", start_day => 0,  lank =>[5, 9] , exclusion => $EXC, target => "", 
+					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 10-15 (#LD#) #SRC#", start_day => 0,  lank =>[10, 14] , exclusion => $EXC, target => "", 
+					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 16-20 (#LD#) #SRC#", start_day => 0,  lank =>[15, 19] , exclusion => $EXC, target => "", 
 					label_skip => 2, graph => "lines"},
 			],
 		},
@@ -84,7 +107,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		average_date => 7,
 		ymin => 10,
 		graphp => [
-			{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 5] , exclusion => "", target => "", 
+			{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 5] , exclusion => $EXC, target => "", 
 					label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
 		],
 	},
@@ -94,14 +117,14 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		lp => $config::RT_LP,,
 		average_date => 7,
 		graphp => [	
-			{ext => "#KIND# TOP5 #FT_TD#", start_day => 0, lank =>[0, 5] , exclusion => "", target => "", 
+			{ext => "#KIND# TOP5 #FT_TD#", start_day => 0, lank =>[0, 5] , exclusion => $EXC, target => "", 
 					label_skip => 2, graph => "lines"},
 		],
 	},
 	KV => {
 		EXC => "Others",
 		graphp => [
-			{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "", target => "", 
+			{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", 
 					label_skip => 2, graph => "lines"},
 		],
 	},
@@ -202,12 +225,16 @@ sub	gencsv
 			my $pdf_file = "$BASE_DIR/$pdf";
 			#dp::dp "[$pdf_file]\n";
 			if(! -e $pdf_file){
-				system("wget $pdf_url -o $pdf_file");
+				system("wget $pdf_url -O $pdf_file");
 			}
-			#dp::dp "ps2ascii $pdf > $pdf.txt\n";
-			system("ps2ascii $pdf_file > $pdf_file.txt") if(!-e "$pdf_file.txt");
+			if(!-e "$pdf_file.txt"){
+				dp::dp "ps2ascii $pdf > $pdf.txt\n";
+				system("ps2ascii $pdf_file > $pdf_file.txt") 
+			}
 			&pdf2data("$pdf_file.txt");
-			#last if($rec++ > 3);
+			if($rec++ < 3) {
+				dp::dp $pdf . "\n";
+			}
 		}
 	}
 	close(HTML);
@@ -215,6 +242,7 @@ sub	gencsv
 	#
 	#	generate csv file from pdf(text)
 	#
+	dp::dp $csvf . "\n";
 	open(CSV, "> $csvf") || die "cannto create $csvf";
 	my @KUS = (sort {$KU_FLAG{$b} <=> $KU_FLAG{$a}} keys %KU_FLAG);
 	my @DATES = (sort keys %DATE_FLAG);

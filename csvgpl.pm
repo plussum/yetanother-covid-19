@@ -72,9 +72,16 @@ sub	csvgpl
 	my $src_url = $clp->{src_url};
     my $src_ref = "<a href=\"$src_url\">$src_url</a>";
 	my $TBL_SIZE = 10;
+	my $mode = $fp->{mode};
 
-	$SORT_BALANCE = csvlib::valdef($csvgplp->{sort_balance}, $DEFUALT_SORT_BALANCE);
-	$SORT_WEIGHT  = csvlib::valdef($csvgplp->{sort_weight}, $DEFUALT_SORT_WEIGHT);
+	$SORT_BALANCE =  $DEFUALT_SORT_BALANCE;
+	$SORT_WEIGHT  =  $DEFUALT_SORT_WEIGHT;
+	if(defined $mep->{SORT_BALANCE}{$mode}){
+		my $sbp = $mep->{SORT_BALANCE}{$mode};
+		$SORT_BALANCE = $sbp->[0];
+		$SORT_WEIGHT = $sbp->[1];
+	}
+	dp::dp "SORT_BALANCE($mode): $SORT_BALANCE, $SORT_WEIGHT\n";
 
 	dp::dp "TITLE: $clp->{name} \n $clp->{htmlf}\n" if($VERBOSE);
 	open(HTML, "> $clp->{htmlf}") || die "Cannot create file $clp->{htmlf}";
@@ -275,10 +282,32 @@ sub	csv2graph
 	#
 	#	ソート用の配列の作成
 	#
+	my $pop_thresh = (defined $mep->{POP_THRESH}) ? $mep->{POP_THRESH} : $config::POP_THRESH;
 	for(my $cn = 0; $cn <= $COUNTRY_NUMBER; $cn++){
 		my $country = $DATA[$cn][0];
 		next if(! $country);
 
+		#
+		#	POP	rewrite data with POP_COUNT
+		#
+		if($aggr_mode eq "POP"){
+			my $pop = 10^10-1;
+			if(defined $CNT_POP{$country} && $CNT_POP{$country} < $pop_thresh){
+				$pop = $CNT_POP{$country} / $config::POP_BASE;
+			}
+			for(my $dn = 0; $dn < $dates; $dn++){
+				my $p = $dn+$std+$DATE_COL_NO;
+				my $c = csvlib::valdef($DATA[$cn][$p], 0);
+
+				my $pc = $c / $pop ;
+				$DATA[$cn][$p] = $pc;
+				#dp::dp "$country, $c, $pc, $pop\n";
+			}
+		}
+
+		#
+		#
+		#
 		#dp::dp join(",", @{$DATA[$cn]}) . "\n" if($country =~ /Sint/ || $country =~ /Japan/);
 		my $tl = 0;
 		my $ccmt = 0;
@@ -288,6 +317,7 @@ sub	csv2graph
 			my $as = scalar(@{$DATA[$cn]});					####	for FT 2020.06.27 データ数が違うので配列サイズで計算
 			$sw_start = int($as * $SORT_BALANCE + 0.5);		####	for FT 2020.06.27
 		}
+
 		for(my $dn = 0; $dn < $dates; $dn++){
 			my $p = $dn+$std+$DATE_COL_NO;
 			my $c = csvlib::valdef($DATA[$cn][$p], 0);
@@ -315,18 +345,19 @@ sub	csv2graph
 				$tl += $c + $c * $SORT_WEIGHT * ($dn - $sw_start);  # 後半に比重を置く
 			}
 		}
+
 		#
-		#	-$SORT_BALANCE と最終データの比で傾きをソートの鍵としたい
+		#	-$SORT_BALANCE と最終データの比で傾きをソートの鍵としたい	FT用か ?
 		#
-		if($SORT_BALANCE < 0 && $tl > 0){
-			my $as = scalar(@{$DATA[$cn]});
-			my $sp = int(-$SORT_BALANCE * $as + 0.5);
-			my $sw = int($as * $SORT_WEIGHT + 1);
-			my $v1 = csvlib::avr($DATA[$cn], $sp - $sw , $sp);
-			my $v2 = csvlib::avr($DATA[$cn], $as - $sw , $as);
-			#dp::dp "FT SORT: as:$as, sp:$sp, sw:$sw, v1:$v1, v2:$v2\n";
-			$tl = ($v1 == 0) ? $v2 * 2 : $v2 / $v1;
-		}
+		#if($SORT_BALANCE < 0 && $tl > 0){
+		#	my $as = scalar(@{$DATA[$cn]});
+		#	my $sp = int((1 - $SORT_BALANCE) * $as + 0.5);
+		#	my $sw = int($as * $SORT_WEIGHT + 1);
+		#	my $v1 = csvlib::avr($DATA[$cn], $sp - $sw , $sp);
+		#	my $v2 = csvlib::avr($DATA[$cn], $as - $sw , $as);
+		#	#dp::dp "FT SORT: as:$as, sp:$sp, sw:$sw, v1:$v1, v2:$v2\n";
+		#	$tl = ($v1 == 0) ? $v2 * 2 : $v2 / $v1;
+		#}
 		if($tl > 0){
 			$CTG{$country} = $tl;
 			$TOTAL{$country} = $DATA[$cn][1];
@@ -340,7 +371,6 @@ sub	csv2graph
 	my @Dataset = (\@DATES);
 	my $CNT = -1;
 	my $rn = 0;
-	my $pop_thresh = (defined $mep->{POP_THRESH}) ? $mep->{POP_THRESH} : $config::POP_THRESH;
 	#open(POPT, "> $config::WIN_PATH/poptest.csv") || die "Cannot create $config::WIN_PATH/poptest.csv";
 	foreach my $country (sort {$CTG{$b} <=> $CTG{$a}} keys %CTG){
 		$rn++;
@@ -348,17 +378,17 @@ sub	csv2graph
 		#next if($#target >= 0 && $#exclusion >= 0 && ! csvlib::search_list($country, @target));
 		next if($#target >= 0 && ! csvlib::search_list($country, @target));
 		#dp::dp "Yes, Target $CNT $country [$tgcs, $tgce]\n" if($DEBUG && $#target >= 0);
-		if($aggr_mode eq "POP"){			# if aggr_mode eq POP, ignore if country population < $POP_THRESH
-			#dp::dp "POP[$country][" . $CNT_POP{$country} . "]\n"; 
-			if(!defined $CNT_POP{$country}){
-				#dp::dp "NO COUNTRY DEFINED at POP[$country][" . $CNT_POP{$country} . "]\n" if(! $country =~ /Unassigned/);
-				next;
-			}
-			if($CNT_POP{$country} < $pop_thresh){
-				#dp::dp "POP leth than $pop_thresh: [$country][" . $CNT_POP{$country} . "]\n";
-				next;
-			}
-		}
+#		if($aggr_mode eq "POP"){			# if aggr_mode eq POP, ignore if country population < $POP_THRESH
+#			#dp::dp "POP[$country][" . $CNT_POP{$country} . "]\n"; 
+#			if(!defined $CNT_POP{$country}){
+#				#dp::dp "NO COUNTRY DEFINED at POP[$country][" . $CNT_POP{$country} . "]\n" if(! $country =~ /Unassigned/);
+#				next;
+#			}
+#			if($CNT_POP{$country} < $pop_thresh){
+#				#dp::dp "POP leth than $pop_thresh: [$country][" . $CNT_POP{$country} . "]\n";
+#				next;
+#			}
+#		}
 
 		$CNT++;
 		if($CNT < $tgcs || $CNT > $tgce){
@@ -369,12 +399,12 @@ sub	csv2graph
 		push(@LEGEND_KEYS, sprintf("%02d:%s", $rn, $country));
 		for(my $i = 0; $i <= $#{$COUNT_D{$country}}; $i++){
 			my $dtn = $COUNT_D{$country}[$i];
-			if($aggr_mode eq "POP"){
-				my $v = $dtn;
-				$dtn /= ($CNT_POP{$country} / $config::POP_BASE) ;
-				$COUNT_D{$country}[$i] = $dtn * $mep->{AGGR_MODE}{POP};
-				# dp::dp join(", ", $country, $v, $dtn, $CNT_POP{$country}) . "\n";
-			}
+#			if($aggr_mode eq "POP"){
+#				my $v = $dtn;
+#				$dtn /= ($CNT_POP{$country} / $config::POP_BASE) ;
+#				$COUNT_D{$country}[$i] = $dtn * $mep->{AGGR_MODE}{POP};
+#				# dp::dp join(", ", $country, $v, $dtn, $CNT_POP{$country}) . "\n";
+#			}
 			$MAX_COUNT = $dtn if(defined $dtn && $dtn > $MAX_COUNT);
 		}
 		push(@Dataset, [@{$COUNT_D{$country}}]);
