@@ -67,7 +67,7 @@ foreach my $src (@src_list){
 					next if($sub ne "COUNT" || !( $src =~ /ccse/));
 				}
 				if($mode =~ /^C/){ 
-					next if($mode =~ /CR/ && $src =~ /who|tko|/ );
+					next if($mode =~ /CR/ && !($src =~ /ccse/) );
 					next if($sub ne "COUNT" ); # || !( $src =~ /ccse/ || $src =~ /who/ || $src =~ /usa/ || $src =~ /ja/));
 				}
 				next if($src =~ /jag|tkoku/ && $mode =~ /.D/);

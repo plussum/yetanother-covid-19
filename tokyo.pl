@@ -105,8 +105,8 @@ for(@ARGV){
 		system("(cd ../tokyo/covid19; git pull origin master)");
 	}
 	elsif(/-av/){
-			s/-av//;
-			$avr_date = $_;
+		s/-av//;
+		$avr_date = $_;
 	}
 }
 my $HTMLF = $config::HTML_PATH . "/$htmlf";

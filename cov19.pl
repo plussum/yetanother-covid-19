@@ -106,7 +106,7 @@ my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
-my @FULL_DATA_SOURCES = qw (ccse who tko jag jagtotal usast usa ku);
+my @FULL_DATA_SOURCES = qw (ccse who tko jag jagtotal usast usa ku tkpos);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
@@ -119,6 +119,7 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$DATA_SOURCE = "usa" if(/^usa$/i);
 	$DATA_SOURCE = "tko" if(/^tko$/i);
 	$DATA_SOURCE = "ku" if(/^ku$/i);
+	$DATA_SOURCE = "tkpos" if(/^tkpos$/i);
 
 
 	if(/-debug/i){
@@ -188,6 +189,11 @@ $mep = jag::new()  if($DATA_SOURCE eq "jag");
 $mep = jagtotal::new()  if($DATA_SOURCE eq "jagtotal");
 $mep = tko::new()  if($DATA_SOURCE eq "tko");
 $mep = tkoku::new()  if($DATA_SOURCE eq "ku");
+if($DATA_SOURCE eq "tkpos"){
+	my $d = ($DOWNLOAD) ? "-DL" : "";
+	system("./tokyo.pl $d");
+	exit 0;
+}
 die "no package for $DATA_SOURCE\n" if(! $mep);
 
 
