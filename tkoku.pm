@@ -65,9 +65,11 @@ our $PARAMS = {			# MODULE PARETER		$mep
 	#MODE => {NC => 1, ND => 1},
 #	sort_balance =>0.7,  	# ALL = 0; 0.7 = 後半の30%のデータでソート
 #	sort_weight => 0.1,	# 0: No Weight, 0.1: 10%　Weight -0.1: -10% Wight
-	SORT_BALANCE => {
-		CC => [0.9, 0.1],
-	},
+#
+#	SORT_BALANCE => {		# move to config.pm
+#		CC => [0.99, 0.1],
+#		CD => [0.99, 0.1],
+#	},
 
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",

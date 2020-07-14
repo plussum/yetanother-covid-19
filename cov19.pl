@@ -106,7 +106,7 @@ my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
-my @FULL_DATA_SOURCES = qw (ccse who tko jag jagtotal usast usa);
+my @FULL_DATA_SOURCES = qw (ccse who tko jag jagtotal usast usa ku);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
@@ -164,7 +164,7 @@ if($FULL_SOURCE){
 	my $dl = "-dl" if($FULL_SOURCE =~ /FULL/);
 	foreach my $src (@FULL_DATA_SOURCES){
 		$_ = $src;
-		my $d = (/jtagtotal/ || /usa/) ? "" : $dl;
+		my $d = (/jtagtotal|usa/) ? "" : $dl;
 		system("$0 $src -all $d");
 	}
 	system("./tokyo.pl -DL; tokyo.pl -av7");

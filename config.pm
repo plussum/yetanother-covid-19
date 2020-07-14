@@ -42,6 +42,19 @@ our $MODE_NAME = {
 	CR => "CCM RECOVERS",
 };
 
+our %SORT_BALANCE = (
+		NC => [0.5,  0.05],
+		ND => [0.5,  0.05],
+		NR => [0.5,  0.05],
+		CC => [0.99, 0.1],
+		CD => [0.99, 0.1],
+		CR => [0.99, 0.1],
+
+		ERN => [0.99, 0.1],
+		FT => [0.5, 0.3],
+		KV => [0.99, 0.1],
+);
+
 my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 
 our $CSS = << "_EOCSS_";
