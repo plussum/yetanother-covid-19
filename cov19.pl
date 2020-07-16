@@ -106,8 +106,8 @@ my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
-#my @FULL_DATA_SOURCES = qw (ccse who tko jag jagtotal usast usa ku tkpos);
-my @FULL_DATA_SOURCES = qw (ku tkpos);
+my @FULL_DATA_SOURCES = qw (ccse who tko jag jagtotal usast usa ku tkpos);
+#my @FULL_DATA_SOURCES = qw (ku tkpos);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
