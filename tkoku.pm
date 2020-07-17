@@ -47,6 +47,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** TOYO-KU  ****",
     src => "TOYO KU ONLINE",
 	src_url => $src_url,
+	references => ["https://www.fukushihoken.metro.tokyo.lg.jp/hodo/saishin/index.html"],
     prefix => "tkoku_",
     src_file => {
 		NC => $transaction,

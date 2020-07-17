@@ -75,6 +75,10 @@ sub	csvgpl
 	my $mode = $fp->{mode};
 	my $sub_mode = $fp->{sub_mode};
 
+	my @references = (defined $mep->{references}) ? (@{$mep->{references}}) : ();
+	dp::dp "REFERENCE: [" . join(",", @references) . "]\n";
+ 
+
 	$SORT_BALANCE =  $DEFUALT_SORT_BALANCE;
 	$SORT_WEIGHT  =  $DEFUALT_SORT_WEIGHT;
 	if(defined $mep->{SORT_BALANCE}{$mode}){
@@ -131,6 +135,7 @@ sub	csvgpl
 			print HTML "</TR>\n" if($l == $#legs || ($l % $TBL_SIZE) == ($TBL_SIZE - 1));
 		}
 		print HTML "</TABLE>";
+	
 		print HTML "<span $class>";
 
 		my $csvf = $clp->{csvf};
@@ -151,10 +156,20 @@ sub	csvgpl
 			#dp::dp "r:[$r]  $tag, $path, $fn\n";
 			#dp::dp "$tag:<a href=\"$path/$fn\">$fn</a>\n"; 
 			if($fn){
-				print HTML "$tag:<a href=\"$path/$fn\">$fn</a>\n"; 
+				print HTML "$tag:<a href=\"$path/$fn\" target=\"blank\">$fn</a>\n"; 
 			}
 			else {
 				print HTML "$tag:\n"; 
+			}
+		}
+		print HTML "<br>\n" if($#references >= 0);
+		foreach my $r (@references){
+			#dp::dp "REF " . $#references . ":[$r]\n";
+			if($r =~ /^http/){
+				print HTML "REF <a href=\"$r\" target=\"blank\">$r</a><br>\n"; 
+			}
+			else {
+				print HTML "REF $r<br>\n"; 
 			}
 		}
 		print HTML "</span>\n";
