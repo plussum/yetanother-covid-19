@@ -267,7 +267,7 @@ sub	csv2graph
 	#
 	#	Graph Parameter set
 	#
-	my $std = defined($gplitem->{start_day}) ? $gplitem->{start_day} : 0;
+	my $std = (defined $gplitem->{start_day}) ? $gplitem->{start_day} : 0;
 	if($std =~ /[0-9]+\/[0-9]+/){
 		my $n = csvlib::search_list($std, @DATE_LABEL);
 		#dp::dp ">>>> $std: $n " . $DATE_LABEL[$n-1] . "\n";
@@ -280,6 +280,22 @@ sub	csv2graph
 		$std = -$std;
 		$std = $DATE_NUMBER - $std
 	}	
+
+	my $end_day = (defined $gplitem->{end_day}) ? $gplitem->{end_day} : ($DATE_NUMBER + 1);
+	dp::dp "END_DAY: $end_day  $std\n";
+	if($end_day =~ /[0-9]+\/[0-9]+/){
+		my $n = csvlib::search_list($end_day, @DATE_LABEL);
+		#dp::dp ">>>> $std: $n " . $DATE_LABEL[$n-1] . "\n";
+		#dp::dp ">>> " . join(",", @DATE_LABEL) . "\n";
+		if($n && $n > 0){
+			$std = $n - 1;
+		}
+	}
+	elsif($end_day >= ($DATE_NUMBER - $std)){
+		$end_day = $DATE_NUMBER - $std ;
+	}	
+	dp::dp "END_DAY: $end_day\n";
+
 	my $end = $DATE_NUMBER;
 	my $dates = $end - $std + 1;
 	my $tgcs = $gplitem->{lank}[0];						# 対象ランク
@@ -296,7 +312,7 @@ sub	csv2graph
 	dp::dp "ADD_TARGET: " , $gplitem->{add_target}, "  " . $#add_target, "\n" if($DEBUG > 1);
 
 	my @DATES = @DATE_LABEL[$std..$end];
-	dp::dp "DATES: ", join(",", @DATES) , "\n" if($DEBUG > 1);
+	#dp::dp "DATES: ", join(",", @DATES) , "\n";# if($DEBUG > 1);
 
 	my @LEGEND_KEYS = ();
 	my $MAX_COUNT = 0;
@@ -348,7 +364,9 @@ sub	csv2graph
 			 #dp::dp "$dates $as * $SORT_BALANCE => $sw_start\n";
 		}
 
-		for(my $dn = 0; $dn < $dates; $dn++){
+		#dp::dp "DATES: $std:$DATE_COL_NO dates:$dates end_day:$end_day std:$std sw_start:$sw_start\n";
+		#for(my $dn = 0; $dn <= $dates; $dn++){
+		for(my $dn = 0; $dn <= $end_day; $dn++){
 			my $p = $dn+$std+$DATE_COL_NO;
 			my $c = csvlib::valdef($DATA[$cn][$p], 0);
 			#dp::dp "$cn:$p -> $c\n";
@@ -377,6 +395,8 @@ sub	csv2graph
 				$tl += $c + $c * $SORT_WEIGHT * ($dn - $sw_start);  # 後半に比重を置く
 			}
 		}
+		#dp::dp "## " . join(", ", $country, $tl, $dates) . "\n";  #if($country =~ /China/);
+
 
 		#
 		#	-$SORT_BALANCE と最終データの比で傾きをソートの鍵としたい	FT用か ?
@@ -403,9 +423,9 @@ sub	csv2graph
 	my @Dataset = (\@DATES);
 	my $CNT = -1;
 	my $rn = 0;
-	#open(POPT, "> $config::WIN_PATH/poptest.csv") || die "Cannot create $config::WIN_PATH/poptest.csv";
 	foreach my $country (sort {$CTG{$b} <=> $CTG{$a}} keys %CTG){
-		#dp::dp "$country\n";
+		#dp::dp "$country  " . $CTG{$country} . "\n";
+		
 		$rn++;
 		next if($#exclusion >= 0 && csvlib::search_list($country, @exclusion));
 		#next if($#target >= 0 && $#exclusion >= 0 && ! csvlib::search_list($country, @target));
@@ -427,7 +447,6 @@ sub	csv2graph
 		push(@COUNTRY, $country);
 		dp::dp "COUNT_D: ". join (",", @{$COUNT_D{$country}}) . "\n" if($DEBUG > 1);
 	}
-	#close(POPT);
 
 	if($DEBUG > 1){
 		dp::dp "Dataset: " . $#Dataset, "\n";
@@ -445,7 +464,8 @@ sub	csv2graph
 	#dp::dp "AVERAGE_DATE : [" . $gplitem->{average_date} . "]\n";
 	my @record = ();
 	my $max_data = 0;
-	for(my $dt = 0; $dt <= $#DATES; $dt++){
+	#for(my $dt = 0; $dt <= $#DATES; $dt++){
+	for(my $dt = 0; $dt <= $end_day; $dt++){
 		my $dts  = $DATES[$dt];
 		$dts =~ s#([0-9]{4})([0-9]{2})([0-9]{2})#$1/$2/$3#;
 		$dts = $dt if(defined $gplitem->{ft});
@@ -516,7 +536,10 @@ sub	csv2graph
 	my $XLABEL = "";
 	my $YLABEL = "";
 	my $START_DATE = $DATES[0];
-	$LAST_DATE = $DATES[$#DATES];
+	# $LAST_DATE = $DATES[$#DATES];
+	$LAST_DATE = $DATES[$end_day];
+	dp::dp "LAST_DATE: " . join("," , $LAST_DATE, $end_day, $#DATES) .  "\n";
+	#dp::dp join(",", @DATES) . "\n";
 	if($style eq "boxes"){
 		$START_DATE = &date_offset($START_DATE, -24 * 60 * 60);
 		$LAST_DATE  = &date_offset($LAST_DATE,   24 * 60 * 60);

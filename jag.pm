@@ -44,11 +44,23 @@ our $transaction = "$CSV_PATH/gis-jag-japan.csv.txt",
 our $src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv";
 our $EXCLUSION = "";
 my @jag_param = (
+#	{ext => "#KIND# #SRC# 1", start_day => 0,  end_day => 30, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#	{ext => "#KIND# #SRC# 2", start_day => 0,  end_day => 45, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#	{ext => "#KIND# #SRC# 3", start_day => 0,  end_day => 60, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#	{ext => "#KIND# #SRC# 4", start_day => 0,  end_day => 75, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#	{ext => "#KIND# #SRC# 5", start_day => 0,  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#	{ext => "#KIND# #SRC# 6", start_day => 0,  end_day => 105, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#	{ext => "#KIND# #SRC# 7", start_day => 0,  end_day => 120, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#	{ext => "#KIND# #SRC# 8", start_day => 0,  end_day => 135, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#	{ext => "#KIND# #SRC# 9", start_day => 0,  end_day => 150, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#	{ext => "#KIND# #SRC# 10", start_day => 0,  end_day => 165, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+##	{ext => "#KIND# #SRC# 11", start_day => 0,  end_day => 180, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#	{ext => "EOD"},
+
 	# GPL PARAMETER			$gplp
 	{ext => "#KIND# Japan TOP20 (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 	{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 
-	# {ext => "EOD"},
 
 	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# rl-avr", start_day => "03/01",  lank =>[0, 7] , exclusion => $EXCLUSION,
 		 target => "", label_skip => 2, graph => "lines", avr_date => 7, additional_plot => 0.5},
