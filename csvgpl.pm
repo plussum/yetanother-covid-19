@@ -282,7 +282,7 @@ sub	csv2graph
 	}	
 
 	my $end_day = (defined $gplitem->{end_day}) ? $gplitem->{end_day} : ($DATE_NUMBER + 1);
-	dp::dp "END_DAY: $end_day  $std\n";
+	#dp::dp "END_DAY: $end_day  $std\n";
 	if($end_day =~ /[0-9]+\/[0-9]+/){
 		my $n = csvlib::search_list($end_day, @DATE_LABEL);
 		#dp::dp ">>>> $std: $n " . $DATE_LABEL[$n-1] . "\n";
@@ -294,7 +294,7 @@ sub	csv2graph
 	elsif($end_day >= ($DATE_NUMBER - $std)){
 		$end_day = $DATE_NUMBER - $std ;
 	}	
-	dp::dp "END_DAY: $end_day\n";
+	#dp::dp "END_DAY: $end_day\n";
 
 	my $end = $DATE_NUMBER;
 	my $dates = $end - $std + 1;
@@ -538,7 +538,7 @@ sub	csv2graph
 	my $START_DATE = $DATES[0];
 	# $LAST_DATE = $DATES[$#DATES];
 	$LAST_DATE = $DATES[$end_day];
-	dp::dp "LAST_DATE: " . join("," , $LAST_DATE, $end_day, $#DATES) .  "\n";
+	#dp::dp "LAST_DATE: " . join("," , $LAST_DATE, $end_day, $#DATES) .  "\n";
 	#dp::dp join(",", @DATES) . "\n";
 	if($style eq "boxes"){
 		$START_DATE = &date_offset($START_DATE, -24 * 60 * 60);
