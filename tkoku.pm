@@ -41,6 +41,7 @@ my $BASE_DIR = "$WIN_PATH/tokyo-ku";
 my $index_file = "$BASE_DIR/$index_html";
 my $pdf_dir = "content";
 my $transaction = "$CSV_PATH/tokyo-ku.csv.txt";
+my $fromImage = "$BASE_DIR/fromImage";
 
 my $EXC = "都外";
 our $PARAMS = {			# MODULE PARETER		$mep
@@ -238,6 +239,17 @@ sub	gencsv
 	my $index = $agrp->{index};
 	my $csvf = $agrp->{output_file};
 
+	#
+	#	from PDF by hand
+	#
+	opendir(my $df, $fromImage) || die "cannot open $fromImage";
+	while(my $fn = readdir($df)){
+		next if($fn =~ /^\./);
+
+		dp::dp $fn . "\n";
+		&pdf2data("$fromImage/$fn");
+	}
+	closedir($df);
 
 	#
 	#	load index and download pdf files
@@ -261,8 +273,11 @@ sub	gencsv
 				system("ps2ascii $pdf_file > $pdf_file.txt") 
 			}
 			&pdf2data("$pdf_file.txt");
-			if($rec++ < 3) {
+			if($rec++ < 3) {		# 3
 				dp::dp $pdf . "\n";
+			}
+			else {
+				#exit;
 			}
 		}
 	}
@@ -283,6 +298,7 @@ sub	gencsv
 		my $lv = 0;
 		foreach my $date (@DATES){
 			my $v = $CONFIRMED{$date}{$ku};
+			#dp::dp "$date:$ku: $v:$lv\n";
 			push(@nn, $v - $lv);
 			$lv = $v;
 		}
@@ -302,9 +318,12 @@ sub	pdf2data
 	my $date = "";
 	my $kn = 0;
 	while(<PDF>){
+		s/（/(/g;
+		s/）/)/g;
 		chop;
-		if(/【参考】区市町村別患者数（都内発生分）/){
-			s/^.*　（(.*)月(.*)日時点.*$/$1\t$2/;
+		if(/【参考】.*区市町村別患者数.*都内発生分.*/){
+			#dp::dp "[$_]\n";
+			s/^.*\((.*)月(.*)日時点.*$/$1\t$2/;
 			#dp::dp "[$_]\n";
 			my ($m, $d) = split(/\t/, $_);
 			#dp::dp "$m $d -> ";
@@ -331,11 +350,18 @@ sub	pdf2data
 			s/、/  /g;
 			s/」//g;
 			s/T//g;
+			s/\|/ /g;
+			s/\｜/ /g;
 			my @ku = split(/ +/, $_);
+
 			my $d = <PDF>;
-			#dp::dp $d;
 			chop $d;
+			$d =~ s/\|/ /g;
+			$d =~ s/\｜/ /g;
+
+			#dp::dp "NUMBER: $d \n";
 			my @number = split(/ +/, $d);
+
 			#dp::dp "\n" . "-" x 20 . "\n";
 			#if($#ku != $#number){
 			#	dp::dp  ">>> " . $_  . "\n";
@@ -348,7 +374,7 @@ sub	pdf2data
 			for(my $i = 1; $i < $#ku; $i++){
 				my $k = $ku[$i];
 				$KU_FLAG{$k} = $number[$i] if(!defined $KU_FLAG{$k} || $number[$i] > $KU_FLAG{$k});
-				#dp::dp join(":", $date, $k, $number[$i]) . " ";
+				#dp::dp join(":", $date, $k, $number[$i]) . " \n";
 				$CONFIRMED{$date}{$k} = $number[$i];
 			}
 		}
