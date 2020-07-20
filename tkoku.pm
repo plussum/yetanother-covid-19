@@ -178,7 +178,7 @@ sub	download
 
 	unlink($index_file);
 	my $cmd = "wget " . $mep->{src_url} . " -O $index_file" ;
-	print $cmd . "\n";
+	dp::dp $cmd . "\n";
 	system ($cmd);
 }
 
@@ -244,9 +244,9 @@ sub	gencsv
 	#
 	opendir(my $df, $fromImage) || die "cannot open $fromImage";
 	while(my $fn = readdir($df)){
-		next if($fn =~ /^\./);
+		next if($fn =~ /^[^0-9]/);
 
-		dp::dp $fn . "\n";
+		dp::dp "fromImage: " . $fn . "\n";
 		&pdf2data("$fromImage/$fn");
 	}
 	closedir($df);
@@ -273,12 +273,7 @@ sub	gencsv
 				system("ps2ascii $pdf_file > $pdf_file.txt") 
 			}
 			&pdf2data("$pdf_file.txt");
-			if($rec++ < 3) {		# 3
-				dp::dp $pdf . "\n";
-			}
-			else {
-				#exit;
-			}
+			dp::dp $pdf . "\n" if($rec++ < 3);		# 3
 		}
 	}
 	close(HTML);

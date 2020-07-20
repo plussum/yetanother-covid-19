@@ -167,6 +167,7 @@ if($FULL_SOURCE){
 	foreach my $src (@FULL_DATA_SOURCES){
 		$_ = $src;
 		my $d = (/jtagtotal|usa|tkpos/) ? "" : $dl;
+		dp::dp "$0 $src -all $d \n";
 		system("$0 $src -all $d");
 	}
 	system("./tokyo.pl -DL; tokyo.pl -av7");
