@@ -571,6 +571,7 @@ sub	csv2graph
 		#dp::dp $s . "\n";
 		$s = $s / $count if($count > 0);
 		$stdv = sqrt($s);
+		$stdv = 1 if($stdv <= 0);
 
 		$thresh_fag_max = int($count * 0.002) + 1;
 		$thresh = $avr + $stdv * $ct;		# 
