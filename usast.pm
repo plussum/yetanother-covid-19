@@ -89,6 +89,7 @@ our $PARAMS = {			# MODULE PARETER        $mep
 				@usa_params,
 			],
 			ND => [
+				{ext => "#KIND# TOP 10 (#LD#) max=12000 #SRC#", start_day => 0, lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", ymax => 1200 },
 				@usa_params,
 			],
 			CC => [
