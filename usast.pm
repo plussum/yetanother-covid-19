@@ -76,6 +76,11 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	copy => \&copy,
 	DLM => $DLM,
 
+#	THRESH => {		# move to config.pm
+#		NC => 0,
+#		ND => 1,
+#	},
+
 	AGGR_MODE => {DAY => 1, POP => 1},									# Effective AGGR MODE
 	#MODE => {NC => 1, ND => 1, CC => 1, CD => 1, NR => 1, CR => 1},		# Effective MODE
 

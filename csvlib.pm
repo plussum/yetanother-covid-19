@@ -274,5 +274,19 @@ sub	cnt_pop_jp
 	close(FD);
 }
 
+sub	max_val
+{
+	my ($v, $div) = @_;
+
+	$v = 1 if($v <= 0);
+	$div = 1 if(!defined $div);
+	my $digit = 10 ** int(log($v) / log(10));
+
+	my $vv = $digit * int(1 + $div * $v / $digit)/$div;
+	$vv = int(0.5+$vv);
+
+	return $vv;
+}
+
 
 1;
