@@ -44,6 +44,7 @@ my $transaction = "$CSV_PATH/tokyo-ku.csv.txt";
 my $fromImage = "$BASE_DIR/fromImage";
 
 my $EXC = "都外";
+my $STD = "05/20";
 our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** TOYO-KU  ****",
     src => "TOYO KU ONLINE",
@@ -80,23 +81,23 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		graphp_mode => {												# New version of graph pamaeter for each MODE
 			NC => [
 				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo TOP20 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo TOP20 5/15 (#LD#) #SRC# wo Shinjyuku", start_day => "05/15",  lank =>[0, 19] , exclusion => "新宿", target => "", label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 1 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[0, 0] , exclusion => "", target => "", label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 1-5 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[0, 3] , exclusion => "新宿", target => "", label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 6-10 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[5, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 11-15 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[10, 14] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 16-20 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[15, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo TOP20 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo TOP20 $STD (#LD#) #SRC# wo Shinjyuku", start_day => "$STD",  lank =>[0, 19] , exclusion => "新宿", target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 1 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[0, 0] , exclusion => "", target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 1-5 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[0, 3] , exclusion => "新宿", target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 6-10 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[5, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 11-15 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[10, 14] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 16-20 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[15, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
 
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# rlav 7", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
-				{ext => "#KIND# Tokyo TOP20 5/15 (#LD#) #SRC# rlav 7", start_day => "05/15",  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
-				{ext => "#KIND# Tokyo TOP20 5/15 (#LD#) #SRC# wo Shinjyuku rlav 7", start_day => "05/15",  lank =>[0, 19] , exclusion => "新宿", target => "", 
+				{ext => "#KIND# Tokyo TOP10 (#LD#) #SRC#(wo Shinjyuku) rlav 7", start_day => 0,  lank =>[1, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo TOP20 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo TOP20 $STD (#LD#) #SRC# wo Shinjyuku rlav 7", start_day => "$STD",  lank =>[0, 19] , exclusion => "新宿", target => "", 
 					label_skip => 2, graph => "lines", avr_date => 7},
-				{ext => "#KIND# Tokyo 1 5/15 (#LD#) #SRC# rlav 7", start_day => "05/15",  lank =>[0, 0] , exclusion => "", target => "", label_skip => 2, graph => "lines", avr_date => 7},
-				{ext => "#KIND# Tokyo 1-5 5/15 (#LD#) #SRC# rlav 7", start_day => "05/15",  lank =>[0, 3] , exclusion => "新宿", target => "", label_skip => 2, graph => "lines", avr_date => 7},
-				{ext => "#KIND# Tokyo 6-10 5/15 (#LD#) #SRC# rlav 7", start_day => "05/15",  lank =>[5, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
-				{ext => "#KIND# Tokyo 11-15 5/15 (#LD#) #SRC# rlav 7", start_day => "05/15",  lank =>[10, 14] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
-				{ext => "#KIND# Tokyo 16-20 5/15 (#LD#) #SRC# rlav 7", start_day => "05/15",  lank =>[15, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo 1 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[0, 0] , exclusion => "", target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo 1-5 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[0, 3] , exclusion => "新宿", target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo 6-10 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[5, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo 11-15 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[10, 14] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo 16-20 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[15, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
 
 			],
 			CC => [

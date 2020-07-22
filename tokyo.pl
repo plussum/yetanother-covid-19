@@ -69,12 +69,14 @@ my $DLM = "\t";
 my @PARAMS = (
     {	
 		src => "$TKY_DIR/data/positive_rate.json",
+		date => "diagnosed_date",
 		dst => "tky_pr",
 		title => "Tokyo Positive Rate",
 		ylabel => "daiagnosed count",
 		y2label => "positive rate",
 		items => [qw (diagnosed_date positive_count negative_count positive_rate)],
 		y2max => "positive_rate",
+		dt_start => "0000-00-00",
 		plot => [
 			{colm => '($2+$3)', axis => "x1y1", graph => "boxes fill",  item_title => ""},
 			{colm => '2', axis => "x1y1", graph => "boxes fill",  item_title => ""},
@@ -83,6 +85,7 @@ my @PARAMS = (
 	},
     {	
 		src => "$TKY_DIR/data/positive_status.json",
+		date => "date",
 		dst => "tky_st",
 		title => "Tokyo Number of Critical and Hospitalized",
 		ylabel => "hospitalized",
@@ -95,6 +98,39 @@ my @PARAMS = (
 		],
 	},
 
+	{	
+		src => "$TKY_DIR/data/positive_rate.json",
+		date => "diagnosed_date",
+		dst => "tky_pr",
+		title => "Tokyo Positive Rate (2020-03-12)",
+		ylabel => "daiagnosed count",
+		y2label => "positive rate",
+		items => [qw (diagnosed_date positive_count negative_count positive_rate)],
+		y2max => "positive_rate",
+		dt_start => "2020-03-12",
+		ext => "0312",
+		plot => [
+			{colm => '($2+$3)', axis => "x1y1", graph => "boxes fill",  item_title => ""},
+			{colm => '2', axis => "x1y1", graph => "boxes fill",  item_title => ""},
+			{colm => '4', axis => "x1y2", graph => "lines linewidth 2",  item_title => ""},
+		],
+	},
+	{	
+		src => "$TKY_DIR/data/positive_status.json",
+		date => "date",
+		dst => "tky_st",
+		title => "Tokyo Number of Critical and Hospitalized",
+		ylabel => "hospitalized",
+		y2label => "serevre",
+		items => [qw(date hospitalized severe_case)], 
+		t2max => "severe_case",
+		dt_start => "2020-03-12",
+		ext => "0312",
+		plot => [
+			{colm => '3', axis => "x1y2", graph => "boxes fill",  item_title => "severe"},
+			{colm => '2', axis => "x1y1", graph => "lines linewidth 2",  item_title => "hospitalized"},
+		],
+	},
 );
 	
 #
@@ -122,11 +158,17 @@ my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 foreach my $p (@PARAMS){
 	foreach my $avr_date(0, 7){
 		print $p->{title} . "avr_date $avr_date \n";
-		my $pngf = &tokyo_info($p, $avr_date);
+		my $dst = &tokyo_info($p, $avr_date);
 
 		print HTML "<!-- avr_date $avr_date -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
-		print HTML "<img src=\"$IMG_PATH/$pngf\">\n";
+		print HTML "<a link img src=\"$IMG_PATH/$dst.png\">\n";
+		print HTML "<img src=\"$IMG_PATH/$dst.png\"> </a>\n";
+
+		print HTML "<span class=\"c\">\n";
+		print HTML "csv:<a href=\"$IMG_PATH/$dst.csv.txt\" target=\"blank\">$IMG_PATH/$dst.csv.txt</a><br>\n"; 
+		print HTML "plot:<a href=\"$IMG_PATH/$dst.-plot.txt\" target=\"blank\">$IMG_PATH/$dst-plot.txt</a><br>\n"; 
+		print HTML "</span>\n";
 		print HTML "<br>\n";
 		print HTML "<span $class> Data Source TOKYO OPEN DATA </span>\n";
 		print HTML "<hr>\n";
@@ -145,11 +187,17 @@ sub	tokyo_info
 {
 	my ($p, $avr_date) = @_;
 
-	my $dst = $p->{dst} . "_avr$avr_date";
+	my $dt_start = &valdef($p->{dt_start}, "0000-00-00"); 
+	my $dt_end   = &valdef($p->{dt_end},   "9999-99-99");
+
+	my $ext = &valdef($p->{ext}, "none");
+	my $dst = $ext . $p->{dst} . "_avr$avr_date" ;
+	print "[$dst]\n";
 	my $pngf = $config::PNG_PATH . "/$dst.png";
-	my $csvf = $config::CSV_PATH . "/$dst.csv.txt";
+	my $csvf = $config::PNG_PATH . "/$dst.csv.txt";
 	my $plotf = $config::PNG_PATH . "/$dst-plot.txt";
 	my @items = @{$p->{items}};
+
 
 	#
 	#	Read from JSON file
@@ -170,6 +218,7 @@ sub	tokyo_info
 	my %max = ();
 	my $date_name = $items[0];
 	foreach my $dt (@data0) {
+
 		foreach (my $itn = 0; $itn <= $#items; $itn++){
 			my $k = $items[$itn];
 			my $v = csvlib::valdef($dt->{$k});
@@ -187,15 +236,19 @@ sub	tokyo_info
 			$data[$rec]{$k} = $v;
 			$max{$k} = $v if(!defined $max{$k} || ($itn > 0 && $v > $max{$k}));
 		}
-		$rec++;
+
+		$rec++ 
 	}
 	my $y2k = $p->{y2max};
 	my $y2 = (defined $y2k && $y2k) ? $max{$y2k} : "";
 
 	open(CSV, "> $csvf") || die "cannto create $csvf";
-	print CSV join(",", "#" . $positive->{date}, @items) . "\n"; 
+	print CSV join($DLM, "#" . $positive->{date}, @items) . "\n"; 
+	
 	foreach my $dt (@data){
 		my @line = ();
+		next if($dt->{$date_name} lt $dt_start || $dt->{$date_name} gt $dt_end);
+
 		foreach my $k (@items){
 			push(@line, $dt->{$k});
 		}
@@ -204,19 +257,24 @@ sub	tokyo_info
 	close(CSV);
 	my $de = scalar(@data);
 
+	my $first_date = $data[$avr_date]{$date_name};
+	$first_date = $dt_start if($dt_start && $dt_start gt $first_date); 
+	my $last_date = $data[$rec-1]{$date_name};
+	$last_date = $dt_end if($dt_end && $dt_end lt $last_date); 
+
 	my $gpara = {
 		csvf => $csvf,
 		pngf => $pngf,
 		plotf => $plotf,
-		first_date => $data[$avr_date]{$date_name}, 
-		last_date   => $data[$rec-1]{$date_name},
+		first_date => $first_date, 
+		last_date   => $last_date,
 		xtics => 60 * 60 * 24 * 7,
 		dlm => $DLM,
 		p => $p,
 		y2 => (defined $p->{y2items}) ? int($y2 + 0.999) : "",
 	};	
 	&graph($gpara);
-	return ("$dst.png");
+	return ("$dst");
 }
 
 sub	graph
@@ -296,8 +354,9 @@ _EOD_
 }
 sub	valdef
 {
-	my($v) = @_;
+	my($v, $d) = @_;
 
-	$v = 0 if(!defined $v);
+	$d = 0 if(!defined $d);	
+	$v = $d if(!defined $v);
 	return $v;
 }

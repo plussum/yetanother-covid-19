@@ -621,7 +621,7 @@ sub	csv2graph
 			#dp::dp "SET YMAX $ymax by THRESH LEVEL\n";
 		}
 	}
-	my $TITLE = $ext . "  src:" . $clp->{src} . " <$thresh_flag:$thresh_fag_max:$ymax:" . sprintf("$max:%.1f:%.1f>", $avr,$stdv);
+	my $TITLE = $ext . "  src:" . $clp->{src} ; # . " <$thresh_flag:$thresh_fag_max:$ymax:" . sprintf("$max:%.1f:%.1f>", $avr,$stdv);
 	my $XLABEL = "";
 	my $YLABEL = "";
 	my $START_DATE = $DATES[0];
