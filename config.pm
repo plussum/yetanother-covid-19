@@ -31,7 +31,7 @@ our $POP_BASE = 100 * 1000;			# 10万人当たりのケース数
 our $POP_THRESH = 100 * 1000;		# 人口が少ないと振れ幅が大きいので、この人口より少ない国は対象外にする
 
 
-our $DLM = ",";
+our $DLM = "\t";
 
 our $MODE_NAME = {
 	NC => "NEW CASES",

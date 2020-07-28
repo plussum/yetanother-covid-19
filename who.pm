@@ -23,6 +23,7 @@ use config;
 use csvgpl;
 use params;
 use dp;
+use config;
 
 #
 #	Initial
@@ -54,7 +55,7 @@ our $PARAMS = {			# MODULE PARETER        $mep
 		CD => "$WIN_PATH/CSV/who_situation_report_ND.html",		# jhccseの場合は、実際にCSVがあるので、このパラメータを読み込みに利用している
 	},
 	base_dir => "",
-	DLM => ",",
+	DLM => $DLM,
 
 	new => \&new,
 	aggregate => \&aggregate,

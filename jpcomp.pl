@@ -13,11 +13,12 @@ use csvaggregate;
 use csvlib;
 use ft;
 use rate;
+use config;
 
 my $DEBUG = 1;
 my $DOWNLOAD = 0;
 my $MODE = "NC";
-my $DLM = ",";
+my $DLM = $config::DLM;
 
 my $src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv";
 my $WIN_PATH = "/mnt/f/OneDrive/cov";

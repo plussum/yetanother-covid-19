@@ -29,6 +29,7 @@ use warnings;
 use Data::Dumper;
 use	csvlib;
 use dp;
+use config;
 
 my $DEBUG = 0;
 
@@ -43,7 +44,7 @@ sub	kvalue
 	my @KV = ();
 	my $TERM = 7;
 
-	my $dlm = csvlib::valdef($p->{delimiter}, ",");
+	my $dlm = csvlib::valdef($p->{delimiter}, $config::DLM);
 
 	#
 	#	Load input file

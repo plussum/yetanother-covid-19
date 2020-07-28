@@ -25,11 +25,14 @@ my $DEFUALT_SORT_WEIGHT  = 0.05;	# 0: No Weight, 0.1: 10%　Weight -0.1: -10% Wi
 my $SORT_BALANCE = 0;		# ALL = 0; 0.7 = 後半の30%のデータでソート
 my $SORT_WEIGHT  = 0;	# 0: No Weight, 0.1: 10%　Weight -0.1: -10% Wight
 
+my $DLM = $config::DLM;
+
 sub	csvgpl
 {
 	my ($csvgplp) = @_;
  
 	$DEBUG = csvlib::valdef($csvgplp->{debug} , $DEBUG);
+
 	if($DEBUG){
 		print "###### csvgpl #####\n";
 		open(PARA, "> param.txt") || die "param.txt";
@@ -74,6 +77,8 @@ sub	csvgpl
 	my $TBL_SIZE = 10;
 	my $mode = $fp->{mode};
 	my $sub_mode = $fp->{sub_mode};
+
+	$DLM = csvlib::valdef($fp->{dlm}, $DLM);
 
 	my @references = (defined $mep->{references}) ? (@{$mep->{references}}) : ();
 	#dp::dp "REFERENCE: [" . join(",", @references) . "]\n";
@@ -229,17 +234,18 @@ sub	csv2graph
 	my @DATA = ();
 	my $DATE_COL_NO = 2;
 
+	#dp::dp "$csvf\n";
 	open(CSV, $csvf) || die "cannot open $csvf";
 	my $cls = <CSV>; 
 	$cls =~ s/,*[\r\n]+$//;
-	for(split(/,/, $cls)){
+	for(split(/$DLM/, $cls)){
 		# s#[0-9]{4}/##;
 		push(@DATE_LABEL,  $_);
 	}
 	for(my $i = 0; $i <$DATE_COL_NO; $i++){
 		shift(@DATE_LABEL);
 	}
-	dp::dp join(",", @DATE_LABEL), "\n" if($DEBUG > 2);
+	#dp::dp "DATE_LABE:  $#DATE_LABEL: " . join(",", @DATE_LABEL), "\n" ;# if($DEBUG > 2);
 
 	my $DATE_NUMBER = $#DATE_LABEL;
 	my $LAST_DATE = $DATE_LABEL[$DATE_NUMBER];
@@ -248,7 +254,7 @@ sub	csv2graph
 	my $l;
 	for($l = 0; <CSV>; $l++){
 		chop;
-		my @w = split(/,/, $_); 
+		my @w = split(/$DLM/, $_); 
 		for(my $i = 0; $i <= $#w; $i++){
 			$DATA[$l][$i] = $w[$i];
 		}
@@ -514,7 +520,7 @@ sub	csv2graph
 			push(@data, $v);
 			$max_data = $v if($v > $max_data);
 		}
-		push(@record, join(",", $dts, @data));
+		push(@record, join($DLM, $dts, @data));
 	}
 
 	#
@@ -599,7 +605,7 @@ sub	csv2graph
 	#
 	dp::dp "#### " . $#record . ":$final_rec\n" if($DEBUG);
 	open(DF, "> $plot_csvf") || die "cannot create $plot_csvf\n";
-	print DF join(",", "#", @LEGEND_KEYS), "\n";
+	print DF join($DLM, "#", @LEGEND_KEYS), "\n";
 	for(my $i = 0; $i <= $final_rec; $i++){
 		my $rr = $record[$i];
 		print DF $rr , "\n";
@@ -644,7 +650,7 @@ sub	csv2graph
 	my $TERM_YSIZE = csvlib::valdef($gplitem->{term_ysize}, 300);
 
 my $PARAMS = << "_EOD_";
-set datafile separator ','
+set datafile separator '$DLM'
 set xtics rotate by -90
 $DATE_FORMAT
 set mxtics 2

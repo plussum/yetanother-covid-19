@@ -24,6 +24,7 @@ use warnings;
 use Data::Dumper;
 use	csvlib;
 use dp;
+use config;
 
 my $DEBUG = 0;
 
@@ -41,7 +42,7 @@ sub	ft
 	my @DATE_LIST = ();
 
 	my $thresh = $p->{thresh};
-	my $dlm = csvlib::valdef($p->{delimiter}, ",");
+	my $dlm = csvlib::valdef($p->{delimiter}, $config::DLM);
 	my $avr_date = $p->{average_date};
 #	$DEBUG = csvlib::valdef($p->{DEBUG}, 0);
 
