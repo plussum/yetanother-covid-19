@@ -90,6 +90,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				{ext => "#KIND# Tokyo 16-20 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[15, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
 
 				{ext => "#KIND# Tokyo TOP10 (#LD#) #SRC#(wo Shinjyuku) rlav 7", start_day => 0,  lank =>[1, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo TOP10 (#LD#) #SRC# rlav 7", start_day => 0,  lank =>[0, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
 				{ext => "#KIND# Tokyo TOP20 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
 				{ext => "#KIND# Tokyo TOP20 $STD (#LD#) #SRC# wo Shinjyuku rlav 7", start_day => "$STD",  lank =>[0, 19] , exclusion => "新宿", target => "", 
 					label_skip => 2, graph => "lines", avr_date => 7},
