@@ -47,14 +47,14 @@ sub	ern
 	#
 	open(IMF, $p->{input_file}) || die "Cannot open " . $p->{input_file};
 	$_ = <IMF>; chop;
-	@DATE_LIST = split(/,/, $_);
+	@DATE_LIST = split(/$dlm/, $_);
 	shift(@DATE_LIST);
 	shift(@DATE_LIST);
 
 	my $ln = 0;
 	while(<IMF>){
 		chop;
-		my @w = (split(",", $_));
+		my @w = (split(/$dlm/, $_));
 		$COUNTRY_LIST[$ln] = shift(@w);
 		$TOTAL[$ln] = shift(@w);
 		$IMF_DATA[$ln] = [@w];

@@ -32,6 +32,7 @@ our $POP_THRESH = 100 * 1000;		# 人口が少ないと振れ幅が大きいの�
 
 
 our $DLM = "\t";
+our $DLM_OUT = "\t";
 
 our $MODE_NAME = {
 	NC => "NEW CASES",

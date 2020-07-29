@@ -54,16 +54,17 @@ sub	ft
 	#
 	#	Load input file
 	#
+	dp::dp $p->{input_file} . "\n";
 	open(IMF, $p->{input_file}) || die "Cannot open " . $p->{input_file};
 	$_ = <IMF>; chop;
-	@DATE_LIST = split(/,/, $_);
+	@DATE_LIST = split(/$dlm/, $_);
 	shift(@DATE_LIST);
 	shift(@DATE_LIST);
 
 	my $ln = 0;
 	while(<IMF>){
 		chop;
-		my @w = (split(",", $_));
+		my @w = (split(/$dlm/, $_));
 		$COUNTRY_LIST[$ln] = shift(@w);
 		shift(@w);
 		$IMF_DATA[$ln] = [@w];
@@ -127,7 +128,7 @@ sub	ft
 	open(FT, "> " . $p->{output_file}) || die "Cannot create " . $p->{output_file};
 	print FT join($dlm, "Country", "Total");
 	for(my $i = 0; $i <= $ITEM_COUNT; $i++){
-			print FT ",$i";
+			print FT "$dlm$i";
 	}
 	print FT "\n";
 	for(my $cn = 0; $cn <= $#COUNTRY_LIST; $cn++){

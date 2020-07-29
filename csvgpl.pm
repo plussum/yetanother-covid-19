@@ -529,7 +529,7 @@ sub	csv2graph
 	my $final_rec = 0;
 	for(my $i = 0; $i <= $#record; $i++){
 		my $rr = $record[$i];
-		$rr =~ s/^[0-9]+,//;
+		$rr =~ s/^[0-9]+$DLM//;
 		if($rr =~ /[0-9]/){
 			$final_rec = $i;
 		}
@@ -553,7 +553,7 @@ sub	csv2graph
 
 	if($thresh_mode){
 		foreach my $rs (@record){
-			my @w = split(/,/, $rs);
+			my @w = split(/$DLM/, $rs);
 			for(my $i = 1; $i <= $#w; $i++){
 				if($w[$i] > $thresh_min){
 					$total += $w[$i];
@@ -566,7 +566,7 @@ sub	csv2graph
 		
 		my $s = 0;
 		foreach my $rs (@record){
-			my @w = split(/,/, $rs);
+			my @w = split(/$DLM/, $rs);
 			for(my $i = 1; $i <= $#w; $i++){
 				if($w[$i] > $thresh_min){
 					$s += (($w[$i] - $avr)**2);
@@ -586,7 +586,7 @@ sub	csv2graph
 		#dp::dp sprintf("total:%d count:%d max:%d avr:%.2f stdev:%.2f thresh:%d ymax:%d\n",
 		#				$total,$count,$max, $avr,$stdv,$thresh,$thresh_ymax);
 		for(my $r = 0; $r <= $#record; $r++){
-			my @w = split(/,/, $record[$r]);
+			my @w = split(/$DLM/, $record[$r]);
 			my $f = "";
 			for(my $i = 1; $i <= $#w; $i++){
 				my $z = ($w[$i] - $avr) / $stdv;
@@ -603,12 +603,13 @@ sub	csv2graph
 	#
 	#	グラフ生成用のCSVの作成
 	#
+	my $DLM_OUT = $config::DLM_OUT;
 	dp::dp "#### " . $#record . ":$final_rec\n" if($DEBUG);
 	open(DF, "> $plot_csvf") || die "cannot create $plot_csvf\n";
-	print DF join($DLM, "#", @LEGEND_KEYS), "\n";
+	print DF join($DLM_OUT, "#", @LEGEND_KEYS), "\n";
 	for(my $i = 0; $i <= $final_rec; $i++){
 		my $rr = $record[$i];
-		print DF $rr , "\n";
+		print DF $rr . "\n";
 	}
 	close(DF);
 
@@ -650,7 +651,7 @@ sub	csv2graph
 	my $TERM_YSIZE = csvlib::valdef($gplitem->{term_ysize}, 300);
 
 my $PARAMS = << "_EOD_";
-set datafile separator '$DLM'
+set datafile separator '$DLM_OUT'
 set xtics rotate by -90
 $DATE_FORMAT
 set mxtics 2
