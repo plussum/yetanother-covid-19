@@ -126,6 +126,12 @@ sub	csvgpl
 		}
 		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode, $fp);
 
+		my $THRESH_SIZE = 1 * 1024;
+		
+		if(csvlib::file_size($config::PNG_PATH . "/$png") < $THRESH_SIZE){
+			die "Failed to create file\n" . "$png : " . csvlib::file_size($config::PNG_PATH . "/$png");
+		}
+
 		print HTML "<!-- " . $gplitem->{ext} . " -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
 		print HTML "<img src=\"$IMG_PATH/$png\">\n";

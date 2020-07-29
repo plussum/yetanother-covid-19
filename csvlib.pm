@@ -288,5 +288,19 @@ sub	max_val
 	return $vv;
 }
 
+#
+#
+#
+sub	file_size
+{
+	my ($fn, $thresh) = @_;
+
+	$thresh = 1 * 1024 if(! defined $thresh);
+
+	my $size = 0;
+	$size = -s $fn if( -f $fn);
+
+	return $size;
+}
 
 1;
