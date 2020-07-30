@@ -445,6 +445,18 @@ sub	csv2graph
 
 	my @sc = (sort {$CTG{$b} <=> $CTG{$a}} keys %CTG);
 
+	#	None Sort
+	if(defined $gplitem->{nosort}){
+		#dp::dp "#" x 20 . "  NONE SORT";
+		@sc = ();
+		for(my $cn = 0; $cn <= $COUNTRY_NUMBER; $cn++){
+			my $country = $DATA[$cn][0];
+			next if(! $country);
+			push(@sc, $country);
+			$TOTAL{$country} = $cn;
+		}
+	}
+
 	foreach my $country (@sc){
 		#dp::dp "$country  " . $CTG{$country} . "\n";
 		
@@ -500,7 +512,7 @@ sub	csv2graph
 			my $country = $COUNTRY[$i-1];
 			#dp::dp "### [$country]: ";
 			my $item_number = $TOTAL{$country};
-			#dp::dp "###### $item_number : $dt";
+			#dp::dp "###### [$country] $item_number : $dt" . "\n";
 			if(defined $gplitem->{average_date}){
 				my $av = 0;
 				if($dt > $item_number){ 
@@ -602,6 +614,37 @@ sub	csv2graph
 					$thresh_flag++;
 				}
 			}
+		}
+	}
+
+	#
+	#	累積
+	#
+	if(defined $gplitem->{ruiseki}){
+		dp::dp "#### RUIKEI\n";
+		my @RUI = ();
+		my $recno = $#record;
+		dp::dp "$recno,  $#Dataset\n";
+		for(my $i = 0; $i <= $recno; $i++){
+			my @w = split(/$DLM/, $record[$i]);
+			for(my $r = 0; $r <= $#w; $r++){
+				$RUI[$i][$r] = $w[$r];
+			}
+		}
+		for(my $i = 0; $i <= $recno; $i++){
+			for(my $r = 2; $r <= $#Dataset; $r++){
+				#print "[$i,$r,$recno, $#Dataset]\n";
+				#print "[" . join(",", $RUI[$i][$r], $RUI[$i][$r] + $RUI[$i][$r-1]) . "]";
+				$RUI[$i][$r] += $RUI[$i][$r-1];
+			}
+		}
+		@record = ();
+		for(my $i = 0; $i <= $recno; $i++){
+			my @rw = ();
+			for(my $r = 0; $r <= $#Dataset; $r++){
+				push(@rw, $RUI[$i][$r]);
+			}
+			push(@record, join($DLM, @rw));
 		}
 	}
 
