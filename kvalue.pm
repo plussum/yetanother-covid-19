@@ -29,6 +29,7 @@ use warnings;
 use Data::Dumper;
 use	csvlib;
 use dp;
+use config;
 
 my $DEBUG = 0;
 
@@ -43,7 +44,7 @@ sub	kvalue
 	my @KV = ();
 	my $TERM = 7;
 
-	my $dlm = csvlib::valdef($p->{delimiter}, ",");
+	my $dlm = csvlib::valdef($p->{delimiter}, $config::DLM);
 
 	#
 	#	Load input file
@@ -51,14 +52,14 @@ sub	kvalue
 	#dp::dp "INPUT FILE: " . $p->{input_file} . "\n";
 	open(IMF, $p->{input_file}) || die "Cannot open " . $p->{input_file};
 	$_ = <IMF>; chop;
-	@DATE_LIST = split(/,/, $_);
+	@DATE_LIST = split(/$dlm/, $_);
 	shift(@DATE_LIST);
 	shift(@DATE_LIST);
 
 	my $ln = 0;
 	while(<IMF>){
 		chop;
-		my @w = (split(",", $_));
+		my @w = (split(/$dlm/, $_));
 		$COUNTRY_LIST[$ln] = shift(@w);
 		$TOTAL[$ln] = shift(@w);
 		#dp::dp join(",", @w) . "\n" if($COUNTRY_LIST[$ln] =~ /Japan/);

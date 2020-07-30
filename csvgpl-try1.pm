@@ -25,14 +25,11 @@ my $DEFUALT_SORT_WEIGHT  = 0.05;	# 0: No Weight, 0.1: 10%　Weight -0.1: -10% Wi
 my $SORT_BALANCE = 0;		# ALL = 0; 0.7 = 後半の30%のデータでソート
 my $SORT_WEIGHT  = 0;	# 0: No Weight, 0.1: 10%　Weight -0.1: -10% Wight
 
-my $DLM = $config::DLM;
-
 sub	csvgpl
 {
 	my ($csvgplp) = @_;
  
 	$DEBUG = csvlib::valdef($csvgplp->{debug} , $DEBUG);
-
 	if($DEBUG){
 		print "###### csvgpl #####\n";
 		open(PARA, "> param.txt") || die "param.txt";
@@ -78,10 +75,8 @@ sub	csvgpl
 	my $mode = $fp->{mode};
 	my $sub_mode = $fp->{sub_mode};
 
-	$DLM = csvlib::valdef($fp->{dlm}, $DLM);
-
 	my @references = (defined $mep->{references}) ? (@{$mep->{references}}) : ();
-	#dp::dp "REFERENCE: [" . join(",", @references) . "]\n";
+	dp::dp "REFERENCE: [" . join(",", @references) . "]\n";
  
 
 	$SORT_BALANCE =  $DEFUALT_SORT_BALANCE;
@@ -104,7 +99,7 @@ sub	csvgpl
 		$SORT_WEIGHT = $sbp->[1];
 		#dp::dp "CONFIG:MODE\n";
 	}
-	#dp::dp "SORT_BALANCE($mode): $SORT_BALANCE, $SORT_WEIGHT\n";
+	dp::dp "SORT_BALANCE($mode): $SORT_BALANCE, $SORT_WEIGHT\n";
 
 	dp::dp "TITLE: $clp->{name} \n $clp->{htmlf}\n" if($VERBOSE);
 	open(HTML, "> $clp->{htmlf}") || die "Cannot create file $clp->{htmlf}";
@@ -125,12 +120,6 @@ sub	csvgpl
 			last;
 		}
 		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode, $fp);
-
-		my $THRESH_SIZE = 1 * 1024;
-		
-		if(csvlib::file_size($config::PNG_PATH . "/$png") < $THRESH_SIZE){
-			die "Failed to create file\n" . "$png : " . csvlib::file_size($config::PNG_PATH . "/$png");
-		}
 
 		print HTML "<!-- " . $gplitem->{ext} . " -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
@@ -207,7 +196,6 @@ sub	csv2graph
 	my $sub_mode = $mep->{sub_mode};
 	$ext =~ s/#KIND#/$kind/;
 	$ext =~ s/#SRC#/$src/;
-	$ext .= " rl-avr " . $gplitem->{avr_date} if(defined $gplitem->{avr_date});
 	#dp::dp $ext . "\n";
 	my $fname = $ext;
 	$fname =~ s/#LD#//;
@@ -226,12 +214,6 @@ sub	csv2graph
 	}
 	my $style = csvlib::valdef($gplitem->{graph}, "lines");
 
-	my $mode = $fp->{mode};
-	my $thresh_mode = csvlib::valdef($config::THRESH{$mode}, 0);
-	$thresh_mode = csvlib::valdef($mep->{THRESH}{$mode}, $thresh_mode);
-	$thresh_mode = csvlib::valdef($gplitem->{thresh}, $thresh_mode);
-	#dp::dp "thresh_mode[$thresh_mode]\n";
-
 #	$plot_pngf =~ s/[\(\) ]//g;
 	#
 	#	Read CSV DATA
@@ -240,18 +222,17 @@ sub	csv2graph
 	my @DATA = ();
 	my $DATE_COL_NO = 2;
 
-	#dp::dp "$csvf\n";
 	open(CSV, $csvf) || die "cannot open $csvf";
 	my $cls = <CSV>; 
 	$cls =~ s/,*[\r\n]+$//;
-	for(split(/$DLM/, $cls)){
+	for(split(/,/, $cls)){
 		# s#[0-9]{4}/##;
 		push(@DATE_LABEL,  $_);
 	}
 	for(my $i = 0; $i <$DATE_COL_NO; $i++){
 		shift(@DATE_LABEL);
 	}
-	#dp::dp "DATE_LABE:  $#DATE_LABEL: " . join(",", @DATE_LABEL), "\n" ;# if($DEBUG > 2);
+	dp::dp join(",", @DATE_LABEL), "\n" if($DEBUG > 2);
 
 	my $DATE_NUMBER = $#DATE_LABEL;
 	my $LAST_DATE = $DATE_LABEL[$DATE_NUMBER];
@@ -260,7 +241,7 @@ sub	csv2graph
 	my $l;
 	for($l = 0; <CSV>; $l++){
 		chop;
-		my @w = split(/$DLM/, $_); 
+		my @w = split(/,/, $_); 
 		for(my $i = 0; $i <= $#w; $i++){
 			$DATA[$l][$i] = $w[$i];
 		}
@@ -526,7 +507,7 @@ sub	csv2graph
 			push(@data, $v);
 			$max_data = $v if($v > $max_data);
 		}
-		push(@record, join($DLM, $dts, @data));
+		push(@record, join(",", $dts, @data));
 	}
 
 	#
@@ -535,7 +516,7 @@ sub	csv2graph
 	my $final_rec = 0;
 	for(my $i = 0; $i <= $#record; $i++){
 		my $rr = $record[$i];
-		$rr =~ s/^[0-9]+$DLM//;
+		$rr =~ s/^[0-9]+,//;
 		if($rr =~ /[0-9]/){
 			$final_rec = $i;
 		}
@@ -543,64 +524,40 @@ sub	csv2graph
 
 	#
 	#	特異に大きなデータをグラフから外すための処理
-	#		https://ai-trend.jp/basic-study/normal-distribution/standardization/
 	#
-	my $thresh_fag_max = 0;
-	my $thresh = 0;
-	my $thresh_ymax = 0;
-	my $thresh_flag = 0;
-	my $thresh_min = 5;
-	my $avr = 0;
-	my $max = 0;
 	my $total = 0;
 	my $count = 0;
-	my $stdv = 0;
-	my $ct = $thresh_mode;							# ct = 2 -> 95.45%
-
-	if($thresh_mode){
-		foreach my $rs (@record){
-			my @w = split(/$DLM/, $rs);
-			for(my $i = 1; $i <= $#w; $i++){
-				if($w[$i] > $thresh_min){
-					$total += $w[$i];
-					$count++;
-					$max = $w[$i] if($w[$i] > $max);
-				}
-			}
+	my $avr = 0;
+	foreach my $country (@sc){
+		foreach my $v (@{$COUNT_D{$country}}){
+			$total += $v;
+			$count++;
 		}
-		$avr = $total / $count if($count > 0);
-		
-		my $s = 0;
-		foreach my $rs (@record){
-			my @w = split(/$DLM/, $rs);
-			for(my $i = 1; $i <= $#w; $i++){
-				if($w[$i] > $thresh_min){
-					$s += (($w[$i] - $avr)**2);
-					#print  sprintf("<%d-%.2f:%.2f>", $w[$i], $avr, $w[$i] - $avr);
-				}
-			}
+	}
+	$avr = $total / $count;
+	
+	my $s = 0;
+	foreach my $country (@sc){
+		foreach my $v (@{$COUNT_D{$country}}){
+			$s += ($v - $avr)^2;
 		}
-		#dp::dp $s . "\n";
-		$s = $s / $count if($count > 0);
-		$stdv = sqrt($s);
-		$stdv = 1 if($stdv <= 0);
+	}
+	$s = $s / $count;
+	my $stdv = sqrt($s);
 
-		$thresh_fag_max = int($count * 0.002) + 1;
-		$thresh = $avr + $stdv * $ct;		# 
-		$thresh_ymax = csvlib::max_val($avr + $stdv * ($ct - 1), 4);  	# 特異に大きな値の処理
-		
-		#dp::dp sprintf("total:%d count:%d max:%d avr:%.2f stdev:%.2f thresh:%d ymax:%d\n",
-		#				$total,$count,$max, $avr,$stdv,$thresh,$thresh_ymax);
-		for(my $r = 0; $r <= $#record; $r++){
-			my @w = split(/$DLM/, $record[$r]);
-			my $f = "";
-			for(my $i = 1; $i <= $#w; $i++){
-				my $z = ($w[$i] - $avr) / $stdv;
-				if($z > $ct){
-					#dp::dp "THRESH: $w[$i]($z) -> $ct:$thresh\n";
-					#$w[$i] = $thresh;
-					$thresh_flag++;
-				}
+	my $ct = 4;							# ct = 2 -> 95.45%
+	my $thresh = $avr + $stdv * $ct;		# 
+
+	dp::dp "total:$total count:$count avr:$avr stdev:$s  thresh:$thresh\n";
+	foreach my $country (@sc){
+		my $countp = $COUNT_D{$country};
+		#dp::dp $countp . ": " . scalar(@$countp) . "\n";
+		#dp::dp Dumper $countp;
+		#dp::dp $country . "\n";
+		for(my $i = 0; $i <  scalar(@$countp) ; $i++){
+			my $v = $countp->[$i];
+			if($v > $thresh){
+				#$countp->[$i] = $thresh;
 			}
 		}
 	}
@@ -608,32 +565,19 @@ sub	csv2graph
 	#
 	#	グラフ生成用のCSVの作成
 	#
-	my $DLM_OUT = $config::DLM_OUT;
 	dp::dp "#### " . $#record . ":$final_rec\n" if($DEBUG);
 	open(DF, "> $plot_csvf") || die "cannot create $plot_csvf\n";
-	print DF join($DLM_OUT, "#", @LEGEND_KEYS), "\n";
+	print DF join(",", "#", @LEGEND_KEYS), "\n";
 	for(my $i = 0; $i <= $final_rec; $i++){
 		my $rr = $record[$i];
-		print DF $rr . "\n";
+		print DF $rr , "\n";
 	}
 	close(DF);
 
 	#
 	#	グラフ生成
 	#
-
-	my $ymin = csvlib::valdef($gplitem->{ymin}, 0);
-	my $ymax = "";
-	if(defined $gplitem->{ymax}){
-		$ymax = $gplitem->{ymax};
-	}
-	elsif($fp->{sub_mode} ne "FT"){
-		if($thresh_flag > 0 && $thresh_flag <= $thresh_fag_max) {
-			$ymax = $thresh_ymax;  	# 特異に大きな値の処理
-			#dp::dp "SET YMAX $ymax by THRESH LEVEL\n";
-		}
-	}
-	my $TITLE = $ext . "  src:" . $clp->{src} ; # . " <$thresh_flag:$thresh_fag_max:$ymax:" . sprintf("$max:%.1f:%.1f>", $avr,$stdv);
+	my $TITLE = $ext . "  src:" . $clp->{src};
 	my $XLABEL = "";
 	my $YLABEL = "";
 	my $START_DATE = $DATES[0];
@@ -656,7 +600,7 @@ sub	csv2graph
 	my $TERM_YSIZE = csvlib::valdef($gplitem->{term_ysize}, 300);
 
 my $PARAMS = << "_EOD_";
-set datafile separator '$DLM_OUT'
+set datafile separator ','
 set xtics rotate by -90
 $DATE_FORMAT
 set mxtics 2
@@ -673,7 +617,6 @@ set xtics #XTICKS#
 #set xrange ['$START_DATE':'$LAST_DATE']
 $XRANGE
 set yrange [#YRANGE#]
-set y2range [#YRANGE#]
 set terminal pngcairo size $TERM_XSIZE, $TERM_YSIZE font "IPAexゴシック,8" enhanced
 #LOGSCALE#
 #LOGSCALE2#
@@ -708,20 +651,16 @@ _EOD_
 		#dp::dp "additional_plot: " . $gplitem->{additional_plot} . "\n";
 		$pn .= ", " . $gplitem->{additional_plot};
 	}
-	if($#LEGEND_KEYS < 0 && ! defined $gplitem->{additional_plot}){
-		$pn = "1 with lines title 'no-data'";
-	}
 	$PARAMS =~ s/#PLOT_PARAM#/$pn/;	
 
+	my $ymin = csvlib::valdef($gplitem->{ymin}, 0);
+	my $ymax = csvlib::valdef($gplitem->{ymax}, "");
 	if($gplitem->{logscale}){
-		if($fp->{sub_mode} eq "FT" && $max_data <= 10){
-			$max_data = 100;
-		} 
 		$ymax = csvlib::calc_max($max_data, defined $gplitem->{logscale}) if(! $ymax);
 		$ymin = 1 if($ymin < 1);
 		# dp::dp "YRANGE [$ymin:$ymax]\n";
 	}
-	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/g;	
+	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/;	
 	my $logs = "nologscale";
 	if(defined $gplitem->{logscale}){
 		$logs = "logscale " . $gplitem->{logscale}; 

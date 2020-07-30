@@ -41,12 +41,15 @@ my $BASE_DIR = "$WIN_PATH/tokyo-ku";
 my $index_file = "$BASE_DIR/$index_html";
 my $pdf_dir = "content";
 my $transaction = "$CSV_PATH/tokyo-ku.csv.txt";
+my $fromImage = "$BASE_DIR/fromImage";
 
 my $EXC = "都外";
+my $STD = "05/20";
 our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** TOYO-KU  ****",
     src => "TOYO KU ONLINE",
 	src_url => $src_url,
+	references => ["https://www.fukushihoken.metro.tokyo.lg.jp/hodo/saishin/index.html"],
     prefix => "tkoku_",
     src_file => {
 		NC => $transaction,
@@ -65,9 +68,11 @@ our $PARAMS = {			# MODULE PARETER		$mep
 	#MODE => {NC => 1, ND => 1},
 #	sort_balance =>0.7,  	# ALL = 0; 0.7 = 後半の30%のデータでソート
 #	sort_weight => 0.1,	# 0: No Weight, 0.1: 10%　Weight -0.1: -10% Wight
-	SORT_BALANCE => {
-		CC => [0.9, 0.1],
-	},
+#
+#	SORT_BALANCE => {		# move to config.pm
+#		CC => [0.99, 0.1],
+#		CD => [0.99, 0.1],
+#	},
 
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
@@ -75,30 +80,36 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		],
 		graphp_mode => {												# New version of graph pamaeter for each MODE
 			NC => [
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", 
-					label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo TOP20 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[0, 19] , exclusion => $EXC, target => "", 
-					label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 1-5 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[0, 4] , exclusion => $EXC, target => "", 
-					label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 6-10 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[5, 9] , exclusion => $EXC, target => "", 
-					label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 11-15 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[10, 14] , exclusion => $EXC, target => "", 
-					label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 16-20 5/15 (#LD#) #SRC#", start_day => "05/15",  lank =>[15, 19] , exclusion => $EXC, target => "", 
-					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo TOP20 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo TOP20 $STD (#LD#) #SRC# wo Shinjyuku", start_day => "$STD",  lank =>[0, 19] , exclusion => "新宿", target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 1 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[0, 0] , exclusion => "", target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 1-5 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[0, 3] , exclusion => "新宿", target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 6-10 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[5, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 11-15 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[10, 14] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 16-20 $STD (#LD#) #SRC#", start_day => "$STD",  lank =>[15, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+
+				{ext => "#KIND# Tokyo TOP10 (#LD#) #SRC#(wo Shinjyuku) rlav 7", start_day => 0,  lank =>[1, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo TOP10 (#LD#) #SRC# rlav 7", start_day => 0,  lank =>[0, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo TOP20 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo TOP20 $STD (#LD#) #SRC# wo Shinjyuku rlav 7", start_day => "$STD",  lank =>[0, 19] , exclusion => "新宿", target => "", 
+					label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo 1 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[0, 0] , exclusion => "", target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo 1-5 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[0, 3] , exclusion => "新宿", target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo 6-10 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[5, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo 11-15 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[10, 14] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo 16-20 $STD (#LD#) #SRC# rlav 7", start_day => "$STD",  lank =>[15, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7},
+
 			],
 			CC => [
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", 
-					label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 1-5 (#LD#) #SRC#", start_day => 0,  lank =>[0, 4] , exclusion => $EXC, target => "", 
-					label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 6-10 (#LD#) #SRC#", start_day => 0,  lank =>[5, 9] , exclusion => $EXC, target => "", 
-					label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 10-15 (#LD#) #SRC#", start_day => 0,  lank =>[10, 14] , exclusion => $EXC, target => "", 
-					label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo 16-20 (#LD#) #SRC#", start_day => 0,  lank =>[15, 19] , exclusion => $EXC, target => "", 
-					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+#				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# logscale", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", logscale => "y"},
+				{ext => "#KIND# Tokyo 1-5 (#LD#) #SRC#", start_day => 0,  lank =>[0, 4] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 1-5 (#LD#) #SRC# wo Shinjyuku", start_day => 0,  lank =>[0, 4] , exclusion => "新宿", target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 6-10 (#LD#) #SRC#", start_day => 0,  lank =>[5, 9] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 11-19 (#LD#) #SRC#", start_day => 0,  lank =>[10, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 21-29 (#LD#) #SRC#", start_day => 0,  lank =>[20, 29] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo 31-39 (#LD#) #SRC#", start_day => 0,  lank =>[30, 39] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
 			],
 		},
 	},
@@ -148,7 +159,7 @@ sub	download
 
 	unlink($index_file);
 	my $cmd = "wget " . $mep->{src_url} . " -O $index_file" ;
-	print $cmd . "\n";
+	dp::dp $cmd . "\n";
 	system ($cmd);
 }
 
@@ -209,6 +220,17 @@ sub	gencsv
 	my $index = $agrp->{index};
 	my $csvf = $agrp->{output_file};
 
+	#
+	#	from PDF by hand
+	#
+	opendir(my $df, $fromImage) || die "cannot open $fromImage";
+	while(my $fn = readdir($df)){
+		next if($fn =~ /^[^0-9]/);
+
+		dp::dp "fromImage: " . $fn . "\n";
+		&pdf2data("$fromImage/$fn");
+	}
+	closedir($df);
 
 	#
 	#	load index and download pdf files
@@ -232,9 +254,7 @@ sub	gencsv
 				system("ps2ascii $pdf_file > $pdf_file.txt") 
 			}
 			&pdf2data("$pdf_file.txt");
-			if($rec++ < 3) {
-				dp::dp $pdf . "\n";
-			}
+			dp::dp $pdf . "\n" if($rec++ < 3);		# 3
 		}
 	}
 	close(HTML);
@@ -254,6 +274,7 @@ sub	gencsv
 		my $lv = 0;
 		foreach my $date (@DATES){
 			my $v = $CONFIRMED{$date}{$ku};
+			#dp::dp "$date:$ku: $v:$lv\n";
 			push(@nn, $v - $lv);
 			$lv = $v;
 		}
@@ -273,9 +294,12 @@ sub	pdf2data
 	my $date = "";
 	my $kn = 0;
 	while(<PDF>){
+		s/（/(/g;
+		s/）/)/g;
 		chop;
-		if(/【参考】区市町村別患者数（都内発生分）/){
-			s/^.*　（(.*)月(.*)日時点.*$/$1\t$2/;
+		if(/【参考】.*区市町村別患者数.*都内発生分.*/){
+			#dp::dp "[$_]\n";
+			s/^.*\((.*)月(.*)日時点.*$/$1\t$2/;
 			#dp::dp "[$_]\n";
 			my ($m, $d) = split(/\t/, $_);
 			#dp::dp "$m $d -> ";
@@ -302,11 +326,20 @@ sub	pdf2data
 			s/、/  /g;
 			s/」//g;
 			s/T//g;
+			s/\|/ /g;
+			s/\｜/ /g;
+
 			my @ku = split(/ +/, $_);
+
 			my $d = <PDF>;
-			#dp::dp $d;
 			chop $d;
+			$d =~ s/\([0-9]+\)/  /g;
+			$d =~ s/\|/ /g;
+			$d =~ s/\｜/ /g;
+
+			#dp::dp "NUMBER: $d \n";
 			my @number = split(/ +/, $d);
+
 			#dp::dp "\n" . "-" x 20 . "\n";
 			#if($#ku != $#number){
 			#	dp::dp  ">>> " . $_  . "\n";
@@ -319,7 +352,7 @@ sub	pdf2data
 			for(my $i = 1; $i < $#ku; $i++){
 				my $k = $ku[$i];
 				$KU_FLAG{$k} = $number[$i] if(!defined $KU_FLAG{$k} || $number[$i] > $KU_FLAG{$k});
-				#dp::dp join(":", $date, $k, $number[$i]) . " ";
+				#dp::dp join(":", $date, $k, $number[$i]) . " \n";
 				$CONFIRMED{$date}{$k} = $number[$i];
 			}
 		}

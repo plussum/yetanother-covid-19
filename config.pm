@@ -11,6 +11,7 @@ use warnings;
 #use ccse;
 #use who;
 
+our $CODE_PATH = "/home/masataka/who/src";
 our $WIN_PATH = "/mnt/f/cov/plussum.github.io";
 our $HTML_PATH = "$WIN_PATH/HTML";
 our $CSV_PATH  = "$WIN_PATH/CSV";
@@ -30,7 +31,8 @@ our $POP_BASE = 100 * 1000;			# 10万人当たりのケース数
 our $POP_THRESH = 100 * 1000;		# 人口が少ないと振れ幅が大きいので、この人口より少ない国は対象外にする
 
 
-our $DLM = ",";
+our $DLM = "\t";
+our $DLM_OUT = "\t";
 
 our $MODE_NAME = {
 	NC => "NEW CASES",
@@ -40,6 +42,32 @@ our $MODE_NAME = {
 	CD => "CCM DEATHS",
 	CR => "CCM RECOVERS",
 };
+
+our %SORT_BALANCE = (
+		NC => [0.7,  0.1],		# 0.5 0.05	0, 0 
+		ND => [0.7,  0.1],
+		NR => [0.7,  0.1],
+		CC => [0.99, 0.1],
+		CD => [0.99, 0.1],
+		CR => [0.99, 0.1],
+
+		ERN => [0.99, 0.1],
+		FT => [0.5, 0.3],
+		KV => [0.99, 0.1],
+);
+
+our %THRESH = ( 	# move to config.pm
+	NC => 6,
+	ND => 6,
+	NR => 0,
+	CC => 0,
+	CD => 0,
+	CR => 0,
+
+	ERN => 0,
+	FT => 0,
+	KV => 0,
+);
 
 my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 

@@ -49,7 +49,7 @@ my $DEBUG = 1;
 
 my @item_name = ();
 my %item_name_col = ();
-my $DLM = ",";
+my $DLM = $config::DLM;
 sub	csv_aggregate
 {
 	my ($agrp) = @_;

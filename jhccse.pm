@@ -12,6 +12,7 @@ use strict;
 use warnings;
 use dp;
 use Data::Dumper;
+use config;
 
 #
 #	$input_file
@@ -39,7 +40,7 @@ sub	jhccse
 	#dp::dp "[" . $p->{mode} . "]\n";
 	#dp::dp Dumper $p;
 
-	my $DLM = csvlib::valdefs($p->{delimiter} , ",");
+	my $DLM = csvlib::valdefs($p->{delimiter} , $config::DLM);
 	my $us_state = csvlib::valdef($p->{us_sate}, "");
 	
 	#

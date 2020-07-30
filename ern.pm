@@ -1,13 +1,16 @@
 #
-#	input_file
-#	output_file
-#	colum_number
-#	record_number
-#	start_day
-#	last_day
-#	thresh
-#	average
-
+#   定型のCSVから、再生産数 のデータを生成
+#
+#       t                  *
+#       +----+-------------+
+#         lp       ip
+#		潜伏期間 感染期間
+#
+#       R0 = ip * S[t+ip+lp] / sum(S[t+1..t+ip])
+#
+#       source      https://qiita.com/oki_mebarun/items/e68b34b604235b1f28a1
+#					http://www.kantoko.com/?p=2102
+#
 package ern;
 use Exporter;
 @ISA = (Exporter);
@@ -18,6 +21,7 @@ use warnings;
 use Data::Dumper;
 use	csvlib;
 use dp;
+use config;
 
 my $DEBUG = 0;
 
@@ -32,9 +36,9 @@ sub	ern
 	my @TOTAL = ();
 	my @AVERAGE = ();
 
-	my $dlm = csvlib::valdef($p->{delimiter}, ",");
-	my $lp = csvlib::valdef($p->{lp}, 5);	# 5 潜伏期間
-	my $ip = csvlib::valdef($p->{ip}, 8);	# 8 感染期間
+	my $dlm = csvlib::valdef($p->{delimiter}, $config::DLM);
+	my $lp = csvlib::valdef($p->{lp}, $config::RT_LP);	# 8 潜伏期間
+	my $ip = csvlib::valdef($p->{ip}, $config::RT_IP);	# 5 感染期間
 	my $avr = csvlib::valdef($p->{average_date}, 7);
 	$DEBUG = csvlib::valdef($p->{DEBUG}, 0);
 
@@ -43,14 +47,14 @@ sub	ern
 	#
 	open(IMF, $p->{input_file}) || die "Cannot open " . $p->{input_file};
 	$_ = <IMF>; chop;
-	@DATE_LIST = split(/,/, $_);
+	@DATE_LIST = split(/$dlm/, $_);
 	shift(@DATE_LIST);
 	shift(@DATE_LIST);
 
 	my $ln = 0;
 	while(<IMF>){
 		chop;
-		my @w = (split(",", $_));
+		my @w = (split(/$dlm/, $_));
 		$COUNTRY_LIST[$ln] = shift(@w);
 		$TOTAL[$ln] = shift(@w);
 		$IMF_DATA[$ln] = [@w];

@@ -41,18 +41,29 @@ my $EXCLUSION = "";
 my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 my @usa_params = (
 	{ext => "#KIND# TOP 10 (#LD#) #SRC#", start_day => 0, lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+	{ext => "#KIND# TOP 10 (#LD#) #SRC#", start_day => 0, lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", avr_date => 7},
+
 	{ext => "#KIND# TOP 10 03/14 (#LD#) #SRC#", start_day => "03/14", lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
 	{ext => "#KIND# TOP 10 05/01(#LD#) #SRC#", start_day => "05/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-	{ext => "#KIND# TOP 10 1month(#LD#) #SRC#", start_day => -31, lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-	{ext => "#KIND# TOP 11-20 1month(#LD#) #SRC#", start_day => -31, lank =>[10, 19], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-	{ext => "#KIND# TOP 21-30 1month(#LD#) #SRC#", start_day => -31, lank =>[20, 29], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-	{ext => "#KIND# TOP 31-40 1month(#LD#) #SRC#", start_day => -31, lank =>[30, 39], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
-	{ext => "#KIND# TOP 41-50 1month(#LD#) #SRC#", start_day => -31, lank =>[40, 49], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+
+	{ext => "#KIND# TOP 10 2month(#LD#) #SRC#", start_day => -62, lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", avr_date => 7},
+	{ext => "#KIND# TOP 11-20 2month(#LD#) #SRC#", start_day => -62, lank =>[10, 19], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", avr_date => 7},
+	{ext => "#KIND# TOP 21-30 2month(#LD#) #SRC#", start_day => -62, lank =>[20, 29], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", avr_date => 7},
+	{ext => "#KIND# TOP 31-40 2month(#LD#) #SRC#", start_day => -62, lank =>[30, 39], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", avr_date => 7},
+	{ext => "#KIND# TOP 41-50 2month(#LD#) #SRC#", start_day => -62, lank =>[40, 49], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", avr_date => 7},
+
+	{ext => "#KIND# TOP 10 2month(#LD#) #SRC#", start_day => -62, lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+	{ext => "#KIND# TOP 11-20 2month(#LD#) #SRC#", start_day => -62, lank =>[10, 19], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+	{ext => "#KIND# TOP 21-30 2month(#LD#) #SRC#", start_day => -62, lank =>[20, 29], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+	{ext => "#KIND# TOP 31-40 2month(#LD#) #SRC#", start_day => -62, lank =>[30, 39], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+	{ext => "#KIND# TOP 41-50 2month(#LD#) #SRC#", start_day => -62, lank =>[40, 49], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines"},
+
 	{ext => "#KIND# TOP 10 05/01 Arizona  (#LD#) #SRC#", start_day => "05/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "Arizona", label_skip => 3, graph => "lines"},
 	{ext => "#KIND# TOP 10 05/01 Florida  (#LD#) #SRC#", start_day => "05/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "Florida", label_skip => 3, graph => "lines"},
 	{ext => "#KIND# TOP 10 05/01 Oklahoma (#LD#) #SRC#", start_day => "05/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "Oklahoma", label_skip => 3, graph => "lines"},
 	{ext => "#KIND# TOP 10 05/01 Oregon (#LD#) #SRC#", start_day => "05/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "Oregon", label_skip => 3, graph => "lines"},
 	{ext => "#KIND# TOP 10 05/01 Texas (#LD#) #SRC#", start_day => "05/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "Texas", label_skip => 3, graph => "lines"},
+
 );
 
 our $PARAMS = {			# MODULE PARETER        $mep
@@ -76,6 +87,15 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	copy => \&copy,
 	DLM => $DLM,
 
+	SORT_BALANCE => {		# move to config.pm
+		NC => [0, 0],
+		ND => [0, 0],
+	},
+#	THRESH => {		# move to config.pm
+#		NC => 0,
+#		ND => 1,
+#	},
+
 	AGGR_MODE => {DAY => 1, POP => 1},									# Effective AGGR MODE
 	#MODE => {NC => 1, ND => 1, CC => 1, CD => 1, NR => 1, CR => 1},		# Effective MODE
 
@@ -89,6 +109,7 @@ our $PARAMS = {			# MODULE PARETER        $mep
 				@usa_params,
 			],
 			ND => [
+				{ext => "#KIND# TOP 10 (#LD#) max=12000 #SRC#", start_day => 0, lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", ymax => 1200 },
 				@usa_params,
 			],
 			CC => [

@@ -44,6 +44,8 @@ my @jag_param = (
 	{ext => "#KIND# Tokyo 01-05 (#LD#) #SRC# rl-avr 7", start_day => "03/12",  lank =>[0, 4] , exclusion => $EXCLUSION, 
 		target => "東京", label_skip => 2, graph => "lines", avr_date => 7},
 
+	{ext => "#KIND# Japan 01-10 (#LD#) #SRC# rl-avr", start_day => "05/20",  lank =>[0, 9] , exclusion => $EXCLUSION,
+		 target => "", label_skip => 2, graph => "lines", avr_date => 7, additional_plot => 0.5},
 	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# rl-avr", start_day => "03/18",  lank =>[0, 7] , exclusion => $EXCLUSION,
 		 target => "", label_skip => 2, graph => "lines", avr_date => 7, additional_plot => 0.5},
 #	{ext => "#KIND# Japan 01-08 (#LD#) #SRC# rl-avr ymax", start_day => "03/18",  lank =>[0, 7] , exclusion => $EXCLUSION,
@@ -109,10 +111,14 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				@jag_param, 
 			],
 			CC => [
-				{ext => "#KIND# Japan TOP20 (#LD#) #SRC#", start_day => "03/12",  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", 
-					label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "03/12",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", 
-					label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Japan TOP20 (#LD#) #SRC#", start_day => "03/12",  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "03/12",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Japan 06-10 (#LD#) #SRC#", start_day => "03/12",  lank =>[5, 9] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Japan 11-15 (#LD#) #SRC#", start_day => "03/12",  lank =>[10, 14] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Japan 16-20 (#LD#) #SRC#", start_day => "03/12",  lank =>[15, 19] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Japan 21-30 (#LD#) #SRC#", start_day => "03/12",  lank =>[20, 29] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Japan 31-40 (#LD#) #SRC#", start_day => "03/12",  lank =>[30, 39] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Japan 40-50 (#LD#) #SRC#", start_day => "03/12",  lank =>[40, 49] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 			],
 		},
 	},
@@ -127,8 +133,8 @@ our $PARAMS = {			# MODULE PARETER		$mep
 	},
 	ERN => {
 		EXEC => "",
-        ip => $config::RT_IP,
-		lp => $config::RT_LP,,
+        ip => 6, #$config::RT_IP,
+		lp => 7, #$config::RT_LP,,
 		average_date => 7,
 		graphp => [	
 			{ext => "#KIND# Japan 0312 #RT_TD#", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, taget => "",
@@ -138,8 +144,22 @@ our $PARAMS = {			# MODULE PARETER		$mep
 			{ext => "#KIND# TOP10 1m #RT_TD#", start_day => -31, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
 
-			{ext => "#KIND# Tokyo 0312 #RT_TD#", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
+			{ext => "AA #KIND# Tokyo 0312 #RT_TD#", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
+#			{ext => "#KIND# Tokyo 0312 #RT_TD# 5,7", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
+#				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10, ip => 5, lp => 7},
+#			{ext => "#KIND# Tokyo 0312 #RT_TD# 5,8", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
+#				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10, ip => 5, lp => 8},
+#			{ext => "#KIND# Tokyo 0312 #RT_TD# 5,9", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
+#				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10, ip => 5, lp => 9},
+#
+#			{ext => "#KIND# Tokyo 0312 #RT_TD# 4,8", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
+#				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10, ip => 4, lp => 8},
+#			{ext => "#KIND# Tokyo 0312 #RT_TD# 5,8", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
+#				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10, ip => 5, lp => 8},
+#			{ext => "#KIND# Tokyo 0312 #RT_TD# 6,8", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
+#				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10, ip => 6, lp => 8},
+
 			{ext => "#KIND# Tokyo 1m #RT_TD#", start_day => -31, lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
 		],
@@ -172,6 +192,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 #
 sub	new 
 {
+	dp::dp "#### TKO ###\n";
 	return $PARAMS;
 }
 
@@ -262,7 +283,7 @@ sub	tko_csv
 	my @DATE_ORDER = sort keys %DATES;
 
 	open(CSV, "> $out_file") || die "cannto create $out_file\n";
-	print CSV join(",", "# pref", "total", @DATE_ORDER) . "\n";
+	print CSV join($DLM, "# pref", "total", @DATE_ORDER) . "\n";
 	my $RN = 0;
 	foreach my $pref (@PREF_ORDER){
 		my @data = ();
@@ -278,7 +299,7 @@ sub	tko_csv
 			$lv= $v;
 		}
 		#dp::dp join(", ", $pref, $#DATE_ORDER, $lv, $DATE_ORDER[$#DATE_ORDER]) . "\n";
-		print CSV join(",", $pref, $tl, @data) . "\n";
+		print CSV join($DLM, $pref, $tl, @data) . "\n";
 		$RN++;
 	}
 	close(CSV);

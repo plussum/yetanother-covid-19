@@ -63,6 +63,16 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	copy => \&copy,
 	DLM => $DLM,
 
+	SORT_BALANCE => {		# move to config.pm
+		NC => [0, 0],
+		ND => [0, 0],
+	},
+#	THRESH => {		# move to config.pm
+#		NC => 0,
+#		ND => 1,
+#	},
+
+
 	AGGR_MODE => {DAY => 1, POP => 1},									# Effective AGGR MODE
 	#MODE => {NC => 1, ND => 1, CC => 1, CD => 1, NR => 1, CR => 1},		# Effective MODE
 
@@ -75,6 +85,20 @@ our $PARAMS = {			# MODULE PARETER        $mep
 		],
 		graphp_mode => {												# New version of graph pamaeter for each MODE
 			NC => [
+#    			{ext => "#KIND# #SRC# 1", start_day => 0,  end_day => 30, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 2", start_day => 0,  end_day => 45, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 3", start_day => 0,  end_day => 60, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 4", start_day => 0,  end_day => 75, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 5", start_day => 0,  end_day => 90, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 6", start_day => 0,  end_day => 105, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 7", start_day => 0,  end_day => 120, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 8", start_day => 0,  end_day => 135, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 9", start_day => 0,  end_day => 150, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 11", start_day => 0,  end_day => 165, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 12", start_day => 0,  end_day => 180, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 13", start_day => 0,  end_day => 195, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+#    			{ext => "#KIND# #SRC# 14", start_day => 0,  end_day => 215, lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+
 				@params::PARAMS_COUNT, 
 				{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
 				{ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},

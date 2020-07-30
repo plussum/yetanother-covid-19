@@ -15,18 +15,35 @@ my $EXCLUSION = "Others,China,US";
 my $NONE_EXC = "Others";
 my $EXC_POP = "San Marino,Holy See";
 my $EXC_FT = "";
+my $EUROPE = "Sweden,United Kingdom,UK,Italy,France,Spain,Belgium,Germany,Netherlands,Switzerland";
 
 our @PARAMS_COUNT = (
+#    {ext => "#KIND# 1month 61-70 (#LD#) #SRC#", start_day => -31, lank =>[60,69] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
+#    {ext => "#KIND# 1month 71-80 (#LD#) #SRC#", start_day => -31, lank =>[70,79] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
+#    {ext => "#KIND# 41-50 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[40, 49] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines"},
+#	{ext => "#KIND# 06-10 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[5,  9] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines", thresh => 1},
+#	{ext => "EOD"},
+
     {ext => "#KIND# all with US(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 3, graph => "lines"},
+    {ext => "#KIND# all with US(#LD#) #SRC# rl-av 7", start_day => 0,  lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", avr_date => 7, term_ysize => 400 },
+
 	{ext => "#KIND# TOP5+Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", add_target => "Japan"},
 	{ext => "#KIND# TOP5+Japan(wo US)(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", add_target => "Japan"},
 
     {ext => "#KIND# Japan (#LD#) #SRC#", start_day => 0,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 3, graph => "lines"},
     {ext => "#KIND# Japan 1month (#LD#) #SRC#", start_day => -31,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 1, graph => "boxes"},
     {ext => "#KIND# Japan 0301 (#LD#) #SRC# rl-avr", start_day => "03/01",  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 2, graph => "lines", avr_date => 7},
+    {ext => "#KIND# Japan 0520 (#LD#) #SRC# rl-avr", start_day => "05/20",  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 2, graph => "lines", avr_date => 7},
 #	{ext => "EOD"},
 
-    {ext => "#KIND# TOP20-122 (#LD#) #SRC#", start_day => 0, lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", term_ysize => 600},
+    {ext => "#KIND# TOP20-122 (#LD#) #SRC#", start_day => 0, lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", term_ysize => 600, thresh => ""},
+
+    {ext => "#KIND# 01-05 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[0,  4] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 06-10 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[5,  9] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 11-20 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[10, 19] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 21-30 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[20, 29] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 31-40 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[30, 39] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 41-50 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[40, 49] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines", avr_date => 7},
 
     {ext => "#KIND# 01-05 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[0,  4] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines"},
     {ext => "#KIND# 06-10 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[5,  9] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines"},
@@ -35,15 +52,25 @@ our @PARAMS_COUNT = (
     {ext => "#KIND# 31-40 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[30, 39] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines"},
     {ext => "#KIND# 41-50 from 0301 (#LD#) #SRC#",   start_day => "03/01", lank =>[40, 49] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines"},
 
-    {ext => "#KIND# 1month 01-05 (#LD#) #SRC#", start_day => -31, lank =>[0, 4] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 1month 06-10 (#LD#) #SRC#", start_day => -31, lank =>[5, 9] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 1month 11-20 (#LD#) #SRC#", start_day => -31, lank =>[10,19] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 1month 21-30 (#LD#) #SRC#", start_day => -31, lank =>[20,29] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 1month 31-40 (#LD#) #SRC#", start_day => -31, lank =>[30,39] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"}, 
-	{ext => "#KIND# 1month 41-50 (#LD#) #SRC#", start_day => -31, lank =>[40,49] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 1month 51-60 (#LD#) #SRC#", start_day => -31, lank =>[50,59] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 1month 61-70 (#LD#) #SRC#", start_day => -31, lank =>[60,69] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
-    {ext => "#KIND# 1month 71-80 (#LD#) #SRC#", start_day => -31, lank =>[70,79] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 2month 01-05 (#LD#) #SRC#", start_day => -60, lank =>[0, 4] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 2month 06-10 (#LD#) #SRC#", start_day => -60, lank =>[5, 9] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 2month 11-20 (#LD#) #SRC#", start_day => -60, lank =>[10,19] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 2month 21-30 (#LD#) #SRC#", start_day => -60, lank =>[20,29] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 2month 31-40 (#LD#) #SRC#", start_day => -60, lank =>[30,39] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7}, 
+	{ext => "#KIND# 2month 41-50 (#LD#) #SRC#", start_day => -60, lank =>[40,49] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 2month 51-60 (#LD#) #SRC#", start_day => -60, lank =>[50,59] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 2month 61-70 (#LD#) #SRC#", start_day => -60, lank =>[60,69] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 2month 71-80 (#LD#) #SRC#", start_day => -60, lank =>[70,79] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
+
+    {ext => "#KIND# 2month 01-05 (#LD#) #SRC#", start_day => -60, lank =>[0, 4] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines" },
+    {ext => "#KIND# 2month 06-10 (#LD#) #SRC#", start_day => -60, lank =>[5, 9] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 2month 11-20 (#LD#) #SRC#", start_day => -60, lank =>[10,19] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 2month 21-30 (#LD#) #SRC#", start_day => -60, lank =>[20,29] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 2month 31-40 (#LD#) #SRC#", start_day => -60, lank =>[30,39] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"}, 
+	{ext => "#KIND# 2month 41-50 (#LD#) #SRC#", start_day => -60, lank =>[40,49] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 2month 51-60 (#LD#) #SRC#", start_day => -60, lank =>[50,59] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 2month 61-70 (#LD#) #SRC#", start_day => -60, lank =>[60,69] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 2month 71-80 (#LD#) #SRC#", start_day => -60, lank =>[70,79] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
 
 	{ext => "#KIND# all-211 ALL logscale (#LD#) #SRC#", start_day => 0, lank =>[0, 19] , exclusion => "Others", target => "", additional_target => "Japan",
 		label_skip => 3, graph => "lines", logscale => "y", avr_date => 7, add_target => "Japan"},
@@ -62,13 +89,21 @@ our @PARAMS_COUNT = (
     {ext => "#KIND# UK 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
 		target => "UK,United Kingdom", label_skip => 2, graph => "boxes"},
 #    {ext => "#KIND# Sweden  (#LD#) #SRC#", start_day => 0,  lank =>[0, 999] , exclusion => $EXCLUSION, 
-#		target => "Sweden", label_skip => 3, graph => "lines"},
+#		target => "Sweden", label_skip => 3, graph => "lines", thresh => 1},
+
     {ext => "#KIND# Europe (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
-		target => "Sweden,US,United Kingdom,UK,Italy,France,Spain,Belgium,Germany,Netherlands,Switzerland", 
-		label_skip => 3, graph => "lines", ymax => 3000},
+		target => $EUROPE, label_skip => 3, graph => "lines"},
     {ext => "#KIND# Europe (#LD#) #SRC# rl-avr 7days", start_day => "03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
-		target => "Sweden,US,United Kingdom,UK,Italy,France,Spain,Belgium,Germany,Netherlands,Switzerland", 
-		label_skip => 3, graph => "lines", ymax => 3000, avr_date => 7},
+		target => $EUROPE, label_skip => 3, graph => "lines",  avr_date => 7},
+    {ext => "#KIND# Europe (#LD#) #SRC# 1month", start_day => -90,  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
+		target => $EUROPE, label_skip => 3, graph => "lines"},
+    {ext => "#KIND# Europe (#LD#) #SRC# 1month rl-avr 7days", start_day => -90,  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
+		target => $EUROPE, label_skip => 3, graph => "lines",  avr_date => 7},
+    {ext => "#KIND# Europe (#LD#) #SRC# 1month rl-avr 7days ymax 2000", start_day => -90,  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
+		target => $EUROPE, label_skip => 3, graph => "lines",  avr_date => 7, ymax => 2000},
+    {ext => "#KIND# Europe (#LD#) #SRC# 1month rl-avr 7days ymax 100", start_day => -90,  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
+		target => $EUROPE, label_skip => 3, graph => "lines",  avr_date => 7, ymax => 100},
+
 
     {ext => "#KIND# Sweden(#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
 		target => "Sweden", label_skip => 3, graph => "boxes"},
@@ -87,7 +122,9 @@ our @PARAMS_COUNT = (
 #    {ext => "#KIND# Slovakia 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
 #		target => "Slovakia", label_skip => 2, graph => "boxes"},
     {ext => "#KIND# ASIA 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
-		target => "Japan,Taiwan,Malaysia,Philip,India,Korea,Singapore,Indonesia ", label_skip => 2, graph => "lines"},
+		target => "Japan,Taiwan,Malaysia,Philip,Korea,Singapore,Indonesia ", label_skip => 2, graph => "lines"},
+    {ext => "#KIND# ASIA 0301 (#LD#) #SRC# rl-avr 7", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
+		target => "Japan,Taiwan,Malaysia,Philip,Korea,Singapore,Indonesia ", label_skip => 2, graph => "lines", avr_date => 7},
 
     {ext => "#KIND# Japan, Korea, China 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
 		target => "Japan,Korea,China", label_skip => 2, graph => "lines"},
@@ -138,6 +175,14 @@ our	@PARMS_RT = (
 		 label_skip => 1, graph => "lines", },
 	{ext => "#KIND# Focusing area from 0301 #RT_TD#",   start_day => 39, lank =>[0, 99] , exclusion => $EXCLUSION, 
 		target => "Russia,Canada,Ecuador,Brazil,India", label_skip => 3, graph => "lines", ymax => 10, },
+
+	{ext => "#KIND# Europ 0301 #RT_TD#",   start_day => 39, lank =>[0, 99] , exclusion => $EXCLUSION, 
+		target => $EUROPE, label_skip => 3, graph => "lines", ymax => 10, },
+	{ext => "#KIND# Europ 1month #RT_TD#",   start_day => -90, lank =>[0, 99] , exclusion => $EXCLUSION, 
+		target => $EUROPE, label_skip => 3, graph => "lines", ymax => 10, },
+	{ext => "#KIND# Europ 1month #RT_TD# ymax2",   start_day => -90, lank =>[0, 99] , exclusion => $EXCLUSION, 
+		target => $EUROPE, label_skip => 3, graph => "lines", ymax => 3, },
+
 	{ext => "#KIND# TOP 01-05 from 0301 #RT_TD#",   start_day => 39, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", 
 		label_skip => 3, graph => "lines", ymax => 10, },
 	{ext => "#KIND# TOP 06-10 from 0301 #RT_TD#",   start_day => 39, lank =>[5, 9] , exclusion => $EXCLUSION, target => "", 
@@ -179,6 +224,8 @@ our	@PARAMS_POP = (
 );
 
 our @ACCD_PARAMS = (
+	{ext => "#KIND# CCM TOP10 (#LD#) #SRC# ", start_day => 0, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines" },
+
 	{ext => "#KIND# CCM TOP5+Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
 		label_skip => 3, graph => "lines", add_target => "Japan"},
 	{ext => "#KIND# CCM TOP5+Japan(#LD#) #SRC# logscale", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
@@ -202,12 +249,13 @@ our @PARAMS_KV = (
 		target => "", label_skip => 2, graph => "lines"},
 	{ext => "#KIND# KV 1m (#LD#) 04/01 #SRC#", start_day => -31,  lank =>[0, 9], exclusion => $EXEC_KV, 
 		target => "", label_skip => 2, graph => "lines"},
-    {ext => "#KIND# Japan and focse reasion 3/1(#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
-		target => "Japan,Sweden,US,United Kingdom,UK,Italy,France,Spain,Belgium,Germany,Netherlands,Switzerland", label_skip => 3, graph => "lines"},
-    {ext => "#KIND# Japan and focse reasion 4/1 (#LD#) #SRC#", start_day => "04/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
-		target => "Japan,Sweden,US,United Kingdom,UK,Italy,France,Spain,Belgium,Germany,Netherlands,Switzerland", label_skip => 3, graph => "lines"},
-    {ext => "#KIND# Japan and focse reasion 1m(#LD#) #SRC#", start_day => -31,  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
-		target => "Japan,Sweden,US,United Kingdom,UK,Italy,France,Spain,Belgium,Germany,Netherlands,Switzerland", label_skip => 3, graph => "lines"},
+
+    {ext => "#KIND# Europ 3/1(#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
+		target => $EUROPE, label_skip => 3, graph => "lines"},
+    {ext => "#KIND#  Europ 4/1 (#LD#) #SRC#", start_day => "04/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
+		target => $EUROPE, label_skip => 3, graph => "lines"},
+    {ext => "#KIND# Europ 1m(#LD#) #SRC#", start_day => -31,  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
+		target => $EUROPE, label_skip => 3, graph => "lines"},
 
 	{ext => "#KIND# Germany (#LD#) 04/01 #SRC#", start_day => "04/01",  lank =>[0, 9], exclusion => $EXEC_KV, 
 		target => "Germany", label_skip => 2, graph => "lines"},
