@@ -328,10 +328,12 @@ sub	pdf2data
 			s/T//g;
 			s/\|/ /g;
 			s/\｜/ /g;
+
 			my @ku = split(/ +/, $_);
 
 			my $d = <PDF>;
 			chop $d;
+			$d =~ s/\([0-9]+\)/  /g;
 			$d =~ s/\|/ /g;
 			$d =~ s/\｜/ /g;
 

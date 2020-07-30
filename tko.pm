@@ -283,7 +283,7 @@ sub	tko_csv
 	my @DATE_ORDER = sort keys %DATES;
 
 	open(CSV, "> $out_file") || die "cannto create $out_file\n";
-	print CSV join(",", "# pref", "total", @DATE_ORDER) . "\n";
+	print CSV join($DLM, "# pref", "total", @DATE_ORDER) . "\n";
 	my $RN = 0;
 	foreach my $pref (@PREF_ORDER){
 		my @data = ();
@@ -299,7 +299,7 @@ sub	tko_csv
 			$lv= $v;
 		}
 		#dp::dp join(", ", $pref, $#DATE_ORDER, $lv, $DATE_ORDER[$#DATE_ORDER]) . "\n";
-		print CSV join(",", $pref, $tl, @data) . "\n";
+		print CSV join($DLM, $pref, $tl, @data) . "\n";
 		$RN++;
 	}
 	close(CSV);

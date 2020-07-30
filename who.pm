@@ -198,7 +198,7 @@ sub	aggregate
 			my @w = ();
 			my $region;
 			my $country;
-			($region, $country, @w)  = split(/,/, $_);
+			($region, $country, @w)  = split(/[$DLM,]/, $_);
 			#dp::dp "[$country] " if($country =~ /Koso/);
 
 			next if($country =~ /regions International/i);
@@ -288,13 +288,13 @@ sub	aggregate
 		#push(@COL, join("/", substr($dt, 0, 4), substr($dt, 4, 2), substr($dt, 6, 2)));
 		push(@COL, join("/", substr($dt, 4, 2), substr($dt, 6, 2)));
 	}
-	print CSV join(",", "", "total", @COL), "\n";
+	print CSV join($DLM, "", "total", @COL), "\n";
 
 	#print CSV join(",", "", "total", sort keys %DATES), "\n";
 	foreach my $country (sort {$COUNTRY{$b} <=> $COUNTRY{$a}} keys %COUNTRY){
 		next if($country =~ /total/);
 
-		print CSV $country . "," . $COUNTRY{$country} . "," ;
+		print CSV $country . $DLM . $COUNTRY{$country} . $DLM ;
 		my $i = 0;
 		foreach my $dt (sort keys %DATES){
 			my $k = join("\t", $dt, $country);
@@ -318,9 +318,9 @@ sub	aggregate
 				$c = 0;
 				$c = int(10000 * csvlib::valdef($TOTAL_DEATH{$k}, 0) / csvlib::valdef($TOTAL_CASE{$k}, 0)/100) if(csvlib::valdef($TOTAL_CASE{$k}, 0) > 0);
 			
-				dp::dp join("," , $dt, $country, csvlib::valdef($TOTAL_DEATH{$k}, 0), csvlib::valdef($TOTAL_CASE{$k}, 0), $c) , "\n" if($DEBUG);
+				dp::dp join($DLM , $dt, $country, csvlib::valdef($TOTAL_DEATH{$k}, 0), csvlib::valdef($TOTAL_CASE{$k}, 0), $c) , "\n" if($DEBUG);
 			}
-			print CSV $c , ",";
+			print CSV $c . $DLM;
 			$COUNT_D{$country}[$i] = $c;
 			$i++;
 		}
@@ -528,8 +528,8 @@ sub	molding
 		if(! defined $w[5]){
 			dp::dp "ERROR: $txtf". join(",", @w) . "\n";
 		} 
-		print TXD join(",", @w[0..5]), "\n";
-		dp::dp "$n:  " . join(",", @w), "\n" if($DEBUG > 1);
+		print TXD join($DLM, @w[0..5]), "\n";
+		dp::dp "$n:  " . join(",", @w), "\n";# if($DEBUG > 1);
 	}
 	close(TXD);
 }

@@ -596,7 +596,6 @@ sub	csv2graph
 			my $f = "";
 			for(my $i = 1; $i <= $#w; $i++){
 				my $z = ($w[$i] - $avr) / $stdv;
-#				if($w[$i] > $thresh){
 				if($z > $ct){
 					#dp::dp "THRESH: $w[$i]($z) -> $ct:$thresh\n";
 					#$w[$i] = $thresh;
@@ -709,9 +708,15 @@ _EOD_
 		#dp::dp "additional_plot: " . $gplitem->{additional_plot} . "\n";
 		$pn .= ", " . $gplitem->{additional_plot};
 	}
+	if($#LEGEND_KEYS < 0 && ! defined $gplitem->{additional_plot}){
+		$pn = "1 with lines title 'no-data'";
+	}
 	$PARAMS =~ s/#PLOT_PARAM#/$pn/;	
 
 	if($gplitem->{logscale}){
+		if($fp->{sub_mode} eq "FT" && $max_data <= 10){
+			$max_data = 100;
+		} 
 		$ymax = csvlib::calc_max($max_data, defined $gplitem->{logscale}) if(! $ymax);
 		$ymin = 1 if($ymin < 1);
 		# dp::dp "YRANGE [$ymin:$ymax]\n";

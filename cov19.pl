@@ -106,7 +106,7 @@ my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
-my @FULL_DATA_SOURCES = qw (ccse ku tko tkpos jag usast usa who jagtotal);
+my @FULL_DATA_SOURCES = qw (ku tko ccse tkpos jag usast usa who jagtotal);
 #my @FULL_DATA_SOURCES = qw (ku);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
@@ -167,8 +167,12 @@ if($FULL_SOURCE){
 	foreach my $src (@FULL_DATA_SOURCES){
 		$_ = $src;
 		my $d = (/jtagtotal|usa|tkpos/) ? "" : $dl;
-		dp::dp "$0 $src -all $d \n";
-		system("$0 $src -all $d");
+		my $cmd = "$0 $src -all $d";
+		dp::dp "system: " . $cmd . "\n";
+		my $rc = system($cmd);
+		$rc = $rc >> 8;
+		dp::dp "[$rc]: $cmd\n";
+		exit 1 if($rc > 0);
 	}
 	system("./tokyo.pl -DL; tokyo.pl -av7");
 	system("./tokyo.pl -av7");
@@ -295,6 +299,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 			}
 		}
 	}
+	exit 0;
 }	
 
 #
