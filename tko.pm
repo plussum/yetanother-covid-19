@@ -146,6 +146,10 @@ our $PARAMS = {			# MODULE PARETER		$mep
 
 			{ext => "AA #KIND# Tokyo 0312 #RT_TD#", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
+			{ext => "AA #KIND# Tokyo 0401 #RT_TD#", start_day => "04/01", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道,愛知,福岡", 
+				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
+			{ext => "AA #KIND# Tokyo 0401 Tokyo#RT_TD#", start_day => "04/01", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神奈川,埼玉,千葉", 
+				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
 #			{ext => "#KIND# Tokyo 0312 #RT_TD# 5,7", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
 #				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10, ip => 5, lp => 7},
 #			{ext => "#KIND# Tokyo 0312 #RT_TD# 5,8", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 

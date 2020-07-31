@@ -24,6 +24,12 @@
 #			 -> who		 who.pm		WHO situation report
 #			 -> jag		 jag.pm		J.A.G Japan data of Japan
 #			 -> jagtotal jagtotal.pm	Total of all prefectures on J.A.A Japan 
+#			 -> tko		 tko.pm		Japan data from Tokyo Open Data
+#			 -> ku		 tkoku.pm	Tokyo City, Town data from Tokoto(Shinjyukuku)
+#			 -> usa		 usa.pm		US States data
+#			 -> usast	 usast.pm	US city, town data
+#			 -> tkpos	 tkpos.pl	Tokyo Positive Rate, server etc
+#			 -> tkage	 tkoage.pm	Tokyo age based data
 #
 #	AGGR_MODE
 #		DAY				Daily count of the source data
@@ -122,7 +128,7 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$DATA_SOURCE = "tko" if(/^tko$/i);
 	$DATA_SOURCE = "ku" if(/^ku$/i);
 	$DATA_SOURCE = "tkpos" if(/^tkpos$/i);
-	$DATA_SOURCE = "tkage" if(/^tkage$/i);
+	$DATA_SOURCE = "tkage" if(/^tko*age$/i);
 
 
 	if(/-debug/i){
