@@ -86,6 +86,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 			],
 			CC => [
 				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# ruiseki", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", nosort => 1, ruiseki => 1},
 			],
 		},
 	},
