@@ -118,13 +118,15 @@ sub	csvgpl
 
 	#print HTML "SOURCE: <a href = \"$WHO_PAGE\"> WHO situation Reports</a>\n<br>\n";
 #
+	my $graph_no = 0;
 	foreach my $gplitem (@$gplp){
 		# $gplitem->{kind} = $clp->{name};
 		if($gplitem->{ext} eq "EOD"){
 			print "#### EOD ###\n";
 			last;
 		}
-		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode, $fp);
+		$graph_no++;
+		my ($png, $plot, $csv, @legs) = &csv2graph($graph_no, $clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode, $fp);
 
 		my $THRESH_SIZE = 1 * 1024;
 		
@@ -196,13 +198,13 @@ sub	csvgpl
 #
 sub	csv2graph
 {
-	my ($csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode, $fp) = @_;
+	my ($graph_no, $csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode, $fp) = @_;
 
 	dp::dp join(", ", $gplitem->{ext}, $gplitem->{start_day}, $gplitem->{lank}[0], $gplitem->{lank}[1], $gplitem->{exclusion}, 
 			"[" . $clp->{src} . "]", $mep->{prefix}), "\n" if($DEBUG > 1);
 	
 	my $src = csvlib::valdefs($gplitem->{src}, "");
-	my $ext = $mep->{prefix} . " " . $gplitem->{ext};
+	my $ext = sprintf("#%02d ", $graph_no) . $mep->{prefix} . " " . $gplitem->{ext};
 	#dp::dp $ext . ":$kind\n";
 	my $sub_mode = $mep->{sub_mode};
 	$ext =~ s/#KIND#/$kind/;
@@ -356,7 +358,7 @@ sub	csv2graph
 		#
 		if($aggr_mode eq "POP"){
 			my $pop = 10^10-1;
-			if(defined $CNT_POP{$country} && $CNT_POP{$country} < $pop_thresh){
+			if(defined $CNT_POP{$country} && $CNT_POP{$country} > $pop_thresh){
 				$pop = $CNT_POP{$country} / $config::POP_BASE;
 			}
 			for(my $dn = 0; $dn < $dates; $dn++){
@@ -677,6 +679,8 @@ sub	csv2graph
 		}
 	}
 	my $TITLE = $ext . "  src:" . $clp->{src} ; # . " <$thresh_flag:$thresh_fag_max:$ymax:" . sprintf("$max:%.1f:%.1f>", $avr,$stdv);
+	$TITLE .= "ymax $ymax" if(defined $gplitem->{ymax});
+	$TITLE .= "log " if(defined $gplitem->{logscale});
 	my $XLABEL = "";
 	my $YLABEL = "";
 	my $START_DATE = $DATES[0];
