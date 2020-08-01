@@ -201,7 +201,7 @@ sub	csv2graph
 	my ($graph_no, $csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode, $fp) = @_;
 
 	dp::dp join(", ", $gplitem->{ext}, $gplitem->{start_day}, $gplitem->{lank}[0], $gplitem->{lank}[1], $gplitem->{exclusion}, 
-			"[" . $clp->{src} . "]", $mep->{prefix}), "\n" if($DEBUG > 1);
+			"[" . $clp->{src} . "]", $mep->{prefix}), "\n" ;#if($DEBUG > 1);
 	
 	my $src = csvlib::valdefs($gplitem->{src}, "");
 	my $ext = sprintf("#%02d ", $graph_no) . $mep->{prefix} . " " . $gplitem->{ext};
@@ -341,6 +341,7 @@ sub	csv2graph
 	my %COUNT_D = ();
 	my %TOTAL = ();
 	my @COUNTRY = ();
+	my @UNDEF_POP = ();
 	my $avr_date = csvlib::valdef($gplitem->{avr_date});
 	#dp::dp "mode: " . $clp->{kind} . "\n";
 	my $count_mode = ($clp->{kind} =~ /^N[A-Z]/) ? "DAY" : "CCM";					# 日次/累計 Cumelative
@@ -359,8 +360,8 @@ sub	csv2graph
 		my $POP_UNIT = 10^10-1;
 		if($aggr_mode eq "POP"){
 			if(! defined $CNT_POP{$country}){
-				dp::dp "No POP:[$country]\n";
-				exit 1;
+				push(@UNDEF_POP, $country);
+
 			}
 			if(defined $CNT_POP{$country} && $CNT_POP{$country} > $pop_thresh){
 				$POP_UNIT = $CNT_POP{$country} / $config::POP_BASE;
@@ -797,6 +798,21 @@ _EOD_
 
 	print ("gnuplot $plot_cmdf\n") if($VERBOSE || $DEBUG > 1);
 	system("gnuplot $plot_cmdf");
+
+	if($#UNDEF_POP >= 0){
+		for(my $i = 0; $i < 5; $i++){
+			dp::dp "#" x 30 . "\n";
+		}
+		foreach my $country (@UNDEF_POP){
+			next if($country =~ /Unassigned/);
+			next if($country =~ /Out of/);
+			dp::dp "No POP:[$country]\n";
+		}
+		for(my $i = 0; $i < 5; $i++){
+			dp::dp "#" x 30 . "\n";
+		}
+		### exit 1;
+	}
 
 	$plot_pngf =~ s#.*/##;
 	$plot_cmdf =~ s#.*/##;

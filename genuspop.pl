@@ -10,7 +10,7 @@ my $BASE_DIR = "/home/masataka/who/COVID-19";
 my $LOOK_UP = "$BASE_DIR/csse_covid_19_data/UID_ISO_FIPS_LookUp_Table.csv";
 my $CCSE_DEATH = "$BASE_DIR/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_US.csv";
 
-my $popf = $config::POPF;
+my $popf = $config::POPF . ".txt";
 
 #
 #
