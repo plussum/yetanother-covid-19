@@ -241,6 +241,7 @@ sub	cnt_pop
 		chop;
 		
 		my($name, $pn) = split(",", $_);
+		next if(! $name);
 
 		$cnt_pop->{$name} = $pn;
 	}

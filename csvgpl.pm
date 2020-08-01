@@ -118,13 +118,15 @@ sub	csvgpl
 
 	#print HTML "SOURCE: <a href = \"$WHO_PAGE\"> WHO situation Reports</a>\n<br>\n";
 #
+	my $graph_no = 0;
 	foreach my $gplitem (@$gplp){
 		# $gplitem->{kind} = $clp->{name};
 		if($gplitem->{ext} eq "EOD"){
 			print "#### EOD ###\n";
 			last;
 		}
-		my ($png, $plot, $csv, @legs) = &csv2graph($clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode, $fp);
+		$graph_no++;
+		my ($png, $plot, $csv, @legs) = &csv2graph($graph_no, $clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode, $fp);
 
 		my $THRESH_SIZE = 1 * 1024;
 		
@@ -196,13 +198,13 @@ sub	csvgpl
 #
 sub	csv2graph
 {
-	my ($csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode, $fp) = @_;
+	my ($graph_no, $csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode, $fp) = @_;
 
 	dp::dp join(", ", $gplitem->{ext}, $gplitem->{start_day}, $gplitem->{lank}[0], $gplitem->{lank}[1], $gplitem->{exclusion}, 
 			"[" . $clp->{src} . "]", $mep->{prefix}), "\n" if($DEBUG > 1);
 	
 	my $src = csvlib::valdefs($gplitem->{src}, "");
-	my $ext = $mep->{prefix} . " " . $gplitem->{ext};
+	my $ext = sprintf("#%02d ", $graph_no) . $mep->{prefix} . " " . $gplitem->{ext};
 	#dp::dp $ext . ":$kind\n";
 	my $sub_mode = $mep->{sub_mode};
 	$ext =~ s/#KIND#/$kind/;
@@ -354,18 +356,14 @@ sub	csv2graph
 		#
 		#	POP	rewrite data with POP_COUNT
 		#
+		my $POP_UNIT = 10^10-1;
 		if($aggr_mode eq "POP"){
-			my $pop = 10^10-1;
-			if(defined $CNT_POP{$country} && $CNT_POP{$country} < $pop_thresh){
-				$pop = $CNT_POP{$country} / $config::POP_BASE;
+			if(! defined $CNT_POP{$country}){
+				dp::dp "No POP:[$country]\n";
+				exit 1;
 			}
-			for(my $dn = 0; $dn < $dates; $dn++){
-				my $p = $dn+$std+$DATE_COL_NO;
-				my $c = csvlib::valdef($DATA[$cn][$p], 0);
-
-				my $pc = $c / $pop ;
-				$DATA[$cn][$p] = $pc;
-				#dp::dp "$country, $c, $pc, $pop\n";
+			if(defined $CNT_POP{$country} && $CNT_POP{$country} > $pop_thresh){
+				$POP_UNIT = $CNT_POP{$country} / $config::POP_BASE;
 			}
 		}
 
@@ -407,6 +405,9 @@ sub	csv2graph
 				$ccmt += $c;
 				$c = $ccmt;
 			}
+			if($aggr_mode eq "POP"){
+				$c = $c / $POP_UNIT ;
+			}
 
 			$COUNT_D{$country}[$dn] = $c;
 			if($dn >= $sw_start){			# 新しい情報を優先してソートする
@@ -414,7 +415,9 @@ sub	csv2graph
 				$tl += $c + $c * $SORT_WEIGHT * ($dn - $sw_start);  # 後半に比重を置く
 			}
 		}
-		#dp::dp "## " . join(", ", $country, $tl, $dates) . "\n";  #if($country =~ /China/);
+		dp::dp "## " . join(", ", $country, sprintf("%.2f", $tl), $dates, 
+				sprintf("P:%.2f", $POP_UNIT), 
+				sprintf("C/P: %.2f", $COUNT_D{$country}[$end_day])) . "\n" if(0 && $country =~ /China/);
 
 
 		#
@@ -444,6 +447,18 @@ sub	csv2graph
 	my $rn = 0;
 
 	my @sc = (sort {$CTG{$b} <=> $CTG{$a}} keys %CTG);
+
+	#	None Sort
+	if(defined $gplitem->{nosort}){
+		#dp::dp "#" x 20 . "  NONE SORT";
+		@sc = ();
+		for(my $cn = 0; $cn <= $COUNTRY_NUMBER; $cn++){
+			my $country = $DATA[$cn][0];
+			next if(! $country);
+			push(@sc, $country);
+			$TOTAL{$country} = $cn;
+		}
+	}
 
 	foreach my $country (@sc){
 		#dp::dp "$country  " . $CTG{$country} . "\n";
@@ -500,7 +515,7 @@ sub	csv2graph
 			my $country = $COUNTRY[$i-1];
 			#dp::dp "### [$country]: ";
 			my $item_number = $TOTAL{$country};
-			#dp::dp "###### $item_number : $dt";
+			#dp::dp "###### [$country] $item_number : $dt" . "\n";
 			if(defined $gplitem->{average_date}){
 				my $av = 0;
 				if($dt > $item_number){ 
@@ -606,6 +621,37 @@ sub	csv2graph
 	}
 
 	#
+	#	累積
+	#
+	if(defined $gplitem->{ruiseki}){
+		dp::dp "#### RUIKEI\n";
+		my @RUI = ();
+		my $recno = $#record;
+		dp::dp "$recno,  $#Dataset\n";
+		for(my $i = 0; $i <= $recno; $i++){
+			my @w = split(/$DLM/, $record[$i]);
+			for(my $r = 0; $r <= $#w; $r++){
+				$RUI[$i][$r] = $w[$r];
+			}
+		}
+		for(my $i = 0; $i <= $recno; $i++){
+			for(my $r = 2; $r <= $#Dataset; $r++){
+				#print "[$i,$r,$recno, $#Dataset]\n";
+				#print "[" . join(",", $RUI[$i][$r], $RUI[$i][$r] + $RUI[$i][$r-1]) . "]";
+				$RUI[$i][$r] += $RUI[$i][$r-1];
+			}
+		}
+		@record = ();
+		for(my $i = 0; $i <= $recno; $i++){
+			my @rw = ();
+			for(my $r = 0; $r <= $#Dataset; $r++){
+				push(@rw, $RUI[$i][$r]);
+			}
+			push(@record, join($DLM, @rw));
+		}
+	}
+
+	#
 	#	グラフ生成用のCSVの作成
 	#
 	my $DLM_OUT = $config::DLM_OUT;
@@ -634,6 +680,8 @@ sub	csv2graph
 		}
 	}
 	my $TITLE = $ext . "  src:" . $clp->{src} ; # . " <$thresh_flag:$thresh_fag_max:$ymax:" . sprintf("$max:%.1f:%.1f>", $avr,$stdv);
+	$TITLE .= "ymax $ymax" if(defined $gplitem->{ymax});
+	$TITLE .= "log " if(defined $gplitem->{logscale});
 	my $XLABEL = "";
 	my $YLABEL = "";
 	my $START_DATE = $DATES[0];

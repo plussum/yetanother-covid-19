@@ -199,6 +199,7 @@ our	@PARMS_RT = (
 );
 
 our	@PARAMS_POP = (
+	{ext => "#KIND# TOP20 -218 ($EXC_POP) (#LD#)", start_day => 27, lank =>[0, 19] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
 	{ext => "#KIND# 01-05 -218 ($EXC_POP) (#LD#)", start_day => 27, lank =>[0, 4] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
 	{ext => "#KIND# 06-10 -218 ($EXC_POP) (#LD#)", start_day => 27, lank =>[5, 9] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
 	{ext => "#KIND# 11-15 -218 ($EXC_POP) (#LD#)", start_day => 27, lank =>[10, 14] , exclusion => $EXC_POP, target => "", label_skip => 3, graph => "lines"},
@@ -223,8 +224,12 @@ our	@PARAMS_POP = (
 	{ext => "#KIND# China (#LD#) 05/01", start_day => "05/01",  lank =>[0, 100] , exclusion => "Others", target => "China", label_skip => 2, graph => "lines"},
 );
 
+my $COMP = "Belgium,United Kingdom,Spain,Italy,Peru,Sweden,Chile,US,France,Brazil,Mexico,Netherlands,Ireland,Panama,Ecuador,Bolivia,Armenia,Canada,North Macedonia,Switzerland";
+
 our @ACCD_PARAMS = (
 	{ext => "#KIND# CCM TOP10 (#LD#) #SRC# ", start_day => 0, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 3, graph => "lines" },
+	{ext => "#KIND# CCM TOP20 (#LD#) #SRC# ", start_day => 0, lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 3, graph => "lines" },
+	{ext => "#KIND# CCM SELECTED (#LD#) #SRC# ", start_day => 0, lank =>[0, 19] , exclusion => "Others", target => $COMP, label_skip => 3, graph => "lines" },
 
 	{ext => "#KIND# CCM TOP5+Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", 
 		label_skip => 3, graph => "lines", add_target => "Japan"},

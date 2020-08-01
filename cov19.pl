@@ -24,6 +24,12 @@
 #			 -> who		 who.pm		WHO situation report
 #			 -> jag		 jag.pm		J.A.G Japan data of Japan
 #			 -> jagtotal jagtotal.pm	Total of all prefectures on J.A.A Japan 
+#			 -> tko		 tko.pm		Japan data from Tokyo Open Data
+#			 -> ku		 tkoku.pm	Tokyo City, Town data from Tokoto(Shinjyukuku)
+#			 -> usa		 usa.pm		US States data
+#			 -> usast	 usast.pm	US city, town data
+#			 -> tkpos	 tkpos.pl	Tokyo Positive Rate, server etc
+#			 -> tkage	 tkoage.pm	Tokyo age based data
 #
 #	AGGR_MODE
 #		DAY				Daily count of the source data
@@ -85,6 +91,7 @@ use usa;
 use usast;
 use tko;
 use tkoku;
+use tkoage;
 
 #
 #	初期化など
@@ -106,7 +113,7 @@ my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
-my @FULL_DATA_SOURCES = qw (ku tko ccse tkpos jag usast usa who jagtotal);
+my @FULL_DATA_SOURCES = qw (tkage ku tko ccse tkpos jag usast usa who jagtotal);
 #my @FULL_DATA_SOURCES = qw (ku);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
@@ -121,6 +128,7 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$DATA_SOURCE = "tko" if(/^tko$/i);
 	$DATA_SOURCE = "ku" if(/^ku$/i);
 	$DATA_SOURCE = "tkpos" if(/^tkpos$/i);
+	$DATA_SOURCE = "tkage" if(/^tko*age$/i);
 
 
 	if(/-debug/i){
@@ -171,7 +179,7 @@ if($FULL_SOURCE){
 		dp::dp "system: " . $cmd . "\n";
 		my $rc = system($cmd);
 		$rc = $rc >> 8;
-		dp::dp "[$rc]: $cmd\n";
+		dp::dp "RETURN CODE [$rc]: $cmd\n";
 		exit 1 if($rc > 0);
 	}
 	system("./tokyo.pl -DL; tokyo.pl -av7");
@@ -195,6 +203,8 @@ $mep = jag::new()  if($DATA_SOURCE eq "jag");
 $mep = jagtotal::new()  if($DATA_SOURCE eq "jagtotal");
 $mep = tko::new()  if($DATA_SOURCE eq "tko");
 $mep = tkoku::new()  if($DATA_SOURCE eq "ku");
+$mep = tkoage::new()  if($DATA_SOURCE eq "tkage");
+
 if($DATA_SOURCE eq "tkpos"){
 	my $d = ($DOWNLOAD) ? "-DL" : "";
 	system("./tokyo.pl $d");
@@ -236,6 +246,7 @@ my 	$FUNCS = {
 my $DLM = $mep->{DLM};
 my $SOURCE_DATA = $mep->{src};
 
+dp::dp join(",", @AGGR_LIST) . "\n";
 foreach my $AGGR_MODE (@AGGR_LIST){
 	dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE] \n";
 	if(! csvlib::valdef($mep->{AGGR_MODE}{$AGGR_MODE},"")){
@@ -299,8 +310,8 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 			}
 		}
 	}
-	exit 0;
 }	
+exit 0;
 
 #
 #
