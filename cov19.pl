@@ -179,7 +179,7 @@ if($FULL_SOURCE){
 		dp::dp "system: " . $cmd . "\n";
 		my $rc = system($cmd);
 		$rc = $rc >> 8;
-		dp::dp "[$rc]: $cmd\n";
+		dp::dp "RETURN CODE [$rc]: $cmd\n";
 		exit 1 if($rc > 0);
 	}
 	system("./tokyo.pl -DL; tokyo.pl -av7");
@@ -246,6 +246,7 @@ my 	$FUNCS = {
 my $DLM = $mep->{DLM};
 my $SOURCE_DATA = $mep->{src};
 
+dp::dp join(",", @AGGR_LIST) . "\n";
 foreach my $AGGR_MODE (@AGGR_LIST){
 	dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE] \n";
 	if(! csvlib::valdef($mep->{AGGR_MODE}{$AGGR_MODE},"")){
@@ -309,8 +310,8 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 			}
 		}
 	}
-	exit 0;
 }	
+exit 0;
 
 #
 #
