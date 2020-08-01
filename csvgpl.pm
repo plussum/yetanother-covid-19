@@ -356,18 +356,14 @@ sub	csv2graph
 		#
 		#	POP	rewrite data with POP_COUNT
 		#
+		my $POP_UNIT = 10^10-1;
 		if($aggr_mode eq "POP"){
-			my $pop = 10^10-1;
-			if(defined $CNT_POP{$country} && $CNT_POP{$country} > $pop_thresh){
-				$pop = $CNT_POP{$country} / $config::POP_BASE;
+			if(! defined $CNT_POP{$country}){
+				dp::dp "No POP:[$country]\n";
+				exit 1;
 			}
-			for(my $dn = 0; $dn < $dates; $dn++){
-				my $p = $dn+$std+$DATE_COL_NO;
-				my $c = csvlib::valdef($DATA[$cn][$p], 0);
-
-				my $pc = $c / $pop ;
-				$DATA[$cn][$p] = $pc;
-				#dp::dp "$country, $c, $pc, $pop\n";
+			if(defined $CNT_POP{$country} && $CNT_POP{$country} > $pop_thresh){
+				$POP_UNIT = $CNT_POP{$country} / $config::POP_BASE;
 			}
 		}
 
@@ -409,6 +405,9 @@ sub	csv2graph
 				$ccmt += $c;
 				$c = $ccmt;
 			}
+			if($aggr_mode eq "POP"){
+				$c = $c / $POP_UNIT ;
+			}
 
 			$COUNT_D{$country}[$dn] = $c;
 			if($dn >= $sw_start){			# 新しい情報を優先してソートする
@@ -416,7 +415,9 @@ sub	csv2graph
 				$tl += $c + $c * $SORT_WEIGHT * ($dn - $sw_start);  # 後半に比重を置く
 			}
 		}
-		#dp::dp "## " . join(", ", $country, $tl, $dates) . "\n";  #if($country =~ /China/);
+		dp::dp "## " . join(", ", $country, sprintf("%.2f", $tl), $dates, 
+				sprintf("P:%.2f", $POP_UNIT), 
+				sprintf("C/P: %.2f", $COUNT_D{$country}[$end_day])) . "\n" if(0 && $country =~ /China/);
 
 
 		#
