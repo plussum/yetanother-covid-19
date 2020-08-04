@@ -738,6 +738,10 @@ _EOD_
 		my $fs = 'set style fill solid border lc rgb "white"';
 		$PARAMS =~ s/#FILLSTYLE#/$fs/;
 	}
+	if(defined $gplitem->{ruiseki}){
+		my $fs = 'set style fill pattern 5';
+		$PARAMS =~ s/#FILLSTYLE#/$fs/;
+	}
 	for(my $i = 0; $i <= $#LEGEND_KEYS; $i++){
 		my $country = $LEGEND_KEYS[$i];
 		$country =~ s/'//g;
@@ -745,6 +749,11 @@ _EOD_
 			push(@w, sprintf("'%s' using 1:%d with boxes title '%s' ", 
 						$plot_csvf, $i+$DATE_COL_NO, $country)
 				);
+		}
+		elsif(defined $gplitem->{ruiseki}){
+			unshift(@w, sprintf("'%s' using 1:%d with filledcurves x1 title '%s' linewidth %d ", 
+						$plot_csvf, $i+$DATE_COL_NO, $country, 1)
+			);
 		}
 		else {
 			push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d ", 

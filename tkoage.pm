@@ -73,6 +73,18 @@ our $PARAMS = {			# MODULE PARETER		$mep
 #		CC => [0.99, 0.1],
 #		CD => [0.99, 0.1],
 #	},
+	THRESH => { 	# move to config.pm
+		NC => 9,
+		ND => 9,
+		NR => 0,
+		CC => 0,
+		CD => 0,
+		CR => 0,
+
+		ERN => 0,
+		FT => 0,
+		KV => 0,
+	},
 
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
@@ -82,11 +94,11 @@ our $PARAMS = {			# MODULE PARETER		$mep
 			NC => [
 				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
 				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# ", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7, nosort => 1},
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# ruiseki", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7, ruiseki => 1, nosort => 1},
+				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# ruiseki", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7, ruiseki => 1, nosort => 1, thresh => ""},
 			],
 			CC => [
 				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# ruiseki", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", nosort => 1, ruiseki => 1},
+				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# ruiseki", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", nosort => 1, ruiseki => 1, thresh => ""},
 			],
 		},
 	},

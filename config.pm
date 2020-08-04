@@ -57,8 +57,8 @@ our %SORT_BALANCE = (
 );
 
 our %THRESH = ( 	# move to config.pm
-	NC => 6,
-	ND => 6,
+	NC => 0,		# 6
+	ND => 0,		# 6
 	NR => 0,
 	CC => 0,
 	CD => 0,
