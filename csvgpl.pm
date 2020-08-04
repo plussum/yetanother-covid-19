@@ -635,11 +635,20 @@ sub	csv2graph
 				$RUI[$i][$r] = $w[$r];
 			}
 		}
-		for(my $i = 0; $i <= $recno; $i++){
-			for(my $r = 2; $r <= $#Dataset; $r++){
-				#print "[$i,$r,$recno, $#Dataset]\n";
-				#print "[" . join(",", $RUI[$i][$r], $RUI[$i][$r] + $RUI[$i][$r-1]) . "]";
-				$RUI[$i][$r] += $RUI[$i][$r-1];
+		if($gplitem->{ruiseki} >= 0){
+			for(my $i = 0; $i <= $recno; $i++){
+				for(my $r = 2; $r <= $#Dataset; $r++){
+					#print "[$i,$r,$recno, $#Dataset]\n";
+					#print "[" . join(",", $RUI[$i][$r], $RUI[$i][$r] + $RUI[$i][$r-1]) . "]";
+					$RUI[$i][$r] += $RUI[$i][$r-1];
+				}
+			}
+		}
+		else {
+			for(my $i = 0; $i <= $recno; $i++){
+				for(my $r = $#Dataset - 1; $r >= 1; $r--){
+					$RUI[$i][$r] += $RUI[$i][$r+1];
+				}
 			}
 		}
 		@record = ();
@@ -751,9 +760,16 @@ _EOD_
 				);
 		}
 		elsif(defined $gplitem->{ruiseki}){
-			unshift(@w, sprintf("'%s' using 1:%d with filledcurves x1 title '%s' linewidth %d ", 
-						$plot_csvf, $i+$DATE_COL_NO, $country, 1)
-			);
+			if($gplitem->{ruiseki} >= 0){
+				unshift(@w, sprintf("'%s' using 1:%d with filledcurves x1 title '%s' linewidth %d ", 
+							$plot_csvf, $i+$DATE_COL_NO, $country, 1)
+				);
+			}
+			else {
+				push(@w, sprintf("'%s' using 1:%d with filledcurves x1 title '%s' linewidth %d ", 
+							$plot_csvf, $i+$DATE_COL_NO, $country, 1)
+				);
+			}
 		}
 		else {
 			push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d ", 

@@ -121,6 +121,11 @@ our @PARAMS_COUNT = (
 #		target => "Finland", label_skip => 2, graph => "boxes"},
 #    {ext => "#KIND# Slovakia 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
 #		target => "Slovakia", label_skip => 2, graph => "boxes"},
+    {ext => "#KIND# Vietnam 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
+		target => "Vietnam", label_skip => 2, graph => "lines"},
+    {ext => "#KIND# Vietnam 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
+		target => "Vietnam", label_skip => 2, graph => "lines", avr_date => 7},
+
     {ext => "#KIND# ASIA 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
 		target => "Japan,Taiwan,Malaysia,Philip,Korea,Singapore,Indonesia ", label_skip => 2, graph => "lines"},
     {ext => "#KIND# ASIA 0301 (#LD#) #SRC# rl-avr 7", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
