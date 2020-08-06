@@ -37,6 +37,7 @@ our $EXCLUSION = "";
 my $MAIN_PREF = "東京,神奈川,埼玉,千葉,大阪,神戸,福岡,愛知,北海道";
 my @jag_param = (
 	{ext => "#KIND# Japan TOP20 (#LD#) #SRC#", start_day => "03/12",  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
+	{ext => "#KIND# Japan TOP20 (#LD#) #SRC#", start_day => "03/12",  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines", avr_date => 7},
 #{ext => "EOD"},
 	{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "03/12",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 
