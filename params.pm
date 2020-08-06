@@ -16,6 +16,17 @@ my $NONE_EXC = "Others";
 my $EXC_POP = "San Marino,Holy See";
 my $EXC_FT = "";
 my $EUROPE = "Sweden,United Kingdom,UK,Italy,France,Spain,Belgium,Germany,Netherlands,Switzerland";
+#
+#	mode|sub_mode|aggr_mode =>  "ND,NC,CC,CD,NR,CR" | "" | "*" | "!ND,CD,CR"
+#	mode 	 :ND, NC,CC,CD,NR,CR
+#	sub_mode :COUNT,FT,ERN,KV
+#	aggr_mode:DAY,POP;
+#			 src => "*", mode => "!NC", sub_mode => "*", aggr_mode => "*"},
+#			 src => "ccse", mode => "!NC", sub_mode => "*", aggr_mode => "*"},
+#			 src => "", mode => "!ccse-NC,who-ND", sub_mode => "ccse-FT", aggr_mode => "*"},
+#
+#			src => "ccse", mode => "!NC", sub_mode => "*", aggr_mode => "*"},
+#
 
 our @PARAMS_COUNT = (
 #    {ext => "#KIND# 1month 61-70 (#LD#) #SRC#", start_day => -31, lank =>[60,69] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
@@ -25,7 +36,9 @@ our @PARAMS_COUNT = (
 #	{ext => "EOD"},
 
     {ext => "#KIND# all with US(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 3, graph => "lines"},
-    {ext => "#KIND# all with US(#LD#) #SRC# rl-av 7", start_day => 0,  lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", avr_date => 7, term_ysize => 400 },
+    {ext => "#KIND# all with US(#LD#) #SRC# rl-av 7", start_day => 0,  lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", avr_date => 7, term_ysize => 400},
+
+#	{ext => "EOD"},
 
 	{ext => "#KIND# TOP5+Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", label_skip => 3, graph => "lines", add_target => "Japan"},
 	{ext => "#KIND# TOP5+Japan(wo US)(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", add_target => "Japan"},
@@ -140,6 +153,8 @@ our @PARAMS_COUNT = (
 		target => "India,Peru,Chile,Mexico,Pakistan,Qatar,Bangladesh,South Africa", label_skip => 2, graph => "lines"},
 
     {ext => "#KIND# Japan 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, target => "Japan", label_skip => 2, graph => "boxes"},
+	{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines", src => "ccse"},
+	{ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines", src => "ccse"},
 );
 
 our	@PARMS_FT = (

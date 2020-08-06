@@ -127,6 +127,7 @@ sub	csvgpl
 		}
 		$graph_no++;
 		my ($png, $plot, $csv, @legs) = &csv2graph($graph_no, $clp->{csvf}, $PNG_PATH, $clp->{name}, $gplitem, $clp, $mep, $aggr_mode, $fp);
+		next if(!$png);
 
 		my $THRESH_SIZE = 1 * 1024;
 		
@@ -206,7 +207,10 @@ sub	csv2graph
 	my $src = csvlib::valdefs($gplitem->{src}, "");
 	my $ext = sprintf("#%02d ", $graph_no) . $mep->{prefix} . " " . $gplitem->{ext};
 	#dp::dp $ext . ":$kind\n";
-	my $sub_mode = $mep->{sub_mode};
+	my $mode = $fp->{mode};
+	my $sub_mode = $fp->{sub_mode};
+	my $src = $fp->{src};
+
 	$ext =~ s/#KIND#/$kind/;
 	$ext =~ s/#SRC#/$src/;
 	$ext .= " rl-avr " . $gplitem->{avr_date} if(defined $gplitem->{avr_date});
@@ -215,6 +219,33 @@ sub	csv2graph
 	$fname =~ s/#LD#//;
 	$fname =~ s#/#-#g;
 	$fname =~ s/[^0-9a-zA-Z]+/_/g;
+
+	#
+	#	Mode check
+	#
+	my %mode_check = ( src => $fp->{src}, mode => $mode, sub_mode => $sub_mode, aggr_mode => $aggr_mode);
+	foreach my $mn ("src", "mode", "sub_mode", "aggr_mode"){
+		my $ml = csvlib::valdef($gplitem->{$mn}, "");
+		#dp::dp "MODE_CHECK[$mn]: ml:$ml ($mode, $sub_mode, $aggr_mode)\n";
+		if($ml =~ /^!/){
+			#dp::dp "EXCLUSE :", join(", ", index("-", $ml) , index($ml, $mode_check{$mn}), index("$src-$ml", $mode_check{$mn})) . "\n";
+			if(index($ml, "-") < 0){
+				#dp::dp "EXCLUSE+[$ml]$mode_check{$mn} ", index($ml, $mode_check{$mn}) . ", " . index("$src-$ml", $mode_check{$mn}) . "\n";
+				return("") if(index($ml, $mode_check{$mn}) >= 0 );	# mode is in the excluse list
+			}
+			else {
+				#dp::dp "EXCLUSE-:$ml:$mode_check{$mn} ", index($ml, $mode_check{$mn}) . ", " . index("$src-$ml", $mode_check{$mn}) . "\n";
+				return("") if(index($ml, "$src-" . $mode_check{$mn}) >= 0 );	# "ccse-ND", "ccse-FT", mode is in the excluse list
+			}
+		}
+		else {
+			#dp::dp "TARGET :", index($ml, $mode_check{$mn}) . "\n";
+			next if(!$ml || $ml eq "*"); 					# Undef or "*"
+			return("") if(index($ml, $mode_check{$mn}) < 0 );	# no mode in target list
+		}
+	}
+	#dp::dp "TARGET:[$src, $mode, $sub_mode, $aggr_mode]\n\n";
+	
 
 	my $plot_pngf = $png_path . "/" . $fname . ".png";
 	my $plot_cmdf = $png_path . "/" . $fname . "-plot.txt";
@@ -228,7 +259,6 @@ sub	csv2graph
 	}
 	my $style = csvlib::valdef($gplitem->{graph}, "lines");
 
-	my $mode = $fp->{mode};
 	my $thresh_mode = csvlib::valdef($config::THRESH{$mode}, 0);
 	$thresh_mode = csvlib::valdef($mep->{THRESH}{$mode}, $thresh_mode);
 	$thresh_mode = csvlib::valdef($gplitem->{thresh}, $thresh_mode);

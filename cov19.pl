@@ -71,6 +71,15 @@
 #		graphp => [		# GPL PARAMETER				$gplp
 #			{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 2, graph => "lines"},
 #
+#	mode|sub_mode|aggr_mode =>  "ND,NC,CC,CD,NR,CR" | "" | "*" | "!ND,CD,CR"
+#	mode 	 :ND, NC,CC,CD,NR,CR
+#	sub_mode :COUNT,FT,ERN,KV
+#	aggr_mode:DAY,POP;
+#			 src => "*", mode => "!NC", sub_mode => "*", aggr_mode => "*"},
+#			 src => "ccse", mode => "!NC", sub_mode => "*", aggr_mode => "*"},
+#			 src => "", mode => "!ccse-NC,who-ND", sub_mode => "ccse-FT", aggr_mode => "*"},
+#
+#
 
 use strict;
 #use warnings;
@@ -151,7 +160,7 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 		exit(0);
 	}
 	elsif(/-all/){
-		push(@MODE_LIST, "ND", "NC", "CC", "CD", "NR", "CR");
+		push(@MODE_LIST, "NC", "ND", "CC", "CD", "NR", "CR");
 		push(@SUB_MODE_LIST, "COUNT", "FT", "ERN", "KV");
 		push(@AGGR_LIST, "DAY", "POP");
 	}
