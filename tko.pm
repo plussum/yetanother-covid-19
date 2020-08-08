@@ -139,12 +139,16 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		lp => 7, #$config::RT_LP,,
 		average_date => 7,
 		graphp => [	
+			{ext => "#KIND# main pref 1m #RT_TD#", start_day => -31, lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
+				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
+			{ext => "#KIND# main pref 1m #RT_TD# ", start_day => -31, lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
+				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 5},
 
-			{ext => "AA #KIND# Tokyo 0312 #RT_TD#", start_day => "03/12", lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
+			{ext => "#KIND# main pref 0312 #RT_TD#", start_day => "03/12", lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
-			{ext => "AA #KIND# Tokyo 0401 #RT_TD#", start_day => "04/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
+			{ext => "#KIND# main pref 0401 #RT_TD#", start_day => "04/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
-			{ext => "AA #KIND# Tokyo 0401 Tokyo#RT_TD#", start_day => "04/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
+			{ext => "#KIND# main pref 0401 Tokyo#RT_TD#", start_day => "04/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
 
 			{ext => "#KIND# Japan 0312 #RT_TD#", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, taget => "",
@@ -153,8 +157,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
 			{ext => "#KIND# TOP10 1m #RT_TD#", start_day => -31, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
-			{ext => "#KIND# Tokyo 1m #RT_TD#", start_day => -31, lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
-				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
+
 #			{ext => "#KIND# Tokyo 0312 #RT_TD# 5,7", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
 #				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10, ip => 5, lp => 7},
 #			{ext => "#KIND# Tokyo 0312 #RT_TD# 5,8", start_day => "03/12", lank =>[0, 5] , exclusion => $EXCLUSION, target => "東京,大阪,神戸,北海道", 
