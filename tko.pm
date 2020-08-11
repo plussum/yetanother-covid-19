@@ -139,6 +139,10 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		lp => 7, #$config::RT_LP,,
 		average_date => 7,
 		graphp => [	
+			{ext => "#KIND# Tokyo 2m #RT_TD#", start_day => -61, lank =>[0, 99] , exclusion => $EXCLUSION, target => "東京", 
+				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
+			{ext => "#KIND# Tokyo from 3/12 #RT_TD#", start_day => "03/12", lank =>[0, 99] , exclusion => $EXCLUSION, target => "東京", 
+				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
 			{ext => "#KIND# main pref 1m #RT_TD#", start_day => -31, lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
 			{ext => "#KIND# main pref 1m #RT_TD# ", start_day => -31, lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 

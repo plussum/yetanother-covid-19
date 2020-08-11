@@ -92,11 +92,11 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		],
 		graphp_mode => {												# New version of graph pamaeter for each MODE
 			NC => [
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# ", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7, nosort => 1},
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# ruiseki +1", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", 
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC# ", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", avr_date => 7, nosort => 1},
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC# ruiseki +1", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", 
 						avr_date => 7, ruiseki => 1, nosort => 1, thresh => ""},
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# ruiseki -1", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", 
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC# ruiseki -1", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", 
 						avr_date => 7, ruiseki => -1, nosort => 1, thresh => ""},
 				{ext => "#KIND# Tokyo over 50 (#LD#) #SRC# ruiseki -1", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, 
 					target => "50,60,70,80,90,100", label_skip => 2, graph => "lines", avr_date => 7, ruiseki => -1, nosort => 1, thresh => ""},
@@ -104,8 +104,8 @@ our $PARAMS = {			# MODULE PARETER		$mep
 					target => "50,60,70,80,90,100", label_skip => 2, graph => "lines", avr_date => 7, nosort => 1, thresh => ""},
 			],
 			CC => [
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
-				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC# ruiseki", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", nosort => 1, ruiseki => 1, thresh => ""},
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines"},
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC# ruiseki", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 2, graph => "lines", nosort => 1, ruiseki => 1, thresh => ""},
 			],
 		},
 	},
