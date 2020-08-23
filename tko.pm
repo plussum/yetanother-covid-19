@@ -276,7 +276,7 @@ sub	tko_csv
 	<FD>;
 	my @items = &csv($_);
 
-	my $vn = ($agp->{mode} =~ /.C/) ? 0 : 3;
+	my $vn = ($agp->{mode} =~ /.C/) ? 0 : 4;	# 2020.08.24	 
 	while(<FD>){
 		my ($y, $m, $d, $pref, $prefe, @vals)  = &csv($_);
 		#my $ymd = sprintf("%04d/%02d/%02d", $y, $m, $d);
