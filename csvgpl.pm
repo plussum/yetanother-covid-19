@@ -837,7 +837,7 @@ _EOD_
 
 	my $xtics = 3600 * 24;
 	if(defined $gplitem->{series}){
-		$xtics = csvlib::valdef($gplitem->{y_label_skip}, 1);
+		$xtics = csvlib::valdef($gplitem->{label_skip}, 1);
 	}
 	else {
 		if(defined $gplitem->{label_skip}){

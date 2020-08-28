@@ -160,12 +160,12 @@ our @PARAMS_COUNT = (
 our	@PARMS_FT = (
 	{ext => "#KIND# Japan and others #FT_TD#", start_day => 0, lank =>[0, 999] , exclusion => $EXC_FT, add_target => "",
 		target => "Japan,Korea,US,Spain,Italy,France,Germany,United Kingdom,Iran,Turkey,Belgium,Switzeland,Russia,Brazil",
-		label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
+		label_skip => 7, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
 	{ext => "#KIND# Japan and TOP10 #FT_TD#", start_day => 0, lank =>[0, 9] , exclusion => $EXC_FT, add_target => "",
-		target => "", add_target => "Japan", label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
+		target => "", add_target => "Japan", label_skip => 7, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
 
 	{ext => "#KIND# TOP5 #FT_TD#", start_day => 0, lank =>[0, 5] , exclusion => $EXC_FT, target => "", 
-		label_skip => 2, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
+		label_skip => 7, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
 	{ext => "#KIND# TOP10 #FT_TD#", start_day => 0, lank =>[0, 10] , exclusion => $EXC_FT, target => "", 
 		label_skip => 7, graph => "lines", series => 1, logscale => "y", term_ysize => 600, ft => 1},
 	{ext => "#KIND# 11-20 #FT_TD#", start_day => 0, lank =>[10, 19] , exclusion => $EXC_FT, target => "",
