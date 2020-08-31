@@ -209,7 +209,7 @@ sub	csv2graph
 	#dp::dp $ext . ":$kind\n";
 	my $mode = $fp->{mode};
 	my $sub_mode = $fp->{sub_mode};
-	my $src = $fp->{src};
+	#my $src = $fp->{src};
 
 	$ext =~ s/#KIND#/$kind/;
 	$ext =~ s/#SRC#/$src/;
