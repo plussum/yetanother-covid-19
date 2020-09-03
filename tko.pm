@@ -220,7 +220,7 @@ sub	download
 {
 	my ($info_path) = @_;
 
-	#system("(cd $TKO_PATH/covid19; git pull origin master)");
+	system("(cd $TKO_PATH/covid19; git pull origin master)");
 	my $cmd = "(cd $BASE_DIR; pwd; ls; cp prefectures.csv ../../prefecture.csv.txt)";
 	#dp::dp $cmd . "\n";
 	system($cmd);
