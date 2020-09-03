@@ -219,6 +219,7 @@ sub	csv2graph
 	$fname =~ s/#LD#//;
 	$fname =~ s#/#-#g;
 	$fname =~ s/[^0-9a-zA-Z]+/_/g;
+	$fname =~ s/^_//;
 
 	#
 	#	Mode check
