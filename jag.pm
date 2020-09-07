@@ -111,7 +111,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
     copy => \&copy,
 
 
-	AGGR_MODE => {DAY => 1, POP => 7},		# POP: 7 Days Total / POP
+	AGGR_MODE => {DAY => 1, POP => 1},		# POP: 7 Days Total / POP
 	#MODE => {NC => 1, ND => 1},
 
 	COUNT => {			# FUNCTION PARAMETER	$funcp
