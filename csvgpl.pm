@@ -401,7 +401,6 @@ sub	csv2graph
 
 		#
 		#
-		#
 		#dp::dp join(",", @{$DATA[$cn]}) . "\n" if($country =~ /Sint/ || $country =~ /Japan/);
 		my $tl = 0;
 		my $ccmt = 0;
@@ -548,13 +547,17 @@ sub	csv2graph
 			#dp::dp "### [$country]: ";
 			my $item_number = $TOTAL{$country};
 			#dp::dp "###### [$country] $item_number : $dt" . "\n";
+	
+			#
+			#	for Average
+			#
 			if(defined $gplitem->{average_date}){
 				my $av = 0;
 				if($dt > $item_number){ 
 					$v = $NO_DATA;			# for FT, set nodata
 				}
 				else {
-					for(my $ma = $dt - $gplitem->{average_date}; $ma <= $dt; $ma++){
+					for(my $ma = $dt - $gplitem->{average_date} + 1; $ma <= $dt; $ma++){		# +1 2020.09.09
 						my $d = $Dataset[$i][$dt];
 						if($ma >= 0) {
 							$d = $Dataset[$i][$ma];
@@ -693,7 +696,7 @@ sub	csv2graph
 	}
 
 	#
-	#	グラフ生成用のCSVの作成
+	#	グラフ生成用のCSVの書き出し
 	#
 	my $DLM_OUT = $config::DLM_OUT;
 	dp::dp "#### " . $#record . ":$final_rec\n" if($DEBUG);
