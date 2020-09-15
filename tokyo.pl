@@ -78,9 +78,9 @@ my @PARAMS = (
 		y2max => "positive_rate",
 		dt_start => "0000-00-00",
 		plot => [
-			{colm => '($2+$3)', axis => "x1y1", graph => "boxes fill",  item_title => ""},
-			{colm => '2', axis => "x1y1", graph => "boxes fill",  item_title => ""},
-			{colm => '4', axis => "x1y2", graph => "lines linewidth 2",  item_title => ""},
+			{colm => '($2+$3)', axis => "x1y1", graph => "boxes fill",  item_title => "test total"},
+			{colm => '2', axis => "x1y1", graph => "boxes fill",  item_title => "positive count"},
+			{colm => '4', axis => "x1y2", graph => "lines linewidth 2",  item_title => "positive rate"},
 		],
 	},
     {	
@@ -110,8 +110,8 @@ my @PARAMS = (
 		dt_start => "2020-03-12",
 		ext => "0312",
 		plot => [
-			{colm => '($2+$3)', axis => "x1y1", graph => "boxes fill",  item_title => ""},
-			{colm => '2', axis => "x1y1", graph => "boxes fill",  item_title => ""},
+			{colm => '($2+$3)', axis => "x1y1", graph => "boxes fill",  item_title => "test_total"},
+			{colm => '2', axis => "x1y1", graph => "boxes fill",  item_title => "positive_count"},
 			{colm => '4', axis => "x1y2", graph => "lines linewidth 2",  item_title => ""},
 		],
 	},

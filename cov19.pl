@@ -122,7 +122,7 @@ my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
-my @FULL_DATA_SOURCES = qw (tkage ku tko ccse tkpos jag usast usa who jagtotal);
+my @FULL_DATA_SOURCES = qw (tkage ku tko ccse tkpos jag usast usa); # who jagtotal
 #my @FULL_DATA_SOURCES = qw (ku);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
@@ -191,8 +191,8 @@ if($FULL_SOURCE){
 		dp::dp "RETURN CODE [$rc]: $cmd\n";
 		exit 1 if($rc > 0);
 	}
-	system("./tokyo.pl -DL; tokyo.pl -av7");
-	system("./tokyo.pl -av7");
+	system("./tokyo.pl -DL; ./tokyo.pl -av7");
+	#system("./tokyo.pl -av7");
 	system("./genindex.pl");
 	system("(cd $config::HTML_PATH; find . -mtime +7 -exec rm {} \\;)");
 	system("(cd $config::PNG_PATH; find . -mtime +7 -exec rm {} \\;)");
