@@ -122,7 +122,7 @@ my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
 my $DATA_SOURCE = "ccse";
-my @FULL_DATA_SOURCES = qw (tkage ku tko ccse tkpos jag usast usa); # who jagtotal
+my @FULL_DATA_SOURCES = qw (tkage ku tko ccse tkpos usast usa); # who jagtotal jag
 #my @FULL_DATA_SOURCES = qw (ku);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
