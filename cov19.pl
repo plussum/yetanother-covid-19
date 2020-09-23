@@ -121,8 +121,9 @@ my $UPLOAD = 0;
 my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
 my @AGGR_LIST = ();
-my $DATA_SOURCE = "ccse";
+my $DATA_SOURCE = "";
 my @FULL_DATA_SOURCES = qw (tkage ku tko ccse tkpos usast usa); # who jagtotal jag
+my @ALL_DATA_SOURCES = qw (tkage ku tko ccse tkpos usast usa who jagtotal jag) ;
 #my @FULL_DATA_SOURCES = qw (ku);
 
 for(my $i = 0; $i <= $#ARGV; $i++){
@@ -215,6 +216,11 @@ $mep = jagtotal::new()  if($DATA_SOURCE eq "jagtotal");
 $mep = tko::new()  if($DATA_SOURCE eq "tko");
 $mep = tkoku::new()  if($DATA_SOURCE eq "ku");
 $mep = tkoage::new()  if($DATA_SOURCE eq "tkage");
+
+if(! $DATA_SOURCE){
+	dp::dp "./cov19.pl " . join(" | ", @ALL_DATA_SOURCES) . " -DL -all -FULL --ERN --FT --POP \n";
+	exit 1;
+}
 
 if($DATA_SOURCE eq "tkpos"){
 	my $d = ($DOWNLOAD) ? "-DL" : "";

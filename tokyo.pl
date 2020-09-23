@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 #
-#
+#	https://github.com/tokyo-metropolitan-gov/covid19.git
 #
 
 # 13101_daily_visitors.json
@@ -92,12 +92,13 @@ my @PARAMS = (
 		y2label => "serevre",
 		items => [qw(date hospitalized severe_case)], 
 		t2max => "severe_case",
+		dt_start => "0000-00-00",
 		plot => [
 			{colm => '3', axis => "x1y2", graph => "boxes fill",  item_title => "severe"},
 			{colm => '2', axis => "x1y1", graph => "lines linewidth 2",  item_title => "hospitalized"},
 		],
 	},
-
+	### Graph from 2020-03-12
 	{	
 		src => "$TKY_DIR/data/positive_rate.json",
 		date => "diagnosed_date",
@@ -215,6 +216,7 @@ sub	tokyo_info
 	my @data = ();
 	my $rec = 0;
 	my @data0 = (@{$positive->{data}});
+	#print Dumper $positive;
 	my %max = ();
 	my $date_name = $items[0];
 	foreach my $dt (@data0) {
@@ -243,15 +245,19 @@ sub	tokyo_info
 	my $y2 = (defined $y2k && $y2k) ? $max{$y2k} : "";
 
 	open(CSV, "> $csvf") || die "cannto create $csvf";
+	#dp::dp $csvf . "\n";
 	print CSV join($DLM, "#" . $positive->{date}, @items) . "\n"; 
 	
 	foreach my $dt (@data){
 		my @line = ();
 		next if($dt->{$date_name} lt $dt_start || $dt->{$date_name} gt $dt_end);
 
+		#dp::dp $dt->{date} . "\n";
+
 		foreach my $k (@items){
 			push(@line, $dt->{$k});
 		}
+		#dp::dp join($DLM , @line) . "\n";
 		print CSV join($DLM , @line) . "\n";
 	}
 	close(CSV);

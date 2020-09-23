@@ -286,11 +286,12 @@ sub	gencsv
 		my $lv = 0;
 		foreach my $date (@DATES){
 			my $v = $CONFIRMED{$date}{$ku};
-			#dp::dp "$date:$ku: $v:$lv\n";
+			#dp::dp "$date:$ku: $v:$lv\n" if($ku eq "小笠原");
 			push(@nn, $v - $lv);
 			$lv = $v;
 		}
 		print CSV join($DLM, $ku, @nn) . "\n";
+		#dp::dp join(",", $ku, @nn) . "\n" if($ku eq "小笠原");
 	}
 	close(CSV);
 }
@@ -320,6 +321,15 @@ sub	pdf2data
 
 			#dp::dp "$m $d \n";
 			$date = sprintf("%02d/%02d", $m, $d);
+
+			my $csvf = "$txtf.csv.txt";
+			my $csvd = $date;
+			$csvd =~ s#/#-#;
+			$csvf =~ s/txt/$csvd/; 
+			open(CSV, ">$csvf") || die "cannot open $csvf";
+			print CSV $date . "\n";
+
+
 			#last if(! ($date ge "04/05" && $date le "04/10"));		#### 
 			#last if($date ne "05/01");		#### 
 
@@ -366,10 +376,12 @@ sub	pdf2data
 				$KU_FLAG{$k} = $number[$i] if(!defined $KU_FLAG{$k} || $number[$i] > $KU_FLAG{$k});
 				#dp::dp join(":", $date, $k, $number[$i]) . " \n";
 				$CONFIRMED{$date}{$k} = $number[$i];
+				print CSV join("\t", $date, $k, $number[$i]) . "\n" ;
 			}
 		}
 	}
 	close(PDF);
+	close(CSV);
 }
 #
 #
