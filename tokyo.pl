@@ -140,6 +140,7 @@ my @PARAMS = (
 for(@ARGV){
 	if(/-DL/){
 		system("(cd ../tokyo/covid19; git pull origin master)");
+		#system("(cd ../tokyo/covid19; git clone origin master)");
 	}
 	elsif(/-av/){
 		s/-av//;
