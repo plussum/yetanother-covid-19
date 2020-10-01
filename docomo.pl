@@ -26,6 +26,9 @@ use csvlib;
 
 binmode(STDOUT, ":utf8");
 
+my $END_OF_DATA = "###EOD###";
+my $TERM_X_SIZE = 1000;
+my $TERM_Y_SIZE = 400;
 
 my @KIND_NAME = qw( 感染拡大前比 緊急事態宣言前比 前年同月比 前日比 );
 my $DOWN_LOAD = 0;
@@ -37,6 +40,7 @@ my $SRC_CSVF =  "$config::WIN_PATH/docomo/docomo.csv.txt";
 
 my $DST_FILE = "$config::PNG_PATH/docomo";
 my $HTMLF    = "$config::HTML_PATH/docomo.html";
+my @tokyo = (qw (東京都));
 my @kanto = (qw (東京都 神奈川県 千葉県 埼玉県 茨木県 栃木県));
 
 my $TGK = $KIND_NAME[0];
@@ -52,26 +56,30 @@ for(@ARGV){
 
 
 my @PARAMS = (
-	{src => "$SRC_CSVF", dst => "top10",  target_range => [1,10], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
-	{src => "$SRC_CSVF", dst => "top11-20", target_range => [11,20], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
-	{src => "$SRC_CSVF", dst => "top21-30", target_range => [21,30], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
-	{src => "$SRC_CSVF", dst => "top31-40", target_range => [31,40], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
-	{src => "$SRC_CSVF", dst => "top41-50", target_range => [41,50], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+#	{src => "$SRC_CSVF", dst => "AllRl",  target_range => [1,999], graph => "AVR", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "全国 RlAvr",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
+#	{src => "$SRC_CSVF", dst => "TokyoAvr",  target_range => [1,999], graph => "AVR", target_area => [@tokyo], exclusion_are => [],	target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "東京 RlAvr",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [@tokyo], exclusion_are => [],	target_kind => [$TGK],},
+# 	{dst => $END_OF_DATA},
 
-	{src => "$SRC_CSVF", dst => "top10",  target_range => [1,10], graph => "AVR", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
-	{src => "$SRC_CSVF", dst => "top11-20", target_range => [11,20], graph => "AVR", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
-	{src => "$SRC_CSVF", dst => "top21-30", target_range => [21,30], graph => "AVR", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
-	{src => "$SRC_CSVF", dst => "top31-40", target_range => [31,40], graph => "AVR", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
-	{src => "$SRC_CSVF", dst => "top41-50", target_range => [41,50], graph => "AVR", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+	{src => "$SRC_CSVF", dst => "全国 top10",  target_range => [1,10], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "全国 top11-20", target_range => [11,20], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+	{src => "$SRC_CSVF", dst => "全国 top21-30", target_range => [21,30], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+	{src => "$SRC_CSVF", dst => "全国 top31-40", target_range => [31,40], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+	{src => "$SRC_CSVF", dst => "全国 top41-50", target_range => [41,50], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
 
-	{src => "$SRC_CSVF", dst => "TokyoTopALL",  target_range => [1,20], graph => "RAW", target_area => [qw(東京都)], exclusion_are => [],target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "全国 top10",  target_range => [1,10], graph => "RLA", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "全国 top11-20", target_range => [11,20], graph => "RLA", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+	{src => "$SRC_CSVF", dst => "全国 top21-30", target_range => [21,30], graph => "RLA", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+	{src => "$SRC_CSVF", dst => "全国 top31-40", target_range => [31,40], graph => "RLA", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+	{src => "$SRC_CSVF", dst => "全国 top41-50", target_range => [41,50], graph => "RLA", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
 
-	#{src => "$SRC_CSVF", dst => "TokyoTopALL",  target_range => [1,20], graph => "AVR", target_area => [qw(東京都)], exclusion_are => [],target_kind => [$TGK],},
-	{src => "$SRC_CSVF", dst => "TokyoTopALL",  target_range => [1,20], graph => "AVR", target_area => [qw(東京都)], exclusion_are => [],target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "東京 ",  target_range => [1,20], graph => "RAW", target_area => [qw(東京都)], exclusion_are => [],target_kind => [$TGK],},
 
-	{src => "$SRC_CSVF", dst => "KantoTop20",  target_range => [1,20], graph => "RAW", target_area => [@kanto], exclusion_are => [],target_kind => [$TGK],},
-	#{src => "$SRC_CSVF", dst => "TokyoTop20",  target_range => [1,20], graph => "AVR", target_area => [qw(東京都)], exclusion_are => [],target_kind => [$TGK],},
-	{src => "$SRC_CSVF", dst => "KantoTop20",  target_range => [1,20], graph => "AVR", target_area => [@kanto], exclusion_are => [],target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "東京 ",  target_range => [1,20], graph => "RLA", target_area => [qw(東京都)], exclusion_are => [],target_kind => [$TGK],},
+
+	{src => "$SRC_CSVF", dst => "関東 Top20",  target_range => [1,20], graph => "RAW", target_area => [@kanto], exclusion_are => [],target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "関東 Top20",  target_range => [1,20], graph => "RLA", target_area => [@kanto], exclusion_are => [],target_kind => [$TGK],},
 
 #	{	
 #		src => "$SRC_CSVF",
@@ -150,6 +158,8 @@ for(my $i = 0; $i < 3; $i++){
 #dp::dp join(",", "# " . $TGK, @LABEL) . "\n";
 
 foreach my $param (@PARAMS){
+	last if($param->{dst} eq $END_OF_DATA);
+
 	push(@OUTPUT_FILES, &csv2graph($param));
 }
 
@@ -222,6 +232,9 @@ sub	csv2graph
 	my $exc = $param->{exclusion_are};
 	my $tgk = $param->{target_kind};
 
+	my $dst = $param->{dst};
+	$dst =~ s/[ \/]/_/g;
+
 	foreach my $area (sort keys %AREA){
 		#dp::dp "## tga " . @$tga . "\n";
 		next if(@$tga > 0 && csvlib::search_list($area, @$tga) eq "");
@@ -262,7 +275,7 @@ sub	csv2graph
 	if($param->{graph} eq "RAW"){
 		my @matrix_sorted = ();
 		csvlib::maratix_sort_max(\@matrix, \@matrix_sorted);
-		$dst_file = join("_", $DST_FILE, $param->{dst});
+		$dst_file = join("_", $DST_FILE, $dst);
 		$p = {
 			datap => \@matrix_sorted,
 			dst_file => $dst_file,
@@ -272,20 +285,52 @@ sub	csv2graph
 		&graph($p);
 	}
 
+
 	#
 	#
 	#
-	if($param->{graph} eq "AVR"){
+	if($param->{graph} eq "RLA"){
 		my $avr_date = 7;
 		my @matrix_avr = ();
 		my @matrix_sorted = ();
-		csvlib::matrix_average(\@matrix, \@matrix_avr, $avr_date);
+		csvlib::matrix_roling_average(\@matrix, \@matrix_avr, $avr_date);
 		csvlib::maratix_sort_max(\@matrix_avr, \@matrix_sorted);
-		$dst_file = $DST_FILE . $param->{dst} . "rlavr__maxval";
+		$dst_file = $DST_FILE . $dst . "rlavr__maxval";
 		$p = {
 			datap => \@matrix_sorted,
 			dst_file => $dst_file,
 			title => "DOCOMO  [$TGK] " . $param->{dst} . " rl-avr7 sort:max",
+			target_range => $param->{target_range},
+		};
+		&graph($p);
+	}
+
+	#
+	#
+	#
+	if($param->{graph} =~ /AVR/){
+		my @matrix_avr = ();
+		my @matrix_rl_avr = ();
+		my $avr_date = 7;
+		my $matrixp = \@matrix_avr;
+		my $title = "DOCOMO  [$TGK] " . $param->{dst} . "average";  
+
+		csvlib::matrix_average(\@matrix, \@matrix_avr);
+		$dst_file = $DST_FILE . $dst . "average";
+
+		if($param->{graph} =~ /RLAVR/){
+			dp::dp "Roling\n";
+			$dst_file .= "rolling";
+			$title .= " rolling";
+
+			csvlib::matrix_roling_average(\@matrix_avr, \@matrix_rl_avr, $avr_date) ;
+			$matrixp = \@matrix_rl_avr;
+		}
+		
+		$p = {
+			datap => $matrixp,
+			dst_file => $dst_file,
+			title => $title,
 			target_range => $param->{target_range},
 		};
 		&graph($p);
@@ -301,14 +346,17 @@ sub	graph
 	my $datap = $p->{datap};
 	my $col = @{$p->{datap}[0]};
 	my $row = @{$p->{datap}};
-	my $csvf = $p->{dst_file} .  ".csv.txt";
-	my $pngf = $p->{dst_file} .  ".png";
-	my $plotf = $p->{dst_file} . ".plot.txt";
+
 	my $title = $p->{title};
 	my $xtics = 60 * 60 * 24 * 7;
 	my @target_range = (0, 99999);
 	@target_range = (@{$p->{target_range}}) if(defined $p->{target_range});
 	#dp::dp "#### " . join(",", "[" . $p->{target_range}[0] . "]", @target_range) . "\n";
+
+	my $dst_file = $p->{dst_file};
+	my $csvf = $dst_file .  ".csv.txt";
+	my $pngf = $dst_file .  ".png";
+	my $plotf = $dst_file . ".plot.txt";
 
 	my $dlm = $DST_DLM;
 	my $ylabel = "%";
@@ -316,7 +364,7 @@ sub	graph
 	#
 	#	Generate CSV Data
 	#
-	#dp::dp "row:$row col:$col\n";
+	dp::dp "row:$row col:$col\n";
 	open(CSV, "> $csvf") || die "Cannot create $csvf";
 	binmode(CSV, ":utf8");
 	for(my $r = 0; $r < $row; $r++){
@@ -343,7 +391,7 @@ set title '$title' font "IPAexゴシック,12" enhanced
 set ylabel '$ylabel'
 #
 set xtics $xtics
-set terminal pngcairo size 1000, 600 font "IPAexゴシック,8" enhanced
+set terminal pngcairo size $TERM_X_SIZE, $TERM_Y_SIZE font "IPAexゴシック,8" enhanced
 set output '$pngf'
 plot #PLOT_PARAM#
 exit

@@ -323,7 +323,7 @@ sub	matrix_convert
 	return ($src_col, $src_row);
 }
 
-sub	matrix_average
+sub	matrix_roling_average
 {
 	my($src, $dst, $avr_date) = @_;
 
@@ -388,6 +388,33 @@ sub	maratix_sort_max
 		$c++;
 	}
 	return ($src_row, $src_col);
+}
+
+sub	matrix_average
+{
+	my($src, $dst) = @_;
+
+	my $src_row = @$src;
+	my $src_col = @{$src->[0]};
+	dp::dp "row: $src_row col:$src_col\n";
+
+	$dst->[0][0] = $src->[0][0];
+	$dst->[0][1] = "average";
+
+	for(my $r = 1; $r < $src_row; $r++){
+		my $tl = 0;
+		for(my $c = 1; $c < $src_col; $c++){
+			$tl += $src->[$r][$c];
+		}
+		$dst->[$r][0] = $src->[$r][0];
+		$dst->[$r][1] = $tl / ($src_row - 1);
+	}
+
+	my $dst_row = @$dst;
+	my $dst_col = @{$dst->[0]};
+	dp::dp "dst_row $dst_row, dst_col:$dst_col\n";
+
+	return ($src_row, 2);
 }
 
 1;

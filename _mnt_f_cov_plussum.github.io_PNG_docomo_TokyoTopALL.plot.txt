@@ -1,0 +1,18 @@
+set datafile separator '	'
+set xtics rotate by -90
+set xdata time
+set timefmt '%Y/%m/%d'
+set format x '%m/%d'
+set mxtics 2
+set mytics 2
+#set grid xtics ytics mxtics mytics
+set key below
+set title 'DOCOMO  [感染拡大前比] TokyoTopALL ' font "IPAexゴシック,12" enhanced
+#set xlabel 'date'
+set ylabel '%'
+#
+set xtics 604800
+set terminal pngcairo size 1000, 400 font "IPAexゴシック,8" enhanced
+set output '_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.png'
+plot '_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:2 with lines title '1:東京都 銀座' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:3 with lines title '2:東京都 丸の内' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:4 with lines title '3:東京都 東京駅南' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:5 with lines title '4:東京都 羽田空港 第1ターミナル' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:6 with lines title '5:東京都 霞が関' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:7 with lines title '6:東京都 立川駅' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:8 with lines title '7:東京都 新宿駅' linewidth 1 ,'_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:9 with lines title '8:東京都 大手町' linewidth 1 ,'_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:10 with lines title '9:東京都 渋谷センター街' linewidth 1 ,'_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:11 with lines title '10:東京都 羽田空港 第2ターミナル' linewidth 1 ,'_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:12 with lines title '11:東京都 品川駅' linewidth 1 ,'_mnt_f_cov_plussum.github.io_PNG_docomo_TokyoTopALL.csv.txt' using 1:13 with lines title '12:東京都 東京駅' linewidth 1 ,0 with lines dt '-' title 'base line'
+exit

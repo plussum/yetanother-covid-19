@@ -1,0 +1,18 @@
+set datafile separator '	'
+set xtics rotate by -90
+set xdata time
+set timefmt '%Y/%m/%d'
+set format x '%m/%d'
+set mxtics 2
+set mytics 2
+#set grid xtics ytics mxtics mytics
+set key below
+set title 'DOCOMO  [感染拡大前比] top10 rl-avr7 sort:max' font "IPAexゴシック,12" enhanced
+#set xlabel 'date'
+set ylabel '%'
+#
+set xtics 604800
+set terminal pngcairo size 1000, 400 font "IPAexゴシック,8" enhanced
+set output '_mnt_f_cov_plussum.github.io_PNG_docomotop10rlavr__maxval.png'
+plot '_mnt_f_cov_plussum.github.io_PNG_docomotop10rlavr__maxval.csv.txt' using 1:2 with lines title '1:京都府 四条河原町付近' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop10rlavr__maxval.csv.txt' using 1:3 with lines title '2:鳥取県 晩稲' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop10rlavr__maxval.csv.txt' using 1:4 with lines title '3:沖縄県 県庁前' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop10rlavr__maxval.csv.txt' using 1:5 with lines title '4:茨城県 取手駅' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop10rlavr__maxval.csv.txt' using 1:6 with lines title '5:北海道 札幌駅' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop10rlavr__maxval.csv.txt' using 1:7 with lines title '6:宮崎県 新別府町' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop10rlavr__maxval.csv.txt' using 1:8 with lines title '7:群馬県 前橋駅' linewidth 1 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop10rlavr__maxval.csv.txt' using 1:9 with lines title '8:神奈川県 横浜中華街駅' linewidth 1 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop10rlavr__maxval.csv.txt' using 1:10 with lines title '9:愛知県 栄駅' linewidth 1 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop10rlavr__maxval.csv.txt' using 1:11 with lines title '10:兵庫県 姫路駅' linewidth 1 ,0 with lines dt '-' title 'base line'
+exit

@@ -1,0 +1,18 @@
+set datafile separator '	'
+set xtics rotate by -90
+set xdata time
+set timefmt '%Y/%m/%d'
+set format x '%m/%d'
+set mxtics 2
+set mytics 2
+#set grid xtics ytics mxtics mytics
+set key below
+set title 'DOCOMO  [感染拡大前比] top31-40 rl-avr7 sort:max' font "IPAexゴシック,12" enhanced
+#set xlabel 'date'
+set ylabel '%'
+#
+set xtics 604800
+set terminal pngcairo size 1000, 400 font "IPAexゴシック,8" enhanced
+set output '_mnt_f_cov_plussum.github.io_PNG_docomotop31-40rlavr__maxval.png'
+plot '_mnt_f_cov_plussum.github.io_PNG_docomotop31-40rlavr__maxval.csv.txt' using 1:32 with lines title '31:茨城県 つくば駅' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop31-40rlavr__maxval.csv.txt' using 1:33 with lines title '32:広島県 紙屋町' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop31-40rlavr__maxval.csv.txt' using 1:34 with lines title '33:岡山県 岡山表町' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop31-40rlavr__maxval.csv.txt' using 1:35 with lines title '34:沖縄県 国際通り' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop31-40rlavr__maxval.csv.txt' using 1:36 with lines title '35:千葉県 船橋駅' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop31-40rlavr__maxval.csv.txt' using 1:37 with lines title '36:香川県 高松市フェリー通り' linewidth 2 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop31-40rlavr__maxval.csv.txt' using 1:38 with lines title '37:石川県 香林坊' linewidth 1 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop31-40rlavr__maxval.csv.txt' using 1:39 with lines title '38:岐阜県 岐阜駅' linewidth 1 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop31-40rlavr__maxval.csv.txt' using 1:40 with lines title '39:鹿児島県 天文館' linewidth 1 ,'_mnt_f_cov_plussum.github.io_PNG_docomotop31-40rlavr__maxval.csv.txt' using 1:41 with lines title '40:三重県 津駅' linewidth 1 ,0 with lines dt '-' title 'base line'
+exit
