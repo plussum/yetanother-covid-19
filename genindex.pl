@@ -87,6 +87,7 @@ foreach my $src (@src_list){
 	#print FRAME "<br>\n";
 }
 print FRAME "<li><a href =\"HTML/tokyo.html\" target=\"graph\">TOKYO OPEN DATA</a></li>\n";
+print FRAME "<li><a href =\"HTML/docomo.html\" target=\"graph\">DOCOMO モバイル空間統計 </a></li>\n";
 print FRAME "<li><a href =\"HTML/$config::WHO_INDEX\" target=\"graph\">WHO_INDEX</a></li>\n";
 print FRAME "<br>\n";
 print FRAME "<li><a href =\"about.html\" target=\"graph\">about</a></li>\n";

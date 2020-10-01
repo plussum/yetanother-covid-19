@@ -130,7 +130,7 @@ sub search_list
 {
     my ($sk, @w) = @_;
 
-    #dp::dp "search_list: $sk:" . join(",", @w, $#w) . "\n";
+    #dp::dp "search_list: $sk:" . join(",", @w) . "\n";
     for(my $i = 0; $i <= $#w; $i++){
 		my $ntc = $w[$i];
         if($sk =~ /$ntc/){
@@ -313,7 +313,7 @@ sub	matrix_convert
 
 	my $src_row = @$src;
 	my $src_col = @{$src->[0]};
-	#dp::dp "row: $src_row col:$src_col\n";
+	dp::dp "row: $src_row col:$src_col\n";
 	for(my $r = 0; $r < $src_row; $r++){
 		for(my $c = 0; $c < $src_col; $c++){
 			#print "[$r:$c:" . $src->[$r][$c] . "]";
@@ -329,7 +329,7 @@ sub	matrix_average
 
 	my $src_row = @$src;
 	my $src_col = @{$src->[0]};
-	#dp::dp "row: $src_row col:$src_col\n";
+	dp::dp "row: $src_row col:$src_col\n";
 
 	for(my $c = 0; $c < $src_col; $c++){
 		$dst->[0][$c] = $src->[0][$c];
@@ -361,31 +361,27 @@ sub	maratix_sort_max
 
 	my $src_row = @$src;
 	my $src_col = @{$src->[0]};
-	#dp::dp "row: $src_row col:$src_col\n";
+	dp::dp "row: $src_row col:$src_col\n";
 	my @index = ();
 
 	for(my $c = 1; $c < $src_col; $c++){
-		my $val = -9999999999999;
+		my $val = 0;
 		for(my $r = 1; $r < $src_row; $r++){
-			#dp::dp $src->[$r][$c] . "\n";
+			dp::dp $src->[$r][$c] . "\n";
 			$val = $src->[$r][$c] if($src->[$r][$c] > $val);
 		}
-		$index[$c-1] = {col => $c, val => $val};
-		#dp::dp "--->" . join(",", $index[$c]->{col}, $index[$c]->{val}) . "\n";
+		$index[$c] = {ac => $c, val => $val};
+		dp::dp "--->" . join(",", $index[$c]->{ac}, $index[$c]->{val}) . "\n";
 	}
+
 
 	for(my $r = 0; $r < $src_row; $r++){
 		$dst->[$r][0] = $src->[$r][0];
 	}
 	my $c = 1;
-	foreach my $sc (sort {$b->{val} <=> $a->{val}} @index){
-		my $col = $sc->{col};
-		#dp::dp join(",", $c, $sc->{col}, $sc->{val}, $src->[0][$col]) . "\n";
-
-		for(my $r = 0; $r < $src_row; $r++){
-			$dst->[$r][$c] = $src->[$r][$col];
-		}
-		$c++;
+	foreach my $sc (sort {$index[$b]->{val} <=> $index[$a]->{val}} @index){
+		dp::dp join(",", $sc, $c. $index[$sc]->{an}, $index[$sc]->{val}) . "\n";
+		$dst->[$c++] = $src->[$sc];
 	}
 	return ($src_row, $src_col);
 }
