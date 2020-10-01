@@ -2,6 +2,7 @@
 #
 
 cd $1
+pwd;
 
 eval `ssh-agent`
 ssh-add ~/.ssh/pls_git 
