@@ -860,16 +860,16 @@ _EOD_
 
 	if($#UNDEF_POP >= 0){
 		for(my $i = 0; $i < 5; $i++){
-			dp::dp "#" x 30 . "\n";
+			#dp::dp "#" x 30 . "\n";
 		}
 		foreach my $country (@UNDEF_POP){
 			next if($country =~ /Unassigned/);
 			next if($country =~ /Out of/);
-			dp::dp "No POP:[$country]\n";
+			#dp::dp "No POP:[$country]\n";
 		}
-		for(my $i = 0; $i < 5; $i++){
-			dp::dp "#" x 30 . "\n";
-		}
+		#for(my $i = 0; $i < 5; $i++){
+		#	dp::dp "#" x 30 . "\n";
+		#}
 		### exit 1;
 	}
 

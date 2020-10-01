@@ -393,6 +393,7 @@ set title '$title' font "IPAexゴシック,12" enhanced
 set ylabel '$ylabel'
 #
 set xtics $xtics
+set grid
 set terminal pngcairo size $TERM_X_SIZE, $TERM_Y_SIZE font "IPAexゴシック,8" enhanced
 set output '$pngf'
 plot #PLOT_PARAM#
