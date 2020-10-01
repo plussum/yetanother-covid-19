@@ -58,8 +58,10 @@ for(@ARGV){
 my @PARAMS = (
 #	{src => "$SRC_CSVF", dst => "AllRl",  target_range => [1,999], graph => "AVR", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
 	{src => "$SRC_CSVF", dst => "全国 RlAvr",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
+
 #	{src => "$SRC_CSVF", dst => "TokyoAvr",  target_range => [1,999], graph => "AVR", target_area => [@tokyo], exclusion_are => [],	target_kind => [$TGK],},
 	{src => "$SRC_CSVF", dst => "東京 RlAvr",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [@tokyo], exclusion_are => [],	target_kind => [$TGK],},
+
 # 	{dst => $END_OF_DATA},
 
 	{src => "$SRC_CSVF", dst => "全国 top10",  target_range => [1,10], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK],},

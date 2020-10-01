@@ -338,13 +338,15 @@ sub	matrix_roling_average
 		$dst->[$r][0] = $src->[$r+$avr_date][0];
 	}
 	for(my $c = 1; $c < $src_col; $c++){
-		for(my $r = 1; $r < $src_row - $avr_date; $r++){
-			#$dst->[$r][$c] = $src->[$r][$c];
+		for(my $r = 1; $r < ($src_row - $avr_date); $r++){
 			my $tl = 0;
 			for(my $rav = $r; $rav < ($r + $avr_date); $rav++){
 				$tl += $src->[$rav][$c];
+				#print "[$rav][$c]" . $src->[$rav][$c] . ",";
 			}
 			$dst->[$r][$c] = $tl / $avr_date;
+			#print "\n";
+			#dp::dp join(",", $tl, $dst->[$r][$c], @{$src->[$r]}) . "\n";
 		}
 	}
 
@@ -403,11 +405,14 @@ sub	matrix_average
 
 	for(my $r = 1; $r < $src_row; $r++){
 		my $tl = 0;
+		$dst->[$r][0] = $src->[$r][0];
 		for(my $c = 1; $c < $src_col; $c++){
 			$tl += $src->[$r][$c];
+			#print "[$r][$c]" . $src->[$r][$c] . ",";
 		}
-		$dst->[$r][0] = $src->[$r][0];
-		$dst->[$r][1] = $tl / ($src_row - 1);
+		#print "\n";
+		$dst->[$r][1] = $tl / ($src_col - 1);
+		#dp::dp join(",", $tl, $src_row - 1, $dst->[$r][1]) . "\n";
 	}
 
 	my $dst_row = @$dst;
