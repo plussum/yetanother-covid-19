@@ -447,8 +447,8 @@ sub	matrix_average
 		$groups = \@gp; 
 		$gpn = 1;
 	}
-	dp::dp "row: $src_row col:$src_col groups:$gpn\n";
-	dp::dp join(",", $groups, $gpn, @$groups) . "\n";
+	#dp::dp "row: $src_row col:$src_col groups:$gpn\n";
+	#dp::dp join(",", $groups, $gpn, @$groups) . "\n";
 
 
 	#
@@ -488,7 +488,7 @@ sub	matrix_average
 	}
 	my $dst_row = @$dst;
 	my $dst_col = @{$dst->[0]};
-	dp::dp "dst_row $dst_row, dst_col:$dst_col\n";
+	#dp::dp "dst_row $dst_row, dst_col:$dst_col\n";
 	
 	return ($src_row, 2);
 }

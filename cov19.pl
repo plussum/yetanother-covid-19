@@ -193,7 +193,7 @@ if($FULL_SOURCE){
 		exit 1 if($rc > 0);
 	}
 	system("./tokyo.pl -DL; ./tokyo.pl -av7");
-	system("./docomo.pl -DL -PP");
+	system("./docomo.pl -DL -ALL");
 	#system("./tokyo.pl -av7");
 	system("./genindex.pl");
 	system("(cd $config::HTML_PATH; find . -mtime +7 -exec rm {} \\;)");
