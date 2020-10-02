@@ -33,7 +33,7 @@ my $TERM_Y_SIZE = 400;
 my @KIND_NAME = qw( 感染拡大前比 緊急事態宣言前比 前年同月比 前日比 );
 my $DOWN_LOAD = 0;
 my $DST_DLM = "\t";
-
+my $AVR_DATE = 7;
 
 my $SRC_URL = "https://mobaku.jp/covid-19/download/%E5%A2%97%E6%B8%9B%E7%8E%87%E4%B8%80%E8%A6%A7.csv";
 my $SRC_CSVF =  "$config::WIN_PATH/docomo/docomo.csv.txt";
@@ -41,10 +41,42 @@ my $SRC_CSVF =  "$config::WIN_PATH/docomo/docomo.csv.txt";
 my $DST_FILE = "$config::PNG_PATH/docomo";
 my $HTMLF    = "$config::HTML_PATH/docomo.html";
 my @tokyo = (qw (東京都));
-my @kanto = (qw (東京都 神奈川県 千葉県 埼玉県 茨木県 栃木県));
+my @kanto = (qw (東京都 神奈川県 千葉県 埼玉県 茨木県 栃木県 群馬県));
+my @kansai = (qw (大阪府 京都府 兵庫県 奈良県 和歌山県 滋賀県));
+my @tokai = (qw (愛知県 岐阜県 三重県 静岡県));
+my @touhoku = (qw (青森県 秋田県 岩手県 宮城県 山形県 福島県));
+my @koushin = (qw (山梨県 長野県));
+my @hokuriku = (qw (新潟県 富山県 石川県 福井県));
+my @chugoku = (qw (鳥取県 島根県 岡山県 広島県 山口県));
+my @shikoku = (qw (香川県 愛媛県 徳島県 高知県));
+my @kyusyu = (qw (福岡県 佐賀県 長崎県 熊本県 大分県 宮崎県 鹿児島県 沖縄県));
+
+
+my	@SUMMARY = (
+	{name => "全国", target => []},
+	{name => "関東", target => [@kanto]},
+	{name => "関西", target => [@kansai]},
+	{name => "東海", target => [@tokai]},
+	{name => "東京", target => ["東京都"]},
+	{name => "大阪", target => ["大阪府"]},
+#	{name => "名古屋", target => ["愛知県"]},
+);
+
+my	@SUMMARY_ALL = (
+	{name => "全国", target => []},
+	{name => "関東", target => [@kanto]},
+	{name => "関西", target => [@kansai]},
+	{name => "東海", target => [@tokai]},
+	{name => "北海道", target => ["北海道"]},
+	{name => "東北", target => [@touhoku]},
+	{name => "甲信", target => [@koushin]},
+	{name => "北陸", target => [@hokuriku]},
+	{name => "中国", target => [@chugoku]},
+	{name => "四国", target => [@shikoku]},
+	{name => "九州", target => [@kyusyu]},
+);
 
 my $TGK = $KIND_NAME[0];
-
 for(@ARGV){
 	$TGK = $KIND_NAME[0] if(/-PP/);	# Pre Pandemic
 	$TGK = $KIND_NAME[1] if(/-PE/);	# Pre Emergency
@@ -53,22 +85,25 @@ for(@ARGV){
 	$DOWN_LOAD = 1 if(/-DL/);
 }
 
-
-
 my @PARAMS = (
-#	{src => "$SRC_CSVF", dst => "AllRl",  target_range => [1,999], graph => "AVR", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
-	{src => "$SRC_CSVF", dst => "全国 RlAvr",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
+# 	{dst => $END_OF_DATA},
+	{src => "$SRC_CSVF", dst => "全国平均",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "サマリ主要地域",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [], exclusion_are => [], target_kind => [$TGK],
+		summary => [@SUMMARY]},
+	{src => "$SRC_CSVF", dst => "サマリ全地域",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [], exclusion_are => [], target_kind => [$TGK],
+		summary => [@SUMMARY_ALL]},
+
+	{src => "$SRC_CSVF", dst => "東京 ALL",  target_range => [1,20], graph => "RAW", target_area => [qw(東京都)], exclusion_are => [],target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "東京 ALL",  target_range => [1,20], graph => "RLA", target_area => [qw(東京都)], exclusion_are => [],target_kind => [$TGK],},
+
+	{src => "$SRC_CSVF", dst => "関東 Top10",  target_range => [1,10], graph => "RAW", target_area => [@kanto], exclusion_are => [],target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "関東 Top10",  target_range => [1,10], graph => "RLA", target_area => [@kanto], exclusion_are => [],target_kind => [$TGK],},
 
 #	{src => "$SRC_CSVF", dst => "TokyoAvr",  target_range => [1,999], graph => "AVR", target_area => [@tokyo], exclusion_are => [],	target_kind => [$TGK],},
-	{src => "$SRC_CSVF", dst => "東京 RlAvr",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [@tokyo], exclusion_are => [],	target_kind => [$TGK],},
-
-# 	{dst => $END_OF_DATA},
-
-	{src => "$SRC_CSVF", dst => "全国 top10",  target_range => [1,10], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
-	{src => "$SRC_CSVF", dst => "全国 top11-20", target_range => [11,20], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
-	{src => "$SRC_CSVF", dst => "全国 top21-30", target_range => [21,30], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
-	{src => "$SRC_CSVF", dst => "全国 top31-40", target_range => [31,40], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
-	{src => "$SRC_CSVF", dst => "全国 top41-50", target_range => [41,50], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+#	{src => "$SRC_CSVF", dst => "東京平均",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [@tokyo], exclusion_are => [],	target_kind => [$TGK],},
+#	{src => "$SRC_CSVF", dst => "関東平均",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [@kanto], exclusion_are => [],	target_kind => [$TGK],},
+#	{src => "$SRC_CSVF", dst => "関西平均",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [@kansai], exclusion_are => [],	target_kind => [$TGK],},
+#	{src => "$SRC_CSVF", dst => "東海平均",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [@tokai], exclusion_are => [],	target_kind => [$TGK],},
 
 	{src => "$SRC_CSVF", dst => "全国 top10",  target_range => [1,10], graph => "RLA", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
 	{src => "$SRC_CSVF", dst => "全国 top11-20", target_range => [11,20], graph => "RLA", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
@@ -76,12 +111,12 @@ my @PARAMS = (
 	{src => "$SRC_CSVF", dst => "全国 top31-40", target_range => [31,40], graph => "RLA", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
 	{src => "$SRC_CSVF", dst => "全国 top41-50", target_range => [41,50], graph => "RLA", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
 
-	{src => "$SRC_CSVF", dst => "東京 ",  target_range => [1,20], graph => "RAW", target_area => [qw(東京都)], exclusion_are => [],target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "全国 top10",  target_range => [1,10], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK],},
+	{src => "$SRC_CSVF", dst => "全国 top11-20", target_range => [11,20], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+	{src => "$SRC_CSVF", dst => "全国 top21-30", target_range => [21,30], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+	{src => "$SRC_CSVF", dst => "全国 top31-40", target_range => [31,40], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
+	{src => "$SRC_CSVF", dst => "全国 top41-50", target_range => [41,50], graph => "RAW", target_area => [], exclusion_are => [],	target_kind => [$TGK]},
 
-	{src => "$SRC_CSVF", dst => "東京 ",  target_range => [1,20], graph => "RLA", target_area => [qw(東京都)], exclusion_are => [],target_kind => [$TGK],},
-
-	{src => "$SRC_CSVF", dst => "関東 Top20",  target_range => [1,20], graph => "RAW", target_area => [@kanto], exclusion_are => [],target_kind => [$TGK],},
-	{src => "$SRC_CSVF", dst => "関東 Top20",  target_range => [1,20], graph => "RLA", target_area => [@kanto], exclusion_are => [],target_kind => [$TGK],},
 
 #	{	
 #		src => "$SRC_CSVF",
@@ -292,16 +327,15 @@ sub	csv2graph
 	#
 	#
 	if($param->{graph} eq "RLA"){
-		my $avr_date = 7;
 		my @matrix_avr = ();
 		my @matrix_sorted = ();
-		csvlib::matrix_roling_average(\@matrix, \@matrix_avr, $avr_date);
+		csvlib::matrix_roling_average(\@matrix, \@matrix_avr, $AVR_DATE);
 		csvlib::maratix_sort_max(\@matrix_avr, \@matrix_sorted);
 		$dst_file = $DST_FILE . $dst . "rlavr__maxval";
 		$p = {
 			datap => \@matrix_sorted,
 			dst_file => $dst_file,
-			title => "DOCOMO  [$TGK] " . $param->{dst} . " rl-avr7 sort:max",
+			title => "DOCOMO  [$TGK] " . $param->{dst} . " (rlavr-$AVR_DATE)",
 			target_range => $param->{target_range},
 		};
 		&graph($p);
@@ -313,20 +347,27 @@ sub	csv2graph
 	if($param->{graph} =~ /AVR/){
 		my @matrix_avr = ();
 		my @matrix_rl_avr = ();
-		my $avr_date = 7;
+		my @matrix_sorted = ();
 		my $matrixp = \@matrix_avr;
-		my $title = "DOCOMO  [$TGK] " . $param->{dst} . "average";  
+		my $title = "DOCOMO  [$TGK] " . $param->{dst} . " (avr)";  
 
-		csvlib::matrix_average(\@matrix, \@matrix_avr);
-		$dst_file = $DST_FILE . $dst . "average";
+		my $sp = $param->{summary};
+		if($sp){
+			dp::dp $sp, @$sp . "\n";
+			dp::dp join(",", @$sp) . "\n";
+		}
+	
+		csvlib::matrix_average(\@matrix, \@matrix_avr, $param->{summary});
+		$dst_file = $DST_FILE . $dst . "avr";
 
 		if($param->{graph} =~ /RLAVR/){
-			dp::dp "Roling\n";
-			$dst_file .= "rolling";
-			$title .= " rolling";
+			#dp::dp "Roling\n";
+			$dst_file .= "rl";
+			$title .= " (rlavr-$AVR_DATE)";
 
-			csvlib::matrix_roling_average(\@matrix_avr, \@matrix_rl_avr, $avr_date) ;
-			$matrixp = \@matrix_rl_avr;
+			csvlib::matrix_roling_average(\@matrix_avr, \@matrix_rl_avr, $AVR_DATE) ;
+			csvlib::maratix_sort_max(\@matrix_rl_avr, \@matrix_sorted);
+			$matrixp = \@matrix_sorted;
 		}
 		
 		$p = {

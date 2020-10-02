@@ -392,7 +392,7 @@ sub	maratix_sort_max
 	return ($src_row, $src_col);
 }
 
-sub	matrix_average
+sub	matrix_average0
 {
 	my($src, $dst) = @_;
 
@@ -422,4 +422,74 @@ sub	matrix_average
 	return ($src_row, 2);
 }
 
+
+#
+#	@group = (
+#		{name => "all", target => []},
+#		{name => "関東", target => [@kanto]},
+#		{name => "関西", target => [@kansai]},
+#		{name => "東海", target => [@toukai]},
+#		{name => "東京", target => ["東京都"]},
+#		{name => "大阪", target => ["大阪府"]},
+#		{name => "名古屋", target => ["愛知県"]},
+#	);
+#
+
+sub	matrix_average
+{
+	my($src, $dst, $groups) = @_;
+
+	my $src_row = @$src;
+	my $src_col = @{$src->[0]};
+	my $gpn = (defined $groups) ? @$groups : -1;
+	my @gp = ({name => "ALL DATA", target => []});
+	if($gpn < 0){
+		$groups = \@gp; 
+		$gpn = 1;
+	}
+	dp::dp "row: $src_row col:$src_col groups:$gpn\n";
+	dp::dp join(",", $groups, $gpn, @$groups) . "\n";
+
+
+	#
+	#	Date colunm
+	#
+	for(my $r = 0; $r < $src_row; $r++){
+		$dst->[$r][0] = $src->[$r][0];
+	}
+
+	for(my $n = 0; $n < $gpn; $n++){
+		my $gp = $groups->[$n];
+		$dst->[0][$n+1] = $gp->{name};
+		my $item_number = 0;
+
+		for(my $r = 1; $r < $src_row; $r++){	# 0 clear
+			$dst->[$r][$n+1] = 0;
+		}
+
+		for(my $c = 1; $c < $src_col; $c++){
+			my $item_name = $src->[0][$c];
+			my $tgn = @{$gp->{target}};
+			#dp::dp join(",", $item_name, $tgn, "--", @{$gp->{target}}) . "\n";
+			if($tgn > 0){
+				#dp::dp join(",", $item_name, "--", @{$gp->{target}}) . "\n";
+				next if(! &search_list($item_name, @{$gp->{target}}));
+			}
+			$item_number++;
+			for(my $r = 1; $r < $src_row; $r++){
+				$dst->[$r][$n+1] += $src->[$r][$c];
+			}
+		}
+		if($item_number > 0){
+			for(my $r = 1; $r < $src_row; $r++){
+				$dst->[$r][$n+1] /= $item_number;
+			}
+		}
+	}
+	my $dst_row = @$dst;
+	my $dst_col = @{$dst->[0]};
+	dp::dp "dst_row $dst_row, dst_col:$dst_col\n";
+	
+	return ($src_row, 2);
+}
 1;
