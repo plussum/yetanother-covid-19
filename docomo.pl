@@ -34,9 +34,10 @@ my @KIND_NAME = qw( 感染拡大前比 緊急事態宣言前比 前年同月比 
 my $DOWN_LOAD = 0;
 my $DST_DLM = "\t";
 my $AVR_DATE = 7;
-
+my $MAIN_URL = "https://mobaku.jp/covid-19/";
 my $SRC_URL = "https://mobaku.jp/covid-19/download/%E5%A2%97%E6%B8%9B%E7%8E%87%E4%B8%80%E8%A6%A7.csv";
 my $SRC_CSVF =  "$config::WIN_PATH/docomo/docomo.csv.txt";
+my $TITLE_HEAD = "NTTドコモ";
 
 my $DST_FILE_TAG = "$config::PNG_PATH/docomo%s";
 my $HTMLF_TAG    = "$config::HTML_PATH/docomo%s.html";
@@ -247,6 +248,9 @@ sub	gen_html
 	print HTML "<BODY>\n";
 	my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
+	print HTML "<h3>データソース： <a href=\"$MAIN_URL\" target=\"blank\"> NTTドコモ モバイル空間統計　新型ウイルス感染症対策特設サイト</a></h3>\n";
+	#print HTML "<a href=\"$MAIN_URL\" target =\"blank\">$MAIN_URL</a>\n";
+
 	foreach my $file (@output_files){
 		my $html_path = $file;
 		$html_path =~ s#.*/#../PNG/#;
@@ -254,7 +258,7 @@ sub	gen_html
 		print HTML "<span class=\"c\">$now</span><br>\n";
 		print HTML "<img src=\"$html_path.png\">\n";
 		print HTML "<br>\n";
-		print HTML "<span $class> Data Source $SRC_URL </span>\n";
+		print HTML "<span $class> <a href=\"$SRC_URL\" target=\"blank\"> Data Source (CSV) </a></span>\n";
 		print HTML "<hr>\n";
 	
 		print HTML "<span $class>";
@@ -337,7 +341,7 @@ sub	csv2graph
 		$p = {
 			datap => \@matrix_sorted,
 			dst_file => $dst_file,
-			title => "DOCOMO  [$TGK] " . $param->{dst} . " ",
+			title => "$TITLE_HEAD [$TGK] " . $param->{dst} . " ",
 			target_range => $param->{target_range},
 		};
 		&graph($p);
@@ -356,7 +360,7 @@ sub	csv2graph
 		$p = {
 			datap => \@matrix_sorted,
 			dst_file => $dst_file,
-			title => "DOCOMO  [$TGK] " . $param->{dst} . " (rlavr-$AVR_DATE)",
+			title => "$TITLE_HEAD  [$TGK] " . $param->{dst} . " (rlavr-$AVR_DATE)",
 			target_range => $param->{target_range},
 		};
 		&graph($p);
@@ -370,7 +374,7 @@ sub	csv2graph
 		my @matrix_rl_avr = ();
 		my @matrix_sorted = ();
 		my $matrixp = \@matrix_avr;
-		my $title = "DOCOMO  [$TGK] " . $param->{dst} . " (avr)";  
+		my $title = "$TITLE_HEAD [$TGK] " . $param->{dst} . " (avr)";  
 
 		my $sp = $param->{summary};
 		#if($sp){
