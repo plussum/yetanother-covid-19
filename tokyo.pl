@@ -52,7 +52,7 @@ use dp;
 use JSON qw/encode_json decode_json/;
 use Data::Dumper;
 
-my $TKY_DIR = "/home/masataka/who/tokyo/covid19";
+my $TKY_DIR = "$config::WIN_PATH/tokyo/covid19"; # "/home/masataka/who/tokyo/covid19";
 my $POSITIVE = "$TKY_DIR/data/positive_rate.json";		# 新規感染者数
 my $CSS = $config::CSS;
 my $IMG_PATH = $config::PNG_REL_PATH;
@@ -139,7 +139,8 @@ my @PARAMS = (
 #
 for(@ARGV){
 	if(/-DL/){
-		system("(cd ../tokyo/covid19; git pull origin master)");
+		system("(cd $TKY_DIR; git pull origin master)");
+		#system("(cd ../tokyo/covid19; git pull origin master)");
 		#system("(cd ../tokyo/covid19; git clone origin master)");
 	}
 	elsif(/-av/){
@@ -206,11 +207,29 @@ sub	tokyo_info
 	#
 	my $JSON = "";
 	open(FD, $p->{src}) || die "cannot open " . $p->{src};
+	my $ln = 0;
+	my $head_flag = 0;
 	while(<FD>){
+		$ln++;
+#		if($head_flag){
+#			dp::dp  "$ln:HEAD: $_";
+#			if(/^>>>>/){
+#				dp::dp "HEAD--> OFF\n";
+#				$head_flag = 0;
+#			}
+#		}
+#		elsif(/^<<<<.*HEAD/){
+#			$head_flag = 1;
+#		}
+#		else {
+#			$JSON .= $_;
+#		}
 		$JSON .= $_;
 	}
 	close(FD);
 
+	#dp::dp $p->{src} . "\n";
+	#dp::dp $JSON . "\n";
 	my $positive = decode_json($JSON);
 	#print Dumper $positive;
 

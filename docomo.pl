@@ -180,6 +180,8 @@ my $line = <FD>;
 chop $line;
 $line = decode('Shift_JIS', $line);
 my @LABEL = split(/,/, $line);
+my $FIRST_DATE = @LABEL[3];
+my $LAST_DATE = @LABEL[$#LABEL];
 
 my $ln = 0;
 while(<FD>){
@@ -416,7 +418,7 @@ sub	graph
 	my $col = @{$p->{datap}[0]};
 	my $row = @{$p->{datap}};
 
-	my $title = $p->{title};
+	my $title = $p->{title} . "($LAST_DATE)";
 	my $xtics = 60 * 60 * 24 * 7;
 	my @target_range = (0, 99999);
 	@target_range = (@{$p->{target_range}}) if(defined $p->{target_range});
@@ -460,6 +462,7 @@ set title '$title' font "IPAexゴシック,12" enhanced
 set ylabel '$ylabel'
 #
 set xtics $xtics
+set xrange ['$FIRST_DATE':'$LAST_DATE']
 set grid
 set terminal pngcairo size $TERM_X_SIZE, $TERM_Y_SIZE font "IPAexゴシック,8" enhanced
 set output '$pngf'

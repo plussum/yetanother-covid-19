@@ -501,10 +501,13 @@ sub	csv2graph
 		#dp::dp "Yes, Target $CNT $country [$tgcs, $tgce]\n" if($DEBUG && $#target >= 0);
 
 		$CNT++;
+		#dp::dp "  " . join(",", $CNT, $tgcs, $tgce, $country) . "\n";
 		if($CNT < $tgcs || $CNT > $tgce){
+			#dp::dp "# " .join(",", $CNT, $tgcs, $tgce, $country, ":", @add_target) . "\n";
 			next if($#add_target < 0);
 			next if(! csvlib::search_list($country, @add_target));
 		}
+		#dp::dp "> " .join(",", $CNT, $tgcs, $tgce, $country) . "\n";
 
 		push(@LEGEND_KEYS, sprintf("%02d:%s", $rn, $country));
 		for(my $i = 0; $i <= $#{$COUNT_D{$country}}; $i++){
