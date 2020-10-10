@@ -52,7 +52,7 @@ use dp;
 use JSON qw/encode_json decode_json/;
 use Data::Dumper;
 
-my $TKY_GIT = "$config::WIN_PATH/tokyo/"; # "/home/masataka/who/tokyo/covid19";
+my $TKY_GIT = "$config::WIN_PATH/tokyo/covid19"; # "/home/masataka/who/tokyo/covid19";
 my $TKY_DIR = "$config::WIN_PATH/tokyo/covid19"; # "/home/masataka/who/tokyo/covid19";
 my $POSITIVE = "$TKY_DIR/data/positive_rate.json";		# 新規感染者数
 my $CSS = $config::CSS;
@@ -140,8 +140,8 @@ my @PARAMS = (
 #
 for(@ARGV){
 	if(/-DL/){
-		dp::dp ("(cd $TKY_GIT; git pull origin master)\n");
-		system("(cd $TKY_GIT; git pull origin master)");
+		dp::dp ("(cd $TKY_GIT; git pull origin development)\n");
+		system("(cd $TKY_GIT; git pull origin development)");
 		#system("(cd ../tokyo/covid19; git pull origin master)");
 		#system("(cd ../tokyo/covid19; git clone origin master)");
 	}
