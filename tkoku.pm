@@ -1,8 +1,12 @@
 #!/usr/bin/perl
 #
-#	kaz-ogiwara / covid19
-#	https://github.com/kaz-ogiwara/covid19
+#	Get data from Tokyo-to directory instead of Shinjyku-ku
+#	Because of the dealy of updating the data
 #
+# 	https://www.metro.tokyo.lg.jp/tosei/hodohappyo/ichiran.html
+#
+#	Shinjyuku-ku data URL
+# 	https://www.city.shinjuku.lg.jp/kusei/cln202002_kns01_me01.html
 #
 #
 #
@@ -33,9 +37,10 @@ my $DEBUG = 1;
 #
 #	Parameter set
 #
-my $index_html = "cln202002_kns01_me01.html";
-my $base_url = "https://www.city.shinjuku.lg.jp";
-our $src_url = "$base_url/kusei/$index_html";
+# 	https://www.metro.tokyo.lg.jp/tosei/hodohappyo/ichiran.html
+my $index_html = "ichiran.html";
+my $base_url = "https://www.metro.tokyo.lg.jp";
+our $src_url = "$base_url/tosei/hodohappyo/$index_html";
 
 my $BASE_DIR = "$WIN_PATH/tokyo-ku";
 my $index_file = "$BASE_DIR/$index_html";
@@ -268,29 +273,102 @@ sub	gencsv
 	#
 	#	load index and download pdf files
 	#
+	#	Shinjyuku-ku to Tokyo-to 2020.10.11
+	#		ichiran.html
+	#		<td><p><a href="/tosei/hodohappyo/press/2020/10/10/01.html">新型コロナウイルスに関連した患者の発生（第895報）</a></p></td>
+	#
+	#		01.html
+	#		<p>都内の医療機関から、今般の新型コロナウイルスに関連した感染症の症例が報告されましたので、
+	#			<a href="/tosei/hodohappyo/press/2020/10/10/documents/01_00.pdf" class="icon_pdf">別紙（PDF：807KB）</a>のとおり、お知らせします。</p>
+	#			新型コロナウイルスに関連した患者の発生（第895報）
+	#			新型コロナウイルスに関連した患者の発生（第893報）
+	#
 	my $rec = 0;
+	dp::dp $index_file . "\n";
 	open(HTML, $index_file) || die "cannot open $index_file";
 	while(<HTML>){
-		if(/都内の新型コロナウイルス関連患者数等/){
-			chop;
-			s#.*a href="/(content/[0-9]+\.pdf)".*#$1#;
-			my $pdf = $_;
-			my $pdf_url = "$base_url/$pdf";
-			#dp::dp $pdf_url . "\n";
-			my $pdf_file = "$BASE_DIR/$pdf";
-			#dp::dp "[$pdf_file]\n";
-			if(! -e $pdf_file){
-				system("wget $pdf_url -O $pdf_file");
+		next if(! /新型コロナウイルスに関連した患者の発生/); #	<td><p><a href="/tosei/hodohappyo/press/2020/10/10/01.html">新型コロナウイルスに関連した患者の発生（第895報）</a></p></td>
+
+		#dp::dp $_;
+		chop;
+		s/.*href=\"([^"]+)\".*/$1/;			# /tosei/hodohappyo/press/2020/10/10/01.html
+		my $tg_url = "$base_url" . $_;
+		my $tg_file = $_;
+		$tg_file =~ s#/tosei/hodohappyo/##;
+		$tg_file =~ s#/##g;
+		$tg_file = "$BASE_DIR/$pdf_dir/$tg_file";
+
+		#dp::dp join(", ", $_, $tg_file, $tg_url) . "\n";
+		if(! (-e $tg_file)){
+			my $cmd = "wget $tg_url -O $tg_file";
+			#dp::dp $cmd . "\n";
+			system($cmd);
+			if(! (-e $tg_file)){
+				dp::dp "Error at $cmd\n";
+				exit 1;
 			}
-			if(!-e "$pdf_file.txt"){
-				dp::dp "ps2ascii $pdf > $pdf.txt\n";
-				system("ps2ascii $pdf_file > $pdf_file.txt") 
-			}
-			&pdf2data("$pdf_file.txt");
-			dp::dp $pdf . "\n" if($rec++ < 3);		# 3
 		}
+
+		my $pdf_file = "";
+		open(TGHTML, $tg_file) || die "cannot open $tg_file";
+		while(<TGHTML>){ #<a href="/tosei/hodohappyo/press/2020/10/10/documents/01_00.pdf" class="icon_pdf">別紙（PDF：807KB）</a>のとおり、お知らせします。</p>
+			if(/.pdf".*別紙（PDF：/){
+				#dp::dp $_;
+
+				chop;
+				s/.*href=\"([^"]+)\".*/$1/;			# /tosei/hodohappyo/press/2020/10/10/documents/01_00.pdf
+				my $tg_url = $base_url . $_;
+				$pdf_file = $_;
+				$pdf_file =~ s#/tosei/hodohappyo/##;
+				$pdf_file =~ s#/##g;
+				$pdf_file = "$BASE_DIR/$pdf_dir/$pdf_file";
+				if(! (-e $pdf_file)){
+					my $cmd = "wget $tg_url -O $pdf_file";
+					dp::dp $cmd;
+					system($cmd);
+				}
+				
+				if(! (-e "$pdf_file.txt")){
+					my $cmd = "ps2ascii $pdf_file > $pdf_file.txt";
+					dp::dp $cmd . "\n";
+					system($cmd);
+				}
+				#dp::dp "######## $pdf_file\n";
+				last;
+			}
+		}
+		close(TGHTML);
 	}
 	close(HTML);
+
+	#s#.*a href="/(content/[0-9]+\.pdf)".*#$1#;
+	#my $pdf = $_;
+	#my $pdf_url = "$base_url/$pdf";
+	##dp::dp $pdf_url . "\n";
+	#my $pdf_file = "$BASE_DIR/$pdf";
+	##dp::dp "[$pdf_file]\n";
+	#if(! -e $pdf_file){
+	#	system("wget $pdf_url -O $pdf_file");
+	#}
+	#if(!-e "$pdf_file.txt"){
+	#	dp::dp "ps2ascii $pdf > $pdf.txt\n";
+	#	system("ps2ascii $pdf_file > $pdf_file.txt") 
+	#}
+
+
+	#
+	#	read all pdf.txt 
+	#
+	opendir my $DIRH, "$BASE_DIR/$pdf_dir" || die "Cannot open $BASE_DIR/$pdf_dir";
+	while(my $pdf_file = readdir($DIRH)){
+		#dp::dp $pdf_file . "\n";
+		if($pdf_file =~ "\.pdf\.txt"){
+			$pdf_file = "$BASE_DIR/$pdf_dir/$pdf_file";
+			#dp::dp $pdf_file . "\n" if($rec++ < 3);		# 3
+			&pdf2data("$pdf_file");
+		}
+	}
+
 
 	#
 	#	generate csv file from pdf(text)
@@ -300,14 +378,23 @@ sub	gencsv
 	my @KUS = (sort {$KU_FLAG{$b} <=> $KU_FLAG{$a}} keys %KU_FLAG);
 	my @DATES = (sort keys %DATE_FLAG);
 
+	my $n = 0;
+#	foreach my $ku (@KUS){
+#		dp::dp sprintf("%02d: ", $n++). "[$ku] [$KU_FLAG{$ku}]\n";
+#	}
 	print CSV join($DLM, "#", @DATES) . "\n";
 	my $no = 1;
 	foreach my $ku (@KUS){
+		#dp::dp $ku . "\n";
 		my @nn = ();
 		my $lv = 0;
 		foreach my $date (@DATES){
+			if(!defined $CONFIRMED{$date}{$ku}){
+				dp::dp "### UNDEFINED CONFIRMED: $date $ku\n";
+				next;
+			}
 			my $v = $CONFIRMED{$date}{$ku};
-			#dp::dp "$date:$ku: $v:$lv\n" if($ku eq "小笠原");
+			#dp::dp "$date:$ku: $v:$lv\n";# if($ku eq "小笠原");
 			push(@nn, $v - $lv);
 			$lv = $v;
 		}
@@ -348,7 +435,7 @@ sub	pdf2data
 			$csvd =~ s#/#-#;
 			$csvf =~ s/txt/$csvd/; 
 			open(CSV, ">$csvf") || die "cannot open $csvf";
-			print CSV $date . "\n";
+			print CSV "# " . $date . "\n";
 
 
 			#last if(! ($date ge "04/05" && $date le "04/10"));		#### 
@@ -366,16 +453,18 @@ sub	pdf2data
 			s/東久留米武蔵村山/東久留米  武蔵村山/;
 			s/あきる野西東京/あきる野  西東京/;
 			s/世田谷渋谷/世田谷 渋谷/;
+			s/調査中.*※/調査中/;
 			s/、/  /g;
 			s/」//g;
 			s/T//g;
 			s/\|/ /g;
 			s/\｜/ /g;
-
+			s/[\r\n]//g;
 			my @ku = split(/ +/, $_);
 
 			my $d = <PDF>;
 			chop $d;
+			$d =~ s/[\r\n]//g;
 			$d =~ s/\([0-9]+\)/  /g;
 			$d =~ s/\|/ /g;
 			$d =~ s/\｜/ /g;
@@ -392,7 +481,7 @@ sub	pdf2data
 			#dp::dp "# " . join(",", $#number, @number). "\n";
 			#dp::dp "\n" . "-" x 20 . "\n";
 
-			for(my $i = 1; $i < $#ku; $i++){
+			for(my $i = 1; $i <= $#ku; $i++){
 				my $k = $ku[$i];
 				$KU_FLAG{$k} = $number[$i] if(!defined $KU_FLAG{$k} || $number[$i] > $KU_FLAG{$k});
 				#dp::dp join(":", $date, $k, $number[$i]) . " \n";
