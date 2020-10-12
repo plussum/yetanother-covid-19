@@ -19,7 +19,6 @@ use Data::Dumper;
 use csvgpl;
 use csvaggregate;
 use csvlib;
-use tkopdf;
 
 #
 #	Initial
@@ -30,14 +29,19 @@ my $DLM = $config::DLM;
 
 my $DEBUG = 1;
 
-
 #
 #	Parameter set
 #
 # 	https://www.metro.tokyo.lg.jp/tosei/hodohappyo/ichiran.html
-my $src_url = $tkopdf::src_url;
-my $index_file = $tkopdf::index_file;
-my $transaction = $tkopdf::transaction;
+my $index_html = "ichiran.html";
+my $base_url = "https://www.metro.tokyo.lg.jp";
+our $src_url = "$base_url/tosei/hodohappyo/$index_html";
+
+my $BASE_DIR = "$WIN_PATH/tokyo-ku";
+my $index_file = "$BASE_DIR/$index_html";
+my $pdf_dir = "content";
+my $transaction = "$CSV_PATH/tokyo-ku.csv.txt";
+my $fromImage = "$BASE_DIR/fromImage";
 
 my $EXC = "都外";
 my $STD = "05/20";
@@ -151,7 +155,12 @@ sub	new
 #
 sub	download
 {
-	tkopdf::download(@_);
+	my ($mep) = @_;
+
+	unlink($index_file);
+	my $cmd = "wget " . $mep->{src_url} . " -O $index_file" ;
+	dp::dp $cmd . "\n";
+	system ($cmd);
 }
 
 #
@@ -159,7 +168,9 @@ sub	download
 #
 sub	copy
 {
-	tkopdf::download(@_);
+	my ($info_path) = @_;
+
+	#system("cp $transaction $CSV_PATH/");
 }
 
 #
@@ -194,11 +205,13 @@ sub	aggregate
 #
 #
 
+my %CONFIRMED = ();
 my %DATE_FLAG = ();
+my %KU_FLAG = ();
+my $data_dir = "tokyo-ku";
 
 my @RANGE_NAME = ();
 my %RANGE = ();
-my $data_dir = "tokyo-ku";
 
 #
 #
@@ -207,41 +220,151 @@ sub	gencsv
 {
 	my	($agrp) = @_;	
 
+	my $index = $agrp->{index};
 	my $csvf = $agrp->{output_file};
-	my $pdf_dir = $tkopdf::PDF_DIR;
 
-	tkopdf::getpdfdata();
+	#
+	#	from PDF by hand
+	#
+	opendir(my $df, $fromImage) || die "cannot open $fromImage";
+	while(my $fn = readdir($df)){
+		next if($fn =~ /^[^0-9]/);
+
+		dp::dp "fromImage: " . $fn . "\n";
+		&pdf2data("$fromImage/$fn");
+	}
+	closedir($df);
+
+	#
+	#	load index and download pdf files
+	#
+	#	Shinjyuku-ku to Tokyo-to 2020.10.11
+	#		ichiran.html
+	#		<td><p><a href="/tosei/hodohappyo/press/2020/10/10/01.html">新型コロナウイルスに関連した患者の発生（第895報）</a></p></td>
+	#
+	#		01.html
+	#		<p>都内の医療機関から、今般の新型コロナウイルスに関連した感染症の症例が報告されましたので、
+	#			<a href="/tosei/hodohappyo/press/2020/10/10/documents/01_00.pdf" class="icon_pdf">別紙（PDF：807KB）</a>のとおり、お知らせします。</p>
+	#			新型コロナウイルスに関連した患者の発生（第895報）
+	#			新型コロナウイルスに関連した患者の発生（第893報）
+	#
+	my $rec = 0;
+	dp::dp $index_file . "\n";
+	open(HTML, $index_file) || die "cannot open $index_file";
+	while(<HTML>){
+		next if(! /新型コロナウイルスに関連した患者の発生/); #	<td><p><a href="/tosei/hodohappyo/press/2020/10/10/01.html">新型コロナウイルスに関連した患者の発生（第895報）</a></p></td>
+
+		#dp::dp $_;
+		chop;
+		s/.*href=\"([^"]+)\".*/$1/;			# /tosei/hodohappyo/press/2020/10/10/01.html
+		my $tg_url = "$base_url" . $_;
+		my $tg_file = $_;
+		$tg_file =~ s#/tosei/hodohappyo/##;
+		$tg_file =~ s#/##g;
+		$tg_file = "$BASE_DIR/$pdf_dir/$tg_file";
+
+		#dp::dp join(", ", $_, $tg_file, $tg_url) . "\n";
+		if(! (-e $tg_file)){
+			my $cmd = "wget $tg_url -O $tg_file";
+			#dp::dp $cmd . "\n";
+			system($cmd);
+			if(! (-e $tg_file)){
+				dp::dp "Error at $cmd\n";
+				exit 1;
+			}
+		}
+
+		my $pdf_file = "";
+		open(TGHTML, $tg_file) || die "cannot open $tg_file";
+		while(<TGHTML>){ #<a href="/tosei/hodohappyo/press/2020/10/10/documents/01_00.pdf" class="icon_pdf">別紙（PDF：807KB）</a>のとおり、お知らせします。</p>
+			if(/.pdf".*別紙（PDF：/){
+				#dp::dp $_;
+
+				chop;
+				s/.*href=\"([^"]+)\".*/$1/;			# /tosei/hodohappyo/press/2020/10/10/documents/01_00.pdf
+				my $tg_url = $base_url . $_;
+				$pdf_file = $_;
+				$pdf_file =~ s#/tosei/hodohappyo/##;
+				$pdf_file =~ s#/##g;
+				$pdf_file = "$BASE_DIR/$pdf_dir/$pdf_file";
+				if(! (-e $pdf_file)){
+					my $cmd = "wget $tg_url -O $pdf_file";
+					dp::dp $cmd;
+					system($cmd);
+				}
+				
+				if(! (-e "$pdf_file.txt")){
+					my $cmd = "ps2ascii $pdf_file > $pdf_file.txt";
+					dp::dp $cmd . "\n";
+					system($cmd);
+				}
+				#dp::dp "######## $pdf_file\n";
+				last;
+			}
+		}
+		close(TGHTML);
+	}
+	close(HTML);
+
+	#s#.*a href="/(content/[0-9]+\.pdf)".*#$1#;
+	#my $pdf = $_;
+	#my $pdf_url = "$base_url/$pdf";
+	##dp::dp $pdf_url . "\n";
+	#my $pdf_file = "$BASE_DIR/$pdf";
+	##dp::dp "[$pdf_file]\n";
+	#if(! -e $pdf_file){
+	#	system("wget $pdf_url -O $pdf_file");
+	#}
+	#if(!-e "$pdf_file.txt"){
+	#	dp::dp "ps2ascii $pdf > $pdf.txt\n";
+	#	system("ps2ascii $pdf_file > $pdf_file.txt") 
+	#}
+
 
 	#
 	#	read all pdf.txt 
 	#
-	opendir my $DIRH, "$pdf_dir" || die "Cannot open $pdf_dir";
+	opendir my $DIRH, "$BASE_DIR/$pdf_dir" || die "Cannot open $BASE_DIR/$pdf_dir";
 	while(my $pdf_file = readdir($DIRH)){
 		#dp::dp $pdf_file . "\n";
 		if($pdf_file =~ "\.pdf\.txt"){
-			$pdf_file = "$pdf_dir/$pdf_file";
+			$pdf_file = "$BASE_DIR/$pdf_dir/$pdf_file";
 			#dp::dp $pdf_file . "\n" if($rec++ < 3);		# 3
 			&pdf2data("$pdf_file");
 		}
 	}
+
 
 	#
 	#	generate csv file from pdf(text)
 	#
 	dp::dp $csvf . "\n";
 	open(CSV, "> $csvf") || die "cannto create $csvf";
+	my @KUS = (sort {$KU_FLAG{$b} <=> $KU_FLAG{$a}} keys %KU_FLAG);
 	my @DATES = (sort keys %DATE_FLAG);
 
+	my $n = 0;
+#	foreach my $ku (@KUS){
+#		dp::dp sprintf("%02d: ", $n++). "[$ku] [$KU_FLAG{$ku}]\n";
+#	}
 	print CSV join($DLM, "#", @DATES) . "\n";
 	my $no = 1;
-	foreach my $r (@RANGE_NAME){
+	foreach my $ku (@KUS){
+		#dp::dp $ku . "\n";
 		my @nn = ();
+		my $lv = 0;
 		foreach my $date (@DATES){
-			my $v = csvlib::valdef($RANGE{$date}{$r}, 0);
-			#dp::dp join(",", $date, $r, $v) . "\n";
-			push(@nn, $v);
+			if(!defined $CONFIRMED{$date}{$ku}){
+				dp::dp "### UNDEFINED CONFIRMED: $date $ku\n";
+				next;
+			}
+			my $v = $CONFIRMED{$date}{$ku};
+			#dp::dp "$date:$ku: $v:$lv\n";# if($ku eq "小笠原");
+			push(@nn, $v - $lv);
+			$lv = $v;
 		}
-		print CSV join($DLM, $r, @nn) . "\n";
+		print CSV join($DLM, $ku, @nn) . "\n";
+		#dp::dp join(",", $ku, @nn) . "\n" if($ku eq "小笠原");
 	}
 	close(CSV);
 }
@@ -266,8 +389,8 @@ sub	pdf2data
 			s/.*年(.+)月(.+)日.*/$1\t$2/;
 			#print "$_\n";
 			my($m, $d) = split(/\t/, $_);
-			$m = tkopdf::utf2num($m);
-			$d = tkopdf::utf2num($d);
+			$m = &utf2num($m);
+			$d = &utf2num($d);
 			$date = sprintf("%02d/%02d", $m, $d);
 			#print "$date\n";
 			$DATE_FLAG{$date} = $date;
@@ -290,4 +413,45 @@ sub	pdf2data
 	}
 	close(PDF);
 }
+#
+#
+#
+sub	utf2num
+{
+	my($utf) = @_;
+
+	my $un = "０１２３４５６７８９";
+	my $number = 0;
+
+	#dp::dp "\n($utf)\n";
+	for(my $i = 0; $i < length($utf) ; ){
+		$_ = substr($utf, $i, 99);
+		#dp::dp "($_)\n";
+		my $nn = -1;
+		if(/^[0-9]+/){
+			$nn = $&;
+			$i += ($nn > 9) ? 2 : 1;
+			#dp::dp "[[$nn:$i:$number]]\n";
+		}
+		else {
+			my $n = substr($utf, $i, 3);
+			$nn = index($un, $n);
+			last if($nn < 0);
+
+			$nn = $nn / 3;
+			$i += 3;
+			#dp::dp "<<$n:$nn:$i:$number>>\n";
+		}
+		last if($nn < 0);
+
+		#dp::dp "($utf:$n)";
+		
+		$number = $number * 10 + $nn;
+	}
+	#dp::dp "$utf => $number\n";
+	return $number;
+}
+		
+
+1;
 

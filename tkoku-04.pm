@@ -23,7 +23,6 @@ use Data::Dumper;
 use csvgpl;
 use csvaggregate;
 use csvlib;
-use tkopdf;
 
 #
 #	Initial
@@ -39,9 +38,15 @@ my $DEBUG = 1;
 #	Parameter set
 #
 # 	https://www.metro.tokyo.lg.jp/tosei/hodohappyo/ichiran.html
-my $src_url = $tkopdf::src_url;
-my $index_file = $tkopdf::index_file;
-my $transaction = $tkopdf::transaction;
+my $index_html = "ichiran.html";
+my $base_url = "https://www.metro.tokyo.lg.jp";
+our $src_url = "$base_url/tosei/hodohappyo/$index_html";
+
+my $BASE_DIR = "$WIN_PATH/tokyo-ku";
+my $index_file = "$BASE_DIR/$index_html";
+my $pdf_dir = "content";
+my $transaction = "$CSV_PATH/tokyo-ku.csv.txt";
+my $fromImage = "$BASE_DIR/fromImage";
 
 my $EXC = "都外";
 my $STD = "05/20";
@@ -188,7 +193,12 @@ sub	new
 #
 sub	download
 {
-	tkopdf::download(@_);
+	my ($mep) = @_;
+
+	unlink($index_file);
+	my $cmd = "wget " . $mep->{src_url} . " -O $index_file" ;
+	dp::dp $cmd . "\n";
+	system ($cmd);
 }
 
 #
@@ -196,12 +206,25 @@ sub	download
 #
 sub	copy
 {
-	tkopdf::copy(@_);
+	my ($info_path) = @_;
+
+	#system("cp $transaction $CSV_PATH/");
 }
 
 #
 #	Aggregate J.A.G Japan  
 #
+my %CONFIRMED = ();
+my %DATE_FLAG = ();
+my %KU_FLAG = ();
+my $data_dir = "tokyo-ku";
+
+$params = (
+	confirmed => \%CONFIRMED,
+	date_flag => \%DATE_FLAG,
+	ku_flag => \%KU_FLAG,
+);
+
 sub	aggregate
 {
 	my ($fp) = @_;
@@ -224,76 +247,14 @@ sub	aggregate
 		total_item_name => "",
 	};
 
-	return &gencsv($agrp);		# 集計処理
+	return &gencsv($agrp, $param);		# 集計処理
 	#system("more $aggregate");
 }
 #
 #
 #
 
-my %CONFIRMED = ();
-my %DATE_FLAG = ();
-my %KU_FLAG = ();
-my $data_dir = "tokyo-ku";
 
-#
-#
-#
-sub	gencsv
-{
-	my	($agrp) = @_;	
-
-	my $csvf = $agrp->{output_file};
-	my $pdf_dir = $tkopdf::PDF_DIR;
-
-	tkopdf::getpdfdata();
-
-	#
-	#	read all pdf.txt 
-	#
-	opendir my $DIRH, "$pdf_dir" || die "Cannot open $pdf_dir";
-	while(my $pdf_file = readdir($DIRH)){
-		#dp::dp $pdf_file . "\n";
-		if($pdf_file =~ "\.pdf\.txt"){
-			$pdf_file = "$pdf_dir/$pdf_file";
-			#dp::dp $pdf_file . "\n" if($rec++ < 3);		# 3
-			&pdf2data("$pdf_file");
-		}
-	}
-
-	#
-	#	generate csv file from pdf(text)
-	#
-	dp::dp $csvf . "\n";
-	open(CSV, "> $csvf") || die "cannto create $csvf";
-	my @KUS = (sort {$KU_FLAG{$b} <=> $KU_FLAG{$a}} keys %KU_FLAG);
-	my @DATES = (sort keys %DATE_FLAG);
-
-	my $n = 0;
-#	foreach my $ku (@KUS){
-#		dp::dp sprintf("%02d: ", $n++). "[$ku] [$KU_FLAG{$ku}]\n";
-#	}
-	print CSV join($DLM, "#", @DATES) . "\n";
-	my $no = 1;
-	foreach my $ku (@KUS){
-		#dp::dp $ku . "\n";
-		my @nn = ();
-		my $lv = 0;
-		foreach my $date (@DATES){
-			if(!defined $CONFIRMED{$date}{$ku}){
-				dp::dp "### UNDEFINED CONFIRMED: $date $ku\n";
-				next;
-			}
-			my $v = $CONFIRMED{$date}{$ku};
-			#dp::dp "$date:$ku: $v:$lv\n";# if($ku eq "小笠原");
-			push(@nn, $v - $lv);
-			$lv = $v;
-		}
-		print CSV join($DLM, $ku, @nn) . "\n";
-		#dp::dp join(",", $ku, @nn) . "\n" if($ku eq "小笠原");
-	}
-	close(CSV);
-}
 
 #
 #
@@ -315,8 +276,8 @@ sub	pdf2data
 			#dp::dp "[$_]\n";
 			my ($m, $d) = split(/\t/, $_);
 			#dp::dp "$m $d -> ";
-			$m = tkopdf::utf2num($m);
-			$d = tkopdf::utf2num($d);
+			$m = &utf2num($m);
+			$d = &utf2num($d);
 
 			#dp::dp "$m $d \n";
 			$date = sprintf("%02d/%02d", $m, $d);
@@ -384,4 +345,45 @@ sub	pdf2data
 	close(PDF);
 	close(CSV);
 }
+#
+#
+#
+sub	utf2num
+{
+	my($utf) = @_;
+
+	my $un = "０１２３４５６７８９";
+	my $number = 0;
+
+	#dp::dp "\n($utf)\n";
+	for(my $i = 0; $i < length($utf) ; ){
+		$_ = substr($utf, $i, 99);
+		#dp::dp "($_)\n";
+		my $nn = -1;
+		if(/^[0-9]+/){
+			$nn = $&;
+			$i += ($nn > 9) ? 2 : 1;
+			#dp::dp "[[$nn:$i:$number]]\n";
+		}
+		else {
+			my $n = substr($utf, $i, 3);
+			$nn = index($un, $n);
+			last if($nn < 0);
+
+			$nn = $nn / 3;
+			$i += 3;
+			#dp::dp "<<$n:$nn:$i:$number>>\n";
+		}
+		last if($nn < 0);
+
+		#dp::dp "($utf:$n)";
+		
+		$number = $number * 10 + $nn;
+	}
+	#dp::dp "$utf => $number\n";
+	return $number;
+}
+		
+
 1;
+
