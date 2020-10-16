@@ -18,9 +18,14 @@ my $WIN_PATH = $config::WIN_PATH;
 my $CSV_PATH = $config::CSV_PATH;
 my $DLM = $config::DLM;
 
-my $index_html = "cln202002_kns01_me01.html";
-my $base_url = "https://www.city.shinjuku.lg.jp";
-our $src_url = "$base_url/kusei/$index_html";
+#my $index_html = "cln202002_kns01_me01.html";
+#my $base_url = "https://www.city.shinjuku.lg.jp";
+#our $src_url = "$base_url/kusei/$index_html";
+#our $transaction = "$CSV_PATH/tokyo-ku.csv.txt";
+
+my $index_html = "ichiran.html";
+my $base_url = "https://www.metro.tokyo.lg.jp/";
+our $src_url = "$base_url/tosei/hodohappyo/$index_html";
 our $transaction = "$CSV_PATH/tokyo-ku.csv.txt";
 
 my $BASE_DIR = "$WIN_PATH/tokyo-ku";
@@ -35,7 +40,7 @@ sub	download
 	my ($mep) = @_;
 
 	unlink($index_file);
-	my $cmd = "wget " . $index_html. " -O $index_file" ;
+	my $cmd = "wget " . $src_url. " -O $index_file" ;
 	dp::dp $cmd . "\n";
 	system ($cmd);
 }
@@ -141,6 +146,22 @@ sub	getpdfdata
 		close(TGHTML);
 	}
 	close(HTML);
+
+	my $pdf_dir = $tkopdf::PDF_DIR;
+	opendir my $DIRH, "$pdf_dir" || die "Cannot open $pdf_dir";
+	while(my $pdf_file = readdir($DIRH)){
+		#dp::dp $pdf_file . "\n";
+		if($pdf_file =~ /\.pdf$/){
+			$pdf_file = "$pdf_dir/$pdf_file";
+			#dp::dp $pdf_file . "\n"; #if($rec++ < 3);		# 3
+			if(!(-e "$pdf_file.txt")){
+					my $cmd = "ps2ascii $pdf_file > $pdf_file.txt";
+					dp::dp $cmd . "\n";
+					system($cmd);
+			}
+			#&pdf2data("$pdf_file.txt");
+		}
+	}
 
 	return 
 
