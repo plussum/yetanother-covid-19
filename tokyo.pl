@@ -199,7 +199,7 @@ sub	tokyo_info
 	my $dst = $ext . $p->{dst} . "_avr$avr_date" ;
 	print "[$dst]\n";
 	my $pngf = $config::PNG_PATH . "/$dst.png";
-	my $csvf = $config::PNG_PATH . "/$dst.csv.txt";
+	my $csvf = $config::PNG_PATH . "/$dst-plot.csv.txt";
 	my $plotf = $config::PNG_PATH . "/$dst-plot.txt";
 	my @items = @{$p->{items}};
 

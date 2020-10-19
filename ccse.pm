@@ -80,8 +80,8 @@ our $PARAMS = {			# MODULE PARETER        $mep
 		EXEC => "US",
 		graphp => [		# GPL PARAMETER         $gplp					# Old version of graph parameter
 			@params::PARAMS_COUNT, 
-			{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 3, graph => "lines"},
-			{ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 3, graph => "lines"},
+			{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 7, graph => "lines"},
+			{ext => "#KIND# China (#LD#) #SRC#", start_day => 0,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 7, graph => "lines"},
 		],
 		graphp_mode => {												# New version of graph pamaeter for each MODE
 			NC => [

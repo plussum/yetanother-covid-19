@@ -135,6 +135,7 @@ sub	csvgpl
 			die "Failed to create file\n" . "$png : " . csvlib::file_size($config::PNG_PATH . "/$png");
 		}
 
+		###########
 		print HTML "<!-- " . $gplitem->{ext} . " -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
 		print HTML "<img src=\"$IMG_PATH/$png\">\n";
@@ -149,7 +150,8 @@ sub	csvgpl
 			print HTML "</TR>\n" if($l == $#legs || ($l % $TBL_SIZE) == ($TBL_SIZE - 1));
 		}
 		print HTML "</TABLE>";
-	
+		############
+
 		print HTML "<span $class>";
 
 		my $csvf = $clp->{csvf};

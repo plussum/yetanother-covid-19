@@ -52,6 +52,10 @@ print FRAME "<BODY>\n";
 print FRAME "<span class=\"c\"> ";
 print FRAME "<H1>INDEX COVID-19</H1>\n";
 print FRAME "<ul type=\"disc\">\n";
+
+print FRAME "<li><a href =\"HTML/summary.html\" target=\"graph\"><b>SUMMARY</b></a></li>\n";
+print FRAME "<br>\n";
+
 foreach my $src (@src_list){
 	print "$src:";
 	foreach my $aggr (@aggr_list){

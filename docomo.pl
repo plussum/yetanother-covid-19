@@ -266,8 +266,8 @@ sub	gen_html
 		print HTML "<span $class>";
 
 		my @refs = (join(":", "PNG", "$html_path.png"),
-					join(":", "CSV", "$html_path.csv.txt"),
-					join(":", "PLT", "$html_path.plot.txt"),
+					join(":", "CSV", "$html_path-plot.csv.txt"),
+					join(":", "PLT", "$html_path-plot.txt"),
 		);
 		foreach my $r (@refs){
 			my ($tag, $path) = split(":", $r);
@@ -425,9 +425,9 @@ sub	graph
 	#dp::dp "#### " . join(",", "[" . $p->{target_range}[0] . "]", @target_range) . "\n";
 
 	my $dst_file = $p->{dst_file};
-	my $csvf = $dst_file .  ".csv.txt";
+	my $csvf = $dst_file .  "-plot.csv.txt";
 	my $pngf = $dst_file .  ".png";
-	my $plotf = $dst_file . ".plot.txt";
+	my $plotf = $dst_file . "-plot.txt";
 
 	my $dlm = $DST_DLM;
 	my $ylabel = "%";

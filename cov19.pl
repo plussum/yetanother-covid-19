@@ -195,6 +195,7 @@ if($FULL_SOURCE){
 	system("./tokyo.pl -DL; ./tokyo.pl -av7");
 	system("./docomo.pl -DL -ALL");
 	#system("./tokyo.pl -av7");
+	system("./summary.pl");
 	system("./genindex.pl");
 	system("(cd $config::HTML_PATH; find . -mtime +7 -exec rm {} \\;)");
 	system("(cd $config::PNG_PATH; find . -mtime +7 -exec rm {} \\;)");
