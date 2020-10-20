@@ -53,7 +53,11 @@ print FRAME "<span class=\"c\"> ";
 print FRAME "<H1>INDEX COVID-19</H1>\n";
 print FRAME "<ul type=\"disc\">\n";
 
-print FRAME "<li><a href =\"HTML/summary.html\" target=\"graph\"><b>SUMMARY</b></a></li>\n";
+print FRAME "<li><a href =\"HTML/summary_japan.html\" target=\"graph\"><b>SUMMARY Japan</b></a></li>\n";
+print FRAME "<li><a href =\"HTML/summary_ww01.html\" target=\"graph\"><b>SUMMARY WW #1</b></a></li>\n";
+print FRAME "<li><a href =\"HTML/summary_ww02.html\" target=\"graph\"><b>SUMMARY WW #2(POP)</b></a></li>\n";
+print FRAME "<li><a href =\"HTML/summary_US01.html\" target=\"graph\"><b>SUMMARY USA STATES</b></a></li>\n";
+print FRAME "<li><a href =\"HTML/summary_US02.html\" target=\"graph\"><b>SUMMARY USA CITIES </b></a></li>\n";
 print FRAME "<br>\n";
 
 foreach my $src (@src_list){

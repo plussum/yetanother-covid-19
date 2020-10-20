@@ -167,7 +167,10 @@ sub search_key_p
     #dp::dp "search_list: $sk:" . join(",", @$w) . "\n";
     for(my $i = 0; $i <= $wn; $i++){
 		my $ntc = $wp->[$i];
-        if($ntc =~ /$sk/){
+		if(! $ntc){
+			#dp::dp "error: search_key_p: ntc $i/$wn\n";
+		}
+        elsif($ntc =~ /$sk/){
            #dp::dp "search_list: $sk:$ntc\n";
            return $i + 1;
         }

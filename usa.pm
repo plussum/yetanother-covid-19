@@ -40,9 +40,11 @@ my $infopath = $config::INFOPATH->{ccse} ;
 my $EXCLUSION = "";
 my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 my @usa_params = (
-	{ext => "#KIND# TOP 10 (#LD#) #SRC#", start_day => 0, lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines"},
-	{ext => "#KIND# TOP 10 03/14 (#LD#) #SRC#", start_day => "03/14", lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines"},
-	{ext => "#KIND# TOP 10 05/01(#LD#) #SRC#", start_day => "05/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines"},
+	{ext => "#KIND# TOP 10 (#LD#) #SRC#", start_day => "03/14", lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines", avr_date => 7},
+	{ext => "#KIND# TOP 10 (#LD#) #SRC#", start_day => "03/14", lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines"},
+
+	#{ext => "#KIND# TOP 10 03/14 (#LD#) #SRC#", start_day => "03/14", lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines"},
+	#{ext => "#KIND# TOP 10 05/01(#LD#) #SRC#", start_day => "05/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines"},
 
 	{ext => "#KIND# TOP 10 2month(#LD#) #SRC#", start_day => -62, lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", avr_date => 7},
 	{ext => "#KIND# TOP 11-20 2month(#LD#) #SRC#", start_day => -62, lank =>[10, 19], exclusion => $EXCLUSION, target => "", label_skip => 3, graph => "lines", avr_date => 7},
