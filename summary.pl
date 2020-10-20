@@ -111,7 +111,7 @@ my @summary = (
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_all_with_US_rl_av_7_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_POP_all_with_US_rl_av_7_rl_avr_",
 
-			"<H1>NEW CASE from 03/01</H1>",
+			"<H1>NEW CASES from 03/01</H1>",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_01_05_from_0301_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_06_10_from_0301_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_11_20_from_0301_rl_avr_",
@@ -119,7 +119,7 @@ my @summary = (
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_31_40_from_0301_rl_avr_",
 
 
-			"<H1>NEW CASE 2months</H1>",
+			"<H1>NEW CASES 2months</H1>",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_2month_01_05_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_2month_06_10_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_2month_11_20_rl_avr_",
@@ -144,7 +144,7 @@ my @summary = (
 			"[0-9]{2}_usast_NEW_CASES_COUNT_DAY_TOP_10_rl_avr_",
 			"[0-9]{2}_usast_NEW_DEATHS_COUNT_DAY_TOP_10_rl_avr_",
 
-			"<H1>NEW CASE 2months</H1>",
+			"<H1>NEW CASES 2months</H1>",
 			"[0-9]{2}_usast_NEW_CASES_COUNT_DAY_TOP_10_2month_rl_avr_",
 			"[0-9]{2}_usast_NEW_CASES_COUNT_DAY_TOP_11_20_2month_rl_avr_",
 			"[0-9]{2}_usast_NEW_CASES_COUNT_DAY_TOP_21_30_2month_rl_avr_",
@@ -181,7 +181,7 @@ my @summary = (
 			"[0-9]{2}_usa_NEW_CASES_COUNT_DAY_TOP_10_rl_avr_",
 			"[0-9]{2}_usa_NEW_DEATHS_COUNT_DAY_TOP_10_rl_avr_",
 
-			"<H1>NEW CASE 2months</H1>",
+			"<H1>NEW CASES 2months</H1>",
 			"[0-9]{2}_usa_NEW_CASES_COUNT_DAY_TOP_10_2month_rl_avr_",
 			"[0-9]{2}_usa_NEW_CASES_COUNT_DAY_TOP_11_20_2month_rl_avr_",
 			"[0-9]{2}_usa_NEW_CASES_COUNT_DAY_TOP_21_30_2month_rl_avr_",
@@ -200,7 +200,7 @@ my @summary = (
 			"[0-9]{2}_usa_NEW_CASES_COUNT_POP_TOP_10_rl_avr_",
 			"[0-9]{2}_usa_NEW_DEATHS_COUNT_POP_TOP_10_rl_avr_",
 
-			"<H1>NEW CASE 2months POP</H1>",
+			"<H1>NEW CASES 2months POP</H1>",
 			"[0-9]{2}_usa_NEW_CASES_COUNT_POP_TOP_10_2month_rl_avr_",
 			"[0-9]{2}_usa_NEW_CASES_COUNT_POP_TOP_11_20_2month_rl_avr_",
 			"[0-9]{2}_usa_NEW_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_",
