@@ -100,7 +100,9 @@ my @summary = (
 
 			"<H1>Forcusing area</H1>",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_ASIA_0301_rl_avr_7_rl_avr_",
+			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_ASIA_0301_rl_avr_7_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_Sweden_rl_avr_",
+			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_Sweden_rl_avr_",
 		],
 	},
 	{
