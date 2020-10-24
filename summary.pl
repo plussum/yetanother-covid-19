@@ -66,15 +66,15 @@ my @summary = (
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_all_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_all_rl_avr_",
 
-			"<H1>NEW TOP 1-10 NEW CASES from 03/01</H1>",
+			"<H1>TOP 1-10 NEW CASES from 03/01</H1>",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_01_05_from_0301_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_06_10_from_0301_rl_avr_",
 
-			"<H1>NEW TOP 1-10 NEW DEATHS from 03/01</H1>",
+			"<H1>TOP 1-10 NEW DEATHS from 03/01</H1>",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_01_05_from_0301_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_06_10_from_0301_rl_avr_",
 
-			"<H1>NEW TOP 11-40 NEW CASES from 03/01</H1>",
+			"<H1>TOP 11-40 NEW CASES from 03/01</H1>",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_11_20_from_0301_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_21_30_from_0301_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_31_40_from_0301_rl_avr_",
