@@ -16,6 +16,8 @@ use config;
 use csvlib;
 use dp;
 
+my $VERBOSE = 0;
+
 my $SUMMARY_HTML = $config::HTML_PATH . "/summary.html";
 my $PNG_DIR = $config::PNG_PATH;
 
@@ -40,8 +42,10 @@ my @summary = (
 			"<H1>TOKYO </H1>",
 			"nonetky_pr_avr[1-9]",
 			"nonetky_st_avr[1-9]",
-			"[0-9]{2}_tko_NEW_CASES_COUNT_DAY_Tokyo_01_05_rl_avr_[0-9]+_rl_avr_",
-			"[0-9]{2}_tko_NEW_DEATHS_COUNT_DAY_Tokyo_01_05_rl_avr_[0-9]+_rl_avr_",
+			#"[0-9]{2}_tko_NEW_CASES_COUNT_DAY_Tokyo_.* rl_avr_[0-9]",
+			#"[0-9]{2}_tko_NEW_DEATHS_COUNT_DAY_Tokyo_.* rl_avr_[0-9]",
+			"[0-9]{2}_tko_NEW_CASES_COUNT_DAY_Tokyo_",
+			"[0-9]{2}_tko_NEW_DEATHS_COUNT_DAY_Tokyo_",
 			"[0-9]{2}_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_ruiseki02_rl_avr_",
 			"[0-9]{2}_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_rl_avr_",
 			"[0-9]{2}_tko_NEW_CASES_ERN_DAY_Tokyo_from[_0-9]+ip_[0-9]+_lp_[0-9]+_rl_avr_",
@@ -110,8 +114,8 @@ my @summary = (
 		htmlf => "summary_ww02.html",
 		params => [		
 			"<H1>NEW CASES/DEATHS </H1>",
-			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_all_with_US_rl_av_7_rl_avr_",
-			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_POP_all_with_US_rl_av_7_rl_avr_",
+			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_all_rl_avr_",
+			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_POP_all_rl_avr_",
 
 			"<H1>NEW CASES from 03/01</H1>",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_01_05_from_0301_rl_avr_",
@@ -127,7 +131,7 @@ my @summary = (
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_2month_11_20_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_2month_21_30_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_2month_31_40_rl_avr_",
-			"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_2month_41_50_rl_avr_",
+			#"[0-9]{2}_jhccse_NEW_CASES_COUNT_POP_2month_41_50_rl_avr_",
 
 			"<H1>NEW DEATHS 2months</H1>",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_POP_2month_01_05_rl_avr_",
@@ -135,7 +139,7 @@ my @summary = (
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_POP_2month_11_20_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_POP_2month_21_30_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_POP_2month_31_40_rl_avr_",
-			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_POP_2month_41_50_rl_avr_",
+			#"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_POP_2month_41_50_rl_avr_",
 		],
 	},
 	{
@@ -244,8 +248,8 @@ if($#PNG_FILES < 0){
 
 foreach my $ss (@summary){
 	my @SUMMARY_PNG = ();
-	dp::dp "\n" . "-" x 20 . "\n";
-	dp::dp join(",", $ss->{index}, $ss->{htmlf}). "\n";
+	dp::dp "\n" . "-" x 20 . "\n" if($VERBOSE);
+	dp::dp join(",", $ss->{index}, $ss->{htmlf}). "\n" if($VERBOSE);
 	foreach my $target (@{$ss->{params}}){
 		next if(! $target);
 		if($target =~ /\</){
@@ -260,6 +264,8 @@ foreach my $ss (@summary){
 		}
 		else {
 			dp::dp "### Not found " . $target . "\n";
+			push(@SUMMARY_PNG, "<h2>not found $target</h2><hr>");
+
 		}
 	}
 
@@ -275,7 +281,7 @@ foreach my $ss (@summary){
 	my $htmlf = $config::HTML_PATH . "/" . $ss->{htmlf};
 	my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
-	dp::dp $htmlf . "\n";
+	dp::dp $htmlf . "\n" if($VERBOSE);
 
 	open(HTML, "> $htmlf") || die "Cannot create file $htmlf";
 	print HTML "<HTML>\n";
