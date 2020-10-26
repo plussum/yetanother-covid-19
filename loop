@@ -1,0 +1,10 @@
+#!/usr/bin/perl
+#
+#
+#
+
+while(1){
+	system("./cov19.pl -FULL &");
+	sleep (2*60*60);
+}
+
