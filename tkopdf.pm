@@ -88,7 +88,7 @@ sub	getpdfdata
 	#			新型コロナウイルスに関連した患者の発生（第893報）
 	#
 	my $rec = 0;
-	dp::dp $index_file . "\n";
+	dp::dp $index_file . "\n" if($config::DEBUG);
 	open(HTML, $index_file) || die "cannot open $index_file";
 	while(<HTML>){
 		#	<td><p><a href="/tosei/hodohappyo/press/2020/10/10/01.html">新型コロナウイルスに関連した患者の発生（第895報）</a></p></td>

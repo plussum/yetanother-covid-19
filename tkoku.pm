@@ -266,7 +266,7 @@ sub	gencsv
 	#
 	#	generate csv file from pdf(text)
 	#
-	dp::dp $csvf . "\n";
+	dp::dp $csvf . "\n" if($config::VERBOSE);
 	open(CSV, "> $csvf") || die "cannto create $csvf";
 	my @KUS = (sort {$KU_FLAG{$b} <=> $KU_FLAG{$a}} keys %KU_FLAG);
 	my @DATES = (sort keys %DATE_FLAG);

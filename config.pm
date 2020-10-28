@@ -11,6 +11,8 @@ use warnings;
 #use ccse;
 #use who;
 
+our $VERBOSE = 1;
+our $DEBUG = 0;
 our $CODE_PATH = "/home/masataka/who/src";
 our $WIN_PATH = "/mnt/f/cov/plussum.github.io";
 our $HTML_PATH = "$WIN_PATH/HTML";

@@ -48,7 +48,7 @@ our @PARAMS_COUNT = (
     {ext => "#KIND# Japan 0301 (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 7, graph => "lines", avr_date => 7},
     {ext => "#KIND# Japan 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 7, graph => "lines"},
 #	{ext => "#KIND# Japan 1month (#LD#) #SRC#", start_day => -31,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 1, graph => "boxes"},
-#	{ext => "#KIND# Japan 0520 (#LD#) #SRC# rl-avr", start_day => "05/20",  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 7, graph => "lines", avr_date => 7},
+#	{ext => "#KIND# Japan 0520 (#LD#) #SRC# ", start_day => "05/20",  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 7, graph => "lines", avr_date => 7},
 #	{ext => "EOD"},
 
 #    {ext => "#KIND# TOP20-122 (#LD#) #SRC#", start_day => 0, lank =>[0, 19], exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines", term_ysize => 600, avr_date => 7}, 
@@ -129,7 +129,7 @@ our @PARAMS_COUNT = (
 #    {ext => "#KIND# Vietnam 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, target => "Vietnam", label_skip => 7, graph => "lines", avr_date => 7},
 
     {ext => "#KIND# ASIA 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, label_skip => 7, graph => "lines", target => $ASIA},
-    {ext => "#KIND# ASIA 0301 (#LD#) #SRC# rl-avr 7", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, label_skip => 7, graph => "lines", avr_date => 7, target => $ASIA},
+    {ext => "#KIND# ASIA 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, label_skip => 7, graph => "lines", avr_date => 7, target => $ASIA},
 
 #    {ext => "#KIND# Japan,Korea,China 0301 (#LD#) #SRC#", start_day => "03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, label_skip => 7, graph => "lines",
 #		target => "Japan,Korea,China"}, 

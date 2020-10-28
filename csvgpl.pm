@@ -13,7 +13,7 @@ use config;
 use csvlib;
 use dp;
 
-my $DEBUG = 2;
+my $DEBUG = 0;
 my $VERBOSE = 0;
 my $WIN_PATH = "";
 my $NO_DATA = "NaN";
@@ -204,7 +204,7 @@ sub	csv2graph
 	my ($graph_no, $csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode, $fp) = @_;
 
 	dp::dp join(", ", $gplitem->{ext}, $gplitem->{start_day}, $gplitem->{lank}[0], $gplitem->{lank}[1], $gplitem->{exclusion}, 
-			"[" . $clp->{src} . "]", $mep->{prefix}), "\n" ;#if($DEBUG > 1);
+			"[" . $clp->{src} . "]", $mep->{prefix}), "\n" if($config::VERBOSE);
 	
 	my $src = csvlib::valdefs($gplitem->{src}, "");
 	my $ext = sprintf("#%02d ", $graph_no) . $mep->{prefix} . " " . $gplitem->{ext};
@@ -664,10 +664,10 @@ sub	csv2graph
 	#	累積
 	#
 	if(defined $gplitem->{ruiseki}){
-		dp::dp "#### RUIKEI\n";
+		dp::dp "#### RUIKEI\n" if($DEBUG);
 		my @RUI = ();
 		my $recno = $#record;
-		dp::dp "$recno,  $#Dataset\n";
+		dp::dp "$recno,  $#Dataset\n" if($DEBUG);
 		for(my $i = 0; $i <= $recno; $i++){
 			my @w = split(/$DLM/, $record[$i]);
 			for(my $r = 0; $r <= $#w; $r++){

@@ -52,6 +52,8 @@ use dp;
 use JSON qw/encode_json decode_json/;
 use Data::Dumper;
 
+my $VERBOSE = 1;
+my $DEBUG = 0;
 my $TKY_GIT = "$config::WIN_PATH/tokyo/covid19"; # "/home/masataka/who/tokyo/covid19";
 my $TKY_DIR = "$config::WIN_PATH/tokyo/covid19"; # "/home/masataka/who/tokyo/covid19";
 my $POSITIVE = "$TKY_DIR/data/positive_rate.json";		# 新規感染者数
@@ -138,12 +140,17 @@ my @PARAMS = (
 #
 #
 #
+dp::dp "tokyo.pl " . join(",", @ARGV) . "\n" if($DEBUG);
 for(@ARGV){
 	if(/-DL/){
 		dp::dp ("(cd $TKY_GIT; git pull origin development)\n");
 		system("(cd $TKY_GIT; git pull origin development)");
 		#system("(cd ../tokyo/covid19; git pull origin master)");
 		#system("(cd ../tokyo/covid19; git clone origin master)");
+	}
+	elsif(/-S$/){
+		$VERBOSE = 0;
+		#dp::dp "### VERBOSE OFF\n";
 	}
 	elsif(/-av/){
 		s/-av//;
@@ -162,7 +169,7 @@ my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
 foreach my $p (@PARAMS){
 	foreach my $avr_date(0, 7){
-		print $p->{title} . "avr_date $avr_date \n";
+		dp::dp $p->{title} . "avr_date $avr_date \n" if($VERBOSE);
 		my $dst = &tokyo_info($p, $avr_date);
 
 		print HTML "<!-- avr_date $avr_date -->\n";
@@ -197,7 +204,7 @@ sub	tokyo_info
 
 	my $ext = &valdef($p->{ext}, "none");
 	my $dst = $ext . $p->{dst} . "_avr$avr_date" ;
-	print "[$dst]\n";
+	dp::dp "[$dst]\n" if($DEBUG);
 	my $pngf = $config::PNG_PATH . "/$dst.png";
 	my $csvf = $config::PNG_PATH . "/$dst-plot.csv.txt";
 	my $plotf = $config::PNG_PATH . "/$dst-plot.txt";
@@ -230,7 +237,7 @@ sub	tokyo_info
 	}
 	close(FD);
 
-	dp::dp $p->{src} . "\n";
+	dp::dp $p->{src} . "\n" if($VERBOSE);
 	#dp::dp $JSON . "\n";
 	my $positive = decode_json($JSON);
 	#print Dumper $positive;

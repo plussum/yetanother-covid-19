@@ -105,8 +105,8 @@ use tkoage;
 #
 #	初期化など
 #
-my $DEBUG = 0;
-my $VERBOSE = 0;
+#my $config::DEBUG = 0;
+#my $config::VERBOSE = 1;
 my $MIN_TOTAL = 100;
 
 my $WIN_PATH = $config::WIN_PATH;
@@ -126,6 +126,8 @@ my @FULL_DATA_SOURCES = qw (tkage ku tko ccse tkpos usast usa); # who jagtotal j
 my @ALL_DATA_SOURCES = qw (tkage ku tko ccse tkpos usast usa who jagtotal jag) ;
 #my @FULL_DATA_SOURCES = qw (ku);
 
+my $now = time;
+dp::dp "######### " . csvlib::ut2d($now) . " " . csvlib::ut2t($now) . " #######\n";
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
 
@@ -140,9 +142,12 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$DATA_SOURCE = "tkpos" if(/^tkpos$/i);
 	$DATA_SOURCE = "tkage" if(/^tko*age$/i);
 
-
 	if(/-debug/i){
-		$DEBUG = 1;
+		$config::DEBUG = 1;
+	}
+	elsif(/-S$/){
+		$config::VERBOSE = 0;
+		#dp::dp "VERBOSE OFF\n";
 	}
 	elsif(/-copy/){
 		$COPY = 1; 
@@ -157,7 +162,9 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 		$FULL_SOURCE = $_ if(/-FULL/i);
 	}
 	elsif(/-tokyo/){
-		system("./tokyo.pl -DL; tokyo.pl -av7");
+		my $S = ($config::VERBOSE) ? "" : "-S";
+		dp::dp("##### ./tokyo.pl -DL $S; tokyo.pl  $S -av7\n");
+		system("./tokyo.pl -DL $S; tokyo.pl  $S -av7");
 		exit(0);
 	}
 	elsif(/-all/){
@@ -186,24 +193,26 @@ if($FULL_SOURCE){
 		$_ = $src;
 		my $d = (/jtagtotal|usa|tkpos/) ? "" : $dl;
 		my $cmd = "$0 $src -all $d";
-		dp::dp "system: " . $cmd . "\n";
+		dp::dp "system: " . $cmd . "\n" if($config::VERBOSE);
 		my $rc = system($cmd);
 		$rc = $rc >> 8;
-		dp::dp "RETURN CODE [$rc]: $cmd\n";
+		dp::dp "RETURN CODE [$rc]: $cmd\n" if($config::VERBOSE);
 		exit 1 if($rc > 0);
 	}
-	system("./tokyo.pl -DL; ./tokyo.pl -av7");
-	system("./docomo.pl -DL -ALL");
+
+	my $S = ($config::VERBOSE) ? "" : "-S";
+	system("./tokyo.pl -DL $S; ./tokyo.pl  $S -av7");
+	system("./docomo.pl -DL $S -ALL");
 	#system("./tokyo.pl -av7");
-	system("./summary.pl");
-	system("./genindex.pl");
+	system("./summary.pl $S");
+	system("./genindex.pl $S");
 	system("(cd $config::HTML_PATH; find . -mtime +7 -exec rm {} \\;)");
 	system("(cd $config::PNG_PATH; find . -mtime +7 -exec rm {} \\;)");
 	system("$0 -upload");
 	exit(0);
 }
 if($UPLOAD){		# upload web data to github.io
-	dp::dp "UPLOAD github.io\n";
+	dp::dp "UPLOAD github.io\n" if($config::VERBOSE);
 	system("./upload.pl");
 	exit(0);
 }
@@ -226,13 +235,15 @@ if(! $DATA_SOURCE){
 
 if($DATA_SOURCE eq "tkpos"){
 	my $d = ($DOWNLOAD) ? "-DL" : "";
-	system("./tokyo.pl $d");
+	my $S = ($config::VERBOSE) ? "" : "-S";
+	#dp::dp("##### ./tokyo.pl -DL $S; tokyo.pl  $S -av7\n");
+	system("./tokyo.pl $d $S");
 	exit 0;
 }
 die "no package for $DATA_SOURCE\n" if(! $mep);
 
 
-dp::dp join(",", "DATA SOURCE:[$DATA_SOURCE] ", $mep->{src}, "[" . $mep->{comment} . "]") . "\n" if($DEBUG);
+dp::dp join(",", "DATA SOURCE:[$DATA_SOURCE] ", $mep->{src}, "[" . $mep->{comment} . "]") . "\n" if($config::DEBUG);
 
 if($COPY){
 	my $copy = $mep->{copy};
@@ -265,18 +276,18 @@ my 	$FUNCS = {
 my $DLM = $mep->{DLM};
 my $SOURCE_DATA = $mep->{src};
 
-dp::dp join(",", @AGGR_LIST) . "\n";
+dp::dp join(",", @AGGR_LIST) . "\n" if($config::VERBOSE);
 foreach my $AGGR_MODE (@AGGR_LIST){
-	dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE] \n";
+	dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE] \n" if($config::VERBOSE);
 	if(! csvlib::valdef($mep->{AGGR_MODE}{$AGGR_MODE},"")){
 		dp::dp "no function defined: $DATA_SOURCE: AGGR_MODE[$AGGR_MODE]\n";
 		next;
 	}
 
 	foreach my $MODE (@MODE_LIST){
-		dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE]\n";
+		dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE]\n" if($config::VERBOSE);
 		if(! csvlib::valdef($mep->{src_file}{$MODE},"")){
-			dp::dp "no function defined: $DATA_SOURCE: MODE[$MODE]\n";
+			dp::dp "no function defined: $DATA_SOURCE: MODE[$MODE]\n" if($config::VERBOSE);
 			next;
 		}
 			
@@ -295,7 +306,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 			my $STG2_CSVF = $config::CSV_PATH  . "/" . $mep->{prefix} . join("_", $MODE, $SUB_MODE, $AGGR_MODE) . ".csv.txt";
 			my $HTMLF = $config::HTML_PATH . "/" . $mep->{prefix} . join("_", $MODE, $SUB_MODE, $AGGR_MODE) . ".html";
 
-			if($VERBOSE || $DEBUG){
+			if($config::VERBOSE || $config::DEBUG){
 				dp::dp "SRC_FILE:[$SRC_FILE]\n" ;
 				dp::dp "STG1_CSVF:[$STG1_CSVF]\n";
 				dp::dp "HTMLF:[$HTMLF]\n";
@@ -356,7 +367,7 @@ sub	daily
 	my $mode = $fp->{mode};
 	my $aggr_mode = $fp->{aggr_mode};
 	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $aggr_mode) ;
-	dp::dp "[$mode] $name\n";
+	dp::dp "[$mode] $name\n" if($config::VERBOSE);
 
 	my $m = csvlib::valdef($mep->{AGGR_MODE}{$aggr_mode}, 0);
 	$name .= "*$m" . "days" if($m > 1);
@@ -376,7 +387,7 @@ sub	daily
 	#dp::dp Dumper $graphp;
 
 	my %params = (
-		debug => $DEBUG,
+		debug => $config::DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
 		fp => $fp,
@@ -399,7 +410,7 @@ sub	pop_not_in_use
 	my ($fp) = @_;
 	my $mep = $fp->{mep};
 
-	dp::dp "pop: \n" ; #  Dumper($fp) ;
+	dp::dp "pop: \n"  if($config::VERBOSE); #  Dumper($fp) ;
 
 	#
 	#	Load CCSE CSV
@@ -413,7 +424,7 @@ sub	pop_not_in_use
 	my $mode = $fp->{mode};
 	my $name = join("-", csvlib::valdef($config::MODE_NAME->{$mode}, " $mode "), $fp->{sub_mode}, $fp->{aggr_mode}) ;
 
-	dp::dp "NAME: $name \n";
+	dp::dp "NAME: $name \n" if($config::VERBOSE);
 	my $csvlist = {
 		name => $name,
 		csvf => $fp->{stage1_csvf}, 
@@ -426,7 +437,7 @@ sub	pop_not_in_use
 
 	my %params = (
 		src => $fp->{src},
-		debug => $DEBUG,
+		debug => $config::DEBUG,
 		clp => $csvlist,
 		mep => $mep,
 		gplp => $fp->{funcp}{graphp},
@@ -497,7 +508,7 @@ sub	ft
 	}
 
 	my %params = (
-		debug => $DEBUG,
+		debug => $config::DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
 		fp => $fp,
@@ -543,7 +554,7 @@ sub	ern
 	#
 
 	my $RT_TD = sprintf("ip(%d)lp(%d)rl-avr(%d) (#LD#)", $fp->{funcp}{ip}, $fp->{funcp}{lp}, $fp->{funcp}{average_date});
-	dp::dp "RT_TD :" . $RT_TD. "\n";
+	dp::dp "RT_TD :" . $RT_TD. "\n" if($config::VERBOSE);
 	$RT_TD =~ s#/#.#g;
 
 	my $R0_LINE = "1 with lines dt \"-\" title 'R0=1'";
@@ -564,7 +575,7 @@ sub	ern
 		$gp->{ext} =~ s/#RT_TD#/$RT_TD/;
 	}
 	my %params = (
-		debug => $DEBUG,
+		debug => $config::DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
 		fp => $fp,
@@ -593,7 +604,7 @@ sub	kv
 	my ($fp) = @_;
 	my $mep = $fp->{mep};
 
-	dp::dp "------ KV ---------\n";
+	dp::dp "------ KV ---------\n" if($config::VERBOSE);
 	my $aggr_func = $mep->{aggregate};
 	my ($colum, $record , $start_day, $last_day) = $aggr_func->($fp);
 
@@ -610,7 +621,7 @@ sub	kv
 	#
 
 	my $RT_TD = sprintf("ip(%d)lp(%d)rl-avr(%d) (#LD#)", $fp->{funcp}{ip}, $fp->{funcp}{lp}, $fp->{funcp}{average_date});
-	dp::dp "RT_TD :" . $RT_TD. "\n";
+	dp::dp "RT_TD :" . $RT_TD. "\n" if($config::VERBOSE);
 	$RT_TD =~ s#/#.#g;
 
 	my $mode = $fp->{mode};
@@ -629,7 +640,7 @@ sub	kv
 		$gp->{ext} =~ s/#RT_TD#/$RT_TD/;
 	}
 	my %params = (
-		debug => $DEBUG,
+		debug => $config::DEBUG,
 		src => $fp->{src},
 		clp => $csvlist,
 		fp => $fp,

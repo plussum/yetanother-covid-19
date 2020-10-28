@@ -228,7 +228,7 @@ sub	gencsv
 	#
 	#	generate csv file from pdf(text)
 	#
-	dp::dp $csvf . "\n";
+	dp::dp $csvf . "\n" if($config::VERBOSE);
 	open(CSV, "> $csvf") || die "cannto create $csvf";
 	my @DATES = (sort keys %DATE_FLAG);
 
