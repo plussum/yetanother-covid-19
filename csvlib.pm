@@ -266,7 +266,7 @@ sub	cnt_pop
 		my($name, $pn) = split(",", $_);
 		next if(! $name);
 
-		$cnt_pop->{$name} = $pn;
+		$cnt_pop->{$name} = &num($pn);
 	}
 	close(FD);
 }

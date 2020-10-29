@@ -189,15 +189,16 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 if($CRON){
 	#$CRON_TERM = 1 * 30;
 	my $cront = 60;		# 1min
-	my $cmd = "$0 -FULL -S >> /home/masataka/who/src/cron.log 2>&1 &";
+	my $cmd = "$0 -FULL -S | tee -a /home/masataka/who/src/cron.log";
 	for(;;){
+		dp::dp "#" x 5 . csvlib::ut2d(time) . " " . csvlib::ut2t(time) . "#" x 5 . "\n";
+		my $next = time + $CRON_TERM;
 		dp::dp "($$) $cmd \n";
 		#$cmd = "date";
 		system($cmd);
-		my $next = time + $CRON_TERM;
-		for(my $t = 0; $t < $CRON_TERM; $t += $cront){
+		for(my $t = 0; time < $next; $t += $cront){
 			my $next_time = csvlib::ut2d($next) . " " . csvlib::ut2t($next);
-			dp::dp sprintf("### $0 %d/%d  next:%s\n", 1 + $t / $cront, $CRON_TERM / $cront, $next_time);
+			dp::dp sprintf("### waiting to execute $0 %d/%d  next:%s\n", 1 + $t / $cront, $CRON_TERM / $cront, $next_time);
 			sleep $cront; 
 		}
 	}

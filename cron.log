@@ -1094,3 +1094,136 @@ Fast-forward
 #[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
 #[207] csvgpl.pm #KIND# Sweden(#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
 #[207] csvgpl.pm #KIND# New Zealand (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+--2020-10-29 15:15:39--  https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html
+www.metro.tokyo.lg.jp (www.metro.tokyo.lg.jp) をDNSに問いあわせています... 27.110.42.78
+www.metro.tokyo.lg.jp (www.metro.tokyo.lg.jp)|27.110.42.78|:443 に接続しています... 接続しました。
+HTTP による接続要求を送信しました、応答を待っています... 200 OK
+長さ: 30536 (30K) [text/html]
+`/mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html' に保存中
+
+     0K .......... .......... .........                       100% 1.42M=0.02s
+
+2020-10-29 15:15:43 (1.42 MB/s) - `/mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html' へ保存完了 [30536/30536]
+
+#[297] ./cov19.pl ######### 20/10/29 15:15:39 #######
+#[298] ./cov19.pl tkage,DAY,POP
+Argument ""1373450^I"\r" isn't numeric in division (/) at csvgpl.pm line 400.
+Illegal division by zero at csvgpl.pm line 442.
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+--2020-10-29 15:28:19--  https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html
+www.metro.tokyo.lg.jp (www.metro.tokyo.lg.jp) をDNSに問いあわせています... 27.110.42.78
+www.metro.tokyo.lg.jp (www.metro.tokyo.lg.jp)|27.110.42.78|:443 に接続しています... 接続しました。
+HTTP による接続要求を送信しました、応答を待っています... 200 OK
+長さ: 30536 (30K) [text/html]
+`/mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html' に保存中
+
+     0K .......... .......... .........                       100% 1.81M=0.02s
+
+2020-10-29 15:28:21 (1.81 MB/s) - `/mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html' へ保存完了 [30536/30536]
+
+#[297] ./cov19.pl ######### 20/10/29 15:28:19 #######
+#[298] ./cov19.pl tkage,DAY,POP
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+--2020-10-29 15:28:28--  https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html
+www.metro.tokyo.lg.jp (www.metro.tokyo.lg.jp) をDNSに問いあわせています... 27.110.42.78
+www.metro.tokyo.lg.jp (www.metro.tokyo.lg.jp)|27.110.42.78|:443 に接続しています... 接続しました。
+HTTP による接続要求を送信しました、応答を待っています... 200 OK
+長さ: 30536 (30K) [text/html]
+`/mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html' に保存中
+
+     0K .......... .......... .........                       100% 2.95M=0.01s
+
+2020-10-29 15:28:28 (2.95 MB/s) - `/mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html' へ保存完了 [30536/30536]
+
+#[297] ./cov19.pl ######### 20/10/29 15:28:28 #######
+#[298] ./cov19.pl ku,DAY,POP
+
+Failed to create file
+04_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_05_20_.png : 0 at csvgpl.pm line 135.
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[298] ./cov19.pl ######### 20/10/29 15:33:07 #######
+#[299] ./cov19.pl tkage,DAY,POP
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[298] ./cov19.pl ######### 20/10/29 15:33:14 #######
+#[299] ./cov19.pl ku,DAY,POP
+Already up-to-date.
+/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data
+cases_total.csv
+data.json
+death_total.csv
+demography.csv
+effective_reproduction_number.csv
+pcr_case_daily.csv
+pcr_positive_daily.csv
+pcr_tested_daily.csv
+prefectures.csv
+recovery_total.csv
+serious.csv
+#[298] ./cov19.pl ######### 20/10/29 15:33:41 #######
+#[299] ./cov19.pl tko,DAY,POP
+Already up-to-date.
+#[298] ./cov19.pl ######### 20/10/29 15:34:37 #######
+#[299] ./cov19.pl ccse,DAY,POP
+#[255] ./cov19.pl ######### 20/10/29 15:37:12 #######
+#[298] ./cov19.pl ######### 20/10/29 15:37:14 #######
+#[299] ./cov19.pl usast,DAY,POP
+#[298] ./cov19.pl ######### 20/10/29 15:38:09 #######
+#[299] ./cov19.pl usa,DAY,POP
+#[146] ./tokyo.pl (cd /mnt/f/cov/plussum.github.io/tokyo/covid19; git pull origin development)
+Already up-to-date.
+Generate index.html and frame.html
+jhccse:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tko:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoku:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoage:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usast:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usa:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+#[233] ./cov19.pl UPLOAD github.io
+/mnt/f/cov/plussum.github.io
+Agent pid 27522
+[master 4a05b9c] update
+ 186 files changed, 18593 insertions(+), 18593 deletions(-)
+ rewrite PNG/01_tkoage_CCM_CASES_COUNT_POP_Tokyo_Age_-plot.csv.txt (95%)
+ rewrite PNG/01_tkoage_CCM_CASES_COUNT_POP_Tokyo_Age_.png (99%)
+ rewrite PNG/01_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_-plot.csv.txt (96%)
+ rewrite PNG/01_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_.png (98%)
+ rewrite PNG/02_tkoage_CCM_CASES_COUNT_POP_Tokyo_Age_ruiseki-plot.csv.txt (68%)
+ rewrite PNG/02_tkoage_CCM_CASES_COUNT_POP_Tokyo_Age_ruiseki.png (98%)
+ rewrite PNG/02_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_rl_avr_7.png (98%)
+ rewrite PNG/02_usa_NEW_CASES_KV_DAY_USA_2month_.png (99%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_-plot.csv.txt (93%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_.png (65%)
+ rewrite PNG/03_tko_NEW_DEATHS_COUNT_DAY_Japan_TOP20_2m_.png (80%)
+ rewrite PNG/03_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_ruiseki02_rl_avr_7-plot.csv.txt (98%)
+ rewrite PNG/03_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_ruiseki02_rl_avr_7.png (98%)
+ rewrite PNG/03_usa_NEW_CASES_KV_DAY_USA_1month_.png (98%)
+ rewrite PNG/04_tkoage_NEW_CASES_COUNT_POP_Tokyo_over_50_1_ruiseki03_rl_avr_7-plot.csv.txt (78%)
+ rewrite PNG/04_tkoage_NEW_CASES_COUNT_POP_Tokyo_over_50_1_ruiseki03_rl_avr_7.png (98%)
+ rewrite PNG/05_tkoage_NEW_CASES_COUNT_POP_Tokyo_over_50_2_ruiseki04_rl_avr_7-plot.csv.txt (91%)
+ rewrite PNG/05_tkoage_NEW_CASES_COUNT_POP_Tokyo_over_50_2_ruiseki04_rl_avr_7.png (99%)
+ rewrite PNG/10_usa_CCM_DEATHS_COUNT_DAY_TOP_21_30_2month_-plot.csv.txt (92%)
+ rewrite PNG/10_usa_CCM_DEATHS_COUNT_DAY_TOP_21_30_2month_.png (99%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (92%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_.png (99%)
+ rewrite PNG/15_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_-plot.csv.txt (87%)
+ rewrite PNG/15_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_.png (99%)
+ rewrite PNG/15_usa_CCM_DEATHS_COUNT_DAY_TOP_10_05_01_Oklahoma_-plot.csv.txt (96%)
+ rewrite PNG/17_tko_CCM_DEATHS_COUNT_DAY_Japan_06_10_2m_-plot.csv.txt (82%)
+ rewrite PNG/17_tko_CCM_DEATHS_COUNT_DAY_Japan_06_10_2m_.png (99%)
+ rewrite PNG/18_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_-plot.csv.txt (96%)
+ rewrite PNG/18_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_.png (99%)
+ rewrite PNG/18_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_MOTH_TOP20-plot.csv.txt (83%)
+ rewrite PNG/18_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_MOTH_TOP20.png (66%)
+ rewrite PNG/19_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_-plot.csv.txt (85%)
+ rewrite PNG/19_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (99%)
+ rewrite PNG/26_jhccse_NEW_DEATHS_COUNT_DAY_2month_31_40_-plot.csv.txt (95%)
+ rewrite PNG/26_jhccse_NEW_DEATHS_COUNT_DAY_2month_31_40_.png (98%)
+/home/masataka/who/src
+Agent pid 27553

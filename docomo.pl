@@ -26,6 +26,7 @@ use csvlib;
 
 binmode(STDOUT, ":utf8");
 
+my $VERBOSE = 0;
 my $END_OF_DATA = "###EOD###";
 my $TERM_X_SIZE = 1000;
 my $TERM_Y_SIZE = 350;
@@ -90,6 +91,7 @@ for(@ARGV){
 	$TARGET_KIND_LIST{PM}++ if(/-PM/);	# Previouse Month 
 	$TARGET_KIND_LIST{PD}++ if(/-PD/);	# Previouse DAY 
 	$DOWN_LOAD = 1 if(/-DL/);
+	$VERBOSE = 1 if(/-V/);
 	if(/-ALL/){
 		$TARGET_KIND_LIST{PP} = 1;
 		$TARGET_KIND_LIST{PE} = 1;
@@ -164,7 +166,7 @@ my @OUTPUT_FILES = ();
 
 if($DOWN_LOAD){
 	my $wget = "wget $SRC_URL -O $SRC_CSVF";
-	dp::dp $wget ."\n";
+	dp::dp $wget ."\n" if($VERBOSE);
 	system($wget);
 }
 
@@ -180,8 +182,8 @@ my $line = <FD>;
 chop $line;
 $line = decode('Shift_JIS', $line);
 my @LABEL = split(/,/, $line);
-my $FIRST_DATE = @LABEL[3];
-my $LAST_DATE = @LABEL[$#LABEL];
+my $FIRST_DATE = $LABEL[3];
+my $LAST_DATE = $LABEL[$#LABEL];
 
 my $ln = 0;
 while(<FD>){
@@ -217,7 +219,7 @@ foreach my $TG (sort keys %TARGET_KIND_LIST){
 
 	$DST_FILE = sprintf($DST_FILE_TAG, $TG);
 	$HTMLF    = sprintf($HTMLF_TAG, $TG);
-	dp::dp "##### $TG, $TGN, $TGK, $DST_FILE, $HTMLF" . "\n";
+	dp::dp "##### $TG, $TGN, $TGK, $DST_FILE, $HTMLF" . "\n" if($VERBOSE);
 
 	foreach my $param (@PARAMS){
 		last if($param->{dst} eq $END_OF_DATA);
@@ -290,7 +292,7 @@ sub	csv2graph
 	my @MATRIX = ();
 	$MATRIX[0] = [ "# " . $TGK, @LABEL];
 
-	dp::dp "DOCOMO  [$TGK] " . $param->{dst} . " " . $param->{graph} . "\n";
+	dp::dp "DOCOMO  [$TGK] " . $param->{dst} . " " . $param->{graph} . "\n" if($VERBOSE);
 	#dp::dp join(",", @{$param->{target_area}}) . "\n";
 	my $rn = 1;
 	my $tga = $param->{target_area};
@@ -405,7 +407,7 @@ sub	csv2graph
 		};
 		&graph($p);
 	}
-	dp::dp $dst_file . "\n";
+	dp::dp $dst_file . "\n" if($VERBOSE);
 	return ($dst_file);
 }
 
