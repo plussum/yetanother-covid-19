@@ -16,7 +16,7 @@ my $NONE_EXC = "Others";
 my $EXC_POP = "San Marino,Holy See";
 my $EXC_FT = "";
 #my $EUROPE = "Sweden,United Kingdom,UK,Italy,France,Spain,Belgium,Germany,Netherlands,Switzerland";
-my $EUROPE = "France,United Kingdom,Italy,Germany,Netherlands,Belgium,Romania,Poland,Czechia,Portugal,Sweden";
+my $EUROPE = "France,United Kingdom,Italy,Germany,Netherlands,Belgium,Romania,Poland,Czechia,Portugal,Sweden,Switzerland";
 my $ASIA = "Japan,Taiwan,Malaysia,Philip,Korea,Singapore,Indonesia"; 
 #
 #	mode|sub_mode|aggr_mode =>  "ND,NC,CC,CD,NR,CR" | "" | "*" | "!ND,CD,CR"
