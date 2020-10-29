@@ -187,18 +187,18 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 }
 
 if($CRON){
-	#$CRON_TERM = 1 * 30;
 	my $cront = 60;		# 1min
 	my $cmd = "$0 -FULL -S | tee -a /home/masataka/who/src/cron.log";
 	for(;;){
-		dp::dp "#" x 5 . csvlib::ut2d(time) . " " . csvlib::ut2t(time) . "#" x 5 . "\n";
-		my $next = time + $CRON_TERM;
-		dp::dp "($$) $cmd \n";
-		#$cmd = "date";
+		my $now = time;
+		dp::dp "#" x 5 . &str_time($now) . "#" x 5 . "\n";
+		my $next_utc = $now + $CRON_TERM;
+		dp::dp "($$) $cmd $now/$next_utc\n";
+		# $cmd = "date";
 		system($cmd);
-		for(my $t = 0; time < $next; $t += $cront){
-			my $next_time = csvlib::ut2d($next) . " " . csvlib::ut2t($next);
-			dp::dp sprintf("### waiting to execute $0 %d/%d  next:%s\n", 1 + $t / $cront, $CRON_TERM / $cront, $next_time);
+		for(my $t = 0; time < $next_utc; $t += $cront){
+			dp::dp sprintf("### waiting to execute at %s next:%s\n",
+				 &str_time(time), &str_time($next_utc));
 			sleep $cront; 
 		}
 	}
@@ -252,7 +252,7 @@ if(! $DATA_SOURCE){
 }
 
 if($DATA_SOURCE eq "tkpos"){
-	dp::dp "######### " . csvlib::ut2d($now) . " " . csvlib::ut2t($now) . " #######\n";
+	dp::dp "######### " . &str_time($now) . " #######\n";
 	my $d = ($DOWNLOAD) ? "-DL" : "";
 	my $S = ($config::VERBOSE) ? "" : "-S";
 	#dp::dp("##### ./tokyo.pl -DL $S; tokyo.pl  $S -av7\n");
@@ -295,7 +295,7 @@ my 	$FUNCS = {
 my $DLM = $mep->{DLM};
 my $SOURCE_DATA = $mep->{src};
 
-dp::dp "######### " . csvlib::ut2d($now) . " " . csvlib::ut2t($now) . " #######\n";
+dp::dp "######### " . &str_time($now) . " #######\n";
 dp::dp join(",", $DATA_SOURCE, @AGGR_LIST) . "\n" ;# if($config::VERBOSE);
 foreach my $AGGR_MODE (@AGGR_LIST){
 	dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE] \n" if($config::VERBOSE);
@@ -672,4 +672,9 @@ sub	kv
 	csvgpl::csvgpl(\%params);
 }
 
+sub	str_time
+{
+	my ($time) = @_;
 
+	return "20" . csvlib::ut2d($time) . " " . csvlib::ut2t($time);
+}
