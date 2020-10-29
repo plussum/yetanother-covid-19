@@ -396,7 +396,7 @@ sub	csv2graph
 				push(@UNDEF_POP, $country);
 
 			}
-			if(defined $CNT_POP{$country} && $CNT_POP{$country} > $pop_thresh){
+			if(defined $CNT_POP{$country} && csvlib::num($CNT_POP{$country}) > $pop_thresh){
 				$POP_UNIT = $CNT_POP{$country} / $config::POP_BASE;
 			}
 		}

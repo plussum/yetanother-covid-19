@@ -515,4 +515,19 @@ sub	matrix_average
 	
 	return ($src_row, 2);
 }
+
+sub	num
+{
+	my ($v) = @_;
+
+	$v = 0 if(! $v);
+	$v =~ s/[\r\n \t"]+//g;
+	if($v =~ /[^0-9\.]/) {
+		my ($package_name, $file_name, $line) = caller;
+		dp::dp "$file_name [$line] >> Error data [$v]\n";
+		$v = 0;
+	}
+	return ($v);
+}
+
 1;

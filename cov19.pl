@@ -129,7 +129,6 @@ my @ALL_DATA_SOURCES = qw (tkage ku tko ccse tkpos usast usa who jagtotal jag) ;
 #my @FULL_DATA_SOURCES = qw (ku);
 
 my $now = time;
-dp::dp "######### " . csvlib::ut2d($now) . " " . csvlib::ut2t($now) . " #######\n";
 for(my $i = 0; $i <= $#ARGV; $i++){
 	$_ = $ARGV[$i];
 
@@ -165,12 +164,6 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	}
 	elsif(/-CRON/i){
 		$CRON = $_ ;
-	}
-	elsif(/-tokyo/){
-		my $S = ($config::VERBOSE) ? "" : "-S";
-		dp::dp("##### ./tokyo.pl -DL $S; tokyo.pl  $S -av7\n");
-		system("./tokyo.pl -DL $S; tokyo.pl  $S -av7");
-		exit(0);
 	}
 	elsif(/-all/){
 		push(@MODE_LIST, "NC", "ND", "CC", "CD", "NR", "CR");
@@ -258,6 +251,7 @@ if(! $DATA_SOURCE){
 }
 
 if($DATA_SOURCE eq "tkpos"){
+	dp::dp "######### " . csvlib::ut2d($now) . " " . csvlib::ut2t($now) . " #######\n";
 	my $d = ($DOWNLOAD) ? "-DL" : "";
 	my $S = ($config::VERBOSE) ? "" : "-S";
 	#dp::dp("##### ./tokyo.pl -DL $S; tokyo.pl  $S -av7\n");
@@ -300,7 +294,8 @@ my 	$FUNCS = {
 my $DLM = $mep->{DLM};
 my $SOURCE_DATA = $mep->{src};
 
-dp::dp join(",", @AGGR_LIST) . "\n" if($config::VERBOSE);
+dp::dp "######### " . csvlib::ut2d($now) . " " . csvlib::ut2t($now) . " #######\n";
+dp::dp join(",", $DATA_SOURCE, @AGGR_LIST) . "\n" ;# if($config::VERBOSE);
 foreach my $AGGR_MODE (@AGGR_LIST){
 	dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE] \n" if($config::VERBOSE);
 	if(! csvlib::valdef($mep->{AGGR_MODE}{$AGGR_MODE},"")){
@@ -316,7 +311,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 		}
 			
 		foreach my $SUB_MODE (@SUB_MODE_LIST){
-			dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n";
+			dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n" if($cofig::VERBOSE);
 			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");		# POP affect only COUNT (no FT, ERN)
 			next if($SUB_MODE eq "ERN" && $MODE eq "ND");				# Newdeath does not make sense for ERN
 			next if($SUB_MODE ne "COUNT" && $MODE =~ /^C/);				# Only count for CC, CD 

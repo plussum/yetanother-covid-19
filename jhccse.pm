@@ -131,9 +131,9 @@ sub	jhccse
 		if($country){
 			dp::dp "[$rn:$RN:$country:$DT_S:$DT_E]\n" if($DEBUG > 1);
 			for(my $dt = $DT_S; $dt <= $DT_E; $dt++){
-				$COUNT{$country}[$dt-$DT_S] += $DATA[$rn][$dt];		# 複数のレコードになっている国があるので += 
+				$COUNT{$country}[$dt-$DT_S] += csvlib::num($DATA[$rn][$dt]);		# 複数のレコードになっている国があるので += 
 			}
-			$COUNTRY{$country} += $DATA[$rn][$DT_E];
+			$COUNTRY{$country} += csvlib::num($DATA[$rn][$DT_E]);
 		}
 	}
 	my $cn =  keys %COUNTRY;

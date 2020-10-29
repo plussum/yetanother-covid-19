@@ -54,7 +54,7 @@ sub	ft
 	#
 	#	Load input file
 	#
-	dp::dp $p->{input_file} . "\n";
+	dp::dp $p->{input_file} . "\n" if($config::VERBOSE);
 	open(IMF, $p->{input_file}) || die "Cannot open " . $p->{input_file};
 	$_ = <IMF>; chop;
 	@DATE_LIST = split(/$dlm/, $_);
