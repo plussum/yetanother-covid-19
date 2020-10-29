@@ -117,6 +117,8 @@ my $DOWNLOAD = 0;
 my $COPY = 0;
 my $FULL_SOURCE = 0;
 my $UPLOAD = 0;
+my $CRON = 0;
+my $CRON_TERM = 2 * 60 * 60;	# 2 hour
 
 my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
@@ -161,6 +163,9 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	elsif(/-FULL/i){
 		$FULL_SOURCE = $_ if(/-FULL/i);
 	}
+	elsif(/-CRON/i){
+		$CRON = $_ ;
+	}
 	elsif(/-tokyo/){
 		my $S = ($config::VERBOSE) ? "" : "-S";
 		dp::dp("##### ./tokyo.pl -DL $S; tokyo.pl  $S -av7\n");
@@ -187,12 +192,31 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	}
 
 }
+
+if($CRON){
+	#$CRON_TERM = 1 * 30;
+	my $cront = 60;		# 1min
+	my $cmd = "$0 -FULL -S >> /home/masataka/who/src/cron.log 2>&1 &";
+	for(;;){
+		dp::dp "($$) $cmd \n";
+		#$cmd = "date";
+		system($cmd);
+		my $next = time + $CRON_TERM;
+		for(my $t = 0; $t < $CRON_TERM; $t += $cront){
+			my $next_time = csvlib::ut2d($next) . " " . csvlib::ut2t($next);
+			dp::dp sprintf("### $0 %d/%d  next:%s\n", 1 + $t / $cront, $CRON_TERM / $cront, $next_time);
+			sleep $cront; 
+		}
+	}
+	exit;
+}
 if($FULL_SOURCE){
 	my $dl = "-DL" if($FULL_SOURCE =~ /FULL/);
+	my $S = ($config::VERBOSE) ? "" : "-S";
 	foreach my $src (@FULL_DATA_SOURCES){
 		$_ = $src;
 		my $d = (/jtagtotal|usa|tkpos/) ? "" : $dl;
-		my $cmd = "$0 $src -all $d";
+		my $cmd = "$0 $src $S -all $d";
 		dp::dp "system: " . $cmd . "\n" if($config::VERBOSE);
 		my $rc = system($cmd);
 		$rc = $rc >> 8;
@@ -200,7 +224,6 @@ if($FULL_SOURCE){
 		exit 1 if($rc > 0);
 	}
 
-	my $S = ($config::VERBOSE) ? "" : "-S";
 	system("./tokyo.pl -DL $S; ./tokyo.pl  $S -av7");
 	system("./docomo.pl -DL $S -ALL");
 	#system("./tokyo.pl -av7");
@@ -209,7 +232,8 @@ if($FULL_SOURCE){
 	system("(cd $config::HTML_PATH; find . -mtime +7 -exec rm {} \\;)");
 	system("(cd $config::PNG_PATH; find . -mtime +7 -exec rm {} \\;)");
 	system("$0 -upload");
-	exit(0);
+
+	exit(0); 
 }
 if($UPLOAD){		# upload web data to github.io
 	dp::dp "UPLOAD github.io\n" if($config::VERBOSE);

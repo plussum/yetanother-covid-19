@@ -1,0 +1,1096 @@
+#[132] ./cov19.pl ######### 20/10/29 14:00:33 #######
+#[204] ./cov19.pl (22495) ./cov19.pl -FULL -S  
+#[204] ./cov19.pl (22495) ./cov19.pl -FULL -S  
+#[204] ./cov19.pl (22495) ./cov19.pl -FULL -S  
+#[204] ./cov19.pl (22495) ./cov19.pl -FULL -S  
+#[204] ./cov19.pl (22495) ./cov19.pl -FULL -S  
+#[204] ./cov19.pl (22495) ./cov19.pl -FULL -S  
+#[204] ./cov19.pl (22495) ./cov19.pl -FULL -S  
+#[204] ./cov19.pl (22495) ./cov19.pl -FULL -S  
+#[204] ./cov19.pl (22495) ./cov19.pl -FULL -S  
+#[204] ./cov19.pl (22495) ./cov19.pl -FULL -S  
+#[132] ./cov19.pl ######### 20/10/29 14:27:06 #######
+#[132] ./cov19.pl ######### 20/10/29 14:27:06 #######
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[303] ./cov19.pl DAY,POP
+#[305] ./cov19.pl tkage: AGGR_MODE[DAY] 
+#[312] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[NC]
+#[319] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoage_NC_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_NC_COUNT_DAY.csv.txt]
+#[231] tkoage.pm /mnt/f/cov/plussum.github.io/CSV/tkoage_NC_DAY.csv.txt
+#[394] ./cov19.pl [NC] NEW CASES-COUNT-DAY
+#[207] csvgpl.pm #KIND# Tokyo Age (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# Tokyo Age (#LD#) #SRC# , 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# Tokyo Age (#LD#) #SRC# ruiseki02, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# Tokyo over 50 #1(#LD#) #SRC# ruiseki03, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# Tokyo over 50 #2 (#LD#) #SRC# ruiseki04, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[319] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[FT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoage_NC_FT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_NC_FT_DAY.csv.txt]
+#[231] tkoage.pm /mnt/f/cov/plussum.github.io/CSV/tkoage_NC_DAY.csv.txt
+#[57] ft.pm /mnt/f/cov/plussum.github.io/CSV/tkoage_NC_DAY.csv.txt
+#[207] csvgpl.pm #KIND# Tokyo TOP20 (#LD#) #SRC#, 0, 0, 5, 都外, [TOYO KU ONLINE], tkoage_
+#[319] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[ERN]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoage_NC_ERN_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_NC_ERN_DAY.csv.txt]
+#[231] tkoage.pm /mnt/f/cov/plussum.github.io/CSV/tkoage_NC_DAY.csv.txt
+#[581] ./cov19.pl RT_TD :ip(5)lp(8)rl-avr(7) (#LD#)
+#[207] csvgpl.pm #KIND# ALL (#LD#), 0, 0, 10, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# ALL (#LD#) max3, 0, 0, 10, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# ALL (#LD#) max10, 0, 0, 10, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# 1-7 (#LD#) max10, 0, 1, 7, 都外, [TOYO KU ONLINE], tkoage_
+#[319] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[KV]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoage_NC_KV_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_NC_KV_DAY.csv.txt]
+#[631] ./cov19.pl ------ KV ---------
+#[231] tkoage.pm /mnt/f/cov/plussum.github.io/CSV/tkoage_NC_DAY.csv.txt
+#[648] ./cov19.pl RT_TD :ip(0)lp(0)rl-avr(0) (#LD#)
+#[207] csvgpl.pm #KIND# Tokyo TOP20 (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[312] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[ND]
+#[314] ./cov19.pl no function defined: tkage: MODE[ND]
+#[312] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[CC]
+#[319] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_CC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoage_CC_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_CC_COUNT_DAY.csv.txt]
+#[231] tkoage.pm /mnt/f/cov/plussum.github.io/CSV/tkoage_CC_DAY.csv.txt
+#[394] ./cov19.pl [CC] CCM CASES-COUNT-DAY
+#[207] csvgpl.pm #KIND# Tokyo Age (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# Tokyo Age (#LD#) #SRC# ruiseki, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[319] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[FT]
+#[319] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[ERN]
+#[319] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[KV]
+#[312] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[CD]
+#[314] ./cov19.pl no function defined: tkage: MODE[CD]
+#[312] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[NR]
+#[314] ./cov19.pl no function defined: tkage: MODE[NR]
+#[312] ./cov19.pl tkage: AGGR_MODE[DAY]  MODE[CR]
+#[314] ./cov19.pl no function defined: tkage: MODE[CR]
+#[305] ./cov19.pl tkage: AGGR_MODE[POP] 
+#[312] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[NC]
+#[319] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_NC_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoage_NC_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_NC_COUNT_POP.csv.txt]
+#[231] tkoage.pm /mnt/f/cov/plussum.github.io/CSV/tkoage_NC_POP.csv.txt
+#[394] ./cov19.pl [NC] NEW CASES-COUNT-POP
+#[207] csvgpl.pm #KIND# Tokyo Age (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# Tokyo Age (#LD#) #SRC# , 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# Tokyo Age (#LD#) #SRC# ruiseki02, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# Tokyo over 50 #1(#LD#) #SRC# ruiseki03, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# Tokyo over 50 #2 (#LD#) #SRC# ruiseki04, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[319] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[FT]
+#[319] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[ERN]
+#[319] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[KV]
+#[312] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[ND]
+#[314] ./cov19.pl no function defined: tkage: MODE[ND]
+#[312] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[CC]
+#[319] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_CC_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoage_CC_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoage_CC_COUNT_POP.csv.txt]
+#[231] tkoage.pm /mnt/f/cov/plussum.github.io/CSV/tkoage_CC_POP.csv.txt
+#[394] ./cov19.pl [CC] CCM CASES-COUNT-POP
+#[207] csvgpl.pm #KIND# Tokyo Age (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[207] csvgpl.pm #KIND# Tokyo Age (#LD#) #SRC# ruiseki, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoage_
+#[319] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[FT]
+#[319] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[ERN]
+#[319] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[KV]
+#[312] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[CD]
+#[314] ./cov19.pl no function defined: tkage: MODE[CD]
+#[312] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[NR]
+#[314] ./cov19.pl no function defined: tkage: MODE[NR]
+#[312] ./cov19.pl tkage: AGGR_MODE[POP]  MODE[CR]
+#[314] ./cov19.pl no function defined: tkage: MODE[CR]
+#[132] ./cov19.pl ######### 20/10/29 14:27:14 #######
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[303] ./cov19.pl DAY,POP
+#[305] ./cov19.pl ku: AGGR_MODE[DAY] 
+#[312] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[NC]
+#[319] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoku_NC_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_NC_COUNT_DAY.csv.txt]
+#[269] tkoku.pm /mnt/f/cov/plussum.github.io/CSV/tkoku_NC_DAY.csv.txt
+#[394] ./cov19.pl [NC] NEW CASES-COUNT-DAY
+#[207] csvgpl.pm #KIND# Tokyo TOP20 (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo TOP20 ruiseki(#LD#) #SRC#, 0, 0, 99, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo TOP20 (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo TOP20 05/20 (#LD#) #SRC#, 05/20, 0, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 05/20 (#LD#) #SRC# , 05/20, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 6-10 05/20 (#LD#) #SRC# , 05/20, 5, 9, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 11-15 05/20 (#LD#) #SRC# , 05/20, 10, 14, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 16-20 05/20 (#LD#) #SRC# , 05/20, 15, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 21-30 05/20 (#LD#) #SRC# , 05/20, 20, 29, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 31-40 05/20 (#LD#) #SRC# , 05/20, 30, 39, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 05/20 (#LD#) #SRC#, 05/20, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 6-10 05/20 (#LD#) #SRC#, 05/20, 5, 9, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 11-15 05/20 (#LD#) #SRC#, 05/20, 10, 14, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 16-20 05/20 (#LD#) #SRC#, 05/20, 15, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 21-30 05/20 (#LD#) #SRC#, 05/20, 20, 29, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 31-40 05/20 (#LD#) #SRC#, 05/20, 30, 39, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 MONTH (#LD#) #SRC# TOP20, -31, 0, 20, , [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 MOTH (#LD#) #SRC# TOP20, -31, 0, 20, , [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 2MONTH (#LD#) #SRC# , -62, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 6-10 2MONTH (#LD#) #SRC# , -62, 5, 9, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 11-15 2MONTH (#LD#) #SRC# , -62, 10, 14, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 16-20 2MONTH (#LD#) #SRC# , -62, 15, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 21-30 2MONTH (#LD#) #SRC# , -62, 20, 29, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 31-40 2MONTH (#LD#) #SRC# , -62, 30, 39, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 2MOTH (#LD#) #SRC#, -62, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 6-10 2MOTH (#LD#) #SRC#, -62, 5, 9, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 11-15 2MOTH (#LD#) #SRC#, -62, 10, 14, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 16-20 2MOTH (#LD#) #SRC#, -62, 15, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 21-30 2MOTH (#LD#) #SRC#, -62, 20, 29, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 31-40 2MOTH (#LD#) #SRC#, -62, 30, 39, 都外, [TOYO KU ONLINE], tkoku_
+#[319] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[FT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoku_NC_FT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_NC_FT_DAY.csv.txt]
+#[269] tkoku.pm /mnt/f/cov/plussum.github.io/CSV/tkoku_NC_DAY.csv.txt
+#[57] ft.pm /mnt/f/cov/plussum.github.io/CSV/tkoku_NC_DAY.csv.txt
+#[207] csvgpl.pm #KIND# Tokyo TOP20 (#LD#) #SRC#, 0, 0, 5, 都外, [TOYO KU ONLINE], tkoku_
+#[319] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[ERN]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoku_NC_ERN_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_NC_ERN_DAY.csv.txt]
+#[269] tkoku.pm /mnt/f/cov/plussum.github.io/CSV/tkoku_NC_DAY.csv.txt
+#[581] ./cov19.pl RT_TD :ip(5)lp(8)rl-avr(7) (#LD#)
+#[207] csvgpl.pm #KIND# TOP5 , 0, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# TOP5 , 0, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# TOP5 , 0, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# 06-10 , 0, 5, 9, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# 11-15 , 0, 10, 14, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# 16-20 , 0, 16, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# 21-25 , 0, 20, 24, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# 26-30 , 0, 25, 29, 都外, [TOYO KU ONLINE], tkoku_
+#[319] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[KV]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoku_NC_KV_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_NC_KV_DAY.csv.txt]
+#[631] ./cov19.pl ------ KV ---------
+#[269] tkoku.pm /mnt/f/cov/plussum.github.io/CSV/tkoku_NC_DAY.csv.txt
+#[648] ./cov19.pl RT_TD :ip(0)lp(0)rl-avr(0) (#LD#)
+#[207] csvgpl.pm #KIND# Tokyo TOP20 (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[312] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[ND]
+#[314] ./cov19.pl no function defined: ku: MODE[ND]
+#[312] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[CC]
+#[319] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_CC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoku_CC_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_CC_COUNT_DAY.csv.txt]
+#[269] tkoku.pm /mnt/f/cov/plussum.github.io/CSV/tkoku_CC_DAY.csv.txt
+#[394] ./cov19.pl [CC] CCM CASES-COUNT-DAY
+#[207] csvgpl.pm #KIND# Tokyo TOP20 (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 (#LD#) #SRC#, 0, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 6-10 (#LD#) #SRC#, 0, 5, 9, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 11-19 (#LD#) #SRC#, 0, 10, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 21-29 (#LD#) #SRC#, 0, 20, 29, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 31-39 (#LD#) #SRC#, 0, 30, 39, 都外, [TOYO KU ONLINE], tkoku_
+#[319] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[FT]
+#[319] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[ERN]
+#[319] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[KV]
+#[312] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[CD]
+#[314] ./cov19.pl no function defined: ku: MODE[CD]
+#[312] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[NR]
+#[314] ./cov19.pl no function defined: ku: MODE[NR]
+#[312] ./cov19.pl ku: AGGR_MODE[DAY]  MODE[CR]
+#[314] ./cov19.pl no function defined: ku: MODE[CR]
+#[305] ./cov19.pl ku: AGGR_MODE[POP] 
+#[312] ./cov19.pl ku: AGGR_MODE[POP]  MODE[NC]
+#[319] ./cov19.pl ku: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_NC_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoku_NC_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_NC_COUNT_POP.csv.txt]
+#[269] tkoku.pm /mnt/f/cov/plussum.github.io/CSV/tkoku_NC_POP.csv.txt
+#[394] ./cov19.pl [NC] NEW CASES-COUNT-POP
+#[207] csvgpl.pm #KIND# Tokyo TOP20 (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo TOP20 ruiseki(#LD#) #SRC#, 0, 0, 99, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo TOP20 (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo TOP20 05/20 (#LD#) #SRC#, 05/20, 0, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 05/20 (#LD#) #SRC# , 05/20, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 6-10 05/20 (#LD#) #SRC# , 05/20, 5, 9, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 11-15 05/20 (#LD#) #SRC# , 05/20, 10, 14, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 16-20 05/20 (#LD#) #SRC# , 05/20, 15, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 21-30 05/20 (#LD#) #SRC# , 05/20, 20, 29, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 31-40 05/20 (#LD#) #SRC# , 05/20, 30, 39, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 05/20 (#LD#) #SRC#, 05/20, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 6-10 05/20 (#LD#) #SRC#, 05/20, 5, 9, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 11-15 05/20 (#LD#) #SRC#, 05/20, 10, 14, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 16-20 05/20 (#LD#) #SRC#, 05/20, 15, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 21-30 05/20 (#LD#) #SRC#, 05/20, 20, 29, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 31-40 05/20 (#LD#) #SRC#, 05/20, 30, 39, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 MONTH (#LD#) #SRC# TOP20, -31, 0, 20, , [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 MOTH (#LD#) #SRC# TOP20, -31, 0, 20, , [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 2MONTH (#LD#) #SRC# , -62, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 6-10 2MONTH (#LD#) #SRC# , -62, 5, 9, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 11-15 2MONTH (#LD#) #SRC# , -62, 10, 14, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 16-20 2MONTH (#LD#) #SRC# , -62, 15, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 21-30 2MONTH (#LD#) #SRC# , -62, 20, 29, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 31-40 2MONTH (#LD#) #SRC# , -62, 30, 39, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 2MOTH (#LD#) #SRC#, -62, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 6-10 2MOTH (#LD#) #SRC#, -62, 5, 9, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 11-15 2MOTH (#LD#) #SRC#, -62, 10, 14, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 16-20 2MOTH (#LD#) #SRC#, -62, 15, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 21-30 2MOTH (#LD#) #SRC#, -62, 20, 29, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 31-40 2MOTH (#LD#) #SRC#, -62, 30, 39, 都外, [TOYO KU ONLINE], tkoku_
+#[319] ./cov19.pl ku: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[FT]
+#[319] ./cov19.pl ku: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[ERN]
+#[319] ./cov19.pl ku: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[KV]
+#[312] ./cov19.pl ku: AGGR_MODE[POP]  MODE[ND]
+#[314] ./cov19.pl no function defined: ku: MODE[ND]
+#[312] ./cov19.pl ku: AGGR_MODE[POP]  MODE[CC]
+#[319] ./cov19.pl ku: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/CSV/tokyo-ku.csv.txt]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_CC_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tkoku_CC_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tkoku_CC_COUNT_POP.csv.txt]
+#[269] tkoku.pm /mnt/f/cov/plussum.github.io/CSV/tkoku_CC_POP.csv.txt
+#[394] ./cov19.pl [CC] CCM CASES-COUNT-POP
+#[207] csvgpl.pm #KIND# Tokyo TOP20 (#LD#) #SRC#, 0, 0, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 1-5 (#LD#) #SRC#, 0, 0, 4, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 6-10 (#LD#) #SRC#, 0, 5, 9, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 11-19 (#LD#) #SRC#, 0, 10, 19, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 21-29 (#LD#) #SRC#, 0, 20, 29, 都外, [TOYO KU ONLINE], tkoku_
+#[207] csvgpl.pm #KIND# Tokyo 31-39 (#LD#) #SRC#, 0, 30, 39, 都外, [TOYO KU ONLINE], tkoku_
+#[319] ./cov19.pl ku: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[FT]
+#[319] ./cov19.pl ku: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[ERN]
+#[319] ./cov19.pl ku: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[KV]
+#[312] ./cov19.pl ku: AGGR_MODE[POP]  MODE[CD]
+#[314] ./cov19.pl no function defined: ku: MODE[CD]
+#[312] ./cov19.pl ku: AGGR_MODE[POP]  MODE[NR]
+#[314] ./cov19.pl no function defined: ku: MODE[NR]
+#[312] ./cov19.pl ku: AGGR_MODE[POP]  MODE[CR]
+#[314] ./cov19.pl no function defined: ku: MODE[CR]
+#[132] ./cov19.pl ######### 20/10/29 14:27:40 #######
+Already up-to-date.
+/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data
+cases_total.csv
+data.json
+death_total.csv
+demography.csv
+effective_reproduction_number.csv
+pcr_case_daily.csv
+pcr_positive_daily.csv
+pcr_tested_daily.csv
+prefectures.csv
+recovery_total.csv
+serious.csv
+#[303] ./cov19.pl DAY,POP
+#[305] ./cov19.pl tko: AGGR_MODE[DAY] 
+#[312] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[NC]
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_NC_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_NC_COUNT_DAY.csv.txt]
+#[394] ./cov19.pl [NC] NEW CASES-COUNT-DAY
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Tokyo 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-10 (#LD#) #SRC#, 05/20, 0, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC#, 03/18, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m ymax, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 (#LD#) #SRC#, 03/12, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 (#LD#) #SRC#, 03/12, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 (#LD#) #SRC#, 03/12, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 02/01, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 03/12, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[FT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_NC_FT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_NC_FT_DAY.csv.txt]
+#[57] ft.pm /mnt/f/cov/plussum.github.io/CSV/tko_NC_DAY.csv.txt
+#[207] csvgpl.pm #KIND# ALL Japan all FT (#LD#) #SRC#, 0, 0, 20, Others, [TOYO KEIZAI ONLINE], tko_
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[ERN]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_NC_ERN_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_NC_ERN_DAY.csv.txt]
+#[581] ./cov19.pl RT_TD :ip(6)lp(7)rl-avr(7) (#LD#)
+#[207] csvgpl.pm #KIND# Tokyo 2m ip(6)lp(7)rl-avr(7) (#LD#), -61, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Tokyo from 3/12 ip(6)lp(7)rl-avr(7) (#LD#), 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# main pref 1m ip(6)lp(7)rl-avr(7) (#LD#), -31, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# main pref 1m ip(6)lp(7)rl-avr(7) (#LD#) , -31, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# main pref 0312 ip(6)lp(7)rl-avr(7) (#LD#), 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# main pref 0401 ip(6)lp(7)rl-avr(7) (#LD#), 04/01, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# main pref 0401 Tokyoip(6)lp(7)rl-avr(7) (#LD#), 04/01, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 0312 ip(6)lp(7)rl-avr(7) (#LD#), 03/12, 0, 5, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# TOP 5 2m ip(6)lp(7)rl-avr(7) (#LD#), -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# TOP10 2m ip(6)lp(7)rl-avr(7) (#LD#), -62, 0, 9, , [TOYO KEIZAI ONLINE], tko_
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[KV]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_NC_KV_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_NC_KV_DAY.csv.txt]
+#[631] ./cov19.pl ------ KV ---------
+#[648] ./cov19.pl RT_TD :ip(0)lp(0)rl-avr(0) (#LD#)
+#[207] csvgpl.pm #KIND# from 03/18 (#LD#) #SRC#, 03/18, 0, 999, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# from 4/1(#LD#) #SRC#, 04/01, 0, 999, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# from 1m(#LD#) #SRC#, -31, 0, 999, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# from 03/18 Tokyo (#LD#) #SRC#, 03/18, 0, 999, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# from 4/1(#LD#)  Tokyo#SRC#, 04/01, 0, 999, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# from 1month(#LD#)  Tokyo#SRC#, -31, 0, 999, , [TOYO KEIZAI ONLINE], tko_
+#[312] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[ND]
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[ND] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_ND_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_ND_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_ND_COUNT_DAY.csv.txt]
+#[394] ./cov19.pl [ND] NEW DEATHS-COUNT-DAY
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Tokyo 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-10 (#LD#) #SRC#, 05/20, 0, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC#, 03/18, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m ymax, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 (#LD#) #SRC#, 03/12, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 (#LD#) #SRC#, 03/12, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 (#LD#) #SRC#, 03/12, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 02/01, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 03/12, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[ND] SUB_MODE:[FT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_ND_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_ND_FT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_ND_FT_DAY.csv.txt]
+#[57] ft.pm /mnt/f/cov/plussum.github.io/CSV/tko_ND_DAY.csv.txt
+#[207] csvgpl.pm #KIND# ALL Japan all FT (#LD#) #SRC#, 0, 0, 20, Others, [TOYO KEIZAI ONLINE], tko_
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[ND] SUB_MODE:[ERN]
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[ND] SUB_MODE:[KV]
+#[312] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[CC]
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_CC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_CC_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_CC_COUNT_DAY.csv.txt]
+#[394] ./cov19.pl [CC] CCM CASES-COUNT-DAY
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 (#LD#) #SRC#, 03/12, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 (#LD#) #SRC#, 03/12, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 (#LD#) #SRC#, 03/12, 15, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 21-30 (#LD#) #SRC#, 03/12, 20, 29, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 31-40 (#LD#) #SRC#, 03/12, 30, 39, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 40-50 (#LD#) #SRC#, 03/12, 40, 49, , [TOYO KEIZAI ONLINE], tko_
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[FT]
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[ERN]
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[KV]
+#[312] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[CD]
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[CD] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_CD_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_CD_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_CD_COUNT_DAY.csv.txt]
+#[394] ./cov19.pl [CD] CCM DEATHS-COUNT-DAY
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Tokyo 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-10 (#LD#) #SRC#, 05/20, 0, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC#, 03/18, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m ymax, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 (#LD#) #SRC#, 03/12, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 (#LD#) #SRC#, 03/12, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 (#LD#) #SRC#, 03/12, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 02/01, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 03/12, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[CD] SUB_MODE:[FT]
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[CD] SUB_MODE:[ERN]
+#[319] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[CD] SUB_MODE:[KV]
+#[312] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[NR]
+#[314] ./cov19.pl no function defined: tko: MODE[NR]
+#[312] ./cov19.pl tko: AGGR_MODE[DAY]  MODE[CR]
+#[314] ./cov19.pl no function defined: tko: MODE[CR]
+#[305] ./cov19.pl tko: AGGR_MODE[POP] 
+#[312] ./cov19.pl tko: AGGR_MODE[POP]  MODE[NC]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_NC_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_NC_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_NC_COUNT_POP.csv.txt]
+#[394] ./cov19.pl [NC] NEW CASES-COUNT-POP
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Tokyo 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-10 (#LD#) #SRC#, 05/20, 0, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC#, 03/18, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m ymax, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 (#LD#) #SRC#, 03/12, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 (#LD#) #SRC#, 03/12, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 (#LD#) #SRC#, 03/12, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 02/01, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 03/12, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[FT]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[ERN]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[KV]
+#[312] ./cov19.pl tko: AGGR_MODE[POP]  MODE[ND]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[ND] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_ND_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_ND_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_ND_COUNT_POP.csv.txt]
+#[394] ./cov19.pl [ND] NEW DEATHS-COUNT-POP
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Tokyo 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-10 (#LD#) #SRC#, 05/20, 0, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC#, 03/18, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m ymax, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 (#LD#) #SRC#, 03/12, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 (#LD#) #SRC#, 03/12, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 (#LD#) #SRC#, 03/12, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 02/01, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 03/12, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[ND] SUB_MODE:[FT]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[ND] SUB_MODE:[ERN]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[ND] SUB_MODE:[KV]
+#[312] ./cov19.pl tko: AGGR_MODE[POP]  MODE[CC]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_CC_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_CC_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_CC_COUNT_POP.csv.txt]
+#[394] ./cov19.pl [CC] CCM CASES-COUNT-POP
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 (#LD#) #SRC#, 03/12, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 (#LD#) #SRC#, 03/12, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 (#LD#) #SRC#, 03/12, 15, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 21-30 (#LD#) #SRC#, 03/12, 20, 29, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 31-40 (#LD#) #SRC#, 03/12, 30, 39, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 40-50 (#LD#) #SRC#, 03/12, 40, 49, , [TOYO KEIZAI ONLINE], tko_
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[FT]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[ERN]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[KV]
+#[312] ./cov19.pl tko: AGGR_MODE[POP]  MODE[CD]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[CD] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data/prefectures.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_CD_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/tko_CD_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/tko_CD_COUNT_POP.csv.txt]
+#[394] ./cov19.pl [CD] CCM DEATHS-COUNT-POP
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 (#LD#) #SRC#, 03/12, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan TOP20 2m (#LD#) #SRC#, -62, 0, 19, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Tokyo 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-10 (#LD#) #SRC#, 05/20, 0, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC#, 03/18, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m ymax, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-08 (#LD#) #SRC# 1m, -31, 0, 7, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 (#LD#) #SRC#, 03/12, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 (#LD#) #SRC#, 03/12, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 (#LD#) #SRC#, 03/12, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 (#LD#) #SRC#, 03/12, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 01-05 2m (#LD#) #SRC#, -62, 0, 4, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 06-10 2m (#LD#) #SRC#, -62, 5, 9, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 11-15 2m (#LD#) #SRC#, -62, 10, 14, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# Japan 16-20 2m (#LD#) #SRC#, -62, 15, 20, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 02/01, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[207] csvgpl.pm #KIND# taget cities  (#LD#) #SRC# 03/12, 03/12, 0, 99, , [TOYO KEIZAI ONLINE], tko_
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[CD] SUB_MODE:[FT]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[CD] SUB_MODE:[ERN]
+#[319] ./cov19.pl tko: AGGR_MODE[POP]  MODE[CD] SUB_MODE:[KV]
+#[312] ./cov19.pl tko: AGGR_MODE[POP]  MODE[NR]
+#[314] ./cov19.pl no function defined: tko: MODE[NR]
+#[312] ./cov19.pl tko: AGGR_MODE[POP]  MODE[CR]
+#[314] ./cov19.pl no function defined: tko: MODE[CR]
+#[132] ./cov19.pl ######### 20/10/29 14:28:35 #######
+Updating 06b30b9..6cde713
+Fast-forward
+ csse_covid_19_data/UID_ISO_FIPS_LookUp_Table.csv   |    2 +-
+ .../csse_covid_19_daily_reports/10-28-2020.csv     | 3960 ++++++++++++
+ .../csse_covid_19_daily_reports_us/10-28-2020.csv  |   59 +
+ .../time_series_covid19_confirmed_US.csv           | 6682 ++++++++++----------
+ .../time_series_covid19_confirmed_global.csv       |  537 +-
+ .../time_series_covid19_deaths_US.csv              | 6682 ++++++++++----------
+ .../time_series_covid19_deaths_global.csv          |  537 +-
+ .../time_series_covid19_recovered_global.csv       |  511 +-
+ 8 files changed, 11496 insertions(+), 7474 deletions(-)
+ create mode 100644 csse_covid_19_data/csse_covid_19_daily_reports/10-28-2020.csv
+ create mode 100644 csse_covid_19_data/csse_covid_19_daily_reports_us/10-28-2020.csv
+#[303] ./cov19.pl DAY,POP
+#[305] ./cov19.pl ccse: AGGR_MODE[DAY] 
+#[312] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[NC]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_NC_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NC_COUNT_DAY.csv.txt]
+#[394] ./cov19.pl [NC] NEW CASES-COUNT-DAY
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Sweden(#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# New Zealand (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Taiwan (#LD#) #SRC#, 0, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# China 3m (#LD#) #SRC#, -93, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[FT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_NC_FT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NC_FT_DAY.csv.txt]
+#[57] ft.pm /mnt/f/cov/plussum.github.io/CSV/jhccse_NC_DAY.csv.txt
+#[207] csvgpl.pm #KIND# Japan and others (268), 0, 0, 999, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan and TOP10 (268), 0, 0, 9, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP5 (268), 0, 0, 5, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP10 (268), 0, 0, 10, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 (268), 0, 10, 19, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 (268), 0, 20, 29, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 (268), 0, 30, 39, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 (268), 0, 40, 49, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japn,Koria (268), 0, 0, 99, , [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[ERN]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_NC_ERN_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NC_ERN_DAY.csv.txt]
+#[581] ./cov19.pl RT_TD :ip(5)lp(8)rl-avr(7) (#LD#)
+#[207] csvgpl.pm #KIND# Japan 01/23 ip(5)lp(8)rl-avr(7) (#LD#), 0, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 03/01 ip(5)lp(8)rl-avr(7) (#LD#), 03/01, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 1m ip(5)lp(8)rl-avr(7) (#LD#), -31, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Germany 0301 ip(5)lp(8)rl-avr(7) (#LD#), 0, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Germany 1month ip(5)lp(8)rl-avr(7) (#LD#), -31, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Forcus area 01 1month ip(5)lp(8)rl-avr(7) (#LD#), -31, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Focusing area from 0301 ip(5)lp(8)rl-avr(7) (#LD#), 39, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europ 0301 ip(5)lp(8)rl-avr(7) (#LD#), 39, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europ 1month ip(5)lp(8)rl-avr(7) (#LD#), -90, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europ 1month ip(5)lp(8)rl-avr(7) (#LD#) ymax2, -90, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP 01-05 from 0301 ip(5)lp(8)rl-avr(7) (#LD#), 39, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP 06-10 from 0301 ip(5)lp(8)rl-avr(7) (#LD#), 39, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP 10 3w ip(5)lp(8)rl-avr(7) (#LD#), -21, 0, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP 10 2w ip(5)lp(8)rl-avr(7) (#LD#), -14, 0, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP 10 1w ip(5)lp(8)rl-avr(7) (#LD#), -7, 0, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan  ip(5)lp(8)rl-avr(7) (#LD#), 03/01, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[NC] SUB_MODE:[KV]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_NC_KV_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NC_KV_DAY.csv.txt]
+#[631] ./cov19.pl ------ KV ---------
+#[648] ./cov19.pl RT_TD :ip(0)lp(0)rl-avr(0) (#LD#)
+#[207] csvgpl.pm #KIND# KV Japan/US(#LD#) #SRC#, 0, 0, 999, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# KV Japan/US KV (#LD#) 04/01 #SRC#, 04/01, 0, 999, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# KV JAPAN/US (#LD#) 1m #SRC# , -31, 0, 999, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# KV ALL (#LD#) 04/01 #SRC#, 04/01, 0, 9, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# KV 1m (#LD#) 04/01 #SRC#, -31, 0, 9, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europ 3/1(#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND#  Europ 4/1 (#LD#) #SRC#, 04/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europ 1m(#LD#) #SRC#, -31, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Germany (#LD#) 04/01 #SRC#, 04/01, 0, 9, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Germany (#LD#) 1month #SRC#, -31, 0, 9, , [Johns Hopkins CSSE], jhccse_
+#[312] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[ND]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[ND] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_ND_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_ND_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_ND_COUNT_DAY.csv.txt]
+#[394] ./cov19.pl [ND] NEW DEATHS-COUNT-DAY
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Sweden(#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# New Zealand (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Taiwan (#LD#) #SRC#, 0, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# China 3m (#LD#) #SRC#, -93, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[ND] SUB_MODE:[FT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_ND_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_ND_FT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_ND_FT_DAY.csv.txt]
+#[57] ft.pm /mnt/f/cov/plussum.github.io/CSV/jhccse_ND_DAY.csv.txt
+#[207] csvgpl.pm #KIND# Japan and others (268), 0, 0, 999, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan and TOP10 (268), 0, 0, 9, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP5 (268), 0, 0, 5, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP10 (268), 0, 0, 10, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 (268), 0, 10, 19, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 (268), 0, 20, 29, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 (268), 0, 30, 39, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 (268), 0, 40, 49, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japn,Koria (268), 0, 0, 99, , [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[ND] SUB_MODE:[ERN]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[ND] SUB_MODE:[KV]
+#[312] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CC]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_CC_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_CC_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_CC_COUNT_DAY.csv.txt]
+#[394] ./cov19.pl [CC] CCM CASES-COUNT-DAY
+#[207] csvgpl.pm #KIND# CCM TOP10 (#LD#) #SRC# , 0, 0, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP20 (#LD#) #SRC# , 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM SELECTED (#LD#) #SRC# , 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP5+Japan(#LD#) #SRC#, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP5+Japan(#LD#) #SRC# logscale, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM Japan(#LD#) #SRC#, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM Japan(#LD#) #SRC# logscale, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[FT]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[ERN]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CC] SUB_MODE:[KV]
+#[312] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CD]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CD] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_CD_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_CD_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_CD_COUNT_DAY.csv.txt]
+#[394] ./cov19.pl [CD] CCM DEATHS-COUNT-DAY
+#[207] csvgpl.pm #KIND# CCM TOP10 (#LD#) #SRC# , 0, 0, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP20 (#LD#) #SRC# , 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM SELECTED (#LD#) #SRC# , 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP5+Japan(#LD#) #SRC#, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP5+Japan(#LD#) #SRC# logscale, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM Japan(#LD#) #SRC#, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM Japan(#LD#) #SRC# logscale, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CD] SUB_MODE:[FT]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CD] SUB_MODE:[ERN]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CD] SUB_MODE:[KV]
+#[312] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[NR]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[NR] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NR_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_NR_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NR_COUNT_DAY.csv.txt]
+#[394] ./cov19.pl [NR] NEW RECOVERS-COUNT-DAY
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Sweden(#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# New Zealand (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Taiwan (#LD#) #SRC#, 0, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# China 3m (#LD#) #SRC#, -93, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Taiwan (#LD#) #SRC#, 0, 0, 999, Others,US, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# China (#LD#) #SRC#, 0, 0, 19, Others,US, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[NR] SUB_MODE:[FT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NR_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_NR_FT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NR_FT_DAY.csv.txt]
+#[57] ft.pm /mnt/f/cov/plussum.github.io/CSV/jhccse_NR_DAY.csv.txt
+#[207] csvgpl.pm #KIND# Japan and others (268), 0, 0, 999, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan and TOP10 (268), 0, 0, 9, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP5 (268), 0, 0, 5, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP10 (268), 0, 0, 10, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 (268), 0, 10, 19, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 (268), 0, 20, 29, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 (268), 0, 30, 39, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 (268), 0, 40, 49, , [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japn,Koria (268), 0, 0, 99, , [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[NR] SUB_MODE:[ERN]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NR_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_NR_ERN_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NR_ERN_DAY.csv.txt]
+#[581] ./cov19.pl RT_TD :ip(5)lp(8)rl-avr(7) (#LD#)
+#[207] csvgpl.pm #KIND# Japan 01/23 ip(5)lp(8)rl-avr(7) (#LD#), 0, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 03/01 ip(5)lp(8)rl-avr(7) (#LD#), 03/01, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 1m ip(5)lp(8)rl-avr(7) (#LD#), -31, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Germany 0301 ip(5)lp(8)rl-avr(7) (#LD#), 0, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Germany 1month ip(5)lp(8)rl-avr(7) (#LD#), -31, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Forcus area 01 1month ip(5)lp(8)rl-avr(7) (#LD#), -31, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Focusing area from 0301 ip(5)lp(8)rl-avr(7) (#LD#), 39, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europ 0301 ip(5)lp(8)rl-avr(7) (#LD#), 39, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europ 1month ip(5)lp(8)rl-avr(7) (#LD#), -90, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europ 1month ip(5)lp(8)rl-avr(7) (#LD#) ymax2, -90, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP 01-05 from 0301 ip(5)lp(8)rl-avr(7) (#LD#), 39, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP 06-10 from 0301 ip(5)lp(8)rl-avr(7) (#LD#), 39, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP 10 3w ip(5)lp(8)rl-avr(7) (#LD#), -21, 0, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP 10 2w ip(5)lp(8)rl-avr(7) (#LD#), -14, 0, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# TOP 10 1w ip(5)lp(8)rl-avr(7) (#LD#), -7, 0, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan  ip(5)lp(8)rl-avr(7) (#LD#), 03/01, 0, 99, Others, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[NR] SUB_MODE:[KV]
+#[312] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CR]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CR] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_CR_DAY.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_CR_COUNT_DAY.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_CR_COUNT_DAY.csv.txt]
+#[394] ./cov19.pl [CR] CCM RECOVERS-COUNT-DAY
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Sweden(#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# New Zealand (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Taiwan (#LD#) #SRC#, 0, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# China 3m (#LD#) #SRC#, -93, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Taiwan (#LD#) #SRC#, 0, 0, 999, Others,US, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# China (#LD#) #SRC#, 0, 0, 19, Others,US, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CR] SUB_MODE:[FT]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CR] SUB_MODE:[ERN]
+#[319] ./cov19.pl ccse: AGGR_MODE[DAY]  MODE[CR] SUB_MODE:[KV]
+#[305] ./cov19.pl ccse: AGGR_MODE[POP] 
+#[312] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[NC]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NC_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_NC_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NC_COUNT_POP.csv.txt]
+#[394] ./cov19.pl [NC] NEW CASES-COUNT-POP
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Sweden(#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# New Zealand (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Taiwan (#LD#) #SRC#, 0, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# China 3m (#LD#) #SRC#, -93, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[FT]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[ERN]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[NC] SUB_MODE:[KV]
+#[312] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[ND]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[ND] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_ND_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_ND_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_ND_COUNT_POP.csv.txt]
+#[394] ./cov19.pl [ND] NEW DEATHS-COUNT-POP
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Sweden(#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# New Zealand (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# ASIA 0301 (#LD#) #SRC#, 03/01, 0, 9999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Taiwan (#LD#) #SRC#, 0, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# China 3m (#LD#) #SRC#, -93, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[ND] SUB_MODE:[FT]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[ND] SUB_MODE:[ERN]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[ND] SUB_MODE:[KV]
+#[312] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[CC]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_CC_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_CC_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_CC_COUNT_POP.csv.txt]
+#[394] ./cov19.pl [CC] CCM CASES-COUNT-POP
+#[207] csvgpl.pm #KIND# CCM TOP10 (#LD#) #SRC# , 0, 0, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP20 (#LD#) #SRC# , 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM SELECTED (#LD#) #SRC# , 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP5+Japan(#LD#) #SRC#, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP5+Japan(#LD#) #SRC# logscale, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM Japan(#LD#) #SRC#, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM Japan(#LD#) #SRC# logscale, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[FT]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[ERN]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[CC] SUB_MODE:[KV]
+#[312] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[CD]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[CD] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_CD_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_CD_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_CD_COUNT_POP.csv.txt]
+#[394] ./cov19.pl [CD] CCM DEATHS-COUNT-POP
+#[207] csvgpl.pm #KIND# CCM TOP10 (#LD#) #SRC# , 0, 0, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP20 (#LD#) #SRC# , 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM SELECTED (#LD#) #SRC# , 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP5+Japan(#LD#) #SRC#, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM TOP5+Japan(#LD#) #SRC# logscale, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM Japan(#LD#) #SRC#, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# CCM Japan(#LD#) #SRC# logscale, 0, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[CD] SUB_MODE:[FT]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[CD] SUB_MODE:[ERN]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[CD] SUB_MODE:[KV]
+#[312] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[NR]
+#[319] ./cov19.pl ccse: AGGR_MODE[POP]  MODE[NR] SUB_MODE:[COUNT]
+#[334] ./cov19.pl SRC_FILE:[/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv]
+#[335] ./cov19.pl STG1_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NR_POP.csv.txt]
+#[336] ./cov19.pl HTMLF:[/mnt/f/cov/plussum.github.io/HTML/jhccse_NR_COUNT_POP.html]
+#[337] ./cov19.pl STG2_CSVF:[/mnt/f/cov/plussum.github.io/CSV/jhccse_NR_COUNT_POP.csv.txt]
+#[394] ./cov19.pl [NR] NEW RECOVERS-COUNT-POP
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# all(#LD#) #SRC#, 0, 0, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Japan 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 01-05 from 0301 (#LD#) #SRC#, 03/01, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 06-10 from 0301 (#LD#) #SRC#, 03/01, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 11-20 from 0301 (#LD#) #SRC#, 03/01, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 21-30 from 0301 (#LD#) #SRC#, 03/01, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 31-40 from 0301 (#LD#) #SRC#, 03/01, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 41-50 from 0301 (#LD#) #SRC#, 03/01, 40, 49, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 01-05 (#LD#) #SRC#, -60, 0, 4, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 06-10 (#LD#) #SRC#, -60, 5, 9, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 11-20 (#LD#) #SRC#, -60, 10, 19, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 21-30 (#LD#) #SRC#, -60, 20, 29, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# 2month 31-40 (#LD#) #SRC#, -60, 30, 39, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Europe (#LD#) #SRC# 2month, -62, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# Sweden(#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
+#[207] csvgpl.pm #KIND# New Zealand (#LD#) #SRC#, 03/01, 0, 999, Others, [Johns Hopkins CSSE], jhccse_
