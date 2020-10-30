@@ -188,28 +188,36 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 }
 
 if($CRON){
-	my $cmd = "$0 -FULL -S | tee -a /home/masataka/who/src/cron.log";
+	my $log = "tee -a /home/masataka/who/src/cron.log";
+	my $cmd = "$0 -FULL -S | $log";
 	my $cront = 20;		# 1min
+	my $force_exec = "";
+	push(@CRON_TAB, csvlib::ut2hm(time)) if($CRON =~ /F$/);
+
 	if(0){
 		$cmd = "date";
 		$cront = 10;
 		push(@CRON_TAB, csvlib::ut2hm(time + 60));
 		push(@CRON_TAB, csvlib::ut2hm(time + 120));
 	}
+
 	my %cron_flag = ();
 	my @cron_tab = (sort @CRON_TAB);
 	foreach my $ct (@cron_tab){
 		$cron_flag{$ct} = 0;
 	}
 
-	my $force_first = ($CRON =~ /F$/) ? 1 : "";
 
 	my $last_hm = "";
+	my $next_exec = "99:99";
 	for(;;){
 		my $now = time;
 		my $now_hm = csvlib::ut2hm($now);
 
-		my $next_exec = "";
+		if($now_hm gt $next_exec){		# The case of sleep
+			$force_exec = 1;			# if now execeeded scheduled execute time	
+		}								# force to execute
+
 		for(my $i = 0; $i < $#cron_tab; $i++){
 			if($now_hm ge $cron_tab[$i] && $now_hm le $cron_tab[$i+1]){
 				$next_exec = $cron_tab[$i+1];
@@ -223,12 +231,18 @@ if($CRON){
 			$cron_flag{$last_hm} = 0;
 			$last_hm = "";
 		}
-		if($force_first || (defined $cron_flag{$now_hm} && $cron_flag{$now_hm} == 0)){
+		if($force_exec || (defined $cron_flag{$now_hm} && $cron_flag{$now_hm} == 0)){
 			$cron_flag{$now_hm} = 1;
 			$last_hm = $now_hm;
-			$force_first = "";
-
+			$force_exec = "";
+			
 			dp::dp "#" x 5 . &str_time($now) . "#" x 5 . "\n";
+			open(LOG, "| $log") || die "Cannto log | $log";
+			print  LOG "#" x 40 . "\n";
+			print  LOG "#" x 5 . &str_time($now) . "\n";
+			print  LOG "#" x 40 . "\n";
+			close(LOG);
+
 			system($cmd);
 			
 		}
