@@ -117,8 +117,8 @@ my $DOWNLOAD = 0;
 my $COPY = 0;
 my $FULL_SOURCE = 0;
 my $UPLOAD = 0;
-my $CRON = 0;
-my $CRON_TERM = 2 * 60 * 60;	# 2 hour
+my $CRON = 0;		# -CRON | -CRON-F
+my @CRON_TAB = qw (04:20 07:20 10:20 12:20 14:20 16:20 20:20 23:20);
 
 my @MODE_LIST = ();
 my @SUB_MODE_LIST = ();
@@ -127,6 +127,7 @@ my $DATA_SOURCE = "";
 my @FULL_DATA_SOURCES = qw (tkage ku tko ccse tkpos usast usa); # who jagtotal jag
 my @ALL_DATA_SOURCES = qw (tkage ku tko ccse tkpos usast usa who jagtotal jag) ;
 #my @FULL_DATA_SOURCES = qw (ku);
+
 
 my $now = time;
 for(my $i = 0; $i <= $#ARGV; $i++){
@@ -187,20 +188,51 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 }
 
 if($CRON){
-	my $cront = 60;		# 1min
 	my $cmd = "$0 -FULL -S | tee -a /home/masataka/who/src/cron.log";
+	my $cront = 20;		# 1min
+	if(0){
+		$cmd = "date";
+		$cront = 10;
+		push(@CRON_TAB, csvlib::ut2hm(time + 60));
+		push(@CRON_TAB, csvlib::ut2hm(time + 120));
+	}
+	my %cron_flag = ();
+	my @cron_tab = (sort @CRON_TAB);
+	foreach my $ct (@cron_tab){
+		$cron_flag{$ct} = 0;
+	}
+
+	my $force_first = ($CRON =~ /F$/) ? 1 : "";
+
+	my $last_hm = "";
 	for(;;){
 		my $now = time;
-		dp::dp "#" x 5 . &str_time($now) . "#" x 5 . "\n";
-		my $next_utc = $now + $CRON_TERM;
-		dp::dp "($$) $cmd $now/$next_utc\n";
-		# $cmd = "date";
-		system($cmd);
-		for(my $t = 0; time < $next_utc; $t += $cront){
-			dp::dp sprintf("### waiting to execute at %s next:%s\n",
-				 &str_time(time), &str_time($next_utc));
-			sleep $cront; 
+		my $now_hm = csvlib::ut2hm($now);
+
+		my $next_exec = "";
+		for(my $i = 0; $i < $#cron_tab; $i++){
+			if($now_hm ge $cron_tab[$i] && $now_hm le $cron_tab[$i+1]){
+				$next_exec = $cron_tab[$i+1];
+				last;
+			}
 		}
+		my $now_hms = csvlib::ut2t($now);
+		dp::dp "### waiting to execute at $next_exec:00 now:$now_hms ($last_hm) [". join(",", @cron_tab) . "]\n";
+
+		if($last_hm && ($now_hm gt $last_hm)){
+			$cron_flag{$last_hm} = 0;
+			$last_hm = "";
+		}
+		if($force_first || (defined $cron_flag{$now_hm} && $cron_flag{$now_hm} == 0)){
+			$cron_flag{$now_hm} = 1;
+			$last_hm = $now_hm;
+			$force_first = "";
+
+			dp::dp "#" x 5 . &str_time($now) . "#" x 5 . "\n";
+			system($cmd);
+			
+		}
+		sleep $cront; 
 	}
 	exit;
 }

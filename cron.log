@@ -2089,3 +2089,60 @@ Agent pid 3382
  rewrite PNG/23_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_rl_avr_7.png (98%)
 /home/masataka/who/src
 Agent pid 3416
+[develop b19fb46] update
+ 1 file changed, 80 insertions(+)
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[318] ./cov19.pl ######### 2020/10/30 11:04:09 #######
+#[319] ./cov19.pl tkage,DAY,POP
+#[133] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/press/2020/10/30/documents/20201029.pdf -O /mnt/f/cov/plussum.github.io/tokyo-ku/content/press20201030documents20201029.pdf#[139] tkopdf.pm ps2ascii /mnt/f/cov/plussum.github.io/tokyo-ku/content/press20201030documents20201029.pdf > /mnt/f/cov/plussum.github.io/tokyo-ku/content/press20201030documents20201029.pdf.txt
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[318] ./cov19.pl ######### 2020/10/30 11:04:17 #######
+#[319] ./cov19.pl ku,DAY,POP
+Already up-to-date.
+/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data
+cases_total.csv
+data.json
+death_total.csv
+demography.csv
+effective_reproduction_number.csv
+pcr_case_daily.csv
+pcr_positive_daily.csv
+pcr_tested_daily.csv
+prefectures.csv
+recovery_total.csv
+serious.csv
+#[318] ./cov19.pl ######### 2020/10/30 11:04:42 #######
+#[319] ./cov19.pl tko,DAY,POP
+Updating 9dc221a..603147e
+Fast-forward
+ .../csse_covid_19_daily_reports/10-26-2020.csv     | 7918 ++++++++++----------
+ .../csse_covid_19_daily_reports/10-27-2020.csv     | 7918 ++++++++++----------
+ .../time_series_covid19_confirmed_global.csv       |  538 +-
+ .../time_series_covid19_deaths_global.csv          |  538 +-
+ 4 files changed, 8456 insertions(+), 8456 deletions(-)
+#[318] ./cov19.pl ######### 2020/10/30 11:05:34 #######
+#[319] ./cov19.pl ccse,DAY,POP
+#[275] ./cov19.pl ######### 2020/10/30 11:07:56 #######
+#[318] ./cov19.pl ######### 2020/10/30 11:07:58 #######
+#[319] ./cov19.pl usast,DAY,POP
+#[318] ./cov19.pl ######### 2020/10/30 11:08:53 #######
+#[319] ./cov19.pl usa,DAY,POP
+#[146] ./tokyo.pl (cd /mnt/f/cov/plussum.github.io/tokyo/covid19; git pull origin development)
+Updating f2baed1..16a5244
+Fast-forward
+ data/data.json  |  2 +-
+ data/metro.json | 18 +++++++++++++-----
+ 2 files changed, 14 insertions(+), 6 deletions(-)
+Generate index.html and frame.html
+jhccse:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tko:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoku:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoage:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usast:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usa:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
