@@ -6955,3 +6955,171 @@ Agent pid 5178
  rewrite PNG/30_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_2MOTH_.png (98%)
 /home/masataka/who/src
 Agent pid 5209
+[develop f0e41d7] update
+ 1 file changed, 71 insertions(+)
+########################################
+#####2020/10/31 20:20:18
+########################################
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[344] ./cov19.pl ######### 2020/10/31 20:20:18 #######
+#[345] ./cov19.pl tkage,DAY,POP
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[344] ./cov19.pl ######### 2020/10/31 20:20:25 #######
+#[345] ./cov19.pl ku,DAY,POP
+Already up-to-date.
+/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data
+cases_total.csv
+data.json
+death_total.csv
+demography.csv
+effective_reproduction_number.csv
+pcr_case_daily.csv
+pcr_positive_daily.csv
+pcr_tested_daily.csv
+prefectures.csv
+recovery_total.csv
+serious.csv
+#[344] ./cov19.pl ######### 2020/10/31 20:20:50 #######
+#[345] ./cov19.pl tko,DAY,POP
+Already up-to-date.
+#[344] ./cov19.pl ######### 2020/10/31 20:21:42 #######
+#[345] ./cov19.pl ccse,DAY,POP
+#[301] ./cov19.pl ######### 2020/10/31 20:24:02 #######
+#[344] ./cov19.pl ######### 2020/10/31 20:24:04 #######
+#[345] ./cov19.pl usast,DAY,POP
+#[344] ./cov19.pl ######### 2020/10/31 20:24:54 #######
+#[345] ./cov19.pl usa,DAY,POP
+#[146] ./tokyo.pl (cd /mnt/f/cov/plussum.github.io/tokyo/covid19; git pull origin development)
+Updating b96b000..5de128d
+Fast-forward
+ data/daily_positive_detail.json               |   13 +-
+ data/data.json                                | 2162 ++++++++++++++++++++++---
+ data/monitoring_items.json                    |   14 +-
+ data/news.json                                |   10 +-
+ data/patient.json                             |   92 +-
+ data/positive_by_developed.json               |   34 +-
+ data/positive_by_diagnosed.json               |   22 +-
+ data/positive_rate.json                       |  221 +--
+ data/positive_status.json                     |    7 +-
+ static/data/130001_tokyo_covid19_patients.csv |  623 ++++---
+ 10 files changed, 2588 insertions(+), 610 deletions(-)
+Generate index.html and frame.html
+jhccse:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tko:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoku:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoage:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usast:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usa:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+#[279] ./cov19.pl UPLOAD github.io
+/mnt/f/cov/plussum.github.io
+Agent pid 6614
+[master a5fecd8] update
+ 379 files changed, 23909 insertions(+), 23833 deletions(-)
+ rewrite PNG/0312tky_pr_avr0.png (98%)
+ rewrite PNG/0312tky_pr_avr7.png (99%)
+ rewrite PNG/0312tky_st_avr0.png (98%)
+ rewrite PNG/0312tky_st_avr7.png (99%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_-plot.csv.txt (89%)
+ rewrite PNG/15_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_-plot.csv.txt (86%)
+ rewrite PNG/15_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_.png (99%)
+ rewrite PNG/19_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_-plot.csv.txt (85%)
+ rewrite PNG/19_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (99%)
+ rewrite PNG/23_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_rl_avr_7-plot.csv.txt (84%)
+ rewrite PNG/23_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_rl_avr_7.png (98%)
+ rewrite "PNG/docomoPD_\345\205\250\345\233\275_top10.png" (98%)
+ rewrite "PNG/docomoPD_\345\205\250\345\233\275_top11-20.png" (98%)
+ rewrite "PNG/docomoPD_\345\205\250\345\233\275_top21-30.png" (97%)
+ rewrite "PNG/docomoPD_\345\205\250\345\233\275_top31-40.png" (98%)
+ rewrite "PNG/docomoPD_\345\205\250\345\233\275_top41-50.png" (97%)
+ rewrite "PNG/docomoPD_\346\235\261\344\272\254_ALL.png" (99%)
+ rewrite "PNG/docomoPD_\351\226\242\346\235\261_Top10.png" (98%)
+ rewrite "PNG/docomoPD\343\202\265\343\203\236\343\203\252\344\270\273\350\246\201\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPD\343\202\265\343\203\236\343\203\252\345\205\250\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275_top10rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275_top11-20rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275_top21-30rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275_top31-40rlavr__maxval.png" (97%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275_top41-50rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275\345\271\263\345\235\207avrrl.png" (99%)
+ rewrite "PNG/docomoPD\346\235\261\344\272\254_ALLrlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPD\351\226\242\346\235\261_Top10rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPE_\345\205\250\345\233\275_top10.png" (97%)
+ rewrite "PNG/docomoPE_\345\205\250\345\233\275_top11-20.png" (97%)
+ rewrite "PNG/docomoPE_\345\205\250\345\233\275_top21-30.png" (97%)
+ rewrite "PNG/docomoPE_\345\205\250\345\233\275_top31-40.png" (97%)
+ rewrite "PNG/docomoPE_\345\205\250\345\233\275_top41-50.png" (97%)
+ rewrite "PNG/docomoPE_\346\235\261\344\272\254_ALL.png" (97%)
+ rewrite "PNG/docomoPE_\351\226\242\346\235\261_Top10-plot.csv.txt" (96%)
+ rewrite "PNG/docomoPE_\351\226\242\346\235\261_Top10.png" (98%)
+ rewrite "PNG/docomoPE\343\202\265\343\203\236\343\203\252\344\270\273\350\246\201\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPE\343\202\265\343\203\236\343\203\252\345\205\250\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275_top10rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275_top11-20rlavr__maxval.png" (97%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275_top21-30rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275_top31-40rlavr__maxval.png" (97%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275_top41-50rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275\345\271\263\345\235\207avrrl.png" (99%)
+ rewrite "PNG/docomoPE\346\235\261\344\272\254_ALLrlavr__maxval-plot.csv.txt" (69%)
+ rewrite "PNG/docomoPE\346\235\261\344\272\254_ALLrlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPE\351\226\242\346\235\261_Top10rlavr__maxval-plot.csv.txt" (76%)
+ rewrite "PNG/docomoPE\351\226\242\346\235\261_Top10rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top10-plot.csv.txt" (72%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top10.png" (97%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top11-20-plot.csv.txt" (72%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top11-20.png" (97%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top21-30-plot.csv.txt" (72%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top21-30.png" (97%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top31-40-plot.csv.txt" (72%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top31-40-plot.txt" (64%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top31-40.png" (97%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top41-50-plot.csv.txt" (72%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top41-50-plot.txt" (73%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top41-50.png" (97%)
+ rewrite "PNG/docomoPM_\346\235\261\344\272\254_ALL-plot.csv.txt" (98%)
+ rewrite "PNG/docomoPM_\346\235\261\344\272\254_ALL.png" (97%)
+ rewrite "PNG/docomoPM_\351\226\242\346\235\261_Top10-plot.csv.txt" (98%)
+ rewrite "PNG/docomoPM_\351\226\242\346\235\261_Top10.png" (98%)
+ rewrite "PNG/docomoPM\343\202\265\343\203\236\343\203\252\344\270\273\350\246\201\345\234\260\345\237\237avrrl.png" (99%)
+ rewrite "PNG/docomoPM\343\202\265\343\203\236\343\203\252\345\205\250\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275_top10rlavr__maxval.png" (97%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275_top11-20rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275_top21-30rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275_top31-40rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275_top41-50rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275\345\271\263\345\235\207avrrl.png" (99%)
+ rewrite "PNG/docomoPM\346\235\261\344\272\254_ALLrlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM\351\226\242\346\235\261_Top10rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top10-plot.csv.txt" (68%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top10.png" (97%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top11-20-plot.csv.txt" (68%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top11-20.png" (97%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top21-30-plot.csv.txt" (68%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top21-30.png" (97%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top31-40-plot.csv.txt" (68%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top31-40.png" (97%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top41-50-plot.csv.txt" (68%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top41-50.png" (97%)
+ rewrite "PNG/docomoPP_\346\235\261\344\272\254_ALL.png" (97%)
+ rewrite "PNG/docomoPP_\351\226\242\346\235\261_Top10.png" (97%)
+ rewrite "PNG/docomoPP\343\202\265\343\203\236\343\203\252\344\270\273\350\246\201\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPP\343\202\265\343\203\236\343\203\252\345\205\250\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275_top10rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275_top11-20rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275_top21-30rlavr__maxval.png" (99%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275_top31-40rlavr__maxval.png" (99%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275_top41-50rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275\345\271\263\345\235\207avrrl.png" (99%)
+ rewrite "PNG/docomoPP\346\235\261\344\272\254_ALLrlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPP\351\226\242\346\235\261_Top10rlavr__maxval.png" (98%)
+ rewrite PNG/nonetky_pr_avr0.png (99%)
+ rewrite PNG/nonetky_pr_avr7.png (99%)
+ rewrite PNG/nonetky_st_avr0.png (99%)
+ rewrite PNG/nonetky_st_avr7.png (99%)
+/home/masataka/who/src
+Agent pid 6644
