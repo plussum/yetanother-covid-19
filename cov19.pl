@@ -360,7 +360,7 @@ foreach my $AGGR_MODE (@AGGR_LIST){
 		foreach my $SUB_MODE (@SUB_MODE_LIST){
 			dp::dp "$DATA_SOURCE: AGGR_MODE[$AGGR_MODE]  MODE[$MODE] SUB_MODE:[$SUB_MODE]\n" if($cofig::VERBOSE);
 			next if($AGGR_MODE eq "POP" && $SUB_MODE ne "COUNT");		# POP affect only COUNT (no FT, ERN)
-			next if($SUB_MODE eq "ERN" && $MODE eq "ND");				# Newdeath does not make sense for ERN
+			next if($SUB_MODE eq "ERN" && $MODE ne "NC");				# Only Newcases make sense for ERN
 			next if($SUB_MODE ne "COUNT" && $MODE =~ /^C/);				# Only count for CC, CD 
 			next if($SUB_MODE eq "KV" && $MODE ne "NC");				# Newdeath does not make sense for ERN
 
