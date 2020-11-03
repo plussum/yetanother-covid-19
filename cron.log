@@ -14262,3 +14262,248 @@ Agent pid 31150
  rewrite PNG/19_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (99%)
 /home/masataka/who/src
 Agent pid 31180
+[develop eb9ec01] update
+ 1 file changed, 87 insertions(+)
+########################################
+#####2020/11/03 10:20:15
+########################################
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[344] ./cov19.pl ######### 2020/11/03 10:20:16 #######
+#[345] ./cov19.pl tkage,DAY,POP
+#[133] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/press/2020/11/03/documents/20201102.pdf -O /mnt/f/cov/plussum.github.io/tokyo-ku/content/press20201103documents20201102.pdf#[139] tkopdf.pm ps2ascii /mnt/f/cov/plussum.github.io/tokyo-ku/content/press20201103documents20201102.pdf > /mnt/f/cov/plussum.github.io/tokyo-ku/content/press20201103documents20201102.pdf.txt
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[344] ./cov19.pl ######### 2020/11/03 10:20:24 #######
+#[345] ./cov19.pl ku,DAY,POP
+Already up-to-date.
+/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data
+cases_total.csv
+data.json
+death_total.csv
+demography.csv
+effective_reproduction_number.csv
+pcr_case_daily.csv
+pcr_positive_daily.csv
+pcr_tested_daily.csv
+prefectures.csv
+recovery_total.csv
+serious.csv
+#[344] ./cov19.pl ######### 2020/11/03 10:20:50 #######
+#[345] ./cov19.pl tko,DAY,POP
+Already up-to-date.
+#[344] ./cov19.pl ######### 2020/11/03 10:21:43 #######
+#[345] ./cov19.pl ccse,DAY,POP
+#[301] ./cov19.pl ######### 2020/11/03 10:24:03 #######
+#[344] ./cov19.pl ######### 2020/11/03 10:24:05 #######
+#[345] ./cov19.pl usast,DAY,POP
+#[344] ./cov19.pl ######### 2020/11/03 10:24:56 #######
+#[345] ./cov19.pl usa,DAY,POP
+#[146] ./tokyo.pl (cd /mnt/f/cov/plussum.github.io/tokyo/covid19; git pull origin development)
+Already up-to-date.
+Generate index.html and frame.html
+jhccse:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tko:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoku:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoage:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usast:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usa:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+#[279] ./cov19.pl UPLOAD github.io
+/mnt/f/cov/plussum.github.io
+Agent pid 32472
+[master 2aa8a89] update
+ 509 files changed, 26694 insertions(+), 26270 deletions(-)
+ rewrite PNG/01_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_-plot.csv.txt (79%)
+ rewrite PNG/01_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_.png (63%)
+ rewrite PNG/01_tko_NEW_DEATHS_COUNT_DAY_Japan_TOP20_.png (63%)
+ rewrite PNG/01_tkoage_CCM_CASES_COUNT_DAY_Tokyo_Age_.png (99%)
+ rewrite PNG/01_tkoage_CCM_CASES_COUNT_POP_Tokyo_Age_.png (99%)
+ rewrite PNG/01_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_.png (98%)
+ rewrite PNG/01_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_.png (98%)
+ rewrite PNG/01_tkoage_NEW_CASES_ERN_DAY_ALL_.png (99%)
+ rewrite PNG/01_tkoage_NEW_CASES_FT_DAY_Tokyo_TOP20_.png (99%)
+ rewrite PNG/01_tkoage_NEW_CASES_KV_DAY_Tokyo_TOP20_.png (98%)
+ rewrite PNG/01_tkoku_CCM_CASES_COUNT_DAY_Tokyo_TOP20_.png (99%)
+ rewrite PNG/01_tkoku_CCM_CASES_COUNT_POP_Tokyo_TOP20_.png (99%)
+ rewrite PNG/01_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_rl_avr_7.png (98%)
+ rewrite PNG/01_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_rl_avr_7.png (98%)
+ rewrite PNG/01_tkoku_NEW_CASES_ERN_DAY_TOP5_-plot.csv.txt (90%)
+ rewrite PNG/01_tkoku_NEW_CASES_ERN_DAY_TOP5_.png (99%)
+ rewrite PNG/01_tkoku_NEW_CASES_FT_DAY_Tokyo_TOP20_.png (99%)
+ rewrite PNG/01_tkoku_NEW_CASES_KV_DAY_Tokyo_TOP20_-plot.csv.txt (99%)
+ rewrite PNG/01_tkoku_NEW_CASES_KV_DAY_Tokyo_TOP20_.png (98%)
+ rewrite PNG/02_tkoage_CCM_CASES_COUNT_DAY_Tokyo_Age_ruiseki.png (98%)
+ rewrite PNG/02_tkoage_CCM_CASES_COUNT_POP_Tokyo_Age_ruiseki.png (98%)
+ rewrite PNG/02_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_rl_avr_7.png (98%)
+ rewrite PNG/02_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_rl_avr_7.png (98%)
+ rewrite PNG/02_tkoage_NEW_CASES_ERN_DAY_ALL_max3.png (97%)
+ rewrite PNG/02_tkoku_CCM_CASES_COUNT_DAY_Tokyo_1_5_.png (99%)
+ rewrite PNG/02_tkoku_CCM_CASES_COUNT_POP_Tokyo_1_5_.png (98%)
+ rewrite PNG/02_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_ruiseki_rl_avr_7.png (96%)
+ rewrite PNG/02_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_ruiseki_rl_avr_7-plot.csv.txt (70%)
+ rewrite PNG/02_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_ruiseki_rl_avr_7.png (96%)
+ rewrite PNG/02_tkoku_NEW_CASES_ERN_DAY_TOP5_-plot.csv.txt (90%)
+ rewrite PNG/02_tkoku_NEW_CASES_ERN_DAY_TOP5_.png (97%)
+ rewrite PNG/02_usa_NEW_CASES_ERN_DAY_US_2month_ip_5_lp_8_rl_avr_7_-plot.csv.txt (95%)
+ rewrite PNG/02_usa_NEW_CASES_ERN_DAY_US_2month_ip_5_lp_8_rl_avr_7_.png (98%)
+ rewrite PNG/02_usa_NEW_CASES_KV_DAY_USA_2month_.png (98%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_-plot.csv.txt (91%)
+ rewrite PNG/03_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_ruiseki02_rl_avr_7.png (99%)
+ rewrite PNG/03_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_ruiseki02_rl_avr_7.png (97%)
+ rewrite PNG/03_tkoage_NEW_CASES_ERN_DAY_ALL_max10.png (98%)
+ rewrite PNG/03_tkoku_CCM_CASES_COUNT_DAY_Tokyo_6_10_.png (99%)
+ rewrite PNG/03_tkoku_CCM_CASES_COUNT_POP_Tokyo_6_10_.png (99%)
+ rewrite PNG/03_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_.png (97%)
+ rewrite PNG/03_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_.png (99%)
+ rewrite PNG/03_tkoku_NEW_CASES_ERN_DAY_TOP5_-plot.csv.txt (90%)
+ rewrite PNG/03_tkoku_NEW_CASES_ERN_DAY_TOP5_.png (98%)
+ rewrite PNG/03_usa_NEW_CASES_ERN_DAY_US_1month_ip_5_lp_8_rl_avr_7_-plot.csv.txt (95%)
+ rewrite PNG/03_usa_NEW_CASES_ERN_DAY_US_1month_ip_5_lp_8_rl_avr_7_.png (99%)
+ rewrite PNG/03_usa_NEW_CASES_KV_DAY_USA_1month_.png (98%)
+ rewrite PNG/04_tkoage_NEW_CASES_COUNT_DAY_Tokyo_over_50_1_ruiseki03_rl_avr_7.png (98%)
+ rewrite PNG/04_tkoage_NEW_CASES_COUNT_POP_Tokyo_over_50_1_ruiseki03_rl_avr_7.png (98%)
+ rewrite PNG/04_tkoage_NEW_CASES_ERN_DAY_1_7_max10.png (99%)
+ rewrite PNG/04_tkoku_CCM_CASES_COUNT_DAY_Tokyo_11_19_.png (99%)
+ rewrite PNG/04_tkoku_CCM_CASES_COUNT_POP_Tokyo_11_19_.png (98%)
+ rewrite PNG/04_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_05_20_-plot.csv.txt (82%)
+ rewrite PNG/04_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_05_20_.png (98%)
+ rewrite PNG/04_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_05_20_-plot.csv.txt (82%)
+ rewrite PNG/04_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_05_20_.png (97%)
+ rewrite PNG/04_tkoku_NEW_CASES_ERN_DAY_06_10_-plot.csv.txt (100%)
+ rewrite PNG/04_tkoku_NEW_CASES_ERN_DAY_06_10_.png (98%)
+ rewrite PNG/05_tkoage_NEW_CASES_COUNT_DAY_Tokyo_over_50_2_ruiseki04_rl_avr_7.png (98%)
+ rewrite PNG/05_tkoage_NEW_CASES_COUNT_POP_Tokyo_over_50_2_ruiseki04_rl_avr_7.png (98%)
+ rewrite PNG/05_tkoku_CCM_CASES_COUNT_DAY_Tokyo_21_29_.png (98%)
+ rewrite PNG/05_tkoku_CCM_CASES_COUNT_POP_Tokyo_21_29_.png (98%)
+ rewrite PNG/05_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_05_20_rl_avr_7-plot.csv.txt (94%)
+ rewrite PNG/05_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_05_20_rl_avr_7.png (99%)
+ rewrite PNG/05_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_05_20_rl_avr_7.png (99%)
+ rewrite PNG/05_tkoku_NEW_CASES_ERN_DAY_11_15_-plot.csv.txt (100%)
+ rewrite PNG/05_tkoku_NEW_CASES_ERN_DAY_11_15_.png (98%)
+ rewrite PNG/06_tkoku_CCM_CASES_COUNT_DAY_Tokyo_31_39_-plot.csv.txt (92%)
+ rewrite PNG/06_tkoku_CCM_CASES_COUNT_DAY_Tokyo_31_39_-plot.txt (70%)
+ rewrite PNG/06_tkoku_CCM_CASES_COUNT_DAY_Tokyo_31_39_.png (98%)
+ rewrite PNG/06_tkoku_CCM_CASES_COUNT_POP_Tokyo_31_39_-plot.csv.txt (60%)
+ rewrite PNG/06_tkoku_CCM_CASES_COUNT_POP_Tokyo_31_39_.png (98%)
+ rewrite PNG/06_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_05_20_rl_avr_7-plot.csv.txt (91%)
+ rewrite PNG/06_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_05_20_rl_avr_7.png (99%)
+ rewrite PNG/06_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_05_20_rl_avr_7.png (98%)
+ rewrite PNG/06_tkoku_NEW_CASES_ERN_DAY_16_20_-plot.csv.txt (100%)
+ rewrite PNG/06_tkoku_NEW_CASES_ERN_DAY_16_20_.png (99%)
+ rewrite PNG/07_tko_CCM_CASES_COUNT_DAY_Japan_31_40_-plot.csv.txt (94%)
+ rewrite PNG/07_tko_CCM_CASES_COUNT_DAY_Japan_31_40_.png (99%)
+ rewrite PNG/07_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_05_20_rl_avr_7-plot.csv.txt (72%)
+ rewrite PNG/07_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_05_20_rl_avr_7.png (98%)
+ rewrite PNG/07_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_05_20_rl_avr_7-plot.csv.txt (99%)
+ rewrite PNG/07_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_05_20_rl_avr_7.png (98%)
+ rewrite PNG/07_tkoku_NEW_CASES_ERN_DAY_21_25_-plot.csv.txt (99%)
+ rewrite PNG/07_tkoku_NEW_CASES_ERN_DAY_21_25_.png (98%)
+ rewrite PNG/08_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_05_20_rl_avr_7-plot.csv.txt (84%)
+ rewrite PNG/08_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_05_20_rl_avr_7.png (99%)
+ rewrite PNG/08_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_05_20_rl_avr_7-plot.csv.txt (70%)
+ rewrite PNG/08_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_05_20_rl_avr_7.png (98%)
+ rewrite PNG/08_tkoku_NEW_CASES_ERN_DAY_26_30_-plot.csv.txt (100%)
+ rewrite PNG/08_tkoku_NEW_CASES_ERN_DAY_26_30_.png (98%)
+ rewrite PNG/09_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_05_20_rl_avr_7.png (98%)
+ rewrite PNG/09_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_05_20_rl_avr_7.png (99%)
+ rewrite PNG/10_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_05_20_rl_avr_7-plot.csv.txt (90%)
+ rewrite PNG/10_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_05_20_rl_avr_7.png (98%)
+ rewrite PNG/10_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_05_20_rl_avr_7-plot.csv.txt (99%)
+ rewrite PNG/10_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_05_20_rl_avr_7.png (98%)
+ rewrite PNG/11_tko_CCM_DEATHS_COUNT_DAY_Japan_01_08_1m-plot.csv.txt (73%)
+ rewrite PNG/11_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_05_20_.png (98%)
+ rewrite PNG/11_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_05_20_.png (98%)
+ rewrite PNG/11_usast_NEW_DEATHS_COUNT_DAY_TOP_10_2month_-plot.csv.txt (94%)
+ rewrite PNG/11_usast_NEW_DEATHS_COUNT_DAY_TOP_10_2month_.png (98%)
+ rewrite PNG/12_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_05_20_.png (98%)
+ rewrite PNG/12_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_05_20_-plot.csv.txt (98%)
+ rewrite PNG/12_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_05_20_.png (98%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (94%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_.png (99%)
+ rewrite PNG/12_usa_NEW_DEATHS_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (60%)
+ rewrite PNG/12_usa_NEW_DEATHS_COUNT_DAY_TOP_41_50_2month_.png (97%)
+ rewrite PNG/12_usast_NEW_DEATHS_COUNT_DAY_TOP_11_20_2month_-plot.csv.txt (96%)
+ rewrite PNG/12_usast_NEW_DEATHS_COUNT_DAY_TOP_11_20_2month_-plot.txt (62%)
+ rewrite PNG/12_usast_NEW_DEATHS_COUNT_DAY_TOP_11_20_2month_.png (98%)
+ rewrite PNG/13_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_05_20_.png (98%)
+ rewrite PNG/13_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_05_20_-plot.csv.txt (75%)
+ rewrite PNG/13_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_05_20_.png (98%)
+ rewrite PNG/13_usa_NEW_DEATHS_COUNT_DAY_TOP_10_05_01_Arizona_.png (72%)
+ rewrite PNG/14_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_05_20_-plot.csv.txt (82%)
+ rewrite PNG/14_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_05_20_.png (98%)
+ rewrite PNG/14_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_05_20_-plot.csv.txt (99%)
+ rewrite PNG/14_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_05_20_.png (98%)
+ rewrite PNG/15_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_05_20_-plot.csv.txt (69%)
+ rewrite PNG/15_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_05_20_.png (97%)
+ rewrite PNG/15_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_05_20_-plot.csv.txt (90%)
+ rewrite PNG/15_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_05_20_-plot.txt (68%)
+ rewrite PNG/15_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_05_20_.png (99%)
+ rewrite PNG/15_usa_CCM_DEATHS_COUNT_DAY_TOP_10_05_01_Oklahoma_-plot.csv.txt (96%)
+ rewrite PNG/16_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_05_20_-plot.csv.txt (88%)
+ rewrite PNG/16_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_05_20_.png (97%)
+ rewrite PNG/16_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_05_20_-plot.csv.txt (93%)
+ rewrite PNG/16_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_05_20_.png (98%)
+ rewrite PNG/17_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_MONTH_TOP20_rl_avr_7-plot.csv.txt (93%)
+ rewrite PNG/17_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_MONTH_TOP20_rl_avr_7.png (98%)
+ rewrite PNG/17_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_MONTH_TOP20_rl_avr_7.png (98%)
+ rewrite PNG/18_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_.png (99%)
+ rewrite PNG/18_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_MOTH_TOP20-plot.csv.txt (98%)
+ rewrite PNG/18_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_MOTH_TOP20.png (97%)
+ rewrite PNG/18_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_MOTH_TOP20-plot.csv.txt (99%)
+ rewrite PNG/18_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_MOTH_TOP20.png (98%)
+ rewrite PNG/19_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_-plot.csv.txt (97%)
+ rewrite PNG/19_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (99%)
+ rewrite PNG/19_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_2MONTH_rl_avr_7-plot.csv.txt (96%)
+ rewrite PNG/19_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/19_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_2MONTH_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/19_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/20_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_2MONTH_rl_avr_7.png (99%)
+ rewrite PNG/20_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_2MONTH_rl_avr_7.png (99%)
+ rewrite PNG/21_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_2MONTH_rl_avr_7.png (99%)
+ rewrite PNG/21_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_2MONTH_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/21_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_2MONTH_rl_avr_7.png (99%)
+ rewrite PNG/22_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/22_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_2MONTH_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/22_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/23_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_2MONTH_rl_avr_7-plot.csv.txt (72%)
+ rewrite PNG/23_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/23_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/24_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_2MONTH_rl_avr_7-plot.csv.txt (82%)
+ rewrite PNG/24_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/24_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_2MONTH_rl_avr_7-plot.csv.txt (95%)
+ rewrite PNG/24_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/25_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/25_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_2MOTH_.png (98%)
+ rewrite PNG/25_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_2MOTH_-plot.csv.txt (76%)
+ rewrite PNG/25_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_2MOTH_.png (97%)
+ rewrite PNG/26_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_2MOTH_-plot.csv.txt (86%)
+ rewrite PNG/26_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_2MOTH_.png (98%)
+ rewrite PNG/26_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/26_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_2MOTH_.png (98%)
+ rewrite PNG/27_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_2MOTH_-plot.csv.txt (88%)
+ rewrite PNG/27_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_2MOTH_.png (98%)
+ rewrite PNG/27_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/27_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_2MOTH_.png (98%)
+ rewrite PNG/28_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_2MOTH_-plot.csv.txt (84%)
+ rewrite PNG/28_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_2MOTH_.png (98%)
+ rewrite PNG/28_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/28_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_2MOTH_.png (99%)
+ rewrite PNG/29_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_2MOTH_-plot.csv.txt (91%)
+ rewrite PNG/29_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_2MOTH_.png (98%)
+ rewrite PNG/29_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/29_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_2MOTH_.png (98%)
+ rewrite PNG/30_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_2MOTH_-plot.csv.txt (89%)
+ rewrite PNG/30_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_2MOTH_.png (97%)
+ rewrite PNG/30_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_2MOTH_-plot.csv.txt (98%)
+ rewrite PNG/30_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_2MOTH_-plot.txt (71%)
+ rewrite PNG/30_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_2MOTH_.png (98%)
+ create mode 100644 tokyo-ku/content/press2020110303.html
+ create mode 100644 tokyo-ku/content/press20201103documents20201102.pdf
+ create mode 100644 tokyo-ku/content/press20201103documents20201102.pdf.11-01.csv.txt
+ create mode 100644 tokyo-ku/content/press20201103documents20201102.pdf.txt
+/home/masataka/who/src
+Agent pid 32503
