@@ -70,6 +70,13 @@ my @jag_param = (
 #	{ext => "#KIND# Japan 01-10 log (#LD#) #SRC#", start_day => "03/12",  lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines",
 #		 logscale => "y", average_date => 7},
 
+	{ext => "#KIND# Japan 01-10 1m (#LD#) #SRC#", start_day => -31,  lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines",
+			term_ysize => 400},
+	{ext => "#KIND# Japan 01-10 1m (#LD#) #SRC#", start_day => -31,  lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines",
+			 avr_date => 7, term_ysize => 400},
+	{ext => "#KIND# Japan 11-20 1m (#LD#) #SRC#", start_day => -31,  lank =>[10, 19] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines",
+			 avr_date => 7, term_ysize => 400},
+
 	{ext => "#KIND# Japan 01-05 2m (#LD#) #SRC#", start_day => -62,  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
 	{ext => "#KIND# Japan 06-10 2m (#LD#) #SRC#", start_day => -62,  lank =>[5, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
 	{ext => "#KIND# Japan 11-15 2m (#LD#) #SRC#", start_day => -62,  lank =>[10, 14] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
