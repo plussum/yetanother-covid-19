@@ -188,7 +188,7 @@ foreach my $p (@PARAMS){
 open(HTML, "> $HTMLF") || die "cannot create $HTMLF";
 print HTML "<HTML>\n";
 print HTML "<HEAD>\n";
-print HTML "<TITLE> NETATMO </TITLE>\n";
+print HTML "<TITLE> COMBINED DATA </TITLE>\n";
 print HTML $CSS;
 print HTML "</HEAD>\n";
 print HTML "<BODY>\n";
