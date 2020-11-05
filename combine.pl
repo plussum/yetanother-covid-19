@@ -54,7 +54,7 @@ foreach my $tgc (@TARGET_COUNTRY){
 	my $title = $tgc->{title};
 	foreach my $country (split(/,/, $tgc->{list})){
 		my $p = {	
-			title => "$tgc->{title} $country",
+			title => "$country $tgc->{title}",
 			time_from => "2020/03/01",
 			time_till => "",
 			avr_date => 7,
@@ -503,6 +503,16 @@ sub	graph
 	}
 	my $xrange = sprintf("['%s':'%s']", &ut2md($utime_from), &ut2md($utime_till));
 	$title .=  sprintf(" (%s:%s)", &ut2md($utime_from), &ut2md($utime_till));
+
+	my $perc = 0;
+	if($YMAX[0] < $YMAX[1]){
+		$perc = $YMAX[0] / $YMAX[1];
+	}
+	else {
+		$perc = $YMAX[1] / $YMAX[0];
+	}
+	
+	$title .= $perc = sprintf(" [%.1f%%]", $perc * 100);
 
 	#
 	#	calculate xtics
