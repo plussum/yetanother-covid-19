@@ -22913,3 +22913,117 @@ Already up-to-date.
 #[357] ./cov19.pl usast,DAY,POP
 #[356] ./cov19.pl ######### 2020/11/05 20:25:00 #######
 #[357] ./cov19.pl usa,DAY,POP
+#[146] ./tokyo.pl (cd /mnt/f/cov/plussum.github.io/tokyo/covid19; git pull origin development)
+Updating d9e6add..096ac7c
+Fast-forward
+ data/consultation_about_fever.json               |    7 +-
+ data/daily_positive_detail.json                  |   13 +-
+ data/data.json                                   | 2527 ++++++++++++++++++++--
+ data/monitoring_items.json                       |   20 +-
+ data/news.json                                   |   12 +-
+ data/patient.json                                |   78 +-
+ data/positive_by_developed.json                  |   40 +-
+ data/positive_by_diagnosed.json                  |   18 +-
+ data/positive_rate.json                          |  247 ++-
+ data/positive_status.json                        |    7 +-
+ data/tokyo_rule.json                             |    7 +-
+ static/data/130001_tokyo_covid19_call_center.csv |    1 +
+ static/data/130001_tokyo_covid19_patients.csv    |  513 +++--
+ 13 files changed, 2994 insertions(+), 496 deletions(-)
+#[122] ./combine.pl Unkown option -S
+Generate index.html and frame.html
+jhccse:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tko:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoku:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoage:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usast:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usa:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+#[281] ./cov19.pl UPLOAD github.io
+/mnt/f/cov/plussum.github.io
+Agent pid 18599
+[master b59b0d3] update
+ 250 files changed, 10033 insertions(+), 9700 deletions(-)
+ rewrite PNG/0312tky_pr_avr0.png (99%)
+ rewrite PNG/0312tky_pr_avr7.png (99%)
+ rewrite PNG/0312tky_st_avr0.png (99%)
+ rewrite PNG/0312tky_st_avr7.png (99%)
+ rewrite "PNG/docomoPD_\345\205\250\345\233\275_top10.png" (98%)
+ rewrite "PNG/docomoPD_\345\205\250\345\233\275_top11-20.png" (97%)
+ rewrite "PNG/docomoPD_\345\205\250\345\233\275_top21-30.png" (98%)
+ rewrite "PNG/docomoPD_\345\205\250\345\233\275_top31-40.png" (97%)
+ rewrite "PNG/docomoPD_\345\205\250\345\233\275_top41-50.png" (98%)
+ rewrite "PNG/docomoPD_\346\235\261\344\272\254_ALL.png" (98%)
+ rewrite "PNG/docomoPD_\351\226\242\346\235\261_Top10.png" (98%)
+ rewrite "PNG/docomoPD\343\202\265\343\203\236\343\203\252\344\270\273\350\246\201\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPD\343\202\265\343\203\236\343\203\252\345\205\250\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275_top10rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275_top11-20rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275_top21-30rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275_top31-40rlavr__maxval.png" (97%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275_top41-50rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPD\345\205\250\345\233\275\345\271\263\345\235\207avrrl.png" (98%)
+ rewrite "PNG/docomoPD\346\235\261\344\272\254_ALLrlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPD\351\226\242\346\235\261_Top10rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPE_\345\205\250\345\233\275_top10.png" (97%)
+ rewrite "PNG/docomoPE_\345\205\250\345\233\275_top11-20.png" (97%)
+ rewrite "PNG/docomoPE_\345\205\250\345\233\275_top21-30.png" (97%)
+ rewrite "PNG/docomoPE_\345\205\250\345\233\275_top31-40.png" (97%)
+ rewrite "PNG/docomoPE_\345\205\250\345\233\275_top41-50.png" (96%)
+ rewrite "PNG/docomoPE_\346\235\261\344\272\254_ALL.png" (97%)
+ rewrite "PNG/docomoPE_\351\226\242\346\235\261_Top10.png" (98%)
+ rewrite "PNG/docomoPE\343\202\265\343\203\236\343\203\252\344\270\273\350\246\201\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPE\343\202\265\343\203\236\343\203\252\345\205\250\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275_top10rlavr__maxval.png" (97%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275_top11-20rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275_top21-30rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275_top31-40rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275_top41-50rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPE\345\205\250\345\233\275\345\271\263\345\235\207avrrl.png" (99%)
+ rewrite "PNG/docomoPE\346\235\261\344\272\254_ALLrlavr__maxval.png" (97%)
+ rewrite "PNG/docomoPE\351\226\242\346\235\261_Top10rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top10.png" (97%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top11-20.png" (97%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top21-30.png" (97%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top31-40.png" (97%)
+ rewrite "PNG/docomoPM_\345\205\250\345\233\275_top41-50.png" (97%)
+ rewrite "PNG/docomoPM_\346\235\261\344\272\254_ALL.png" (97%)
+ rewrite "PNG/docomoPM_\351\226\242\346\235\261_Top10.png" (97%)
+ rewrite "PNG/docomoPM\343\202\265\343\203\236\343\203\252\344\270\273\350\246\201\345\234\260\345\237\237avrrl.png" (99%)
+ rewrite "PNG/docomoPM\343\202\265\343\203\236\343\203\252\345\205\250\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275_top10rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275_top11-20rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275_top21-30rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275_top31-40rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275_top41-50rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM\345\205\250\345\233\275\345\271\263\345\235\207avrrl.png" (99%)
+ rewrite "PNG/docomoPM\346\235\261\344\272\254_ALLrlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPM\351\226\242\346\235\261_Top10rlavr__maxval.png" (99%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top10.png" (98%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top11-20.png" (97%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top21-30.png" (97%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top31-40.png" (97%)
+ rewrite "PNG/docomoPP_\345\205\250\345\233\275_top41-50.png" (97%)
+ rewrite "PNG/docomoPP_\346\235\261\344\272\254_ALL.png" (97%)
+ rewrite "PNG/docomoPP_\351\226\242\346\235\261_Top10.png" (97%)
+ rewrite "PNG/docomoPP\343\202\265\343\203\236\343\203\252\344\270\273\350\246\201\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPP\343\202\265\343\203\236\343\203\252\345\205\250\345\234\260\345\237\237avrrl.png" (98%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275_top10rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275_top11-20rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275_top21-30rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275_top31-40rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275_top41-50rlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPP\345\205\250\345\233\275\345\271\263\345\235\207avrrl.png" (99%)
+ rewrite "PNG/docomoPP\346\235\261\344\272\254_ALLrlavr__maxval.png" (98%)
+ rewrite "PNG/docomoPP\351\226\242\346\235\261_Top10rlavr__maxval.png" (97%)
+ rewrite PNG/nonetky_pr_avr0.png (99%)
+ rewrite PNG/nonetky_pr_avr7.png (99%)
+ rewrite PNG/nonetky_st_avr0.png (99%)
+ rewrite PNG/nonetky_st_avr7.png (99%)
+/home/masataka/who/src
+Agent pid 18630
