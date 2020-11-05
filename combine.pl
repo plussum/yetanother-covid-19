@@ -10,9 +10,10 @@ use config;
 use	csvlib;
 use dp;
 use Data::Dumper;
+use Time::Local 'timelocal';
 
-my $DEBUG = 0;
-my $VERBOSE = 0;
+my $DEBUG = 1;
+my $VERBOSE = 1;
 
 my %SRC_CSV = (
 	"ccse-NC" => "$config::CSV_PATH/jhccse_NC_DAY.csv.txt",
@@ -50,6 +51,8 @@ our @PARAM_LIST = (
 my @CSV_FILES = ();
 my $last = "";
 
+my @YMIN = 0;
+my @YMAX = 0;
 
 #
 #	Set Color Table
@@ -111,15 +114,18 @@ my %ITEM_FLAG = ();
 my %COUNTRY = ();
 my %COUNTRY_FLAG = ();
 my %DATES = ();
+my $pn = 0;
 foreach my $p (@PARAMS){
 
 	my $csvf =  $p->{title};
 	$csvf =~ s/[\W\s]/_/g;
-	$p->{dst} = $csvf;
+	$csvf = "$IMG_DIR/$csvf";
+	$p->{dst} = "$csvf";
 
-	&get_csvfile($p);
+	my @ys = &get_csvfile($p);
+	$p->{items_end} = [@ys];
 
-	dp::dp "$OUT_CSV\n";
+	dp::dp "$csvf.csv.txt\n";
 	open(OUT_CSV, "> $csvf.csv.txt" ) || die "Cannot create $csvf.csv.txt";
 
 	my @LABEL = ();
@@ -145,7 +151,8 @@ foreach my $p (@PARAMS){
 	close(OUT_CSV);
 
 	print "-" x 80 . "\n";
-	system("cat $csvf.csv.txt");
+	#system("cat $csvf.csv.txt");
+	$pn++;
 }
 
 #
@@ -212,11 +219,14 @@ sub	get_csvfile
 
 	dp::dp "### TITLE: " . $p->{title}  . "\n";
 	my @graph = @{$p->{plot}};
+	my @yy = ();
+	my $yn = 0;
 	foreach my $gp (@graph){
 		dp::dp "### LABEL:" . $gp->{label}  . "\n";
 		my @items = @{$gp->{items}};
 		my @target = split(/,/, csvlib::valdefs($gp->{target} // "", ""));			# 明示的対象国
 
+		$yy[$yn] = 0;
 		foreach my $item (@items){
 			dp::dp "### ITEM:" . $item  . "\n";
 			if(! defined $SRC_CSV{$item}){
@@ -237,6 +247,8 @@ sub	get_csvfile
 				my ($country, $total, @data) = split(/$DLM/, $_);
 				next if($#target >= 0 && ! csvlib::search_list($country, @target));
 
+				$yy[$yn]++;
+
 				dp::dp "$country\n";
 				for(my $d = 0; $d <= $#data; $d++){
 					my $dt = $dates[$d];
@@ -247,7 +259,9 @@ sub	get_csvfile
 			}
 			close(FD);
 		}
+		$yn++;
 	}
+	return ($yy[0], $yy[0]+$yy[1]);
 }
 
 #	{
@@ -275,8 +289,8 @@ sub	comvine_graph
 
 	my $dst = $p->{dst};
 	print "[$dst]\n" if($DEBUG);
-	my $pngf = $IMG_DIR . "/$dst.png";
-	my $plotf = $IMG_DIR . "/$dst-plot.txt";
+	my $pngf = "$dst.png";
+	my $plotf = "$dst-plot.txt";
 
 	my $time_from = $p->{time_from} // "";
 	my $time_till = $p->{time_till} // "";
@@ -368,11 +382,11 @@ sub	graph
 	my $CSV_TIME_TILL = "";	# LAST_DATE
 	while(<CSV>){
 		s/[\r\n]+$//;
-		my @w = split(/,/, $_);
+		my @w = split(/$DLM/, $_);
 
-		$CSV_TIME_FROM = $w[0] if(! $CSV_TIME_FROM);
-		$CSV_TIME_TILL = $w[0];
-		for(my $i = 1; $i <= $#w; $i++){
+		$CSV_TIME_TILL = &date2ut("2020/" . shift(@w));
+		$CSV_TIME_FROM = $CSV_TIME_TILL if(! $CSV_TIME_FROM);
+		for(my $i = 0; $i <= $#w; $i++){
 			my $v = $w[$i];
 			next if($v eq "NaN");
 
@@ -383,7 +397,7 @@ sub	graph
 	}
 	close(CSV);
 
-	dp::dp "CSV_TIME [$CSV_TIME_FOM:$CSV_TIME_TILL]\n";
+	dp::dp "CSV_TIME [$CSV_TIME_FROM:$CSV_TIME_TILL]\n";
 	##### DEBUG for STATS
 	foreach my $k (keys %STATS){
 		my @w = ();
@@ -395,8 +409,7 @@ sub	graph
 	#####
 
 	my %PLP_STATS = ();
-	my @YMIN = ();
-	my @YMAX = ();
+	my $ys = 0;
 	for(my $i = 0; $i < $plp_number; $i++){
 		my $plp = $p->{plot}[$i];
 		$PLP_STATS{MAX}[$i] = -99999999;
@@ -406,20 +419,12 @@ sub	graph
 		my @itm = @{$plp->{items}};
 		dp::dp "#### " . join(",", @itm) . "\n" if($DEBUG);
 
-		for(my $c = 1; $c <= $#CSV_ITEMS; $c++){
-			my $lbl = $CSV_ITEMS[$c];
-			if(csvlib::search_list($lbl, @itm)){
-				dp::dp "ITEMS: $i, $lbl\n" if($DEBUG);
-				push(@{$cols[$i]}, $c);
-			}
-		}
-
-		dp::dp "cols $i:" . join(",", @{$cols[$i]}) . "\n" if($DEBUG);
-		foreach  my $cn (@{$cols[$i]}){
-			dp::dp ">>STATS ($cn) " . join(",", $STATS{MAX}[$cn], $STATS{MIN}[$cn], $STATS{TOTAL}[$cn]) . "\n" if($DEBUG);
-			$PLP_STATS{MAX}[$i] = $STATS{MAX}[$cn] if($STATS{MAX}[$cn] > $PLP_STATS{MAX}[$i]);
-			$PLP_STATS{MIN}[$i] = $STATS{MIN}[$cn] if($STATS{MIN}[$cn] < $PLP_STATS{MIN}[$i]);
-			$PLP_STATS{TOTAL}[$i] += $STATS{TOTAL}[$cn];
+		dp::dp "cols $i:" . join(",", @{$p->{items_end}}, $p->{items_end}->[1] ) . "\n" if($DEBUG);
+		for(; $ys < $p->{items_end}->[$i]; $ys++){ 
+			dp::dp ">>STATS ($ys) " . join(",", $STATS{MAX}[$ys], $STATS{MIN}[$ys], $STATS{TOTAL}[$ys]) . "\n" if($DEBUG);
+			$PLP_STATS{MAX}[$i] = $STATS{MAX}[$ys] if($STATS{MAX}[$ys] > $PLP_STATS{MAX}[$i]);
+			$PLP_STATS{MIN}[$i] = $STATS{MIN}[$ys] if($STATS{MIN}[$ys] < $PLP_STATS{MIN}[$i]);
+			$PLP_STATS{TOTAL}[$i] += $STATS{TOTAL}[$ys];
 		}
 		dp::dp "PLP_STATS ($i) " . join(",", $PLP_STATS{MAX}[$i], $PLP_STATS{MIN}[$i], $PLP_STATS{TOTAL}[$i]) . "\n" if($DEBUG);
 	
@@ -645,7 +650,7 @@ sub ut2dt
 {
 	my ($tm) = @_;
 
-	#dp::dp "ut2dt: " . join(",", caller) . "\n";
+	dp::dp "ut2dt: " . join(",", caller) . "\n";
 	$tm = $tm // time;
 	my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($tm);
 	my $s = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year + 1900, $mon+1, $mday, $hour, $min, $sec);
@@ -664,7 +669,7 @@ sub ymd2tm
 	$h = $h // 0;
 	$mn = $mn // 0;
 	$s = $s // 0;
-	#print "ymd2tm: " . join("/", @_), "\n";
+	#dp::dp "ymd2tm: " . join("/", @_), "\n";
 
 	#$y -= 2100 if($y > 2100);
 	my $tm = timelocal($s, $mn, $h, $d, $m - 1, $y);
@@ -679,9 +684,10 @@ sub	date2ut
 {
 	my ($time_str) = @_;
 
-	my ($y, $m, $d, $hh, $mm, $ss) = split(/[-: ]/, $time_str);
+	my ($y, $m, $d, $hh, $mm, $ss) = split(/[\/: ]/, $time_str);
 
-	return &ymd2tm($y, $m, $d, $hh, $mm, $ss);
+	#dp::dp "date2ut: $time_str -> ". join(",", $y, $m, $d, $hh // 0, $mm // 0, $ss // 0) . "\n";
+	return &ymd2tm($y, $m, $d, $hh // 0, $mm // 0, $ss // 0);
 } 
 
 #
@@ -693,6 +699,10 @@ sub	time_params
 
 	dp::dp "[$tms:$now]\n";
 	$now = $now // time;
+	if($now =~ /\//){
+		print "<<$now:" .  &date2ut("2020/$now") . ">>\n";
+		$now = &date2ut("2020/$now");
+	}
 
 	my $utime = $now;
 	if($tms =~ /^[0-9].*[-:]/){
