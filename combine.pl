@@ -119,30 +119,33 @@ foreach my $p (@PARAMS){
 
 	&get_csvfile($p);
 
-	my @LABEL = ("# date");
+	dp::dp "$OUT_CSV\n";
+	open(OUT_CSV, "> $csvf.csv.txt" ) || die "Cannot create $csvf.csv.txt";
+
+	my @LABEL = ();
 	foreach my $item (@ITEMS){
 		foreach my $country (sort keys %COUNTRY_FLAG){
 			push(@LABEL, "$item-$country");
 		}
 	}
+	print OUT_CSV join($DLM, "# date", @LABEL) . "\n";
 
-	dp::dp "$OUT_CSV\n";
-	open(OUT_CSV, "> $csvf.csv.txt" ) || die "Cannot create $csvf.csv.txt";
 	my @dts = (sort keys %DATES);
-	print OUT_CSV join($DLM, "#area", @dts) . "\n";
+	#print OUT_CSV join($DLM, "#area", @dts) . "\n";
 
-	foreach my $item (@ITEMS){
-		foreach my $country (sort keys %COUNTRY_FLAG){
-			my @record = ("$item-$country");
-			foreach my $dt (sort keys %DATES){
+	foreach my $dt (sort keys %DATES){
+		my @record = ($dt);
+		foreach my $item (@ITEMS){
+			foreach my $country (sort keys %COUNTRY_FLAG){
 				push(@record, $COUNTRY{$item}{$country}{$dt} // 0);
 			}
-			print OUT_CSV join($DLM, @record) . "\n";
 		}
+		print OUT_CSV join($DLM, @record) . "\n";
 	}
 	close(OUT_CSV);
 
-	system("cat $OUT_CSV");
+	print "-" x 80 . "\n";
+	system("cat $csvf.csv.txt");
 }
 
 #
@@ -353,8 +356,6 @@ sub	graph
 	$s =~ s/[\r\n]+$//;
 	my @CSV_ITEMS = split(/$DLM/, $s);
 	shift(@CSV_ITEMS);
-	my $CSV_TIME_FROM = $CSV_ITEMS[0]);				# FIRST DATE
-	my $CSV_TIME_TILL = $CSV_ITEMS[$#CSV_ITEMS]);	# LAST_DATE
 
 	my %STATS = ();
 	for(my $i = 0; $i <= $#CSV_ITEMS; $i++){
@@ -363,11 +364,15 @@ sub	graph
 		$STATS{TOTAL}[$i] = 0;
 	}
 	
+	my $CSV_TIME_FROM = "";				# FIRST DATE
+	my $CSV_TIME_TILL = "";	# LAST_DATE
 	while(<CSV>){
 		s/[\r\n]+$//;
 		my @w = split(/,/, $_);
 
-		for(my $i = 2; $i <= $#w; $i++){
+		$CSV_TIME_FROM = $w[0] if(! $CSV_TIME_FROM);
+		$CSV_TIME_TILL = $w[0];
+		for(my $i = 1; $i <= $#w; $i++){
 			my $v = $w[$i];
 			next if($v eq "NaN");
 
@@ -378,10 +383,11 @@ sub	graph
 	}
 	close(CSV);
 
+	dp::dp "CSV_TIME [$CSV_TIME_FOM:$CSV_TIME_TILL]\n";
 	##### DEBUG for STATS
 	foreach my $k (keys %STATS){
 		my @w = ();
-		for(my $i = 2; $i <= $#CSV_ITEMS; $i++){
+		for(my $i = 1; $i <= $#CSV_ITEMS; $i++){
 			push(@w, $STATS{$k}[$i]);
 		}
 		dp::dp "==== $k " . join(", ", @w) . "\n" if($DEBUG);
@@ -685,6 +691,7 @@ sub	time_params
 {
 	my ($tms, $now) = @_;
 
+	dp::dp "[$tms:$now]\n";
 	$now = $now // time;
 
 	my $utime = $now;
