@@ -40,7 +40,7 @@ our @PARAM_LIST = (
 		title => "JHCCSE New Cases/Deathes",
 		time_from => "-1d",
 		time_till => "",
-		graph => [
+		plot => [
 			{items => [qw(ccse-NC)], target => "US", label => "NewCases", ymin => "", ymax => "", graph => $LT1},
 			{items => [qw(ccse-ND)], target => "US", label => "NewDeathes", ymin => "", ymax => "", graph => $LTW},
 		],
@@ -106,21 +106,30 @@ for(@ARGV){
 #
 #	CSVファイルのダウンロード	RAW/
 #
+my @ITEMS = ();
+my %ITEM_FLAG = ();
+my %COUNTRY = ();
+my %COUNTRY_FLAG = ();
+my %DATES = ();
 foreach my $p (@PARAMS){
-	my @ITEMS = ();
-	my %ITEM_FLAG = ();
-	my %COUNTRY = ();
-	my %COUNTRY_FLAG = ();
-	my %DATES = ();
 
 	my $csvf =  $p->{title};
-	s/\W/_/g;
+	$csvf =~ s/[\W\s]/_/g;
+	$p->{dst} = $csvf;
+
 	&get_csvfile($p);
 
+	my @LABEL = ("# date");
+	foreach my $item (@ITEMS){
+		foreach my $country (sort keys %COUNTRY_FLAG){
+			push(@LABEL, "$item-$country");
+		}
+	}
+
 	dp::dp "$OUT_CSV\n";
-	open(OUT_CSV, "> $OUT_CSV" ) || die "Cannot create $OUT_CSV";
+	open(OUT_CSV, "> $csvf.csv.txt" ) || die "Cannot create $csvf.csv.txt";
 	my @dts = (sort keys %DATES);
-	print OUT_CSV join($DLM, "area", @dts) . "\n";
+	print OUT_CSV join($DLM, "#area", @dts) . "\n";
 
 	foreach my $item (@ITEMS){
 		foreach my $country (sort keys %COUNTRY_FLAG){
@@ -132,8 +141,9 @@ foreach my $p (@PARAMS){
 		}
 	}
 	close(OUT_CSV);
-}
 
+	system("cat $OUT_CSV");
+}
 
 #
 #	Generate HTML
@@ -148,14 +158,12 @@ print HTML "<BODY>\n";
 my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
 foreach my $p (@PARAMS){
-	last if(! $p->{src});
+	#last if(! $p->{src});
 
 	print $p->{title} . "\n" if($VERBOSE);
-	my $dst =$p->{title};	# {dst}
-	$dst =~ s/[^a-zA-Z0-9]/_/g;
-	$p->{dst} = $dst;
+	my $dst = $p->{dst};
 
-	&netatmo_graph($p);
+	&comvine_graph($p);
 
 	print HTML "<!-- $p->{title}  -->\n";
 	print HTML "<span class=\"c\">$now</span><br>\n";
@@ -193,8 +201,14 @@ sub	get_csvfile
 {
 	my ($p) =  @_;
 
+	@ITEMS = ();
+	%ITEM_FLAG = ();
+	%COUNTRY = ();
+	%COUNTRY_FLAG = ();
+	%DATES = ();
+
 	dp::dp "### TITLE: " . $p->{title}  . "\n";
-	my @graph = @{$p->{graph}};
+	my @graph = @{$p->{plot}};
 	foreach my $gp (@graph){
 		dp::dp "### LABEL:" . $gp->{label}  . "\n";
 		my @items = @{$gp->{items}};
@@ -232,6 +246,7 @@ sub	get_csvfile
 		}
 	}
 }
+
 #	{
 #		[
 #		src => $MAIN_CSV,
@@ -250,7 +265,7 @@ sub	get_csvfile
 #			{axis => "x1y2", graph => "lines linewidth 2",  item_title => "positive rate"},
 #		],
 #	},
-sub	netatmo_graph
+sub	comvine_graph
 {
 	my ($p) = @_;
 
@@ -265,7 +280,7 @@ sub	netatmo_graph
 
 	my $gpara = {
 		p => $p,
-#		csvf => $MAIN_CSV,
+		csvf => $dst . ".csv.txt",
 		pngf => $pngf,
 		plotf => $plotf,
 		time_form => $time_from, 
@@ -336,9 +351,10 @@ sub	graph
 	dp::dp $s if($DEBUG);
 	$s =~ s/^#//;
 	$s =~ s/[\r\n]+$//;
-	my @CSV_ITEMS = split(/,/, $s);
-	my $CSV_TIME_FROM = shift(@CSV_ITEMS);
-	my $CSV_TIME_TILL = shift(@CSV_ITEMS);
+	my @CSV_ITEMS = split(/$DLM/, $s);
+	shift(@CSV_ITEMS);
+	my $CSV_TIME_FROM = $CSV_ITEMS[0]);				# FIRST DATE
+	my $CSV_TIME_TILL = $CSV_ITEMS[$#CSV_ITEMS]);	# LAST_DATE
 
 	my %STATS = ();
 	for(my $i = 0; $i <= $#CSV_ITEMS; $i++){
@@ -370,6 +386,7 @@ sub	graph
 		}
 		dp::dp "==== $k " . join(", ", @w) . "\n" if($DEBUG);
 	}
+	#####
 
 	my %PLP_STATS = ();
 	my @YMIN = ();
@@ -433,7 +450,7 @@ sub	graph
 	#	Time Range
 	#
 	if(!$time_from && !$time_till){
-		$time_from = "-1w";
+		$time_from = "-2m";
 		$time_till = "";
 	}
 	my $utime_from = &time_params($time_from, $CSV_TIME_TILL);
@@ -512,7 +529,7 @@ _EOD_
 		my $plp = $p->{plot}[$i];
 		my $axis = ($i == 0) ? "axis x1y1" : "axis x1y2";
 		#dp::dp "plp :\n " . Dumper $plp;
-		my $graph = $plp->{graph} // "lines lw 1";
+		my $graph = $plp->{plot} // "lines lw 1";
 #		if($graph =~ /lines/) {
 #			if($i == 0){ 
 #				$graph .= " linewidth 2";
@@ -674,7 +691,7 @@ sub	time_params
 	if($tms =~ /^[0-9].*[-:]/){
 		$utime = &dt2ut($tms);
 	}
-	elsif($tms =~ /^[-+]/){
+	elsif($tms =~ /^[-+]/){			# +1d, -1d 1w 1m
 		$tms =~ /([\-\+][0-9]+)([a-zA-Z]+)/;
 		my $tm = $1;
 		my $unit = $2 // "d";	# default: date
