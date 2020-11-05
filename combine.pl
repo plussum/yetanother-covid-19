@@ -31,8 +31,9 @@ my $IMG_DIR  = "$config::PNG_PATH";
 
 my $IMG_REL_PATH = "../IMG";
 
-my $HTMLF = "$HTML_DIR/index.html";
-my $HTMLF_ONESHOT = "$HTML_DIR/oneshot.html";
+my $HTMLF   = "$HTML_DIR/comvine.html";
+my $OUT_CSV = "$IMG_DIR/comvine.csv.txt";
+my $OUT_PNG = "$IMG_DIR/comvine.png";
 
 our @PARAM_LIST = (
 	{	
@@ -40,8 +41,8 @@ our @PARAM_LIST = (
 		time_from => "-1d",
 		time_till => "",
 		graph => [
-			{items => [qw(ccse-NC)], label => "NewCases", ymin => "", ymax => "", graph => $LT1},
-			{items => [qw(ccse-ND)], label => "NewDeathes", ymin => "", ymax => "", graph => $LTW},
+			{items => [qw(ccse-NC)], target => "US", label => "NewCases", ymin => "", ymax => "", graph => $LT1},
+			{items => [qw(ccse-ND)], target => "US", label => "NewDeathes", ymin => "", ymax => "", graph => $LTW},
 		],
 	},
 );
@@ -95,11 +96,6 @@ for(@ARGV){
 		dp::dp "##### $title\n";
 		my $ymin = "";
 		my $ymax = "";
-		@PARAMS = (
-		{
-		},
-		);
-		$HTMLF = $HTMLF_ONESHOT;
 	}
 	elsif(/-/){
 		dp::dp "Unkown option $_\n";
@@ -110,73 +106,34 @@ for(@ARGV){
 #
 #	CSVファイルのダウンロード	RAW/
 #
-my @ITEMS = ();
-my %ITEM_FLAG = ();
-my %COUNTRY = ();
-my %DATES = ();
-
 foreach my $p (@PARAMS){
+	my @ITEMS = ();
+	my %ITEM_FLAG = ();
+	my %COUNTRY = ();
+	my %COUNTRY_FLAG = ();
+	my %DATES = ();
+
+	my $csvf =  $p->{title};
+	s/\W/_/g;
 	&get_csvfile($p);
-}
 
-foreach my $item (@ITEMS){
-	foreach my $country (sort keys %COUNTRY){
-		my @record = ($country);
-		foreach my $dt (sort keys %DATES){
-			push(@record, $COUNTRY{$item}{$country}{$dt});
-		}
-		print join($DLM, @record) . "\n";
-		last;
-	}
-}
+	dp::dp "$OUT_CSV\n";
+	open(OUT_CSV, "> $OUT_CSV" ) || die "Cannot create $OUT_CSV";
+	my @dts = (sort keys %DATES);
+	print OUT_CSV join($DLM, "area", @dts) . "\n";
 
-#
-#	CSVファイルのリストを作成
-#		graph => [
-#			{items => [qw(ccse-NC)], terget => "", label => "NewCases", ymin => "", ymax => "", graph => $LT1},
-#			{items => [qw(ccse-ND)], terget => "", label => "NewDeathes", ymin => "", ymax => "", graph => $LTW},
-#		],
-#
-sub	get_csvfile
-{
-	my ($p) =  @_;
-
-	dp::dp "### TITLE: " . $p->{title}  . "\n";
-
-	my @graph = @{$p->{graph}};
-	foreach my $gp (@graph){
-		dp::dp "### LABEL:" . $gp->{label}  . "\n";
-		my @items = @{$gp->{items}};
-		foreach my $item (@items){
-			dp::dp "### ITEM:" . $item  . "\n";
-			if(! defined $SRC_CSV{$item}){
-				dp::dp "### No CSV definition for $item\n";
-				next;
+	foreach my $item (@ITEMS){
+		foreach my $country (sort keys %COUNTRY_FLAG){
+			my @record = ("$item-$country");
+			foreach my $dt (sort keys %DATES){
+				push(@record, $COUNTRY{$item}{$country}{$dt} // 0);
 			}
-			if(! defined $ITEM_FLAG{$item}){
-				push(@ITEMS, $item);
-			}
-			$ITEM_FLAG{$item}++;
-
-			open(FD, $SRC_CSV{$item}) || die "Cannot open $SRC_CSV{$item} for $item";
-			$_ = (<FD>);
-			s/[\r\n]+$//;
-			my ($country_l, $total_l, @dates) = split(/$DLM/, $_);
-			while(<FD>){
-				s/[\r\n]+$//;
-				my ($country, $total, @data) = split(/$DLM/, $_);
-				for(my $d = 0; $d <= $#data; $d++){
-					my $dt = $dates[$d];
-					$COUNTRY{$item}{$country}{$dt} = $data[$d];
-					$COUNTRY{$country}++;
-					$DATES{$dt}++;
-				}
-			}
-			close(FD);
+			print OUT_CSV join($DLM, @record) . "\n";
 		}
 	}
+	close(OUT_CSV);
 }
-exit;
+
 
 #
 #	Generate HTML
@@ -192,7 +149,6 @@ my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
 foreach my $p (@PARAMS){
 	last if(! $p->{src});
-	next if(defined $p->{exec} && $p->{exec} eq "#");
 
 	print $p->{title} . "\n" if($VERBOSE);
 	my $dst =$p->{title};	# {dst}
@@ -222,6 +178,60 @@ close(HTML);
 
 exit(0);
 
+#
+#	CSVファイルのリストを作成
+#		title => "JHCCSE New Cases/Deathes",
+#		time_from => "-1d",
+#		time_till => "",
+#		graph => [
+#			{items => [qw(ccse-NC)], terget => "", label => "NewCases", ymin => "", ymax => "", graph => $LT1},
+#			{items => [qw(ccse-ND)], terget => "", label => "NewDeathes", ymin => "", ymax => "", graph => $LTW},
+#		],
+#		my @target = split(/,/, csvlib::valdefs($gplitem->{target}, ""));			# 明示的対象国
+#
+sub	get_csvfile
+{
+	my ($p) =  @_;
+
+	dp::dp "### TITLE: " . $p->{title}  . "\n";
+	my @graph = @{$p->{graph}};
+	foreach my $gp (@graph){
+		dp::dp "### LABEL:" . $gp->{label}  . "\n";
+		my @items = @{$gp->{items}};
+		my @target = split(/,/, csvlib::valdefs($gp->{target} // "", ""));			# 明示的対象国
+
+		foreach my $item (@items){
+			dp::dp "### ITEM:" . $item  . "\n";
+			if(! defined $SRC_CSV{$item}){
+				dp::dp "### No CSV definition for $item\n";
+				next;
+			}
+			if(! defined $ITEM_FLAG{$item}){
+				push(@ITEMS, $item);
+			}
+			$ITEM_FLAG{$item}++;
+
+			open(FD, $SRC_CSV{$item}) || die "Cannot open $SRC_CSV{$item} for $item";
+			$_ = (<FD>);
+			s/[\r\n]+$//;
+			my ($country_l, $total_l, @dates) = split(/$DLM/, $_);
+			while(<FD>){
+				s/[\r\n]+$//;
+				my ($country, $total, @data) = split(/$DLM/, $_);
+				next if($#target >= 0 && ! csvlib::search_list($country, @target));
+
+				dp::dp "$country\n";
+				for(my $d = 0; $d <= $#data; $d++){
+					my $dt = $dates[$d];
+					$COUNTRY{$item}{$country}{$dt} = $data[$d];
+					$COUNTRY_FLAG{$country}++;
+					$DATES{$dt}++;
+				}
+			}
+			close(FD);
+		}
+	}
+}
 #	{
 #		[
 #		src => $MAIN_CSV,
