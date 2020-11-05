@@ -12,8 +12,8 @@ use dp;
 use Data::Dumper;
 use Time::Local 'timelocal';
 
-my $DEBUG = 1;
-my $VERBOSE = 1;
+my $DEBUG = 0;
+my $VERBOSE = 0;
 
 my %SRC_CSV = (
 	"ccse-NC" => "$config::CSV_PATH/jhccse_NC_DAY.csv.txt",
@@ -30,24 +30,42 @@ my $BX1 = "boxes fill";
 my $HTML_DIR = "$config::HTML_PATH";
 my $IMG_DIR  = "$config::PNG_PATH";
 
-my $IMG_REL_PATH = "../IMG";
+my $IMG_REL_PATH = $config::PNG_REL_PATH;
 
-my $HTMLF   = "$HTML_DIR/comvine.html";
-my $OUT_CSV = "$IMG_DIR/comvine.csv.txt";
-my $OUT_PNG = "$IMG_DIR/comvine.png";
+my $HTMLF   = "$HTML_DIR/combine.html";
+my $OUT_CSV = "$IMG_DIR/combine.csv.txt";
+my $OUT_PNG = "$IMG_DIR/combine.png";
 
-our @PARAM_LIST = (
-	{	
-		title => "JHCCSE New Cases/Deathes",
-		time_from => "-1d",
-		time_till => "",
-		plot => [
-			{items => [qw(ccse-NC)], target => "US", label => "NewCases", ymin => "", ymax => "", graph => $LT1},
-			{items => [qw(ccse-ND)], target => "US", label => "NewDeathes", ymin => "", ymax => "", graph => $LTW},
-		],
-	},
+my @TARGET_COUNTRY = (
+	{src => "ccse", title => "JHCCSE New Cases/Deathes", list => "Japan,US"},
+	{src => "tko",  title => "Toyo Keizai New Cases/Deathes",list => "東京,大阪,北海道,神奈川,千葉,埼玉,愛知,沖縄,熊本,福岡"},
+	{src => "ccse", title => "JHCCSE NEW Cases/Deathes", list => "France,United Kingdom,Italy,Germany,Belgium,Poland,Netherlands,Czechia,Romania,Switzerland,Portugal,Sweden"},
 );
 
+
+#
+#	ADD EU 
+#
+my @PARAM_LIST = ();
+
+foreach my $tgc (@TARGET_COUNTRY){
+	my $src_nc = $tgc->{src} . "-NC";
+	my $src_nd = $tgc->{src} . "-ND";
+	my $title = $tgc->{title};
+	foreach my $country (split(/,/, $tgc->{list})){
+		my $p = {	
+			title => "$tgc->{title} $country",
+			time_from => "2020/03/01",
+			time_till => "",
+			avr_date => 7,
+			plot => [
+				{items => [$src_nc], target => $country, label => "NewCases", ymin => "", ymax => "", graph => $LTW},
+				{items => [$src_nd], target => $country, label => "NewDeathes", ymin => "", ymax => "", graph => $LT1},
+			],
+		};
+		push(@PARAM_LIST, $p);
+	}
+}
 my @CSV_FILES = ();
 my $last = "";
 
@@ -116,17 +134,17 @@ my %COUNTRY_FLAG = ();
 my %DATES = ();
 my $pn = 0;
 foreach my $p (@PARAMS){
-
-	my $csvf =  $p->{title};
-	$csvf =~ s/[\W\s]/_/g;
-	$csvf = "$IMG_DIR/$csvf";
+	dp::dp $p->{title} . "\n";
+	my $csvf =  $p->{title} ;
+	$csvf .= "rl_avr " . $p->{avr_date} if(defined $p->{avr_date});
+	$csvf =~ s/[ \/,.]/_/g;
 	$p->{dst} = "$csvf";
 
 	my @ys = &get_csvfile($p);
 	$p->{items_end} = [@ys];
 
-	dp::dp "$csvf.csv.txt\n";
-	open(OUT_CSV, "> $csvf.csv.txt" ) || die "Cannot create $csvf.csv.txt";
+	dp::dp "$csvf.csv.txt\n" if($DEBUG);
+	open(OUT_CSV, "> $IMG_DIR/$csvf.csv.txt" ) || die "Cannot create $IMG_DIR/$csvf.csv.txt";
 
 	my @LABEL = ();
 	foreach my $item (@ITEMS){
@@ -137,20 +155,29 @@ foreach my $p (@PARAMS){
 	print OUT_CSV join($DLM, "# date", @LABEL) . "\n";
 
 	my @dts = (sort keys %DATES);
-	#print OUT_CSV join($DLM, "#area", @dts) . "\n";
-
-	foreach my $dt (sort keys %DATES){
-		my @record = ($dt);
+	for(my $d = 0; $d < $#dts; $d++){
+		my $dt = $dts[$d];
+		my @record = ("2020/" . $dt);
+		my $avr_date = $p->{avr_date} // "";
 		foreach my $item (@ITEMS){
 			foreach my $country (sort keys %COUNTRY_FLAG){
-				push(@record, $COUNTRY{$item}{$country}{$dt} // 0);
+				my $v = $COUNTRY{$item}{$country}{$dt} // 0;
+				if($avr_date){
+					my $i = ($d < $avr_date) ? 0 : $d - $avr_date + 1; 
+					for(;$i < $d; $i++){
+						my $d_avr = $dts[$i];
+						$v += $COUNTRY{$item}{$country}{$d_avr} // 0;
+					}
+					$v /= $avr_date;
+				}
+				push(@record, $v);
 			}
 		}
 		print OUT_CSV join($DLM, @record) . "\n";
 	}
 	close(OUT_CSV);
 
-	print "-" x 80 . "\n";
+	print "-" x 80 . "\n" if($DEBUG);
 	#system("cat $csvf.csv.txt");
 	$pn++;
 }
@@ -173,7 +200,7 @@ foreach my $p (@PARAMS){
 	print $p->{title} . "\n" if($VERBOSE);
 	my $dst = $p->{dst};
 
-	&comvine_graph($p);
+	&combine_graph($p);
 
 	print HTML "<!-- $p->{title}  -->\n";
 	print HTML "<span class=\"c\">$now</span><br>\n";
@@ -217,18 +244,18 @@ sub	get_csvfile
 	%COUNTRY_FLAG = ();
 	%DATES = ();
 
-	dp::dp "### TITLE: " . $p->{title}  . "\n";
+	dp::dp "### TITLE: " . $p->{title}  . "\n" if($DEBUG);
 	my @graph = @{$p->{plot}};
 	my @yy = ();
 	my $yn = 0;
 	foreach my $gp (@graph){
-		dp::dp "### LABEL:" . $gp->{label}  . "\n";
+		dp::dp "### LABEL:" . $gp->{label}  . "\n" if($DEBUG);
 		my @items = @{$gp->{items}};
 		my @target = split(/,/, csvlib::valdefs($gp->{target} // "", ""));			# 明示的対象国
 
 		$yy[$yn] = 0;
 		foreach my $item (@items){
-			dp::dp "### ITEM:" . $item  . "\n";
+			dp::dp "### ITEM:" . $item  . "\n" if($DEBUG);
 			if(! defined $SRC_CSV{$item}){
 				dp::dp "### No CSV definition for $item\n";
 				next;
@@ -249,7 +276,7 @@ sub	get_csvfile
 
 				$yy[$yn]++;
 
-				dp::dp "$country\n";
+				dp::dp "$country\n" if($DEBUG);
 				for(my $d = 0; $d <= $#data; $d++){
 					my $dt = $dates[$d];
 					$COUNTRY{$item}{$country}{$dt} = $data[$d];
@@ -282,7 +309,7 @@ sub	get_csvfile
 #			{axis => "x1y2", graph => "lines linewidth 2",  item_title => "positive rate"},
 #		],
 #	},
-sub	comvine_graph
+sub	combine_graph
 {
 	my ($p) = @_;
 
@@ -297,9 +324,9 @@ sub	comvine_graph
 
 	my $gpara = {
 		p => $p,
-		csvf => $dst . ".csv.txt",
-		pngf => $pngf,
-		plotf => $plotf,
+		csvf => "$IMG_DIR/$dst" . ".csv.txt",
+		pngf => "$IMG_DIR/$pngf",
+		plotf => "$IMG_DIR/$plotf",
 		time_form => $time_from, 
 		time_till   => $time_till,
 #		xtics => $TERM,
@@ -384,7 +411,7 @@ sub	graph
 		s/[\r\n]+$//;
 		my @w = split(/$DLM/, $_);
 
-		$CSV_TIME_TILL = &date2ut("2020/" . shift(@w));
+		$CSV_TIME_TILL = &date2ut(shift(@w));
 		$CSV_TIME_FROM = $CSV_TIME_TILL if(! $CSV_TIME_FROM);
 		for(my $i = 0; $i <= $#w; $i++){
 			my $v = $w[$i];
@@ -397,7 +424,7 @@ sub	graph
 	}
 	close(CSV);
 
-	dp::dp "CSV_TIME [$CSV_TIME_FROM:$CSV_TIME_TILL]\n";
+	dp::dp "CSV_TIME [$CSV_TIME_FROM:$CSV_TIME_TILL]\n" if($DEBUG);
 	##### DEBUG for STATS
 	foreach my $k (keys %STATS){
 		my @w = ();
@@ -426,7 +453,7 @@ sub	graph
 			$PLP_STATS{MIN}[$i] = $STATS{MIN}[$ys] if($STATS{MIN}[$ys] < $PLP_STATS{MIN}[$i]);
 			$PLP_STATS{TOTAL}[$i] += $STATS{TOTAL}[$ys];
 		}
-		dp::dp "PLP_STATS ($i) " . join(",", $PLP_STATS{MAX}[$i], $PLP_STATS{MIN}[$i], $PLP_STATS{TOTAL}[$i]) . "\n" if($DEBUG);
+		dp::dp "PLP_STATS ($i) " . join(",", "MIN:" . $PLP_STATS{MIN}[$i], "MAX:" . $PLP_STATS{MAX}[$i], "TOTAL:" . $PLP_STATS{TOTAL}[$i]) . "\n" if($DEBUG);
 	
 		my $ymn = ($ymin[$i]) ? $ymin[$i] : $PLP_STATS{MIN}[$i];
 		my $ymx = ($ymax[$i]) ? $ymax[$i] : $PLP_STATS{MAX}[$i];
@@ -474,8 +501,8 @@ sub	graph
 		$utime_till = $CSV_TIME_TILL;
 		dp::dp "TIME_TILL: $time_till" . &ut2dt($utime_till) . "\n" if($DEBUG);
 	}
-	my $xrange = sprintf("['%s':'%s']", &ut2dt($utime_from), &ut2dt($utime_till));
-	$title .=  sprintf(" (%s:%s)", &ut2dt($utime_from), &ut2dt($utime_till));
+	my $xrange = sprintf("['%s':'%s']", &ut2md($utime_from), &ut2md($utime_till));
+	$title .=  sprintf(" (%s:%s)", &ut2md($utime_from), &ut2md($utime_till));
 
 	#
 	#	calculate xtics
@@ -496,10 +523,12 @@ sub	graph
 	}
 	my $max_data = 500;
 	my $ev = int(($graph_term / (5 * 60)) / $max_data);
-	my $every = ($ev > 0) ? "every $ev" : "";
+	my $every = ""; # ($ev > 0) ? "every $ev" : "";
 	dp::dp  "### Every : " . join(",", $xtics, $max_data, $ev, $every) . "\n" if($DEBUG);
 	#$xtics = int($xtics / $xt_unit) * $xt_unit;
 
+	dp::dp $csvf . "\n" if($DEBUG);
+	dp::dp $plotf . "\n" if($DEBUG);
 	dp::dp join("\t", "from", $time_from, $utime_from, &ut2dt($utime_from)) ."\n" if($DEBUG);
 	dp::dp join("\t", "till", $time_till, $utime_till, &ut2dt($utime_till)) ."\n" if($DEBUG);
 	dp::dp join("\t", "xtics", $graph_term, $xt_number, $graph_term / $xt_number, $xtics) ."\n" if($DEBUG);
@@ -510,16 +539,16 @@ $COLOR_SET
 set style fill solid 0.2
 set xtics rotate by -90
 set xdata time
-set timefmt '%Y-%m-%d %H:%M'
+set timefmt '%Y/%m/%d'
 #set format x '%m-%d %H:%M'
-set format x '%H:%M %m-%d'
+set format x '%m/%d'
 set xrange $xrange
 $yl
 $yr
 $yl2
 $yr2
-#set mxtics 2
-#set mytics 2
+set mxtics 2
+set mytics 2
 set grid xtics ytics mxtics mytics
 set key below
 set title '$title' font "IPAexゴシック,12" enhanced
@@ -536,23 +565,16 @@ _EOD_
 
 	my @p= ();
 	#dp::dp join(",", $item_number, @$item_names) . ":\n";
+	my $c = 0;
 	for(my $i = 0; $i < $plp_number; $i++){
 		my $plp = $p->{plot}[$i];
 		my $axis = ($i == 0) ? "axis x1y1" : "axis x1y2";
 		#dp::dp "plp :\n " . Dumper $plp;
-		my $graph = $plp->{plot} // "lines lw 1";
-#		if($graph =~ /lines/) {
-#			if($i == 0){ 
-#				$graph .= " linewidth 2";
-#			}
-#			else {
-#				#$graph .= " linewidth 1 dt (10,4) ";
-#				$graph .= " linewidth 1";
-#			}
-#		}
-		foreach my $c (@{$cols[$i]}){
+		my $graph = $plp->{graph} // "lines lw 1";
+
+		for(; $c < $p->{items_end}->[$i]; $c++){
 			my $s = sprintf("'%s' using 1:%s $every %s with %s title '%s'", 
-				$csvf, $c + 1, $axis, $graph, 
+				$csvf, $c + 2, $axis, $graph, 
 				$CSV_ITEMS[$c]
 			);
 			push(@p, $s);
@@ -580,7 +602,7 @@ _EOD_
 	my $arrow_cmd = join("\n", @arrows);
 	#dp::dp "\n" . $arrow_cmd . "\n";
 
-	$PARAMS =~ s/#ARROW#/$arrow_cmd/;
+	#$PARAMS =~ s/#ARROW#/$arrow_cmd/;
 
 	dp::dp $plot . "\n" if($DEBUG);
 
@@ -642,6 +664,7 @@ sub	valdef
 	$v = $d if(!defined $v);
 	return $v;
 }
+
 #
 #
 #	unix_time, ":", -> "01:23:45"
@@ -650,13 +673,27 @@ sub ut2dt
 {
 	my ($tm) = @_;
 
-	dp::dp "ut2dt: " . join(",", caller) . "\n";
+	#dp::dp "ut2dt: " . join(",", caller) . "\n";
 	$tm = $tm // time;
 	my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($tm);
 	my $s = sprintf("%04d-%02d-%02d %02d:%02d:%02d", $year + 1900, $mon+1, $mday, $hour, $min, $sec);
 	return $s;
 }
 
+#
+#
+#	unix_time, ":", -> "01:23:45"
+#
+sub ut2md
+{
+	my ($tm) = @_;
+
+	#dp::dp "ut2dt: " . join(",", caller) . "\n";
+	$tm = $tm // time;
+	my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($tm);
+	my $s = sprintf("%04d/%02d/%02d",  $year + 1900, $mon+1, $mday);
+	return $s;
+}
 #
 #	year, month, date, hour, min, sec -> unix_time
 #
@@ -697,16 +734,22 @@ sub	time_params
 {
 	my ($tms, $now) = @_;
 
-	dp::dp "[$tms:$now]\n";
+	dp::dp "time_params[$tms:$now]\n" if($DEBUG);
 	$now = $now // time;
 	if($now =~ /\//){
-		print "<<$now:" .  &date2ut("2020/$now") . ">>\n";
-		$now = &date2ut("2020/$now");
+		my @w = split(/\//, $now);
+		$now = "2020/$now" if($#w < 2);
+		dp::dp "<<$now:" .  &date2ut($now) . ">>\n" if($DEBUG);
+		$now = &date2ut($now);
 	}
-
 	my $utime = $now;
-	if($tms =~ /^[0-9].*[-:]/){
-		$utime = &dt2ut($tms);
+
+	if($tms =~ /\//){
+		#$utime = &dt2ut($tms);
+		my @w = split(/\//, $tms);
+		$tms = "2020/$tms" if($#w < 2);
+		$utime = &date2ut($tms);
+		dp::dp "<<$tms:" .  $utime . ">>\n" if($DEBUG);
 	}
 	elsif($tms =~ /^[-+]/){			# +1d, -1d 1w 1m
 		$tms =~ /([\-\+][0-9]+)([a-zA-Z]+)/;

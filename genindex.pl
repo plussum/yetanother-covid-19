@@ -95,6 +95,7 @@ foreach my $src (@src_list){
 	#print FRAME "<br>\n";
 }
 print FRAME "<li><a href =\"HTML/tokyo.html\" target=\"graph\">TOKYO OPEN DATA</a></li>\n";
+print FRAME "<li><a href =\"HTML/combine.html\" target=\"graph\">COMBINDED DATA</a></li>\n";
 print FRAME "<br><b>DOCOMO</b><br>\n";
 print FRAME "<li><a href =\"HTML/docomoPP.html\" target=\"graph\">モバイル空間統計 感染拡大前比 </a></li>\n";
 print FRAME "<li><a href =\"HTML/docomoPE.html\" target=\"graph\">モバイル空間統計 緊急事態宣言前比</a></li>\n";

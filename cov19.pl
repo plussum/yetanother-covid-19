@@ -143,6 +143,7 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 	$DATA_SOURCE = "ku" if(/^ku$/i);
 	$DATA_SOURCE = "tkpos" if(/^tkpos$/i);
 	$DATA_SOURCE = "tkage" if(/^tko*age$/i);
+	$DATA_SOURCE = "comb" if(/^comb/i);
 
 	if(/-debug/i){
 		$config::DEBUG = 1;
@@ -267,6 +268,7 @@ if($FULL_SOURCE){
 	system("./tokyo.pl -DL $S; ./tokyo.pl  $S -av7");
 	system("./docomo.pl -DL $S -ALL");
 	#system("./tokyo.pl -av7");
+	system("./combine.pl $S");
 	system("./summary.pl $S");
 	system("./genindex.pl $S");
 	system("(cd $config::HTML_PATH; find . -mtime +7 -exec rm {} \\;)");
@@ -292,10 +294,6 @@ $mep = tko::new()  if($DATA_SOURCE eq "tko");
 $mep = tkoku::new()  if($DATA_SOURCE eq "ku");
 $mep = tkoage::new()  if($DATA_SOURCE eq "tkage");
 
-if(! $DATA_SOURCE){
-	dp::dp "./cov19.pl " . join(" | ", @ALL_DATA_SOURCES) . " -DL -all -FULL --ERN --FT --POP \n";
-	exit 1;
-}
 
 if($DATA_SOURCE eq "tkpos"){
 	dp::dp "######### " . &str_time($now) . " #######\n";
@@ -305,6 +303,20 @@ if($DATA_SOURCE eq "tkpos"){
 	system("./tokyo.pl $d $S");
 	exit 0;
 }
+if($DATA_SOURCE eq "comb"){
+	dp::dp "######### " . &str_time($now) . " #######\n";
+	my $d = ($DOWNLOAD) ? "-DL" : "";
+	my $S = ($config::VERBOSE) ? "" : "-S";
+	#dp::dp("##### ./tokyo.pl -DL $S; tokyo.pl  $S -av7\n");
+	system("./combine.pl $d $S");
+	exit 0;
+}
+
+if(! $DATA_SOURCE){
+	dp::dp "./cov19.pl " . join(" | ", @ALL_DATA_SOURCES) . " -DL -all -FULL --ERN --FT --POP \n";
+	exit 1;
+}
+
 die "no package for $DATA_SOURCE\n" if(! $mep);
 
 

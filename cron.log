@@ -22867,3 +22867,49 @@ Agent pid 14594
  rewrite PNG/22_tko_NEW_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (99%)
 /home/masataka/who/src
 Agent pid 14625
+[develop a344ed2] update
+ 1 file changed, 77 insertions(+)
+########################################
+#####2020/11/05 20:20:10
+########################################
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/05 20:20:10 #######
+#[357] ./cov19.pl tkage,DAY,POP
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/05 20:20:17 #######
+#[357] ./cov19.pl ku,DAY,POP
+Updating bb4871f..5583fb4
+Fast-forward
+ data/cases_total.csv                   |  1 +
+ data/data.json                         |  2 +-
+ data/death_total.csv                   |  1 +
+ data/effective_reproduction_number.csv |  1 +
+ data/pcr_case_daily.csv                | 64 +++++++++++++++++-----------------
+ data/pcr_positive_daily.csv            |  1 +
+ data/pcr_tested_daily.csv              |  1 +
+ data/prefectures.csv                   | 51 +++++++++++++++++++++++++--
+ data/recovery_total.csv                |  1 +
+ data/serious.csv                       |  1 +
+ 10 files changed, 89 insertions(+), 35 deletions(-)
+/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data
+cases_total.csv
+data.json
+death_total.csv
+demography.csv
+effective_reproduction_number.csv
+pcr_case_daily.csv
+pcr_positive_daily.csv
+pcr_tested_daily.csv
+prefectures.csv
+recovery_total.csv
+serious.csv
+#[356] ./cov19.pl ######### 2020/11/05 20:20:42 #######
+#[357] ./cov19.pl tko,DAY,POP
+Already up-to-date.
+#[356] ./cov19.pl ######### 2020/11/05 20:21:45 #######
+#[357] ./cov19.pl ccse,DAY,POP
+#[299] ./cov19.pl ######### 2020/11/05 20:24:06 #######
+#[356] ./cov19.pl ######### 2020/11/05 20:24:09 #######
+#[357] ./cov19.pl usast,DAY,POP
+#[356] ./cov19.pl ######### 2020/11/05 20:25:00 #######
+#[357] ./cov19.pl usa,DAY,POP
