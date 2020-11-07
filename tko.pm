@@ -92,6 +92,11 @@ my @jag_param = (
 	{ext => "#KIND# taget cities  (#LD#) #SRC# 03/12", start_day => "03/12",  lank =>[0, 99] , exclusion => $EXCLUSION, 
 		target => $MAIN_PREF, label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 300},
 
+	{ext => "#KIND# taget cities  (#LD#) #SRC# 2m", start_day => "-60",  lank =>[0, 99] , exclusion => $EXCLUSION, 
+		target => $MAIN_PREF, label_skip => 1, graph => "lines", avr_date => 7, term_ysize => 300},
+	{ext => "#KIND# taget cities  (#LD#) #SRC# 2m", start_day => "-60",  lank =>[0, 99] , exclusion => $EXCLUSION, 
+		target => $MAIN_PREF, label_skip => 1, graph => "lines",  term_ysize => 300},
+
 #	{ext => "#KIND# Fukuoka,Hokaido (#LD#) #SRC# 03/12", start_day => "03/12",  lank =>[0, 99] , exclusion => $EXCLUSION, 
 #		target => "福岡,北海道", label_skip => 7, graph => "lines", term_ysize => 300},
 #	{ext => "#KIND# Fukuoka,Hokaido (#LD#) #SRC# 03/12", start_day => "03/12",  lank =>[0, 99] , exclusion => $EXCLUSION, 
