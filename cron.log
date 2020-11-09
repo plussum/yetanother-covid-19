@@ -33865,3 +33865,165 @@ Agent pid 10813
  rewrite PNG/22_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (99%)
 /home/masataka/who/src
 Agent pid 10844
+[develop a2aa2de] update
+ 1 file changed, 75 insertions(+)
+########################################
+#####2020/11/09 14:20:07
+########################################
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/09 14:20:08 #######
+#[357] ./cov19.pl tkage,DAY,POP
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/09 14:20:17 #######
+#[357] ./cov19.pl ku,DAY,POP
+Already up-to-date.
+/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data
+cases_total.csv
+data.json
+death_total.csv
+demography.csv
+effective_reproduction_number.csv
+pcr_case_daily.csv
+pcr_positive_daily.csv
+pcr_tested_daily.csv
+prefectures.csv
+recovery_total.csv
+serious.csv
+#[356] ./cov19.pl ######### 2020/11/09 14:20:48 #######
+#[357] ./cov19.pl tko,DAY,POP
+Updating 70406f3..392363f
+Fast-forward
+ .../csse_covid_19_daily_reports/11-07-2020.csv     | 7922 ++++++++++----------
+ .../csse_covid_19_daily_reports_us/11-07-2020.csv  |  118 +-
+ .../time_series_covid19_confirmed_US.csv           | 6682 ++++++++---------
+ .../time_series_covid19_confirmed_global.csv       |    4 +-
+ 4 files changed, 7363 insertions(+), 7363 deletions(-)
+#[356] ./cov19.pl ######### 2020/11/09 14:22:02 #######
+#[357] ./cov19.pl ccse,DAY,POP
+#[299] ./cov19.pl ######### 2020/11/09 14:25:01 #######
+#[356] ./cov19.pl ######### 2020/11/09 14:25:04 #######
+#[357] ./cov19.pl usast,DAY,POP
+#[356] ./cov19.pl ######### 2020/11/09 14:26:08 #######
+#[357] ./cov19.pl usa,DAY,POP
+#[146] ./tokyo.pl (cd /mnt/f/cov/plussum.github.io/tokyo/covid19; git pull origin development)
+Already up-to-date.
+#[122] ./combine.pl Unkown option -S
+#[268] ./summary.pl ### Not found [0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_ASIA_0301_rl_avr_7_rl_avr_
+#[268] ./summary.pl ### Not found [0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_ASIA_0301_rl_avr_7_rl_avr_
+Generate index.html and frame.html
+jhccse:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tko:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoku:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoage:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usast:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usa:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+#[281] ./cov19.pl UPLOAD github.io
+/mnt/f/cov/plussum.github.io
+Agent pid 13163
+[master 17254a6] update
+ 329 files changed, 20341 insertions(+), 22649 deletions(-)
+ rewrite PNG/01_jhccse_NEW_CASES_COUNT_DAY_all_rl_avr_7.png (91%)
+ rewrite PNG/01_jhccse_NEW_CASES_COUNT_POP_all_rl_avr_7.png (80%)
+ rewrite PNG/02_jhccse_CCM_CASES_COUNT_DAY_CCM_TOP20_.png (90%)
+ rewrite PNG/02_jhccse_CCM_CASES_COUNT_POP_CCM_TOP20_.png (98%)
+ rewrite PNG/02_jhccse_NEW_CASES_COUNT_DAY_all_.png (97%)
+ delete mode 100644 PNG/02_jhccse_NEW_RECOVERS_ERN_DAY_Japan_03_01_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/02_jhccse_NEW_RECOVERS_ERN_DAY_Japan_03_01_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/02_jhccse_NEW_RECOVERS_ERN_DAY_Japan_03_01_ip_5_lp_8_rl_avr_7_.png
+ rewrite PNG/03_jhccse_CCM_CASES_COUNT_DAY_CCM_SELECTED_.png (96%)
+ delete mode 100644 PNG/03_jhccse_NEW_RECOVERS_ERN_DAY_Japan_1m_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/03_jhccse_NEW_RECOVERS_ERN_DAY_Japan_1m_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/03_jhccse_NEW_RECOVERS_ERN_DAY_Japan_1m_ip_5_lp_8_rl_avr_7_.png
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_-plot.csv.txt (90%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_.png (66%)
+ rewrite PNG/03_usa_NEW_CASES_KV_DAY_USA_1month_.png (98%)
+ delete mode 100644 PNG/04_jhccse_NEW_RECOVERS_ERN_DAY_Germany_0301_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/04_jhccse_NEW_RECOVERS_ERN_DAY_Germany_0301_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/04_jhccse_NEW_RECOVERS_ERN_DAY_Germany_0301_ip_5_lp_8_rl_avr_7_.png
+ rewrite PNG/05_jhccse_NEW_CASES_COUNT_DAY_01_05_from_0301_rl_avr_7.png (99%)
+ delete mode 100644 PNG/05_jhccse_NEW_RECOVERS_ERN_DAY_Germany_1month_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/05_jhccse_NEW_RECOVERS_ERN_DAY_Germany_1month_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/05_jhccse_NEW_RECOVERS_ERN_DAY_Germany_1month_ip_5_lp_8_rl_avr_7_.png
+ rewrite PNG/05_usast_NEW_DEATHS_FT_DAY_USST_31_40_3340_.png (99%)
+ rewrite PNG/06_jhccse_NEW_CASES_ERN_DAY_Forcus_area_01_1month_ip_5_lp_8_rl_avr_7_.png (60%)
+ delete mode 100644 PNG/06_jhccse_NEW_RECOVERS_ERN_DAY_Forcus_area_01_1month_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/06_jhccse_NEW_RECOVERS_ERN_DAY_Forcus_area_01_1month_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/06_jhccse_NEW_RECOVERS_ERN_DAY_Forcus_area_01_1month_ip_5_lp_8_rl_avr_7_.png
+ rewrite PNG/06_usast_CCM_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7.png (99%)
+ rewrite PNG/06_usast_NEW_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7.png (73%)
+ rewrite PNG/07_jhccse_NEW_CASES_COUNT_POP_11_20_from_0301_rl_avr_7.png (79%)
+ delete mode 100644 PNG/07_jhccse_NEW_RECOVERS_ERN_DAY_Focusing_area_from_0301_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/07_jhccse_NEW_RECOVERS_ERN_DAY_Focusing_area_from_0301_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/07_jhccse_NEW_RECOVERS_ERN_DAY_Focusing_area_from_0301_ip_5_lp_8_rl_avr_7_.png
+ rewrite PNG/07_usast_CCM_CASES_COUNT_DAY_TOP_31_40_2month_rl_avr_7.png (98%)
+ rewrite PNG/07_usast_NEW_CASES_COUNT_DAY_TOP_31_40_2month_rl_avr_7.png (99%)
+ delete mode 100644 PNG/08_jhccse_NEW_RECOVERS_ERN_DAY_Europ_0301_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/08_jhccse_NEW_RECOVERS_ERN_DAY_Europ_0301_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/08_jhccse_NEW_RECOVERS_ERN_DAY_Europ_0301_ip_5_lp_8_rl_avr_7_.png
+ delete mode 100644 PNG/09_jhccse_NEW_RECOVERS_ERN_DAY_Europ_1month_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/09_jhccse_NEW_RECOVERS_ERN_DAY_Europ_1month_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/09_jhccse_NEW_RECOVERS_ERN_DAY_Europ_1month_ip_5_lp_8_rl_avr_7_.png
+ delete mode 100644 PNG/10_jhccse_NEW_RECOVERS_ERN_DAY_Europ_1month_ip_5_lp_8_rl_avr_7_ymax2-plot.csv.txt
+ delete mode 100644 PNG/10_jhccse_NEW_RECOVERS_ERN_DAY_Europ_1month_ip_5_lp_8_rl_avr_7_ymax2-plot.txt
+ delete mode 100644 PNG/10_jhccse_NEW_RECOVERS_ERN_DAY_Europ_1month_ip_5_lp_8_rl_avr_7_ymax2.png
+ rewrite PNG/10_usa_CCM_DEATHS_COUNT_DAY_TOP_21_30_2month_-plot.csv.txt (98%)
+ rewrite PNG/10_usa_CCM_DEATHS_COUNT_DAY_TOP_21_30_2month_-plot.txt (64%)
+ rewrite PNG/10_usa_CCM_DEATHS_COUNT_DAY_TOP_21_30_2month_.png (98%)
+ rewrite PNG/11_jhccse_NEW_CASES_COUNT_DAY_01_05_from_0301_.png (98%)
+ delete mode 100644 PNG/11_jhccse_NEW_RECOVERS_ERN_DAY_TOP_01_05_from_0301_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/11_jhccse_NEW_RECOVERS_ERN_DAY_TOP_01_05_from_0301_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/11_jhccse_NEW_RECOVERS_ERN_DAY_TOP_01_05_from_0301_ip_5_lp_8_rl_avr_7_.png
+ delete mode 100644 PNG/12_jhccse_NEW_RECOVERS_ERN_DAY_TOP_06_10_from_0301_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/12_jhccse_NEW_RECOVERS_ERN_DAY_TOP_06_10_from_0301_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/12_jhccse_NEW_RECOVERS_ERN_DAY_TOP_06_10_from_0301_ip_5_lp_8_rl_avr_7_.png
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (98%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_-plot.txt (62%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_.png (98%)
+ rewrite PNG/12_usa_NEW_DEATHS_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (71%)
+ rewrite PNG/12_usa_NEW_DEATHS_COUNT_DAY_TOP_41_50_2month_.png (98%)
+ rewrite PNG/13_jhccse_NEW_CASES_COUNT_POP_11_20_from_0301_.png (72%)
+ delete mode 100644 PNG/13_jhccse_NEW_RECOVERS_ERN_DAY_TOP_10_3w_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/13_jhccse_NEW_RECOVERS_ERN_DAY_TOP_10_3w_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/13_jhccse_NEW_RECOVERS_ERN_DAY_TOP_10_3w_ip_5_lp_8_rl_avr_7_.png
+ rewrite PNG/13_usast_CCM_CASES_COUNT_POP_TOP_21_30_2month_-plot.csv.txt (74%)
+ rewrite PNG/13_usast_CCM_CASES_COUNT_POP_TOP_21_30_2month_.png (99%)
+ rewrite PNG/13_usast_NEW_CASES_COUNT_POP_TOP_21_30_2month_-plot.csv.txt (75%)
+ rewrite PNG/13_usast_NEW_CASES_COUNT_POP_TOP_21_30_2month_.png (98%)
+ delete mode 100644 PNG/14_jhccse_NEW_RECOVERS_ERN_DAY_TOP_10_2w_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/14_jhccse_NEW_RECOVERS_ERN_DAY_TOP_10_2w_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/14_jhccse_NEW_RECOVERS_ERN_DAY_TOP_10_2w_ip_5_lp_8_rl_avr_7_.png
+ rewrite PNG/14_usast_CCM_CASES_COUNT_DAY_TOP_31_40_2month_.png (99%)
+ rewrite PNG/14_usast_CCM_DEATHS_COUNT_DAY_TOP_31_40_2month_-plot.csv.txt (92%)
+ rewrite PNG/14_usast_CCM_DEATHS_COUNT_DAY_TOP_31_40_2month_.png (98%)
+ rewrite PNG/14_usast_NEW_CASES_COUNT_DAY_TOP_31_40_2month_.png (85%)
+ delete mode 100644 PNG/15_jhccse_NEW_RECOVERS_ERN_DAY_TOP_10_1w_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/15_jhccse_NEW_RECOVERS_ERN_DAY_TOP_10_1w_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/15_jhccse_NEW_RECOVERS_ERN_DAY_TOP_10_1w_ip_5_lp_8_rl_avr_7_.png
+ rewrite PNG/15_tko_NEW_DEATHS_COUNT_DAY_Japan_16_20_.png (99%)
+ delete mode 100644 PNG/16_jhccse_NEW_RECOVERS_ERN_DAY_Japan_ip_5_lp_8_rl_avr_7_-plot.csv.txt
+ delete mode 100644 PNG/16_jhccse_NEW_RECOVERS_ERN_DAY_Japan_ip_5_lp_8_rl_avr_7_-plot.txt
+ delete mode 100644 PNG/16_jhccse_NEW_RECOVERS_ERN_DAY_Japan_ip_5_lp_8_rl_avr_7_.png
+ rewrite PNG/16_tko_CCM_DEATHS_COUNT_DAY_Japan_01_10_1m_.png (64%)
+ rewrite PNG/17_jhccse_NEW_CASES_COUNT_DAY_2month_01_05_rl_avr_7.png (99%)
+ create mode 100644 PNG/17_jhccse_NEW_CASES_ERN_DAY_Japan_ip_5_lp_8_rl_avr_7_2m-plot.csv.txt
+ create mode 100644 PNG/17_jhccse_NEW_CASES_ERN_DAY_Japan_ip_5_lp_8_rl_avr_7_2m-plot.txt
+ create mode 100644 PNG/17_jhccse_NEW_CASES_ERN_DAY_Japan_ip_5_lp_8_rl_avr_7_2m.png
+ rewrite PNG/18_tko_CCM_DEATHS_COUNT_DAY_Japan_11_20_1m_rl_avr_7.png (69%)
+ rewrite PNG/18_tko_NEW_DEATHS_COUNT_DAY_Japan_11_20_1m_rl_avr_7.png (98%)
+ rewrite PNG/20_jhccse_NEW_CASES_COUNT_POP_2month_21_30_rl_avr_7.png (75%)
+ rewrite PNG/21_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_-plot.csv.txt (94%)
+ rewrite PNG/21_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_.png (99%)
+ rewrite PNG/22_jhccse_NEW_CASES_COUNT_DAY_2month_01_05_.png (98%)
+ rewrite PNG/22_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_-plot.csv.txt (79%)
+ rewrite PNG/22_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (98%)
+ rewrite PNG/25_jhccse_NEW_CASES_COUNT_POP_2month_21_30_.png (82%)
+ rewrite PNG/30_tko_CCM_DEATHS_COUNT_DAY_taget_cities_2m-plot.csv.txt (88%)
+ rewrite PNG/30_tko_CCM_DEATHS_COUNT_DAY_taget_cities_2m.png (60%)
+/home/masataka/who/src
+Agent pid 13195

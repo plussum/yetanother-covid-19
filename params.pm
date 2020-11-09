@@ -203,6 +203,8 @@ our	@PARMS_RT = (
 
 	{ext => "#KIND# Japan  #RT_TD#",   start_day => "03/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
 		label_skip => 7, graph => "lines", },
+	{ext => "#KIND# Japan  #RT_TD# 2m",   start_day => -60, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
+		label_skip => 7, graph => "lines", },
 );
 
 our	@PARAMS_POP = (
