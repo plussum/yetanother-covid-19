@@ -37,12 +37,15 @@ my @summary = (
 
 			"<H1>NEW CASES/DEATHS by REAGION</H1>",
 			"[0-9]{2}_tko_NEW_CASES_COUNT_DAY_Japan_TOP20_rl_avr_",
-			"[0-9]{2}_tko_NEW_CASES_COUNT_POP_Japan_TOP20_rl_avr_",
-			"[0-9]{2}_tko_NEW_DEATHS_COUNT_DAY_Japan_TOP20_rl_avr_",
-			"[0-9]{2}_tko_NEW_DEATHS_COUNT_POP_Japan_TOP20_rl_avr_",
-
 			"[0-9]{2}_tko_NEW_CASES_COUNT_DAY_Japan_01_10_1m_rl_avr",
+			"[0-9]{2}_tko_NEW_CASES_COUNT_POP_Japan_TOP20_rl_avr_",
+			"[0-9]{2}_tko_NEW_CASES_COUNT_POP_Japan_01_10_1m_rl_avr_",
+
+			"[0-9]{2}_tko_NEW_DEATHS_COUNT_DAY_Japan_TOP20_rl_avr_",
 			"[0-9]{2}_tko_NEW_DEATHS_COUNT_DAY_Japan_01_10_1m_rl_avr",
+			"[0-9]{2}_tko_NEW_DEATHS_COUNT_POP_Japan_TOP20_rl_avr_",
+			"[0-9]{2}_tko_NEW_DEATHS_COUNT_POP_Japan_01_10_1m_rl_avr_",
+
 
 			"<H1>TOKYO </H1>",
 			"nonetky_pr_avr[1-9]",
@@ -108,8 +111,8 @@ my @summary = (
 			"[0-9]{2}_jhccse_NEW_CASES_ERN_DAY_Forcus_area_01_1month_ip_",
 
 			"<H1>Forcusing area</H1>",
-			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_ASIA_0301_rl_avr_7_rl_avr_",
-			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_ASIA_0301_rl_avr_7_rl_avr_",
+			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_ASIA_0301_rl_avr",
+			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_ASIA_0301_rl_avr",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_Sweden_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_Sweden_rl_avr_",
 		],
