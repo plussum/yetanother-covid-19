@@ -41,6 +41,9 @@ my @summary = (
 			"[0-9]{2}_tko_NEW_DEATHS_COUNT_DAY_Japan_TOP20_rl_avr_",
 			"[0-9]{2}_tko_NEW_DEATHS_COUNT_POP_Japan_TOP20_rl_avr_",
 
+			"[0-9]{2}_tko_NEW_CASES_COUNT_DAY_Japan_01_10_1m_rl_avr",
+			"[0-9]{2}_tko_NEW_DEATHS_COUNT_DAY_Japan_01_10_1m_rl_avr",
+
 			"<H1>TOKYO </H1>",
 			"nonetky_pr_avr[1-9]",
 			"nonetky_st_avr[1-9]",
