@@ -172,7 +172,7 @@ our	@PARMS_RT = (
 		label_skip => 7, graph => "lines"},
 	{ext => "#KIND# Japan 03/01 #RT_TD#", start_day => "03/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
 		label_skip => 7, graph => "lines"},
-	{ext => "#KIND# Japan 1m #RT_TD#",   start_day => -31, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan",
+	{ext => "#KIND# Japan 2m #RT_TD#",   start_day => -61, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan",
 		 label_skip => 1, graph => "lines",  ymin => 0},
 	{ext => "#KIND# Germany 0301 #RT_TD#",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Germany",
 		 label_skip => 7, graph => "lines", },

@@ -30,7 +30,7 @@ my @summary = (
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_Japan_[0-9]{4}_rl_avr",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_Japan_[0-9]{4}_rl_avr",
 			"[0-9]{2}_jhccse_NEW_CASES_ERN_DAY_Japan[_0-9]+ip_[0-9]+_lp_[0-9]+_rl_avr_[0-9]+",
-			"[0-9]{2}_jhccse_NEW_CASES_ERN_DAY_Japan_[0-9]m[_0-9]+ip_[0-9]+_lp_[0-9]+_rl_avr_[0-9]+",
+			"[0-9]{2}_jhccse_NEW_CASES_ERN_DAY_Japan_2m[_0-9]+ip_[0-9]+_lp_[0-9]+_rl_avr_[0-9]+",
 
 			"docomoPEサマリ主要地域avrrl",
 			"docomoPE東京_ALLrlavr__maxval",
