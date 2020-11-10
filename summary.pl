@@ -57,10 +57,14 @@ my @summary = (
 			"[0-9]{2}_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_ruiseki02_rl_avr_",
 			"[0-9]{2}_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_rl_avr_",
 			"[0-9]{2}_tko_NEW_CASES_ERN_DAY_Tokyo_from[_0-9]+ip_[0-9]+_lp_[0-9]+_rl_avr_",
+			"[0-9]{2}_tko_NEW_CASES_ERN_DAY_Tokyo_2m_ip_[0-9]+_lp_[0-9]+_rl_avr_",
 
 			"<H1>TOKYO REAGION</H1>",
 			"[0-9]{2}_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_rl_avr_",
+			"[0-9]{2}_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP01_10_2m",
+			"[0-9]{2}_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP11_20_2m",
 			"[0-9]{2}_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_rl_avr_",
+			"[0-9]{2}_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP01_10_2m",
 
 			"<H1>TOKYO OTHER</H1>",
 			"[0-9]{2}_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_rl_avr_",

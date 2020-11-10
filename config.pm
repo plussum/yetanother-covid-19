@@ -24,7 +24,7 @@ our $CSV_REL_PATH  = "../CSV";		# HTML からの相対パス
 our $WHO_INDEX = "who_index.html";
 our $RT_IP = 5;
 our $RT_LP = 8;
-our $THRESH_FT = {NC => 9, ND => 3, NR => 3};
+our $THRESH_FT = {NC => 9, ND => 3, NR => 3};		# 
 
 our $POPF = "$WIN_PATH/pop.csv";
 #our $POPF_JP = "$WIN_PATH/popjp.txt";
