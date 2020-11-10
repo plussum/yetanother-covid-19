@@ -40215,3 +40215,78 @@ Agent pid 904
  rewrite PNG/25_jhccse_NEW_CASES_COUNT_POP_2month_21_30_.png (82%)
 /home/masataka/who/src
 Agent pid 937
+[develop d4eae7f] update
+ 1 file changed, 113 insertions(+)
+########################################
+#####2020/11/10 23:43:06
+########################################
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/10 23:43:06 #######
+#[357] ./cov19.pl tkage,DAY,POP
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/10 23:43:13 #######
+#[357] ./cov19.pl ku,DAY,POP
+Already up-to-date.
+/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data
+cases_total.csv
+data.json
+death_total.csv
+demography.csv
+effective_reproduction_number.csv
+pcr_case_daily.csv
+pcr_positive_daily.csv
+pcr_tested_daily.csv
+prefectures.csv
+recovery_total.csv
+serious.csv
+#[356] ./cov19.pl ######### 2020/11/10 23:43:40 #######
+#[357] ./cov19.pl tko,DAY,POP
+Already up-to-date.
+#[356] ./cov19.pl ######### 2020/11/10 23:44:41 #######
+#[357] ./cov19.pl ccse,DAY,POP
+#[299] ./cov19.pl ######### 2020/11/10 23:47:02 #######
+#[356] ./cov19.pl ######### 2020/11/10 23:47:04 #######
+#[357] ./cov19.pl usast,DAY,POP
+#[356] ./cov19.pl ######### 2020/11/10 23:47:56 #######
+#[357] ./cov19.pl usa,DAY,POP
+#[146] ./tokyo.pl (cd /mnt/f/cov/plussum.github.io/tokyo/covid19; git pull origin development)
+Already up-to-date.
+#[122] ./combine.pl Unkown option -S
+Generate index.html and frame.html
+jhccse:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tko:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoku:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoage:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usast:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usa:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+#[281] ./cov19.pl UPLOAD github.io
+/mnt/f/cov/plussum.github.io
+Agent pid 2258
+[master 4695f85] update
+ 174 files changed, 16358 insertions(+), 16358 deletions(-)
+ rewrite PNG/01_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_.png (63%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_-plot.csv.txt (60%)
+ rewrite PNG/04_jhccse_NEW_DEATHS_FT_DAY_TOP10_268_.png (84%)
+ rewrite PNG/11_tko_CCM_DEATHS_COUNT_DAY_Japan_01_08_1m-plot.csv.txt (89%)
+ rewrite PNG/11_tko_CCM_DEATHS_COUNT_DAY_Japan_01_08_1m.png (60%)
+ rewrite PNG/11_usa_CCM_DEATHS_COUNT_DAY_TOP_31_40_2month_-plot.csv.txt (94%)
+ rewrite PNG/11_usa_CCM_DEATHS_COUNT_DAY_TOP_31_40_2month_.png (98%)
+ rewrite PNG/12_usa_NEW_DEATHS_COUNT_DAY_TOP_41_50_2month_.png (98%)
+ rewrite PNG/15_tko_NEW_DEATHS_COUNT_DAY_Japan_16_20_.png (98%)
+ rewrite PNG/16_tko_CCM_DEATHS_COUNT_DAY_Japan_01_10_1m_-plot.csv.txt (88%)
+ rewrite PNG/16_tko_CCM_DEATHS_COUNT_DAY_Japan_01_10_1m_.png (61%)
+ rewrite PNG/18_tko_NEW_DEATHS_COUNT_DAY_Japan_11_20_1m_rl_avr_7.png (65%)
+ rewrite PNG/21_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_-plot.csv.txt (96%)
+ rewrite PNG/21_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_.png (99%)
+ rewrite PNG/22_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_-plot.csv.txt (85%)
+ rewrite PNG/22_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (99%)
+ rewrite PNG/30_tko_CCM_DEATHS_COUNT_DAY_taget_cities_2m-plot.csv.txt (65%)
+ rewrite PNG/30_tko_CCM_DEATHS_COUNT_DAY_taget_cities_2m.png (60%)
+/home/masataka/who/src
+Agent pid 2290
