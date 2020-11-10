@@ -36607,3 +36607,374 @@ Agent pid 7173
  rewrite PNG/22_tko_NEW_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (98%)
 /home/masataka/who/src
 Agent pid 7204
+[develop 262aebb] update
+ 1 file changed, 85 insertions(+)
+########################################
+#####2020/11/10 10:20:03
+########################################
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/10 10:20:03 #######
+#[357] ./cov19.pl tkage,DAY,POP
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/10 10:20:10 #######
+#[357] ./cov19.pl ku,DAY,POP
+Already up-to-date.
+/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data
+cases_total.csv
+data.json
+death_total.csv
+demography.csv
+effective_reproduction_number.csv
+pcr_case_daily.csv
+pcr_positive_daily.csv
+pcr_tested_daily.csv
+prefectures.csv
+recovery_total.csv
+serious.csv
+#[356] ./cov19.pl ######### 2020/11/10 10:20:36 #######
+#[357] ./cov19.pl tko,DAY,POP
+Updating a077a1a..05668f5
+Fast-forward
+ csse_covid_19_data/README.md                       |    4 +-
+ .../csse_covid_19_daily_reports/09-20-2020.csv     |  130 +-
+ .../csse_covid_19_daily_reports/09-21-2020.csv     |   94 +-
+ .../csse_covid_19_daily_reports/09-22-2020.csv     |  128 +-
+ .../csse_covid_19_daily_reports/09-23-2020.csv     |   88 +-
+ .../csse_covid_19_daily_reports/09-24-2020.csv     |  124 +-
+ .../csse_covid_19_daily_reports/09-25-2020.csv     |   90 +-
+ .../csse_covid_19_daily_reports/09-26-2020.csv     |   90 +-
+ .../csse_covid_19_daily_reports/09-27-2020.csv     |  158 +-
+ .../csse_covid_19_daily_reports/09-28-2020.csv     |  108 +-
+ .../csse_covid_19_daily_reports/09-29-2020.csv     |  144 +-
+ .../csse_covid_19_daily_reports/09-30-2020.csv     |  112 +-
+ .../csse_covid_19_daily_reports/10-01-2020.csv     |  148 +-
+ .../csse_covid_19_daily_reports/10-02-2020.csv     |  116 +-
+ .../csse_covid_19_daily_reports/10-03-2020.csv     |  114 +-
+ .../csse_covid_19_daily_reports/10-04-2020.csv     |  156 +-
+ .../csse_covid_19_daily_reports/10-05-2020.csv     |  122 +-
+ .../csse_covid_19_daily_reports/10-06-2020.csv     |  146 +-
+ .../csse_covid_19_daily_reports/10-07-2020.csv     |  114 +-
+ .../csse_covid_19_daily_reports/10-08-2020.csv     |  156 +-
+ .../csse_covid_19_daily_reports/10-09-2020.csv     |  114 +-
+ .../csse_covid_19_daily_reports/10-10-2020.csv     |  106 +-
+ .../csse_covid_19_daily_reports/10-11-2020.csv     |  158 +-
+ .../csse_covid_19_daily_reports/10-12-2020.csv     |  120 +-
+ .../csse_covid_19_daily_reports/10-13-2020.csv     |  136 +-
+ .../csse_covid_19_daily_reports/10-14-2020.csv     |  112 +-
+ .../csse_covid_19_daily_reports/10-15-2020.csv     |  142 +-
+ .../csse_covid_19_daily_reports/10-16-2020.csv     |  108 +-
+ .../csse_covid_19_daily_reports/10-17-2020.csv     |  104 +-
+ .../csse_covid_19_daily_reports/10-18-2020.csv     |  146 +-
+ .../csse_covid_19_daily_reports/10-19-2020.csv     |  108 +-
+ .../csse_covid_19_daily_reports/10-20-2020.csv     |  140 +-
+ .../csse_covid_19_daily_reports/10-21-2020.csv     |  100 +-
+ .../csse_covid_19_daily_reports/10-22-2020.csv     |  138 +-
+ .../csse_covid_19_daily_reports/10-23-2020.csv     |  100 +-
+ .../csse_covid_19_daily_reports/10-24-2020.csv     |   98 +-
+ .../csse_covid_19_daily_reports/10-25-2020.csv     |  142 +-
+ .../csse_covid_19_daily_reports/10-26-2020.csv     |  120 +-
+ .../csse_covid_19_daily_reports/10-27-2020.csv     |  152 +-
+ .../csse_covid_19_daily_reports/10-28-2020.csv     |  116 +-
+ .../csse_covid_19_daily_reports/10-29-2020.csv     |  162 +-
+ .../csse_covid_19_daily_reports/10-30-2020.csv     |  144 +-
+ .../csse_covid_19_daily_reports/10-31-2020.csv     |  140 +-
+ .../csse_covid_19_daily_reports/11-01-2020.csv     |  176 +-
+ .../csse_covid_19_daily_reports/11-02-2020.csv     |  150 +-
+ .../csse_covid_19_daily_reports/11-03-2020.csv     |  496 +-
+ .../csse_covid_19_daily_reports/11-04-2020.csv     |  460 +-
+ .../csse_covid_19_daily_reports/11-05-2020.csv     |  500 +-
+ .../csse_covid_19_daily_reports/11-06-2020.csv     |  450 +-
+ .../csse_covid_19_daily_reports/11-07-2020.csv     | 7922 ++++++++++----------
+ .../csse_covid_19_daily_reports/11-08-2020.csv     |  176 +-
+ .../csse_covid_19_daily_reports_us/09-20-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-21-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-22-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-23-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-24-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-25-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-26-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-27-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-28-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-29-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-30-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-01-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-02-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-03-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-04-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-05-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-06-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-07-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-08-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-09-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-10-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-11-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-12-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-13-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-14-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-15-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-16-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-17-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-18-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-19-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-20-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-21-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-22-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-23-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-24-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-25-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-26-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-27-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-28-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-29-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-30-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-31-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-01-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-02-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-03-2020.csv  |    4 +-
+ .../csse_covid_19_daily_reports_us/11-04-2020.csv  |    4 +-
+ .../csse_covid_19_daily_reports_us/11-05-2020.csv  |    4 +-
+ .../csse_covid_19_daily_reports_us/11-06-2020.csv  |    4 +-
+ .../csse_covid_19_daily_reports_us/11-07-2020.csv  |  118 +-
+ .../csse_covid_19_daily_reports_us/11-08-2020.csv  |    4 +-
+ .../time_series_covid19_confirmed_US.csv           |  522 +-
+ .../time_series_covid19_confirmed_global.csv       |    4 +-
+ 103 files changed, 8166 insertions(+), 8164 deletions(-)
+#[356] ./cov19.pl ######### 2020/11/10 10:21:42 #######
+#[357] ./cov19.pl ccse,DAY,POP
+#[299] ./cov19.pl ######### 2020/11/10 10:24:25 #######
+#[356] ./cov19.pl ######### 2020/11/10 10:24:28 #######
+#[357] ./cov19.pl usast,DAY,POP
+#[356] ./cov19.pl ######### 2020/11/10 10:25:27 #######
+#[357] ./cov19.pl usa,DAY,POP
+#[146] ./tokyo.pl (cd /mnt/f/cov/plussum.github.io/tokyo/covid19; git pull origin development)
+Already up-to-date.
+#[122] ./combine.pl Unkown option -S
+Generate index.html and frame.html
+jhccse:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tko:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoku:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoage:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usast:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usa:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+#[281] ./cov19.pl UPLOAD github.io
+/mnt/f/cov/plussum.github.io
+Agent pid 10410
+[master ea5f8f9] update
+ 599 files changed, 25756 insertions(+), 25740 deletions(-)
+ rewrite PNG/01_jhccse_CCM_CASES_COUNT_DAY_CCM_TOP10_.png (98%)
+ rewrite PNG/01_jhccse_NEW_CASES_COUNT_DAY_all_rl_avr_7.png (98%)
+ rewrite PNG/01_jhccse_NEW_CASES_FT_DAY_Japan_and_others_268_.png (97%)
+ rewrite PNG/01_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_.png (62%)
+ rewrite PNG/01_usa_CCM_CASES_COUNT_POP_TOP_10_rl_avr_7.png (98%)
+ rewrite PNG/01_usa_NEW_CASES_COUNT_POP_TOP_10_rl_avr_7-plot.csv.txt (99%)
+ rewrite PNG/01_usa_NEW_CASES_COUNT_POP_TOP_10_rl_avr_7.png (99%)
+ rewrite PNG/01_usa_NEW_CASES_ERN_DAY_US_01_23_ip_5_lp_8_rl_avr_7_-plot.csv.txt (89%)
+ rewrite PNG/01_usa_NEW_CASES_ERN_DAY_US_01_23_ip_5_lp_8_rl_avr_7_-plot.txt (60%)
+ rewrite PNG/01_usa_NEW_CASES_ERN_DAY_US_01_23_ip_5_lp_8_rl_avr_7_.png (99%)
+ rewrite PNG/01_usa_NEW_CASES_KV_DAY_USA_-plot.csv.txt (72%)
+ rewrite PNG/01_usa_NEW_CASES_KV_DAY_USA_.png (98%)
+ rewrite PNG/01_usast_CCM_CASES_COUNT_DAY_TOP_10_rl_avr_7.png (69%)
+ rewrite PNG/01_usast_NEW_CASES_COUNT_DAY_TOP_10_rl_avr_7.png (98%)
+ rewrite PNG/01_usast_NEW_CASES_KV_DAY_USA_-plot.csv.txt (63%)
+ rewrite PNG/01_usast_NEW_CASES_KV_DAY_USA_.png (99%)
+ rewrite PNG/02_jhccse_CCM_CASES_COUNT_DAY_CCM_TOP20_.png (97%)
+ rewrite PNG/02_jhccse_CCM_CASES_COUNT_POP_CCM_TOP20_.png (98%)
+ rewrite PNG/02_jhccse_NEW_CASES_COUNT_DAY_all_.png (98%)
+ rewrite PNG/02_jhccse_NEW_CASES_COUNT_POP_all_.png (76%)
+ rewrite PNG/02_jhccse_NEW_CASES_FT_DAY_Japan_and_TOP10_268_.png (98%)
+ rewrite PNG/02_usa_CCM_CASES_COUNT_POP_TOP_10_-plot.csv.txt (64%)
+ rewrite PNG/02_usa_CCM_CASES_COUNT_POP_TOP_10_.png (99%)
+ rewrite PNG/02_usa_NEW_CASES_COUNT_POP_TOP_10_-plot.csv.txt (80%)
+ rewrite PNG/02_usa_NEW_CASES_COUNT_POP_TOP_10_.png (99%)
+ rewrite PNG/02_usa_NEW_CASES_ERN_DAY_US_2month_ip_5_lp_8_rl_avr_7_-plot.csv.txt (98%)
+ rewrite PNG/02_usa_NEW_CASES_ERN_DAY_US_2month_ip_5_lp_8_rl_avr_7_.png (99%)
+ rewrite PNG/02_usa_NEW_CASES_KV_DAY_USA_2month_-plot.csv.txt (65%)
+ rewrite PNG/02_usa_NEW_CASES_KV_DAY_USA_2month_.png (98%)
+ rewrite PNG/02_usast_CCM_CASES_COUNT_DAY_TOP_10_.png (70%)
+ rewrite PNG/02_usast_NEW_CASES_COUNT_DAY_TOP_10_.png (98%)
+ rewrite PNG/03_jhccse_CCM_CASES_COUNT_DAY_CCM_SELECTED_.png (67%)
+ rewrite PNG/03_jhccse_CCM_CASES_COUNT_POP_CCM_SELECTED_.png (98%)
+ rewrite PNG/03_jhccse_NEW_CASES_FT_DAY_TOP5_268_.png (98%)
+ rewrite PNG/03_jhccse_NEW_CASES_KV_DAY_KV_JAPAN_US_1m_-plot.csv.txt (98%)
+ rewrite PNG/03_jhccse_NEW_CASES_KV_DAY_KV_JAPAN_US_1m_.png (99%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_-plot.csv.txt (96%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_.png (66%)
+ rewrite PNG/03_usa_CCM_CASES_COUNT_POP_TOP_10_2month_rl_avr_7-plot.csv.txt (87%)
+ rewrite PNG/03_usa_CCM_CASES_COUNT_POP_TOP_10_2month_rl_avr_7.png (98%)
+ rewrite PNG/03_usa_NEW_CASES_COUNT_POP_TOP_10_2month_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/03_usa_NEW_CASES_COUNT_POP_TOP_10_2month_rl_avr_7.png (99%)
+ rewrite PNG/03_usa_NEW_CASES_ERN_DAY_US_1month_ip_5_lp_8_rl_avr_7_-plot.csv.txt (96%)
+ rewrite PNG/03_usa_NEW_CASES_ERN_DAY_US_1month_ip_5_lp_8_rl_avr_7_.png (99%)
+ rewrite PNG/03_usa_NEW_CASES_KV_DAY_USA_1month_-plot.csv.txt (81%)
+ rewrite PNG/03_usa_NEW_CASES_KV_DAY_USA_1month_.png (98%)
+ rewrite PNG/03_usast_NEW_CASES_ERN_DAY_US_1month_ip_5_lp_8_rl_avr_7_-plot.csv.txt (98%)
+ rewrite PNG/03_usast_NEW_CASES_ERN_DAY_US_1month_ip_5_lp_8_rl_avr_7_.png (99%)
+ rewrite PNG/04_jhccse_CCM_CASES_COUNT_DAY_CCM_TOP5_Japan_.png (99%)
+ rewrite PNG/04_jhccse_NEW_CASES_FT_DAY_TOP10_268_.png (97%)
+ rewrite PNG/04_usa_CCM_CASES_COUNT_POP_TOP_11_20_2month_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/04_usa_CCM_CASES_COUNT_POP_TOP_11_20_2month_rl_avr_7-plot.txt (62%)
+ rewrite PNG/04_usa_CCM_CASES_COUNT_POP_TOP_11_20_2month_rl_avr_7.png (99%)
+ rewrite PNG/04_usa_NEW_CASES_COUNT_POP_TOP_11_20_2month_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/04_usa_NEW_CASES_COUNT_POP_TOP_11_20_2month_rl_avr_7-plot.txt (62%)
+ rewrite PNG/04_usa_NEW_CASES_COUNT_POP_TOP_11_20_2month_rl_avr_7.png (99%)
+ rewrite PNG/04_usast_CCM_CASES_COUNT_DAY_TOP_10_2month_rl_avr_7-plot.csv.txt (61%)
+ rewrite PNG/04_usast_CCM_CASES_COUNT_DAY_TOP_10_2month_rl_avr_7.png (67%)
+ rewrite PNG/04_usast_CCM_CASES_COUNT_POP_TOP_10_2month_rl_avr_7.png (68%)
+ rewrite PNG/04_usast_NEW_CASES_COUNT_DAY_TOP_10_2month_rl_avr_7-plot.csv.txt (60%)
+ rewrite PNG/04_usast_NEW_CASES_COUNT_DAY_TOP_10_2month_rl_avr_7.png (98%)
+ rewrite PNG/04_usast_NEW_CASES_COUNT_POP_TOP_10_2month_rl_avr_7.png (71%)
+ rewrite PNG/04_usast_NEW_CASES_KV_DAY_USA_11_20_2month_-plot.csv.txt (99%)
+ rewrite PNG/04_usast_NEW_CASES_KV_DAY_USA_11_20_2month_.png (98%)
+ rewrite PNG/05_jhccse_CCM_CASES_COUNT_DAY_CCM_TOP5_Japan_logscale.png (98%)
+ rewrite PNG/05_jhccse_NEW_CASES_COUNT_DAY_01_05_from_0301_rl_avr_7.png (98%)
+ rewrite PNG/05_usa_CCM_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7-plot.csv.txt (99%)
+ rewrite PNG/05_usa_CCM_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7-plot.txt (60%)
+ rewrite PNG/05_usa_CCM_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7.png (99%)
+ rewrite PNG/05_usa_NEW_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/05_usa_NEW_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7-plot.txt (65%)
+ rewrite PNG/05_usa_NEW_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7.png (98%)
+ rewrite PNG/05_usast_CCM_CASES_COUNT_DAY_TOP_11_20_2month_rl_avr_7-plot.txt (60%)
+ rewrite PNG/05_usast_CCM_CASES_COUNT_DAY_TOP_11_20_2month_rl_avr_7.png (99%)
+ rewrite PNG/05_usast_CCM_CASES_COUNT_POP_TOP_11_20_2month_rl_avr_7-plot.csv.txt (77%)
+ rewrite PNG/05_usast_CCM_CASES_COUNT_POP_TOP_11_20_2month_rl_avr_7.png (98%)
+ rewrite PNG/05_usast_NEW_CASES_COUNT_DAY_TOP_11_20_2month_rl_avr_7-plot.txt (60%)
+ rewrite PNG/05_usast_NEW_CASES_COUNT_DAY_TOP_11_20_2month_rl_avr_7.png (99%)
+ rewrite PNG/05_usast_NEW_CASES_COUNT_POP_TOP_11_20_2month_rl_avr_7-plot.csv.txt (77%)
+ rewrite PNG/05_usast_NEW_CASES_COUNT_POP_TOP_11_20_2month_rl_avr_7.png (98%)
+ rewrite PNG/05_usast_NEW_CASES_FT_DAY_USST_31_40_3340_.png (98%)
+ rewrite PNG/06_jhccse_NEW_CASES_ERN_DAY_Forcus_area_01_1month_ip_5_lp_8_rl_avr_7_-plot.csv.txt (85%)
+ rewrite PNG/06_jhccse_NEW_CASES_ERN_DAY_Forcus_area_01_1month_ip_5_lp_8_rl_avr_7_.png (60%)
+ rewrite PNG/06_usa_CCM_CASES_COUNT_POP_TOP_31_40_2month_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/06_usa_CCM_CASES_COUNT_POP_TOP_31_40_2month_rl_avr_7-plot.txt (62%)
+ rewrite PNG/06_usa_CCM_CASES_COUNT_POP_TOP_31_40_2month_rl_avr_7.png (98%)
+ rewrite PNG/06_usa_NEW_CASES_COUNT_DAY_TOP_31_40_2month_rl_avr_7-plot.csv.txt (79%)
+ rewrite PNG/06_usa_NEW_CASES_COUNT_DAY_TOP_31_40_2month_rl_avr_7.png (98%)
+ rewrite PNG/06_usa_NEW_CASES_COUNT_POP_TOP_31_40_2month_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/06_usa_NEW_CASES_COUNT_POP_TOP_31_40_2month_rl_avr_7-plot.txt (65%)
+ rewrite PNG/06_usa_NEW_CASES_COUNT_POP_TOP_31_40_2month_rl_avr_7.png (98%)
+ rewrite PNG/06_usast_CCM_CASES_COUNT_DAY_TOP_21_30_2month_rl_avr_7.png (99%)
+ rewrite PNG/06_usast_CCM_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7-plot.csv.txt (63%)
+ rewrite PNG/06_usast_CCM_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7.png (98%)
+ rewrite PNG/06_usast_NEW_CASES_COUNT_DAY_TOP_21_30_2month_rl_avr_7.png (99%)
+ rewrite PNG/06_usast_NEW_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7-plot.csv.txt (63%)
+ rewrite PNG/06_usast_NEW_CASES_COUNT_POP_TOP_21_30_2month_rl_avr_7.png (98%)
+ rewrite PNG/06_usast_NEW_CASES_KV_DAY_USA_11_20_1month_.png (98%)
+ rewrite PNG/07_jhccse_NEW_CASES_COUNT_POP_11_20_from_0301_rl_avr_7.png (98%)
+ rewrite PNG/07_usa_CCM_CASES_COUNT_DAY_TOP_41_50_2month_rl_avr_7.png (98%)
+ rewrite PNG/07_usa_CCM_CASES_COUNT_POP_TOP_41_50_2month_rl_avr_7-plot.csv.txt (99%)
+ rewrite PNG/07_usa_CCM_CASES_COUNT_POP_TOP_41_50_2month_rl_avr_7-plot.txt (65%)
+ rewrite PNG/07_usa_CCM_CASES_COUNT_POP_TOP_41_50_2month_rl_avr_7.png (98%)
+ rewrite PNG/07_usa_NEW_CASES_COUNT_DAY_TOP_41_50_2month_rl_avr_7-plot.csv.txt (99%)
+ rewrite PNG/07_usa_NEW_CASES_COUNT_DAY_TOP_41_50_2month_rl_avr_7-plot.txt (62%)
+ rewrite PNG/07_usa_NEW_CASES_COUNT_DAY_TOP_41_50_2month_rl_avr_7.png (98%)
+ rewrite PNG/07_usa_NEW_CASES_COUNT_POP_TOP_41_50_2month_rl_avr_7-plot.csv.txt (99%)
+ rewrite PNG/07_usa_NEW_CASES_COUNT_POP_TOP_41_50_2month_rl_avr_7.png (98%)
+ rewrite PNG/07_usast_CCM_CASES_COUNT_POP_TOP_31_40_2month_rl_avr_7-plot.txt (60%)
+ rewrite PNG/07_usast_CCM_CASES_COUNT_POP_TOP_31_40_2month_rl_avr_7.png (98%)
+ rewrite PNG/07_usast_NEW_CASES_COUNT_POP_TOP_31_40_2month_rl_avr_7-plot.txt (60%)
+ rewrite PNG/07_usast_NEW_CASES_COUNT_POP_TOP_31_40_2month_rl_avr_7.png (98%)
+ rewrite PNG/08_usa_CCM_CASES_COUNT_POP_TOP_10_2month_-plot.csv.txt (70%)
+ rewrite PNG/08_usa_CCM_CASES_COUNT_POP_TOP_10_2month_.png (99%)
+ rewrite PNG/08_usa_NEW_CASES_COUNT_POP_TOP_10_2month_-plot.csv.txt (99%)
+ rewrite PNG/08_usa_NEW_CASES_COUNT_POP_TOP_10_2month_.png (99%)
+ rewrite PNG/09_usa_CCM_CASES_COUNT_POP_TOP_11_20_2month_-plot.csv.txt (99%)
+ rewrite PNG/09_usa_CCM_CASES_COUNT_POP_TOP_11_20_2month_.png (98%)
+ rewrite PNG/09_usa_NEW_CASES_COUNT_POP_TOP_11_20_2month_-plot.csv.txt (99%)
+ rewrite PNG/09_usa_NEW_CASES_COUNT_POP_TOP_11_20_2month_-plot.txt (62%)
+ rewrite PNG/09_usa_NEW_CASES_COUNT_POP_TOP_11_20_2month_.png (98%)
+ rewrite PNG/09_usast_CCM_CASES_COUNT_DAY_TOP_10_03_14_.png (71%)
+ rewrite PNG/09_usast_NEW_CASES_COUNT_DAY_TOP_10_03_14_.png (98%)
+ rewrite PNG/10_usa_CCM_CASES_COUNT_POP_TOP_21_30_2month_-plot.csv.txt (99%)
+ rewrite PNG/10_usa_CCM_CASES_COUNT_POP_TOP_21_30_2month_.png (98%)
+ rewrite PNG/10_usa_CCM_DEATHS_COUNT_DAY_TOP_21_30_2month_-plot.csv.txt (87%)
+ rewrite PNG/10_usa_CCM_DEATHS_COUNT_DAY_TOP_21_30_2month_.png (99%)
+ rewrite PNG/10_usa_NEW_CASES_COUNT_DAY_TOP_21_30_2month_-plot.csv.txt (97%)
+ rewrite PNG/10_usa_NEW_CASES_COUNT_DAY_TOP_21_30_2month_.png (98%)
+ rewrite PNG/10_usa_NEW_CASES_COUNT_POP_TOP_21_30_2month_-plot.csv.txt (98%)
+ rewrite PNG/10_usa_NEW_CASES_COUNT_POP_TOP_21_30_2month_-plot.txt (61%)
+ rewrite PNG/10_usa_NEW_CASES_COUNT_POP_TOP_21_30_2month_.png (97%)
+ rewrite PNG/10_usast_CCM_CASES_COUNT_DAY_TOP_10_05_01_.png (70%)
+ rewrite PNG/10_usast_NEW_CASES_COUNT_DAY_TOP_10_05_01_.png (98%)
+ rewrite PNG/11_jhccse_NEW_CASES_COUNT_DAY_01_05_from_0301_.png (98%)
+ rewrite PNG/11_usa_CCM_CASES_COUNT_POP_TOP_31_40_2month_-plot.csv.txt (100%)
+ rewrite PNG/11_usa_CCM_CASES_COUNT_POP_TOP_31_40_2month_.png (98%)
+ rewrite PNG/11_usa_CCM_DEATHS_COUNT_DAY_TOP_31_40_2month_-plot.csv.txt (91%)
+ rewrite PNG/11_usa_CCM_DEATHS_COUNT_DAY_TOP_31_40_2month_.png (98%)
+ rewrite PNG/11_usa_NEW_CASES_COUNT_DAY_TOP_31_40_2month_-plot.csv.txt (100%)
+ rewrite PNG/11_usa_NEW_CASES_COUNT_DAY_TOP_31_40_2month_-plot.txt (64%)
+ rewrite PNG/11_usa_NEW_CASES_COUNT_DAY_TOP_31_40_2month_.png (97%)
+ rewrite PNG/11_usa_NEW_CASES_COUNT_POP_TOP_31_40_2month_-plot.csv.txt (99%)
+ rewrite PNG/11_usa_NEW_CASES_COUNT_POP_TOP_31_40_2month_-plot.txt (64%)
+ rewrite PNG/11_usa_NEW_CASES_COUNT_POP_TOP_31_40_2month_.png (97%)
+ rewrite PNG/11_usa_NEW_DEATHS_COUNT_DAY_TOP_31_40_2month_.png (74%)
+ rewrite PNG/11_usast_CCM_CASES_COUNT_DAY_TOP_10_2month_-plot.csv.txt (98%)
+ rewrite PNG/11_usast_CCM_CASES_COUNT_DAY_TOP_10_2month_.png (68%)
+ rewrite PNG/11_usast_CCM_CASES_COUNT_POP_TOP_10_2month_.png (66%)
+ rewrite PNG/11_usast_NEW_CASES_COUNT_DAY_TOP_10_2month_-plot.csv.txt (98%)
+ rewrite PNG/11_usast_NEW_CASES_COUNT_DAY_TOP_10_2month_.png (98%)
+ rewrite PNG/11_usast_NEW_CASES_COUNT_POP_TOP_10_2month_.png (97%)
+ rewrite PNG/12_usa_CCM_CASES_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (96%)
+ rewrite PNG/12_usa_CCM_CASES_COUNT_DAY_TOP_41_50_2month_.png (99%)
+ rewrite PNG/12_usa_CCM_CASES_COUNT_POP_TOP_41_50_2month_-plot.csv.txt (100%)
+ rewrite PNG/12_usa_CCM_CASES_COUNT_POP_TOP_41_50_2month_-plot.txt (64%)
+ rewrite PNG/12_usa_CCM_CASES_COUNT_POP_TOP_41_50_2month_.png (98%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (93%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_.png (98%)
+ rewrite PNG/12_usa_NEW_CASES_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (100%)
+ rewrite PNG/12_usa_NEW_CASES_COUNT_DAY_TOP_41_50_2month_.png (98%)
+ rewrite PNG/12_usa_NEW_CASES_COUNT_POP_TOP_41_50_2month_-plot.csv.txt (99%)
+ rewrite PNG/12_usa_NEW_CASES_COUNT_POP_TOP_41_50_2month_.png (97%)
+ rewrite PNG/12_usast_CCM_CASES_COUNT_DAY_TOP_11_20_2month_-plot.csv.txt (98%)
+ rewrite PNG/12_usast_CCM_CASES_COUNT_DAY_TOP_11_20_2month_.png (99%)
+ rewrite PNG/12_usast_CCM_CASES_COUNT_POP_TOP_11_20_2month_-plot.csv.txt (80%)
+ rewrite PNG/12_usast_CCM_CASES_COUNT_POP_TOP_11_20_2month_.png (98%)
+ rewrite PNG/12_usast_NEW_CASES_COUNT_DAY_TOP_11_20_2month_-plot.csv.txt (100%)
+ rewrite PNG/12_usast_NEW_CASES_COUNT_DAY_TOP_11_20_2month_.png (98%)
+ rewrite PNG/12_usast_NEW_CASES_COUNT_POP_TOP_11_20_2month_-plot.csv.txt (75%)
+ rewrite PNG/12_usast_NEW_CASES_COUNT_POP_TOP_11_20_2month_.png (98%)
+ rewrite PNG/12_usast_NEW_DEATHS_COUNT_DAY_TOP_11_20_2month_-plot.csv.txt (95%)
+ rewrite PNG/12_usast_NEW_DEATHS_COUNT_DAY_TOP_11_20_2month_.png (79%)
+ rewrite PNG/13_jhccse_NEW_CASES_COUNT_POP_11_20_from_0301_.png (72%)
+ rewrite PNG/13_usast_CCM_CASES_COUNT_DAY_TOP_21_30_2month_-plot.csv.txt (97%)
+ rewrite PNG/13_usast_CCM_CASES_COUNT_DAY_TOP_21_30_2month_.png (98%)
+ rewrite PNG/13_usast_CCM_CASES_COUNT_POP_TOP_21_30_2month_-plot.csv.txt (63%)
+ rewrite PNG/13_usast_CCM_CASES_COUNT_POP_TOP_21_30_2month_.png (99%)
+ rewrite PNG/13_usast_NEW_CASES_COUNT_DAY_TOP_21_30_2month_-plot.csv.txt (99%)
+ rewrite PNG/13_usast_NEW_CASES_COUNT_DAY_TOP_21_30_2month_.png (97%)
+ rewrite PNG/13_usast_NEW_CASES_COUNT_POP_TOP_21_30_2month_-plot.csv.txt (61%)
+ rewrite PNG/13_usast_NEW_CASES_COUNT_POP_TOP_21_30_2month_.png (98%)
+ rewrite PNG/14_usast_CCM_CASES_COUNT_POP_TOP_31_40_2month_-plot.csv.txt (78%)
+ rewrite PNG/14_usast_CCM_CASES_COUNT_POP_TOP_31_40_2month_-plot.txt (60%)
+ rewrite PNG/14_usast_CCM_CASES_COUNT_POP_TOP_31_40_2month_.png (99%)
+ rewrite PNG/14_usast_NEW_CASES_COUNT_POP_TOP_31_40_2month_-plot.csv.txt (79%)
+ rewrite PNG/14_usast_NEW_CASES_COUNT_POP_TOP_31_40_2month_-plot.txt (60%)
+ rewrite PNG/14_usast_NEW_CASES_COUNT_POP_TOP_31_40_2month_.png (98%)
+ rewrite PNG/15_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_-plot.csv.txt (83%)
+ rewrite PNG/15_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_.png (99%)
+ rewrite PNG/15_tko_NEW_DEATHS_COUNT_DAY_Japan_16_20_.png (99%)
+ rewrite PNG/15_usa_NEW_DEATHS_COUNT_DAY_TOP_10_05_01_Oklahoma_.png (97%)
+ rewrite PNG/16_tko_CCM_DEATHS_COUNT_DAY_Japan_01_10_1m_.png (66%)
+ rewrite PNG/16_tko_NEW_DEATHS_COUNT_DAY_Japan_01_10_1m_.png (82%)
+ rewrite PNG/17_jhccse_NEW_CASES_COUNT_DAY_2month_01_05_rl_avr_7-plot.csv.txt (65%)
+ rewrite PNG/17_jhccse_NEW_CASES_COUNT_DAY_2month_01_05_rl_avr_7.png (99%)
+ rewrite PNG/18_tko_CCM_DEATHS_COUNT_DAY_Japan_11_20_1m_rl_avr_7.png (69%)
+ rewrite PNG/18_tko_NEW_DEATHS_COUNT_DAY_Japan_11_20_1m_rl_avr_7.png (68%)
+ rewrite PNG/20_jhccse_NEW_CASES_COUNT_POP_2month_21_30_rl_avr_7-plot.csv.txt (75%)
+ rewrite PNG/20_jhccse_NEW_CASES_COUNT_POP_2month_21_30_rl_avr_7.png (99%)
+ rewrite PNG/20_tko_CCM_DEATHS_COUNT_DAY_Japan_06_10_2m_-plot.csv.txt (88%)
+ rewrite PNG/20_tko_CCM_DEATHS_COUNT_DAY_Japan_06_10_2m_.png (98%)
+ rewrite PNG/21_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_-plot.csv.txt (93%)
+ rewrite PNG/21_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_.png (99%)
+ rewrite PNG/22_jhccse_NEW_CASES_COUNT_DAY_2month_01_05_-plot.csv.txt (80%)
+ rewrite PNG/22_jhccse_NEW_CASES_COUNT_DAY_2month_01_05_.png (98%)
+ rewrite PNG/22_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_-plot.csv.txt (86%)
+ rewrite PNG/22_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (99%)
+ rewrite PNG/25_jhccse_NEW_CASES_COUNT_POP_2month_21_30_.png (97%)
+/home/masataka/who/src
+Agent pid 10442
