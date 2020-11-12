@@ -309,7 +309,7 @@ sub	csv2graph
 		dp::dp "     :" , join(",", @DATE_LABEL) , "\n";
 		for($l = 0; $l < 5; $l++){		# $COUNTRY_NUMBER
 			dp::dp $DATA[$l][0] . ": ";
-			for(my $i = $DATE_COL_NO; $i <= $DATE_NUMBER + $DATE_COL_NO; $i++){
+			for(my $i = $DATE_COL_NO; $i < $DATE_NUMBER + $DATE_COL_NO; $i++){
 				# print "# " . $i . "  " . $DATE_LABEL[$i-$DATE_COL_NO] .":" ;
 				print $DATA[$l][$i] , ",";
 			}
@@ -419,12 +419,13 @@ sub	csv2graph
 		for(my $dn = 0; $dn <= $end_day; $dn++){
 			my $p = $dn+$std+$DATE_COL_NO;
 			my $c = csvlib::valdef($DATA[$cn][$p], 0);
-			#dp::dp "$cn:$p -> $c\n";
-			if($c =~ /[^0-9]\-\./){
-				dp::dp "($dn:$std:$p:$c:$csvf)\n";
-			}
-			if($c =~ /^[^0-9]+$/){			# Patch for bug of former data, may be
-				#dp::dp "DATA ERROR at $country($dn) $c\n" if($DEBUG);
+			#dp::dp "$cn:$p -> $c\n" if($c =~ /NaN/);
+			#if($c =~ /[^0-9-\.]/){
+			#	dp::dp "Numeric Check: ($dn:$std:$p:$c:$csvf)\n";
+			#}
+			#if($c =~ /^[^0-9]+$/){			# Patch for bug of former data, may be
+			if($c =~ /[^0-9\-\.]/){
+				dp::dp "DATA ERROR at $country($dn) $c\n" ;#if($DEBUG);
 				$tl = -1;
 				last;
 			}
@@ -544,7 +545,7 @@ sub	csv2graph
 		my $dts  = $DATES[$dt];
 		$dts =~ s#([0-9]{4})([0-9]{2})([0-9]{2})#$1/$2/$3#;
 		$dts = $dt if(defined $gplitem->{ft});
-		#print "[[$DATES[$dt]][$dts]\n";
+		#dp::dp "[[$DATES[$dt]][$dts]\n";
 		my @data = ();
 		for (my $i = 1; $i <= $#Dataset; $i++){
 			my $v = $Dataset[$i][$dt];

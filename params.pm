@@ -170,8 +170,13 @@ our	@PARMS_FT = (
 our	@PARMS_RT = (
 	{ext => "#KIND# Japan 01/23 #RT_TD#", start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
 		label_skip => 7, graph => "lines"},
+	#{ext => "EOD"},
+
+	{ext => "#KIND# Japan 02/15 #RT_TD#", start_day => "02/15", lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
+		label_skip => 7, graph => "lines"},
 	{ext => "#KIND# Japan 03/01 #RT_TD#", start_day => "03/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
 		label_skip => 7, graph => "lines"},
+
 	{ext => "#KIND# Japan 2m #RT_TD#",   start_day => -61, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan",
 		 label_skip => 1, graph => "lines",  ymin => 0},
 	{ext => "#KIND# Germany 0301 #RT_TD#",   start_day => 0, lank =>[0, 99] , exclusion => $EXCLUSION, target => "Germany",
@@ -198,8 +203,8 @@ our	@PARMS_RT = (
 		label_skip => 1, graph => "lines", ymax => "", },
 	{ext => "#KIND# TOP 10 2w #RT_TD#",   start_day => -14, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", 
 		label_skip => 1, graph => "lines", ymax => "", },
-	{ext => "#KIND# TOP 10 1w #RT_TD#",   start_day => -7, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", 
-		label_skip => 1, graph => "lines", ymax => "", },
+#	{ext => "#KIND# TOP 10 1w #RT_TD#",   start_day => -7, lank =>[0, 9] , exclusion => $EXCLUSION, target => "", 
+#		label_skip => 1, graph => "lines", ymax => "", },
 
 	{ext => "#KIND# Japan  #RT_TD#",   start_day => "03/01", lank =>[0, 99] , exclusion => $EXCLUSION, target => "Japan", 
 		label_skip => 7, graph => "lines", },

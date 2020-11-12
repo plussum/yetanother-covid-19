@@ -26,6 +26,8 @@ our $RT_IP = 5;
 our $RT_LP = 8;
 our $THRESH_FT = {NC => 9, ND => 3, NR => 3};		# 
 
+our $NO_DATA = "NaN";
+
 our $POPF = "$WIN_PATH/pop.csv";
 #our $POPF_JP = "$WIN_PATH/popjp.txt";
 #our $POPF_US = "$WIN_PATH/popus.txt";

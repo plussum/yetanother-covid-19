@@ -24,6 +24,7 @@ use dp;
 use config;
 
 my $DEBUG = 0;
+my $ALL_TERM = "" ; #1;
 
 sub	ern
 {
@@ -100,13 +101,16 @@ sub	ern
 	#	再生産数の計算
 	#
 	my $rate_term = $date_number - $ip - $lp;
+	my $date_term = ($ALL_TERM) ? $date_number : $rate_term;
 	open(RATE, "> " . $p->{output_file}) || die "Cannot create " . $p->{output_file} ;
-	print RATE join($dlm, "Country", "Total", @DATE_LIST[0..($rate_term-1)]), "\n";
+	print RATE join($dlm, "Country", "Total", @DATE_LIST[0..($date_term-1)]), "\n";		# 2020/11/12
+	#print RATE join($dlm, "Country", "Total", @DATE_LIST), "\n";
 	for(my $cn = 0; $cn <= $#COUNTRY_LIST; $cn++){
 		my $country = $COUNTRY_LIST[$cn];
 
 		print RATE $country. $dlm . $TOTAL[$cn] . $dlm;
-		for(my $dt = 0; $dt < $rate_term ; $dt++){
+		my $dt = 0;
+		for(; $dt < $rate_term ; $dt++){
 			my $ppre = $ip * $AVERAGE[$cn][$dt+$lp+$ip];
 			my $pat = 0;
 			for(my $dp = $dt + 1; $dp <= ($dt + $ip); $dp++){
@@ -120,12 +124,16 @@ sub	ern
 				$RATE[$cn][$dt] =  0;
 			}
 		}
+		for(;$dt < $date_number; $dt++){
+			$RATE[$cn][$dt] =  0; # $config::NO_DATA;
+		}
 		print RATE join($dlm, @{$RATE[$cn]}), "\n";
-		#print "R0 : " . join(",", @{$RATE[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);
+		#dp::dp "R0 :$dt: " . join(",", @{$RATE[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);
 	}
 	close(RATE);
 
-	return ($#COUNTRY_LIST, $rate_term, $DATE_LIST[0], $DATE_LIST[$rate_term]);
+	return ($#COUNTRY_LIST, $date_term, $DATE_LIST[0], $DATE_LIST[$date_term]);		# 2020/11/12
+	#return ($#COUNTRY_LIST, $date_number, $DATE_LIST[0], $DATE_LIST[$date_number]);
 }
 
 1;
