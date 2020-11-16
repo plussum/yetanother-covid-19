@@ -91,12 +91,19 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				{ext => "#KIND# Tokyo Age (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines"},
 				{ext => "#KIND# Tokyo Age (#LD#) #SRC# ", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", 
 						avr_date => 7, nosort => 1},
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC# 2m", start_day => -61,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", 
+						avr_date => 7, nosort => 1},
+
 				#{ext => "#KIND# Tokyo Age (#LD#) #SRC# ruiseki01", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", 
 				#		avr_date => 7, ruiseki => 1, nosort => 1, thresh => ""},
 				{ext => "#KIND# Tokyo Age (#LD#) #SRC# ruiseki02", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", 
 						avr_date => 7, ruiseki => -1, nosort => 1, thresh => ""},
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC# ruiseki02 2m", start_day => -61,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", 
+						avr_date => 7, ruiseki => -1, nosort => 1, thresh => ""},
+
 				{ext => "#KIND# Tokyo over 50 #1(#LD#) #SRC# ruiseki03", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, 
 					target => "50,60,70,80,90,100", label_skip => 7, graph => "lines", avr_date => 7, ruiseki => -1, nosort => 1, thresh => ""},
+
 				{ext => "#KIND# Tokyo over 50 #2 (#LD#) #SRC# ruiseki04", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, 
 					target => "50,60,70,80,90,100", label_skip => 7, graph => "lines", avr_date => 7, nosort => 1, thresh => ""},
 			],
