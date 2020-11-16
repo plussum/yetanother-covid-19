@@ -57483,3 +57483,93 @@ Agent pid 22587
  rewrite PNG/30_tko_CCM_DEATHS_COUNT_DAY_taget_cities_2m.png (60%)
 /home/masataka/who/src
 Agent pid 22617
+[develop 3edd307] update
+ 1 file changed, 95 insertions(+)
+########################################
+#####2020/11/16 23:31:53
+########################################
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/16 23:31:53 #######
+#[357] ./cov19.pl tkage,DAY,POP
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/16 23:32:02 #######
+#[357] ./cov19.pl ku,DAY,POP
+Already up-to-date.
+/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data
+cases_total.csv
+data.json
+death_total.csv
+demography.csv
+effective_reproduction_number.csv
+pcr_case_daily.csv
+pcr_positive_daily.csv
+pcr_tested_daily.csv
+prefectures.csv
+recovery_total.csv
+serious.csv
+#[356] ./cov19.pl ######### 2020/11/16 23:32:31 #######
+#[357] ./cov19.pl tko,DAY,POP
+Already up-to-date.
+#[356] ./cov19.pl ######### 2020/11/16 23:33:36 #######
+#[357] ./cov19.pl ccse,DAY,POP
+#[299] ./cov19.pl ######### 2020/11/16 23:36:06 #######
+#[356] ./cov19.pl ######### 2020/11/16 23:36:08 #######
+#[357] ./cov19.pl usast,DAY,POP
+#[356] ./cov19.pl ######### 2020/11/16 23:37:03 #######
+#[357] ./cov19.pl usa,DAY,POP
+#[428] csvgpl.pm DATA ERROR at Out of TN;Tennessee;US(91) 9.08713814812682e+16
+#[428] csvgpl.pm DATA ERROR at Chaves;New Mexico;US(134) 1.02862215489142e+17
+#[428] csvgpl.pm DATA ERROR at Union;Georgia;US(100) 2.56705178760118e+16
+#[428] csvgpl.pm DATA ERROR at Unassigned;Iowa;US(188) -1.27902229417322e+16
+#[428] csvgpl.pm DATA ERROR at Jenkins;Georgia;US(113) 1.27902229417322e+16
+#[428] csvgpl.pm DATA ERROR at Faribault;Minnesota;US(111) 2.56705178760118e+16
+#[428] csvgpl.pm DATA ERROR at Dent;Missouri;US(250) 1.62129586585338e+18
+#[428] csvgpl.pm DATA ERROR at Dent;Missouri;US(28) 1.62129586585338e+18
+#[146] ./tokyo.pl (cd /mnt/f/cov/plussum.github.io/tokyo/covid19; git pull origin development)
+Already up-to-date.
+#[122] ./combine.pl Unkown option -S
+Generate index.html and frame.html
+jhccse:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tko:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoku:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoage:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usast:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usa:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+#[281] ./cov19.pl UPLOAD github.io
+/mnt/f/cov/plussum.github.io
+Agent pid 23904
+[master 01259ca] update
+ 181 files changed, 16339 insertions(+), 16339 deletions(-)
+ rewrite PNG/02_usa_NEW_CASES_KV_DAY_USA_2month_.png (98%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_-plot.csv.txt (96%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_.png (66%)
+ rewrite PNG/08_jhccse_NEW_DEATHS_FT_DAY_41_50_269_.png (99%)
+ rewrite PNG/10_usa_CCM_DEATHS_COUNT_DAY_TOP_21_30_2month_-plot.csv.txt (90%)
+ rewrite PNG/10_usa_CCM_DEATHS_COUNT_DAY_TOP_21_30_2month_.png (98%)
+ rewrite PNG/11_usa_CCM_DEATHS_COUNT_DAY_TOP_31_40_2month_-plot.csv.txt (93%)
+ rewrite PNG/11_usa_CCM_DEATHS_COUNT_DAY_TOP_31_40_2month_.png (98%)
+ rewrite PNG/12_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_05_20_rl_avr_7.png (82%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (95%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_.png (98%)
+ rewrite PNG/12_usa_NEW_DEATHS_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (74%)
+ rewrite PNG/12_usa_NEW_DEATHS_COUNT_DAY_TOP_41_50_2month_.png (98%)
+ rewrite PNG/16_usa_CCM_DEATHS_COUNT_DAY_TOP_10_05_01_Oregon_-plot.csv.txt (92%)
+ rewrite PNG/18_tko_CCM_DEATHS_COUNT_DAY_Japan_11_20_1m_rl_avr_7-plot.csv.txt (90%)
+ rewrite PNG/18_tko_CCM_DEATHS_COUNT_DAY_Japan_11_20_1m_rl_avr_7.png (98%)
+ rewrite PNG/18_tko_NEW_DEATHS_COUNT_DAY_Japan_11_20_1m_rl_avr_7.png (61%)
+ rewrite PNG/20_tko_CCM_DEATHS_COUNT_DAY_Japan_06_10_2m_-plot.csv.txt (78%)
+ rewrite PNG/20_tko_CCM_DEATHS_COUNT_DAY_Japan_06_10_2m_.png (99%)
+ rewrite PNG/21_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_-plot.csv.txt (88%)
+ rewrite PNG/21_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_.png (98%)
+ rewrite PNG/22_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_-plot.csv.txt (74%)
+ rewrite PNG/22_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (99%)
+ rewrite PNG/22_tko_NEW_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (98%)
+ rewrite PNG/26_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_rl_avr_7.png (99%)
+/home/masataka/who/src
+Agent pid 23935
