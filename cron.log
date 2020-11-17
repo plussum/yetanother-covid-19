@@ -58470,3 +58470,719 @@ Agent pid 8670
  rewrite PNG/30_tko_CCM_DEATHS_COUNT_DAY_taget_cities_2m-plot.csv.txt (93%)
 /home/masataka/who/src
 Agent pid 8701
+[develop 80294b2] update
+ 1 file changed, 87 insertions(+)
+########################################
+#####2020/11/17 14:20:06
+########################################
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/17 14:20:06 #######
+#[357] ./cov19.pl tkage,DAY,POP
+#[133] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/press/2020/11/17/documents/20201116.pdf -O /mnt/f/cov/plussum.github.io/tokyo-ku/content/press20201117documents20201116.pdf#[139] tkopdf.pm ps2ascii /mnt/f/cov/plussum.github.io/tokyo-ku/content/press20201117documents20201116.pdf > /mnt/f/cov/plussum.github.io/tokyo-ku/content/press20201117documents20201116.pdf.txt
+#[44] tkopdf.pm wget https://www.metro.tokyo.lg.jp//tosei/hodohappyo/ichiran.html -O /mnt/f/cov/plussum.github.io/tokyo-ku/ichiran.html
+#[356] ./cov19.pl ######### 2020/11/17 14:20:16 #######
+#[357] ./cov19.pl ku,DAY,POP
+Already up-to-date.
+/mnt/f/cov/plussum.github.io/tokyokeizai/covid19/data
+cases_total.csv
+data.json
+death_total.csv
+demography.csv
+effective_reproduction_number.csv
+pcr_case_daily.csv
+pcr_positive_daily.csv
+pcr_tested_daily.csv
+prefectures.csv
+recovery_total.csv
+serious.csv
+#[356] ./cov19.pl ######### 2020/11/17 14:20:45 #######
+#[357] ./cov19.pl tko,DAY,POP
+Updating 0a9f620..fe321d2
+Fast-forward
+ .../csse_covid_19_daily_reports/03-29-2020.csv     | 6870 ++++++++---------
+ .../csse_covid_19_daily_reports/03-30-2020.csv     | 6880 ++++++++---------
+ .../csse_covid_19_daily_reports/03-31-2020.csv     |  472 +-
+ .../csse_covid_19_daily_reports/04-01-2020.csv     |  480 +-
+ .../csse_covid_19_daily_reports/04-02-2020.csv     | 5140 ++++++-------
+ .../csse_covid_19_daily_reports/04-04-2020.csv     | 5358 ++++++-------
+ .../csse_covid_19_daily_reports/04-11-2020.csv     |  568 +-
+ .../csse_covid_19_daily_reports/04-12-2020.csv     |  576 +-
+ .../csse_covid_19_daily_reports/04-15-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/04-16-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/04-21-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/04-22-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/04-24-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/04-25-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/04-26-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/04-28-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/04-29-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-03-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-04-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-16-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-18-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-19-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-20-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-21-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-22-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-23-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-24-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-25-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-26-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-27-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-28-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-29-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-30-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/05-31-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-01-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-02-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-03-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-04-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-05-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-06-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-07-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-08-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-09-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-10-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-11-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-12-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-13-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-14-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-15-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-16-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-17-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-18-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-19-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-20-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-21-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-22-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-23-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-24-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-25-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-26-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-27-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-28-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-29-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/06-30-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-01-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-02-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-03-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-04-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-05-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-06-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-07-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-08-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-09-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-10-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-11-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-12-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-13-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-14-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-15-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-16-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-17-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-18-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-19-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-20-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-21-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-22-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-23-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-24-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-25-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-26-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-27-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-28-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-29-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-30-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/07-31-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-01-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-02-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-03-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-04-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-05-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-06-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-07-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-08-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-09-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-11-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-12-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-13-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-14-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-15-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-16-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-17-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-18-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-19-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-20-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-21-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-22-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-23-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-24-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-25-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-26-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-27-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-28-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-29-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-30-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/08-31-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-01-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-02-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-03-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-04-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-05-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-06-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-07-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-08-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-09-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-10-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-11-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-12-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-13-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-14-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-15-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-16-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-17-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-18-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-19-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-20-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-21-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-22-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-23-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-24-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-25-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-26-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-27-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-28-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-29-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/09-30-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-01-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-02-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-03-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-04-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-05-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-06-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-07-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-08-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-09-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-11-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-12-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-13-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-14-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-15-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-16-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-17-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-18-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-19-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-20-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-22-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-23-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-24-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-25-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-26-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-27-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-28-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-29-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-30-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/10-31-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-01-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-02-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-03-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-04-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-05-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-06-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-07-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-08-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-09-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-10-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-11-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-12-2020.csv     | 7950 ++++++++++----------
+ .../csse_covid_19_daily_reports/11-13-2020.csv     |    4 +-
+ .../csse_covid_19_daily_reports/11-14-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports/11-15-2020.csv     |    2 +-
+ .../csse_covid_19_daily_reports_us/04-12-2020.csv  |  120 +-
+ .../csse_covid_19_daily_reports_us/04-14-2020.csv  |  120 +-
+ .../csse_covid_19_daily_reports_us/04-15-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/04-16-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/04-18-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/04-19-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/04-21-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/04-22-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/04-24-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/04-25-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/04-26-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/04-28-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/04-29-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-03-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-04-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-16-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-18-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-19-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-20-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-21-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-22-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-23-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-24-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-25-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-26-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-27-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-28-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-29-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-30-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/05-31-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-01-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-02-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-03-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-04-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-05-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-06-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-07-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-08-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-09-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-10-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-11-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-12-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-13-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-14-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-15-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-16-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-17-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-18-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-19-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-20-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-21-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-22-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-23-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-24-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-25-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-26-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-27-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-28-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-29-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/06-30-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-01-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-02-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-03-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-04-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-05-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-06-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-07-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-08-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-09-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-10-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-11-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-12-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-13-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-14-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-15-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-16-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-17-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-18-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-19-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-20-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-21-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-22-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-23-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-24-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-25-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-26-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-27-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-28-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-29-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-30-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/07-31-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-01-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-02-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-03-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-04-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-05-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-06-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-07-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-08-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-09-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-11-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-12-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-13-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-14-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-15-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-16-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-17-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-18-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-19-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-20-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-21-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-22-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-23-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-24-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-25-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-26-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-27-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-28-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-29-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-30-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/08-31-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-01-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-02-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-03-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-04-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-05-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-06-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-07-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-08-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-09-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-10-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-11-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-12-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-13-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-14-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-15-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-16-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-17-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-18-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-19-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-20-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-21-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-22-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-23-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-24-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-25-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-26-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-27-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-28-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-29-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/09-30-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-01-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-02-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-03-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-04-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-05-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-06-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-07-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-08-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-09-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-11-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-12-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-13-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-14-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-15-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-16-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-17-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-18-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-19-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-20-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-22-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-23-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-24-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-25-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-26-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-27-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-28-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-29-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-30-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/10-31-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-01-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-02-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-03-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-04-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-05-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-06-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-07-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-08-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-09-2020.csv  |  118 +-
+ .../csse_covid_19_daily_reports_us/11-10-2020.csv  |  118 +-
+ .../csse_covid_19_daily_reports_us/11-11-2020.csv  |  118 +-
+ .../csse_covid_19_daily_reports_us/11-12-2020.csv  |  118 +-
+ .../csse_covid_19_daily_reports_us/11-13-2020.csv  |  118 +-
+ .../csse_covid_19_daily_reports_us/11-14-2020.csv  |    2 +-
+ .../csse_covid_19_daily_reports_us/11-15-2020.csv  |    2 +-
+ .../time_series_covid19_deaths_US.csv              |    2 +-
+ .../time_series_covid19_deaths_global.csv          |    2 +-
+ 396 files changed, 17943 insertions(+), 17943 deletions(-)
+#[356] ./cov19.pl ######### 2020/11/17 14:21:52 #######
+#[357] ./cov19.pl ccse,DAY,POP
+#[299] ./cov19.pl ######### 2020/11/17 14:24:37 #######
+#[356] ./cov19.pl ######### 2020/11/17 14:24:40 #######
+#[357] ./cov19.pl usast,DAY,POP
+#[356] ./cov19.pl ######### 2020/11/17 14:25:37 #######
+#[357] ./cov19.pl usa,DAY,POP
+#[428] csvgpl.pm DATA ERROR at Out of TN;Tennessee;US(91) 9.08713814812682e+16
+#[428] csvgpl.pm DATA ERROR at Chaves;New Mexico;US(134) 1.02862215489142e+17
+#[428] csvgpl.pm DATA ERROR at Union;Georgia;US(100) 2.56705178760118e+16
+#[428] csvgpl.pm DATA ERROR at Unassigned;Iowa;US(188) -1.27902229417322e+16
+#[428] csvgpl.pm DATA ERROR at Jenkins;Georgia;US(113) 1.27902229417322e+16
+#[428] csvgpl.pm DATA ERROR at Faribault;Minnesota;US(111) 2.56705178760118e+16
+#[428] csvgpl.pm DATA ERROR at Dent;Missouri;US(250) 1.62129586585338e+18
+#[428] csvgpl.pm DATA ERROR at Dent;Missouri;US(28) 1.62129586585338e+18
+#[146] ./tokyo.pl (cd /mnt/f/cov/plussum.github.io/tokyo/covid19; git pull origin development)
+Updating b92d7fb..b8466a1
+Fast-forward
+ static/data/130001_tokyo_covid19_patients.csv | 6650 ++++++++++++-------------
+ 1 file changed, 3325 insertions(+), 3325 deletions(-)
+#[122] ./combine.pl Unkown option -S
+Generate index.html and frame.html
+jhccse:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tko:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoku:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+tkoage:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usast:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+usa:DAY:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+POP:COUNT:NC:ND:CC:CD:NR:CR:FT:NC:ND:CC:CD:NR:CR:ERN:NC:ND:CC:CD:NR:CR:KV:NC:ND:CC:CD:NR:CR:
+#[281] ./cov19.pl UPLOAD github.io
+/mnt/f/cov/plussum.github.io
+Agent pid 10795
+[master 429de16] update
+ 658 files changed, 34516 insertions(+), 33987 deletions(-)
+ rewrite PNG/01_jhccse_CCM_DEATHS_COUNT_DAY_CCM_TOP10_-plot.csv.txt (72%)
+ rewrite PNG/01_jhccse_CCM_DEATHS_COUNT_DAY_CCM_TOP10_.png (98%)
+ rewrite PNG/01_jhccse_CCM_DEATHS_COUNT_POP_CCM_TOP10_.png (69%)
+ rewrite PNG/01_jhccse_NEW_DEATHS_COUNT_DAY_all_rl_avr_7.png (98%)
+ rewrite PNG/01_jhccse_NEW_DEATHS_COUNT_POP_all_rl_avr_7.png (60%)
+ rewrite PNG/01_jhccse_NEW_DEATHS_FT_DAY_Japan_and_others_269_.png (98%)
+ rewrite PNG/01_tkoage_CCM_CASES_COUNT_DAY_Tokyo_Age_.png (99%)
+ rewrite PNG/01_tkoage_CCM_CASES_COUNT_POP_Tokyo_Age_.png (99%)
+ rewrite PNG/01_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_.png (98%)
+ rewrite PNG/01_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_.png (98%)
+ rewrite PNG/01_tkoage_NEW_CASES_ERN_DAY_ALL_.png (99%)
+ rewrite PNG/01_tkoage_NEW_CASES_FT_DAY_Tokyo_TOP20_.png (98%)
+ rewrite PNG/01_tkoage_NEW_CASES_KV_DAY_Tokyo_TOP20_.png (99%)
+ rewrite PNG/01_tkoku_CCM_CASES_COUNT_DAY_Tokyo_TOP20_.png (98%)
+ rewrite PNG/01_tkoku_CCM_CASES_COUNT_POP_Tokyo_TOP20_.png (98%)
+ rewrite PNG/01_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_rl_avr_7.png (97%)
+ rewrite PNG/01_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_rl_avr_7.png (98%)
+ rewrite PNG/01_tkoku_NEW_CASES_ERN_DAY_TOP5_-plot.csv.txt (97%)
+ rewrite PNG/01_tkoku_NEW_CASES_ERN_DAY_TOP5_.png (98%)
+ rewrite PNG/01_tkoku_NEW_CASES_FT_DAY_Tokyo_TOP20_.png (99%)
+ rewrite PNG/01_tkoku_NEW_CASES_KV_DAY_Tokyo_TOP20_-plot.csv.txt (99%)
+ rewrite PNG/01_tkoku_NEW_CASES_KV_DAY_Tokyo_TOP20_.png (98%)
+ rewrite PNG/01_usast_CCM_DEATHS_COUNT_DAY_TOP_10_rl_avr_7.png (99%)
+ rewrite PNG/01_usast_NEW_DEATHS_COUNT_DAY_TOP_10_rl_avr_7.png (98%)
+ rewrite PNG/01_usast_NEW_DEATHS_FT_DAY_USST_TOP_20_3340_.png (96%)
+ rewrite PNG/02_jhccse_CCM_DEATHS_COUNT_DAY_CCM_TOP20_.png (97%)
+ rewrite PNG/02_jhccse_CCM_DEATHS_COUNT_POP_CCM_TOP20_.png (76%)
+ rewrite PNG/02_jhccse_NEW_DEATHS_COUNT_DAY_all_.png (98%)
+ rewrite PNG/02_jhccse_NEW_DEATHS_COUNT_POP_all_.png (62%)
+ rewrite PNG/02_jhccse_NEW_DEATHS_FT_DAY_Japan_and_TOP10_269_.png (96%)
+ rewrite PNG/02_tkoage_CCM_CASES_COUNT_DAY_Tokyo_Age_ruiseki.png (98%)
+ rewrite PNG/02_tkoage_CCM_CASES_COUNT_POP_Tokyo_Age_ruiseki.png (98%)
+ rewrite PNG/02_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_rl_avr_7.png (99%)
+ rewrite PNG/02_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_rl_avr_7.png (98%)
+ rewrite PNG/02_tkoage_NEW_CASES_ERN_DAY_ALL_max3.png (97%)
+ rewrite PNG/02_tkoku_CCM_CASES_COUNT_DAY_Tokyo_1_5_.png (99%)
+ rewrite PNG/02_tkoku_CCM_CASES_COUNT_POP_Tokyo_1_5_.png (99%)
+ rewrite PNG/02_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP01_10_2m_rl_avr_7.png (98%)
+ rewrite PNG/02_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP01_10_2m_rl_avr_7.png (99%)
+ rewrite PNG/02_tkoku_NEW_CASES_ERN_DAY_TOP5_-plot.csv.txt (97%)
+ rewrite PNG/02_tkoku_NEW_CASES_ERN_DAY_TOP5_.png (98%)
+ rewrite PNG/02_usast_CCM_DEATHS_COUNT_DAY_TOP_10_-plot.csv.txt (75%)
+ rewrite PNG/02_usast_CCM_DEATHS_COUNT_DAY_TOP_10_.png (98%)
+ rewrite PNG/02_usast_NEW_DEATHS_COUNT_DAY_TOP_10_.png (98%)
+ rewrite PNG/02_usast_NEW_DEATHS_FT_DAY_USST_1_10_3340_.png (98%)
+ rewrite PNG/03_jhccse_CCM_DEATHS_COUNT_DAY_CCM_SELECTED_.png (98%)
+ rewrite PNG/03_jhccse_CCM_DEATHS_COUNT_POP_CCM_SELECTED_.png (73%)
+ rewrite PNG/03_jhccse_NEW_DEATHS_FT_DAY_TOP5_269_.png (79%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_-plot.csv.txt (95%)
+ rewrite PNG/03_tko_CCM_DEATHS_COUNT_DAY_Japan_TOP20_2m_.png (67%)
+ rewrite PNG/03_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_2m_rl_avr_7.png (98%)
+ rewrite PNG/03_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_2m_rl_avr_7.png (98%)
+ rewrite PNG/03_tkoage_NEW_CASES_ERN_DAY_ALL_max10.png (98%)
+ rewrite PNG/03_tkoku_CCM_CASES_COUNT_DAY_Tokyo_6_10_.png (99%)
+ rewrite PNG/03_tkoku_CCM_CASES_COUNT_POP_Tokyo_6_10_-plot.csv.txt (70%)
+ rewrite PNG/03_tkoku_CCM_CASES_COUNT_POP_Tokyo_6_10_.png (99%)
+ rewrite PNG/03_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP11_20_2m_rl_avr_7-plot.csv.txt (81%)
+ rewrite PNG/03_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP11_20_2m_rl_avr_7.png (98%)
+ rewrite PNG/03_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP11_20_2m_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/03_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP11_20_2m_rl_avr_7.png (98%)
+ rewrite PNG/03_tkoku_NEW_CASES_ERN_DAY_TOP5_-plot.csv.txt (97%)
+ rewrite PNG/03_tkoku_NEW_CASES_ERN_DAY_TOP5_.png (98%)
+ rewrite PNG/03_usa_NEW_CASES_KV_DAY_USA_1month_.png (98%)
+ rewrite PNG/03_usast_CCM_DEATHS_COUNT_DAY_TOP_10_targeted_-plot.csv.txt (75%)
+ rewrite PNG/03_usast_CCM_DEATHS_COUNT_DAY_TOP_10_targeted_.png (99%)
+ rewrite PNG/03_usast_CCM_DEATHS_COUNT_POP_TOP_10_targeted_.png (68%)
+ rewrite PNG/03_usast_NEW_DEATHS_COUNT_DAY_TOP_10_targeted_.png (99%)
+ rewrite PNG/03_usast_NEW_DEATHS_COUNT_POP_TOP_10_targeted_.png (77%)
+ rewrite PNG/04_jhccse_CCM_DEATHS_COUNT_DAY_CCM_TOP5_Japan_-plot.csv.txt (76%)
+ rewrite PNG/04_jhccse_CCM_DEATHS_COUNT_DAY_CCM_TOP5_Japan_.png (98%)
+ rewrite PNG/04_jhccse_NEW_DEATHS_FT_DAY_TOP10_269_.png (97%)
+ rewrite PNG/04_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_ruiseki02_rl_avr_7.png (98%)
+ rewrite PNG/04_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_ruiseki02_rl_avr_7.png (98%)
+ rewrite PNG/04_tkoage_NEW_CASES_ERN_DAY_1_7_max10.png (99%)
+ rewrite PNG/04_tkoku_CCM_CASES_COUNT_DAY_Tokyo_11_19_.png (98%)
+ rewrite PNG/04_tkoku_CCM_CASES_COUNT_POP_Tokyo_11_19_.png (98%)
+ rewrite PNG/04_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_ruiseki_rl_avr_7.png (96%)
+ rewrite PNG/04_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_ruiseki_rl_avr_7.png (96%)
+ rewrite PNG/04_tkoku_NEW_CASES_ERN_DAY_06_10_-plot.csv.txt (97%)
+ rewrite PNG/04_tkoku_NEW_CASES_ERN_DAY_06_10_.png (98%)
+ rewrite PNG/04_usast_CCM_DEATHS_COUNT_DAY_TOP_10_2month_rl_avr_7.png (99%)
+ rewrite PNG/04_usast_NEW_DEATHS_COUNT_DAY_TOP_10_2month_rl_avr_7.png (98%)
+ rewrite PNG/05_jhccse_CCM_DEATHS_COUNT_DAY_CCM_TOP5_Japan_logscale-plot.csv.txt (72%)
+ rewrite PNG/05_jhccse_CCM_DEATHS_COUNT_DAY_CCM_TOP5_Japan_logscale.png (99%)
+ rewrite PNG/05_jhccse_NEW_DEATHS_COUNT_DAY_01_05_from_0301_rl_avr_7.png (98%)
+ rewrite PNG/05_tkoage_NEW_CASES_COUNT_DAY_Tokyo_Age_ruiseki02_2m_rl_avr_7.png (98%)
+ rewrite PNG/05_tkoage_NEW_CASES_COUNT_POP_Tokyo_Age_ruiseki02_2m_rl_avr_7.png (98%)
+ rewrite PNG/05_tkoku_CCM_CASES_COUNT_DAY_Tokyo_21_29_.png (99%)
+ rewrite PNG/05_tkoku_CCM_CASES_COUNT_POP_Tokyo_21_29_.png (98%)
+ rewrite PNG/05_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_-plot.csv.txt (94%)
+ rewrite PNG/05_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_.png (98%)
+ rewrite PNG/05_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_.png (98%)
+ rewrite PNG/05_tkoku_NEW_CASES_ERN_DAY_11_15_-plot.csv.txt (99%)
+ rewrite PNG/05_tkoku_NEW_CASES_ERN_DAY_11_15_.png (99%)
+ rewrite PNG/05_usast_CCM_DEATHS_COUNT_POP_TOP_11_20_2month_rl_avr_7.png (98%)
+ rewrite PNG/05_usast_NEW_DEATHS_COUNT_POP_TOP_11_20_2month_rl_avr_7.png (78%)
+ rewrite PNG/06_jhccse_NEW_DEATHS_COUNT_POP_06_10_from_0301_rl_avr_7.png (64%)
+ rewrite PNG/06_tkoage_NEW_CASES_COUNT_DAY_Tokyo_over_50_1_ruiseki03_rl_avr_7.png (99%)
+ rewrite PNG/06_tkoage_NEW_CASES_COUNT_POP_Tokyo_over_50_1_ruiseki03_rl_avr_7.png (98%)
+ rewrite PNG/06_tkoku_CCM_CASES_COUNT_DAY_Tokyo_31_39_.png (99%)
+ rewrite PNG/06_tkoku_CCM_CASES_COUNT_POP_Tokyo_31_39_.png (98%)
+ rewrite PNG/06_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_05_20_-plot.csv.txt (78%)
+ rewrite PNG/06_tkoku_NEW_CASES_COUNT_DAY_Tokyo_TOP20_05_20_.png (98%)
+ rewrite PNG/06_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_05_20_-plot.csv.txt (95%)
+ rewrite PNG/06_tkoku_NEW_CASES_COUNT_POP_Tokyo_TOP20_05_20_.png (97%)
+ rewrite PNG/06_tkoku_NEW_CASES_ERN_DAY_16_20_-plot.csv.txt (100%)
+ rewrite PNG/06_tkoku_NEW_CASES_ERN_DAY_16_20_.png (98%)
+ rewrite PNG/07_tkoage_NEW_CASES_COUNT_DAY_Tokyo_over_50_2_ruiseki04_rl_avr_7.png (98%)
+ rewrite PNG/07_tkoage_NEW_CASES_COUNT_POP_Tokyo_over_50_2_ruiseki04_rl_avr_7.png (99%)
+ rewrite PNG/07_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_05_20_rl_avr_7.png (98%)
+ rewrite PNG/07_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_05_20_rl_avr_7.png (98%)
+ rewrite PNG/07_tkoku_NEW_CASES_ERN_DAY_21_25_-plot.csv.txt (99%)
+ rewrite PNG/07_tkoku_NEW_CASES_ERN_DAY_21_25_.png (98%)
+ rewrite PNG/08_jhccse_NEW_DEATHS_FT_DAY_41_50_269_.png (99%)
+ rewrite PNG/08_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_05_20_rl_avr_7.png (98%)
+ rewrite PNG/08_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_05_20_rl_avr_7-plot.csv.txt (99%)
+ rewrite PNG/08_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_05_20_rl_avr_7.png (98%)
+ rewrite PNG/08_tkoku_NEW_CASES_ERN_DAY_26_30_-plot.csv.txt (100%)
+ rewrite PNG/08_tkoku_NEW_CASES_ERN_DAY_26_30_.png (98%)
+ rewrite PNG/09_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_05_20_rl_avr_7.png (98%)
+ rewrite PNG/09_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_05_20_rl_avr_7.png (98%)
+ rewrite PNG/09_usast_CCM_DEATHS_COUNT_DAY_TOP_10_03_14_-plot.csv.txt (82%)
+ rewrite PNG/09_usast_CCM_DEATHS_COUNT_DAY_TOP_10_03_14_.png (98%)
+ rewrite PNG/09_usast_NEW_DEATHS_COUNT_DAY_TOP_10_03_14_.png (98%)
+ rewrite PNG/10_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_05_20_rl_avr_7.png (98%)
+ rewrite PNG/10_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_05_20_rl_avr_7.png (98%)
+ rewrite PNG/10_usast_CCM_DEATHS_COUNT_DAY_TOP_10_05_01_-plot.csv.txt (90%)
+ rewrite PNG/10_usast_CCM_DEATHS_COUNT_DAY_TOP_10_05_01_.png (99%)
+ rewrite PNG/10_usast_NEW_DEATHS_COUNT_DAY_TOP_10_05_01_-plot.csv.txt (62%)
+ rewrite PNG/10_usast_NEW_DEATHS_COUNT_DAY_TOP_10_05_01_.png (98%)
+ rewrite PNG/11_jhccse_NEW_DEATHS_COUNT_DAY_01_05_from_0301_.png (98%)
+ rewrite PNG/11_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_05_20_rl_avr_7-plot.csv.txt (62%)
+ rewrite PNG/11_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_05_20_rl_avr_7.png (98%)
+ rewrite PNG/11_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_05_20_rl_avr_7-plot.csv.txt (85%)
+ rewrite PNG/11_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_05_20_rl_avr_7.png (97%)
+ rewrite PNG/11_usa_CCM_DEATHS_COUNT_DAY_TOP_31_40_2month_-plot.csv.txt (90%)
+ rewrite PNG/11_usa_CCM_DEATHS_COUNT_DAY_TOP_31_40_2month_.png (98%)
+ rewrite PNG/11_usast_CCM_DEATHS_COUNT_DAY_TOP_10_2month_-plot.csv.txt (94%)
+ rewrite PNG/11_usast_CCM_DEATHS_COUNT_DAY_TOP_10_2month_.png (98%)
+ rewrite PNG/11_usast_NEW_DEATHS_COUNT_DAY_TOP_10_2month_-plot.csv.txt (71%)
+ rewrite PNG/11_usast_NEW_DEATHS_COUNT_DAY_TOP_10_2month_.png (98%)
+ rewrite PNG/12_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_05_20_rl_avr_7.png (98%)
+ rewrite PNG/12_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_05_20_rl_avr_7-plot.csv.txt (99%)
+ rewrite PNG/12_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_05_20_rl_avr_7.png (98%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (84%)
+ rewrite PNG/12_usa_CCM_DEATHS_COUNT_DAY_TOP_41_50_2month_.png (98%)
+ rewrite PNG/12_usa_NEW_DEATHS_COUNT_DAY_TOP_41_50_2month_-plot.csv.txt (74%)
+ rewrite PNG/12_usa_NEW_DEATHS_COUNT_DAY_TOP_41_50_2month_.png (98%)
+ rewrite PNG/12_usast_CCM_DEATHS_COUNT_POP_TOP_11_20_2month_.png (98%)
+ rewrite PNG/12_usast_NEW_DEATHS_COUNT_POP_TOP_11_20_2month_-plot.csv.txt (61%)
+ rewrite PNG/12_usast_NEW_DEATHS_COUNT_POP_TOP_11_20_2month_.png (98%)
+ rewrite PNG/13_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_05_20_.png (98%)
+ rewrite PNG/13_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_05_20_-plot.csv.txt (90%)
+ rewrite PNG/13_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_05_20_.png (98%)
+ rewrite PNG/14_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_05_20_.png (98%)
+ rewrite PNG/14_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_05_20_-plot.csv.txt (83%)
+ rewrite PNG/14_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_05_20_.png (98%)
+ rewrite PNG/15_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_.png (99%)
+ rewrite PNG/15_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_05_20_.png (98%)
+ rewrite PNG/15_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_05_20_-plot.csv.txt (99%)
+ rewrite PNG/15_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_05_20_.png (98%)
+ rewrite PNG/16_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_05_20_-plot.csv.txt (78%)
+ rewrite PNG/16_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_05_20_.png (98%)
+ rewrite PNG/16_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_05_20_-plot.csv.txt (98%)
+ rewrite PNG/16_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_05_20_.png (98%)
+ rewrite PNG/16_usa_CCM_DEATHS_COUNT_DAY_TOP_10_05_01_Oregon_-plot.csv.txt (92%)
+ rewrite PNG/17_jhccse_NEW_DEATHS_COUNT_DAY_2month_01_05_rl_avr_7-plot.csv.txt (67%)
+ rewrite PNG/17_jhccse_NEW_DEATHS_COUNT_DAY_2month_01_05_rl_avr_7.png (98%)
+ rewrite PNG/17_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_05_20_-plot.csv.txt (74%)
+ rewrite PNG/17_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_05_20_.png (97%)
+ rewrite PNG/17_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_05_20_-plot.csv.txt (97%)
+ rewrite PNG/17_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_05_20_.png (98%)
+ rewrite PNG/17_usa_CCM_DEATHS_COUNT_DAY_TOP_10_05_01_Texas_-plot.csv.txt (92%)
+ rewrite PNG/18_tko_CCM_DEATHS_COUNT_DAY_Japan_11_20_1m_rl_avr_7.png (65%)
+ rewrite PNG/18_tko_NEW_DEATHS_COUNT_DAY_Japan_11_20_1m_rl_avr_7.png (61%)
+ rewrite PNG/18_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_05_20_.png (98%)
+ rewrite PNG/18_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_05_20_-plot.csv.txt (80%)
+ rewrite PNG/18_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_05_20_.png (99%)
+ rewrite PNG/19_tko_CCM_DEATHS_COUNT_DAY_Japan_01_05_2m_-plot.csv.txt (91%)
+ rewrite PNG/19_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_MONTH_TOP20_rl_avr_7.png (98%)
+ rewrite PNG/19_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_MONTH_TOP20_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/19_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_MONTH_TOP20_rl_avr_7.png (98%)
+ rewrite PNG/20_jhccse_NEW_DEATHS_COUNT_POP_2month_21_30_rl_avr_7.png (75%)
+ rewrite PNG/20_tko_CCM_DEATHS_COUNT_DAY_Japan_06_10_2m_-plot.csv.txt (78%)
+ rewrite PNG/20_tko_CCM_DEATHS_COUNT_DAY_Japan_06_10_2m_.png (98%)
+ rewrite PNG/20_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_MOTH_TOP20-plot.csv.txt (95%)
+ rewrite PNG/20_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_MOTH_TOP20.png (98%)
+ rewrite PNG/20_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_MOTH_TOP20-plot.csv.txt (78%)
+ rewrite PNG/20_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_MOTH_TOP20.png (98%)
+ rewrite PNG/21_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_-plot.csv.txt (68%)
+ rewrite PNG/21_tko_CCM_DEATHS_COUNT_DAY_Japan_11_15_2m_.png (98%)
+ rewrite PNG/21_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/21_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_2MONTH_rl_avr_7.png (99%)
+ rewrite PNG/22_jhccse_NEW_DEATHS_COUNT_DAY_2month_01_05_-plot.csv.txt (73%)
+ rewrite PNG/22_jhccse_NEW_DEATHS_COUNT_DAY_2month_01_05_.png (98%)
+ rewrite PNG/22_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_-plot.csv.txt (82%)
+ rewrite PNG/22_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (99%)
+ rewrite PNG/22_tko_NEW_DEATHS_COUNT_DAY_Japan_16_20_2m_.png (98%)
+ rewrite PNG/22_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_2MONTH_rl_avr_7-plot.csv.txt (79%)
+ rewrite PNG/22_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_2MONTH_rl_avr_7.png (99%)
+ rewrite PNG/22_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_2MONTH_rl_avr_7-plot.csv.txt (71%)
+ rewrite PNG/22_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_2MONTH_rl_avr_7.png (99%)
+ rewrite PNG/23_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_2MONTH_rl_avr_7-plot.csv.txt (91%)
+ rewrite PNG/23_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/23_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_2MONTH_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/23_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/24_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_2MONTH_rl_avr_7-plot.csv.txt (77%)
+ rewrite PNG/24_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/24_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_2MONTH_rl_avr_7-plot.csv.txt (100%)
+ rewrite PNG/24_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/25_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_2MONTH_rl_avr_7-plot.csv.txt (73%)
+ rewrite PNG/25_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/25_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_2MONTH_rl_avr_7-plot.csv.txt (99%)
+ rewrite PNG/25_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/26_jhccse_NEW_DEATHS_COUNT_POP_2month_31_40_.png (76%)
+ rewrite PNG/26_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_rl_avr_7-plot.csv.txt (91%)
+ rewrite PNG/26_tko_CCM_DEATHS_COUNT_DAY_Japan_16_20_2m_rl_avr_7.png (99%)
+ rewrite PNG/26_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_2MONTH_rl_avr_7.png (98%)
+ rewrite PNG/26_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_2MONTH_rl_avr_7-plot.csv.txt (99%)
+ rewrite PNG/26_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_2MONTH_rl_avr_7.png (99%)
+ rewrite PNG/27_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/27_tkoku_NEW_CASES_COUNT_DAY_Tokyo_1_5_2MOTH_.png (98%)
+ rewrite PNG/27_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/27_tkoku_NEW_CASES_COUNT_POP_Tokyo_1_5_2MOTH_.png (98%)
+ rewrite PNG/28_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_2MOTH_-plot.csv.txt (92%)
+ rewrite PNG/28_tkoku_NEW_CASES_COUNT_DAY_Tokyo_6_10_2MOTH_.png (98%)
+ rewrite PNG/28_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/28_tkoku_NEW_CASES_COUNT_POP_Tokyo_6_10_2MOTH_.png (99%)
+ rewrite PNG/29_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_2MOTH_-plot.csv.txt (97%)
+ rewrite PNG/29_tkoku_NEW_CASES_COUNT_DAY_Tokyo_11_15_2MOTH_.png (98%)
+ rewrite PNG/29_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/29_tkoku_NEW_CASES_COUNT_POP_Tokyo_11_15_2MOTH_.png (98%)
+ rewrite PNG/30_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/30_tkoku_NEW_CASES_COUNT_DAY_Tokyo_16_20_2MOTH_.png (97%)
+ rewrite PNG/30_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/30_tkoku_NEW_CASES_COUNT_POP_Tokyo_16_20_2MOTH_.png (99%)
+ rewrite PNG/31_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_2MOTH_-plot.csv.txt (89%)
+ rewrite PNG/31_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_2MOTH_-plot.txt (65%)
+ rewrite PNG/31_tkoku_NEW_CASES_COUNT_DAY_Tokyo_21_30_2MOTH_.png (97%)
+ rewrite PNG/31_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_2MOTH_-plot.csv.txt (99%)
+ rewrite PNG/31_tkoku_NEW_CASES_COUNT_POP_Tokyo_21_30_2MOTH_.png (98%)
+ rewrite PNG/32_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/32_tkoku_NEW_CASES_COUNT_DAY_Tokyo_31_40_2MOTH_.png (98%)
+ rewrite PNG/32_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_2MOTH_-plot.csv.txt (100%)
+ rewrite PNG/32_tkoku_NEW_CASES_COUNT_POP_Tokyo_31_40_2MOTH_.png (98%)
+ create mode 100644 tokyo-ku/content/press2020111721.html
+ create mode 100644 tokyo-ku/content/press20201117documents20201116.pdf
+ create mode 100644 tokyo-ku/content/press20201117documents20201116.pdf.11-15.csv.txt
+ create mode 100644 tokyo-ku/content/press20201117documents20201116.pdf.txt
+/home/masataka/who/src
+Agent pid 10828
