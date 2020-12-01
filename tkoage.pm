@@ -59,7 +59,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
     download => \&download,
     copy => \&copy,
 
-	POP_THRESH => 100,
+	POP_THRESH => 10000,
 	AGGR_MODE => {DAY => 1, POP => 1},		# POP: 7 Days Total / POP
 	#MODE => {NC => 1, ND => 1},
 #	sort_balance =>0.7,  	# ALL = 0; 0.7 = 後半の30%のデータでソート
@@ -98,6 +98,8 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				#		avr_date => 7, ruiseki => 1, nosort => 1, thresh => ""},
 				{ext => "#KIND# Tokyo Age (#LD#) #SRC# ruiseki02", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", 
 						avr_date => 7, ruiseki => -1, nosort => 1, thresh => ""},
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC# ruiseki03(Percent)", start_day => 0, lank =>[0, 19] , exclusion => "100,不明", target => "", label_skip => 7, graph => "lines", 
+						avr_date => 7, ruiseki => -1, nosort => 1, thresh => "", ruiseki_percent => 1},
 				{ext => "#KIND# Tokyo Age (#LD#) #SRC# ruiseki02 2m", start_day => -61,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", 
 						avr_date => 7, ruiseki => -1, nosort => 1, thresh => ""},
 

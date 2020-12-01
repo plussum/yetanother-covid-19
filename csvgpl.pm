@@ -671,10 +671,18 @@ sub	csv2graph
 		dp::dp "$recno,  $#Dataset\n" if($DEBUG);
 		for(my $i = 0; $i <= $recno; $i++){
 			my @w = split(/$DLM/, $record[$i]);
+			my $total = 0;
 			for(my $r = 0; $r <= $#w; $r++){
 				$RUI[$i][$r] = $w[$r];
+				$total += $RUI[$i][$r] if($r > 0);
+			}
+			if(($gplitem->{ruiseki_percent} // "")){
+				for(my $r = 1; $r <= $#w; $r++){
+					$RUI[$i][$r] = 100 * $RUI[$i][$r]  / $total;
+				}
 			}
 		}
+
 		if($gplitem->{ruiseki} >= 0){
 			for(my $i = 0; $i <= $recno; $i++){
 				for(my $r = 2; $r <= $#Dataset; $r++){
