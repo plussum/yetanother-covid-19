@@ -313,7 +313,7 @@ if($DATA_SOURCE eq "comb"){
 }
 
 if(! $DATA_SOURCE){
-	dp::dp "./cov19.pl " . join(" | ", @ALL_DATA_SOURCES) . " -DL -all -FULL --ERN --FT --POP \n";
+	dp::dp "./cov19.pl " . join(" | ", @ALL_DATA_SOURCES) . " -DL -all -FULL --ERN --FT --POP -CRON[F]\n";
 	exit 1;
 }
 

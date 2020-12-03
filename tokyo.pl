@@ -254,6 +254,7 @@ sub	tokyo_info
 		foreach (my $itn = 0; $itn <= $#items; $itn++){
 			my $k = $items[$itn];
 			my $v = csvlib::valdef($dt->{$k});
+			#dp::dp "$itn: $k: $v\n";
 			if($avr_date > 0 && $k ne $date_name){
 				if($rec < $avr_date){
 					$v = 0;
@@ -267,14 +268,7 @@ sub	tokyo_info
 			}
 			$data[$rec]{$k} = $v;
 			$max{$k} = $v if(!defined $max{$k} || ($itn > 0 && $v > $max{$k}));
-			$total += $v;
 		}
-		#####  percent 
-		#if($
-		#foreach (my $itn = 0; $itn <= $#items; $itn++){
-		#	$data[$rec]{$k} = 100 * $data[$rec]{$k} / $total;
-		#}
-
 		$rec++ 
 	}
 	my $y2k = $p->{y2max};
