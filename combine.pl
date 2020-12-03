@@ -5,12 +5,15 @@
 
 use strict;
 use warnings;
+use Clone qw(clone);
 
 use config;
 use	csvlib;
 use dp;
 use Data::Dumper;
 use Time::Local 'timelocal';
+
+my $MAX_DATE = "2037/12/31";
 
 my $DEBUG = 0;
 my $VERBOSE = 0;
@@ -56,7 +59,7 @@ foreach my $tgc (@TARGET_COUNTRY){
 		my $p = {	
 			time_from => "2020/03/01",
 			title => "$country $tgc->{title}",
-			time_till => "",
+			time_till => $MAX_DATE,
 			avr_date => 7,
 			plot => [
 				{items => [$src_nc], target => $country, label => "NewCases", ymin => "", ymax => "", graph => $LTW},
@@ -64,8 +67,9 @@ foreach my $tgc (@TARGET_COUNTRY){
 			],
 		};
 		push(@PARAM_LIST, $p);
-		$p->{time_from} = "2020/08/01",
-		push(@PARAM_LIST, $p);
+		my $pn = clone($p);
+		$pn->{time_from} = "2020/08/01",
+		push(@PARAM_LIST, $pn);
 	}
 }
 my @CSV_FILES = ();
@@ -138,7 +142,8 @@ my $pn = 0;
 foreach my $p (@PARAMS){
 	#dp::dp $p->{title} . "\n";
 	my $csvf =  $p->{title} . "(" . $p->{time_from} . ")";
-	$csvf =~ s/\W/_/g;
+	#my $csvf =  $p->{title} ;
+	$csvf =~ s/[\/#,,\(\) ]/_/g;
 	$csvf .= "rl_avr " . $p->{avr_date} if(defined $p->{avr_date});
 	$csvf =~ s/[ \/,.]/_/g;
 	$p->{dst} = "$csvf";
@@ -199,7 +204,7 @@ my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
 foreach my $p (@PARAMS){
 	#last if(! $p->{src});
-	dp::dp $p->{title} . "\n";
+	#dp::dp $p->{title} . "\n";
 
 	#print $p->{title} . "\n" if($VERBOSE);
 	my $dst = $p->{dst};
@@ -319,12 +324,12 @@ sub	combine_graph
 
 
 	my $dst = $p->{dst};
-	print "[$dst]\n" if($DEBUG);
+	dp::dp "$dst\n"; # if($DEBUG);
 	my $pngf = "$dst.png";
 	my $plotf = "$dst-plot.txt";
 
 	my $time_from = $p->{time_from} // "";
-	my $time_till = $p->{time_till} // "";
+	my $time_till = $p->{time_till} // $MAX_DATE;
 
 	my $gpara = {
 		p => $p,
@@ -402,6 +407,10 @@ sub	graph
 	my @CSV_ITEMS = split(/$DLM/, $s);
 	shift(@CSV_ITEMS);
 
+	
+	#dp::dp join(", ", $time_from, $time_till, "--",  @CSV_ITEMS) . "\n";
+	#dp::dp $csvf . "\n";
+
 	my %STATS = ();
 	for(my $i = 0; $i <= $#CSV_ITEMS; $i++){
 		$STATS{MAX}[$i] = -99999999;
@@ -409,14 +418,20 @@ sub	graph
 		$STATS{TOTAL}[$i] = 0;
 	}
 	
-	my $CSV_TIME_FROM = "";				# FIRST DATE
-	my $CSV_TIME_TILL = "";	# LAST_DATE
+	my $CSV_TIME_FROM = "";		# FIRST DATE
+	my $CSV_TIME_TILL = "";		# LAST_DATE
 	while(<CSV>){
 		s/[\r\n]+$//;
 		my @w = split(/$DLM/, $_);
 
-		$CSV_TIME_TILL = &date2ut(shift(@w));
+		my $dt = shift(@w);
+		$CSV_TIME_TILL = &date2ut($dt);
 		$CSV_TIME_FROM = $CSV_TIME_TILL if(! $CSV_TIME_FROM);
+		if($dt lt $time_from || $dt gt $time_till){		# 2020/12/03
+			#dp::dp "out of date range :[$time_from-$time_till] [$dt]\n";
+			next;
+		}
+
 		for(my $i = 0; $i <= $#w; $i++){
 			my $v = $w[$i];
 			next if($v eq "NaN");
@@ -491,6 +506,7 @@ sub	graph
 	#
 	#	Time Range
 	#
+	$time_till = "" if($time_till eq $MAX_DATE);
 	if(!$time_from && !$time_till){
 		$time_from = "-2m";
 		$time_till = "";
@@ -506,7 +522,7 @@ sub	graph
 		dp::dp "TIME_TILL: $time_till" . &ut2dt($utime_till) . "\n" if($DEBUG);
 	}
 	my $xrange = sprintf("['%s':'%s']", &ut2md($utime_from), &ut2md($utime_till));
-	$title .=  sprintf(" (%s:%s)", &ut2md($utime_from), &ut2md($utime_till));
+	$title .=  sprintf(" (%s-%s)", &ut2md($utime_from), &ut2md($utime_till));
 
 	my $perc = 0;
 	if($YMAX[0] < $YMAX[1]){
