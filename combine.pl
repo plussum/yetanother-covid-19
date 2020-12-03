@@ -64,6 +64,8 @@ foreach my $tgc (@TARGET_COUNTRY){
 			],
 		};
 		push(@PARAM_LIST, $p);
+		$p->{time_from} = "2020/08/01",
+		push(@PARAM_LIST, $p);
 	}
 }
 my @CSV_FILES = ();
@@ -134,7 +136,7 @@ my %COUNTRY_FLAG = ();
 my %DATES = ();
 my $pn = 0;
 foreach my $p (@PARAMS){
-	dp::dp $p->{title} . "\n";
+	#dp::dp $p->{title} . "\n";
 	my $csvf =  $p->{title} ;
 	$csvf .= "rl_avr " . $p->{avr_date} if(defined $p->{avr_date});
 	$csvf =~ s/[ \/,.]/_/g;
@@ -196,8 +198,9 @@ my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
 foreach my $p (@PARAMS){
 	#last if(! $p->{src});
+	dp::dp $p->{title} . "\n";
 
-	print $p->{title} . "\n" if($VERBOSE);
+	#print $p->{title} . "\n" if($VERBOSE);
 	my $dst = $p->{dst};
 
 	&combine_graph($p);
