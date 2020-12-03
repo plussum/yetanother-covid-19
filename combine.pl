@@ -39,6 +39,8 @@ my $HTMLF   = "$HTML_DIR/combine.html";
 my $OUT_CSV = "$IMG_DIR/combine.csv.txt";
 my $OUT_PNG = "$IMG_DIR/combine.png";
 
+my $CD_RATE = 2.5;			# Axis of New Cases / New Deaths
+
 my @TARGET_COUNTRY = (
 	{src => "ccse", title => "JHCCSE New Cases/Deathes", list => "Japan,US"},
 	{src => "tko",  title => "Toyo Keizai New Cases/Deathes",list => "東京,大阪,北海道,神奈川,千葉,埼玉,愛知,沖縄,熊本,福岡"},
@@ -62,8 +64,8 @@ foreach my $tgc (@TARGET_COUNTRY){
 			time_till => $MAX_DATE,
 			avr_date => 7,
 			plot => [
+				{items => [$src_nd], target => $country, label => "NewDeathes($CD_RATE%)", ymin => "", ymax => "", graph => $BX1},
 				{items => [$src_nc], target => $country, label => "NewCases", ymin => "", ymax => "", graph => $LTW},
-				{items => [$src_nd], target => $country, label => "NewDeathes", ymin => "", ymax => "", graph => $LT1},
 			],
 		};
 		push(@PARAM_LIST, $p);
@@ -483,6 +485,7 @@ sub	graph
 		dp::dp "RANGE: $yr  DIGIT: $yd  -> $ydn\n" if($DEBUG);
 
 		$ymn = int($ymn / $ydn - 0.999999) * $ydn if(! $ymin[$i]);
+		$ymn = 0; ##### 2020/12/03
 		$ymx = int(($ymx - $ymn) / $ydn + 0.999999999) * $ydn + $ymn if(! $ymax[$i]);
 
 		$yrange[$i] = sprintf("set y%srange [$ymn:$ymx]", ($i == 0) ? "" : 2);
@@ -494,6 +497,11 @@ sub	graph
 		$YMAX[$i] = $ymx;
 	}
 
+	my $ymx = $YMAX[1] * $CD_RATE / 100;  # 5%
+	my $ymn = 0 ;
+	$yrange[0] = sprintf("set y%srange [$ymn:$ymx]", "");
+	#dp::dp "max/min: " . join(", ", @YMIN, @YMAX, $ymx) . "\n";
+
 	my $yr  = $yrange[0];
 	my $yl  = $ylabel[0];
 	my $yr2 = ($yrange[1]) ? $yrange[1] : $yrange[0];
@@ -502,6 +510,8 @@ sub	graph
 	$yl2 =~ s/yl/y2l/;
 	#my $y2tics = ($ylabel[1]) ? "set y2tics" : "";	# set y2tics
 	my $y2tics = "set y2tics";
+
+	#dp::dp "Y2RANGE: " .join(", ", $yrange[0], $yrange[1], $yr2) . "\n";
 
 	#
 	#	Time Range
