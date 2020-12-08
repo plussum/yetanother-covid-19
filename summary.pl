@@ -243,6 +243,7 @@ my @summary = (
 	}
 );
 
+
 #foreach my $ss (@summary){
 #	print join(",", $ss->{index}, $ss->{htmlf}, @{$ss->{params}}) . "\n";
 #}
@@ -265,6 +266,8 @@ if($#PNG_FILES < 0){
 	exit 1;
 }
 
+my $last_ctime = time;
+
 foreach my $ss (@summary){
 	my @SUMMARY_PNG = ();
 	dp::dp "\n" . "-" x 20 . "\n" if($VERBOSE);
@@ -280,6 +283,9 @@ foreach my $ss (@summary){
 			my $png = $PNG_FILES[$skn-1];
 			push(@SUMMARY_PNG, $png);
 			#dp::dp $png . "\n";
+			my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+				$atime,$mtime,$ctime,$blksize,$blocks) = stat("$config::PNG_PATH/$png");
+			$last_ctime = $ctime if($ctime > $last_ctime);
 		}
 		else {
 			dp::dp "### Not found " . $target . "\n";
@@ -310,6 +316,7 @@ foreach my $ss (@summary){
 	print HTML "</HEAD>\n";
 	print HTML "<BODY>\n";
 
+	print HTML "" . csvlib::ut2dt($last_ctime) . "\n";
 	my $img_path = $config::PNG_REL_PATH;
 	foreach my $png (@SUMMARY_PNG){
 		if($png =~ /\</){

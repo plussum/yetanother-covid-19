@@ -74,6 +74,16 @@ sub ut2hm
 	return $s;
 }
 
+sub ut2dt
+{
+	my ($tm, $dlm) = @_;
+
+	$dlm = $dlm // ":";
+	my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($tm);
+	my $s = sprintf("%04d/%02d/%02d %02d:%02d:%02d", $year + 1900, $mon + 1, $mday, $hour, $min, $sec);
+	return $s;
+}
+
 #
 #	unix_time, "/", -> "20/01/02"
 #
