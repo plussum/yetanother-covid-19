@@ -92,8 +92,8 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	DLM => $DLM,
 
 	SORT_BALANCE => {		# move to config.pm
-		NC => [0, 0],
-		ND => [0, 0],
+		NC => [0.9, 1],
+		ND => [0.9, 1],
 	},
 #	THRESH => {		# move to config.pm
 #		NC => 0,

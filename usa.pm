@@ -95,8 +95,8 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	AGGR_MODE => {DAY => 1, POP => 1},									# Effective AGGR MODE
 	POP_THRESH => 100,
 	SORT_BALANCE => {		# move to config.pm
-		NC => [0.95, 1],
-		ND => [0.95, 1],
+		NC => [0.9, 1],
+		ND => [0.9, 1],
 	},
 
 	COUNT => {			# FUNCTION PARAMETER    $funcp
