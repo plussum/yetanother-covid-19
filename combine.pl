@@ -72,6 +72,11 @@ foreach my $tgc (@TARGET_COUNTRY){
 		my $pn = clone($p);
 		$pn->{time_from} = "2020/08/01",
 		push(@PARAM_LIST, $pn);
+
+		$pn = clone($p);
+		$pn->{time_from} = "2020/10/01",
+		push(@PARAM_LIST, $pn);
+
 	}
 }
 my @CSV_FILES = ();
