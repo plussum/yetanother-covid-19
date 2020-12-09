@@ -67,8 +67,8 @@ my @usa_params = (
 	{ext => "#KIND# Montgomery-Maryland  (#LD#) #SRC#", start_day => 0, lank =>[0, 9], exclusion => $EXCLUSION, target => "Montgomery;Maryland", label_skip => 7, graph => "lines"},
 	{ext => "#KIND# Montgomery-Maryland 04/01 (#LD#) #SRC#", start_day => "04/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "Montgomery;Maryland", label_skip => 7, graph => "lines"},
 
-	{ext => "#KIND# California  (#LD#) #SRC#", start_day => 0, lank =>[0, 9], exclusion => $EXCLUSION, target => "California", label_skip => 7, graph => "lines"},
-	{ext => "#KIND# California 04/01 (#LD#) #SRC#", start_day => "04/01", lank =>[0, 9], exclusion => $EXCLUSION, target => "California", label_skip => 7, graph => "lines"},
+	{ext => "#KIND# California  (#LD#) #SRC#", start_day => 0, lank =>[0, 9], exclusion => $EXCLUSION, target => "California", label_skip => 7, graph => "lines", avr_date => 7},
+	{ext => "#KIND# California 04/01 (#LD#) #SRC#", start_day => -90, lank =>[0, 9], exclusion => $EXCLUSION, target => "California", label_skip => 7, graph => "lines", avr_date => 7},
 );
 
 our $PARAMS = {			# MODULE PARETER        $mep
@@ -94,6 +94,10 @@ our $PARAMS = {			# MODULE PARETER        $mep
 
 	AGGR_MODE => {DAY => 1, POP => 1},									# Effective AGGR MODE
 	POP_THRESH => 100,
+	SORT_BALANCE => {		# move to config.pm
+		NC => [0.95, 1],
+		ND => [0.95, 1],
+	},
 
 	COUNT => {			# FUNCTION PARAMETER    $funcp
 		EXEC => "",
