@@ -191,7 +191,7 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 if($CRON){
 	my $log = "tee -a /home/masataka/who/src/cron.log";
 	my $cov19_cmd = "$0 -FULL -S | $log";
-	my $cront = 20;		# 1min
+	my $cront = 2*60;		# 1min
 	my $force_exec = "";
 	push(@CRON_TAB, csvlib::ut2hm(time)) if($CRON =~ /F$/);
 
