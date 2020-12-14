@@ -43,7 +43,7 @@ my $CD_RATE = 2.5;			# Axis of New Cases / New Deaths
 
 my @TARGET_COUNTRY = (
 	{src => "ccse", title => "JHCCSE New Cases/Deathes", list => "Japan,US"},
-	{src => "tko",  title => "Toyo Keizai New Cases/Deathes",list => "東京,大阪,北海道,神奈川,千葉,埼玉,愛知,沖縄,熊本,福岡"},
+	{src => "tko",  title => "Toyo Keizai New Cases/Deathes",list => "東京,大阪,北海道,神奈川,千葉,埼玉,愛知,兵庫,沖縄,熊本,福岡"},
 	{src => "ccse", title => "JHCCSE NEW Cases/Deathes", list => "France,United Kingdom,Italy,Germany,Belgium,Poland,Netherlands,Czechia,Romania,Switzerland,Portugal,Sweden"},
 );
 
