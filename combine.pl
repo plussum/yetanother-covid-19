@@ -60,7 +60,7 @@ foreach my $tgc (@TARGET_COUNTRY){
 	foreach my $country (split(/,/, $tgc->{list})){
 		my $p = {	
 			time_from => "2020/03/01",
-			title => "$country $tgc->{title}",
+			title => "[$country] $tgc->{title}",
 			time_till => $MAX_DATE,
 			avr_date => 7,
 			plot => [
@@ -150,7 +150,7 @@ foreach my $p (@PARAMS){
 	#dp::dp $p->{title} . "\n";
 	my $csvf =  $p->{title} . "(" . $p->{time_from} . ")";
 	#my $csvf =  $p->{title} ;
-	$csvf =~ s/[\/#,,\(\) ]/_/g;
+	$csvf =~ s/[\/#,,\(\)\[\] ]/_/g;
 	$csvf .= "rl_avr " . $p->{avr_date} if(defined $p->{avr_date});
 	$csvf =~ s/[ \/,.]/_/g;
 	$p->{dst} = "$csvf";
