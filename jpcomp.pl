@@ -21,7 +21,9 @@ my $MODE = "NC";
 my $DLM = $config::DLM;
 
 my $src_url = "https://dl.dropboxusercontent.com/s/6mztoeb6xf78g5w/COVID-19.csv";
-my $WIN_PATH = "/mnt/f/OneDrive/cov";
+#my $WIN_PATH = "/mnt/f/OneDrive/cov";
+my $WIN_PATH = $confg::WIN_PATH;
+
 my $transaction = "$WIN_PATH/gis-jag-japan.csv.txt";
 my $AGR_CSVF = "$WIN_PATH/JapanPref_total.csv.txt";
 my $RATE_CSVF = "$WIN_PATH/JapanPref_total-rate.csv.txt";
