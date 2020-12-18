@@ -6,7 +6,6 @@ use strict;
 use warnings;
 use confg.pm:
 
-#my $dir = "/mnt/f/cov/plussum.github.io/PNG";
 my $dir = $config::PNG_PATH;
 if($#ARGV < 0){
 	print "USAGE: $0 file_name\n";
