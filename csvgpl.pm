@@ -253,6 +253,7 @@ sub	csv2graph
 	my $plot_pngf = $png_path . "/" . $fname . ".png";
 	my $plot_cmdf = $png_path . "/" . $fname . "-plot.txt";
 	my $plot_csvf = $png_path . "/" . $fname . "-plot.csv.txt";
+	my $plot_valf = $png_path . "/" . $fname . "-plot.val.txt";
 	if($DEBUG){
 		dp::dp $plot_pngf , "\n" ;		#### 
 		dp::dp "SRC CSV [$csvf]\n" ;
@@ -784,9 +785,16 @@ set terminal pngcairo size $TERM_XSIZE, $TERM_YSIZE font "IPAexゴシック,8" e
 #LOGSCALE2#
 #FILLSTYLE#
 set y2tics
+set output '$plot_pngf.png'
+plot #PLOT_PARAM#
+Y_MIN = 0
+Y_MAX = GPVAL_Y_MAX
+
+#show variables all
 set output '$plot_pngf'
 #ARROW#
 plot #PLOT_PARAM#
+#show variables all
 exit
 _EOD_
 
@@ -833,23 +841,8 @@ _EOD_
 	if($#LEGEND_KEYS < 0 && ! defined $gplitem->{additional_plot}){
 		$pn = "1 with lines title 'no-data'";
 	}
-	$PARAMS =~ s/#PLOT_PARAM#/$pn/;	
+	$PARAMS =~ s/#PLOT_PARAM#/$pn/g;	
 
-	#	Draw one week before
-	my $RELATIVE_DATE = 7;
-	#my $MARK_DATE = $DATES[$end_day-$RELATIVE_DATE];
-	my @aw = ();
-	
-	for(my $date = $end_day - $RELATIVE_DATE; $date > 0; $date -= $RELATIVE_DATE){
-		my $mark_date = $DATES[$date];
-		my $a = sprintf("set arrow from '%s',%d to '%s',%d nohead lw 1 dt (3,7) lc rgb \"red\"",
-            $mark_date, $ymin, $mark_date, csvlib::calc_max2($max_data));
-		push(@aw, $a);
-	}
-	my $arw = join("\n", @aw);
-
-	$PARAMS =~ s/#ARROW#/$arw/;	
-	
 
 	if($gplitem->{logscale}){
 		if($fp->{sub_mode} eq "FT" && $max_data <= 10){
@@ -881,12 +874,46 @@ _EOD_
 	$PARAMS =~ s/#XTICKS#/$xtics/;
 #	dp::dp "[[[$PARAMS]]]\n";
 
+#	my $PARAMS_SHOW_VALS = $PARAMS;
+#	my $SHOW_VALS = "show variables GPVAL_Y_MIN\nshow variables GPVAL_Y_MAX\n";
+#	$PARAMS_SHOW_VALS =~ s/#SHOW_VALS#/$SHOW_VALS/;
+
+	#my $gpval_y_min = $GPVAL{GPVAL_Y_MIN} // "";
+	#my $gpval_y_max = $GPVAL{GPVAL_Y_MAX} // "";
+
+	if(1){
+		my $RELATIVE_DATE = 7;
+		#my $MARK_DATE = $DATES[$end_day-$RELATIVE_DATE];
+		my @aw = ();
+		
+		for(my $date = $end_day - $RELATIVE_DATE; $date > 0; $date -= $RELATIVE_DATE){
+			my $mark_date = $DATES[$date];
+			#my $a = sprintf("set arrow from '%s',%d to '%s',%d nohead lw 1 dt (3,7) lc rgb \"red\"",
+			#    $mark_date, $ymin, $mark_date, csvlib::calc_max2($max_data));
+			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"red\"",
+				$mark_date,  $mark_date);
+			push(@aw, $a);
+		}
+		my $arw = join("\n", @aw);
+		#dp::dp "ARROW: $arw\n";
+
+		$PARAMS =~ s/#ARROW#/$arw/;	
+	}
+	
 	open(PLF, "> $plot_cmdf") || die "cannot create $plot_cmdf";
 	print PLF $PARAMS;
 	close(PLF);
-
 	print ("gnuplot $plot_cmdf\n") if($VERBOSE || $DEBUG > 1);
 	system("gnuplot $plot_cmdf");
+	#system("cat $plot_cmdf");
+
+	#dp::dp "#" x 30 . "\n";
+	#system("echo $plot_valf ; cat $plot_valf");
+	#dp::dp "#" x 30 . "\n";
+	#exit;
+	#	Draw one week before
+	#my %GPVAL =();
+	#&load_vals($plot_valf, \%GPVAL);
 
 	if($#UNDEF_POP >= 0){
 		for(my $i = 0; $i < 5; $i++){
@@ -924,3 +951,31 @@ sub	date_offset
 	return $ld;
 }
 1;
+sub	load_vals
+{
+	my ($fn, $gp) = @_;
+
+	dp::dp "#### locad_vals: $fn\n";
+	my @list = ();
+	open(GP, $fn) || die "cannot open $fn";
+	while(<GP>){
+		dp::dp $_;
+		s/[\r\n]+$//;
+		push(@list, $_);
+	}
+	close(GP);
+
+	for(my $i = 0; $i <= $#list; $i){
+		if(/Variables beginning with (.*):/){
+			#GPVAL_Y_MIN = 0.0
+			$i++;
+			$list[$i] =~ /([\w_]+) = ([0-9\.])/;
+			my( $val_name , $v) = ($1, $2);
+			$gp->{$val_name} = $v;
+			dp::dp "### $list[$i] \n";
+		}
+	}
+	foreach my $vn (sort keys %{$gp}){
+		dp::dp "GPVAL:  $vn => $gp->{$vn}\n";
+	}
+}

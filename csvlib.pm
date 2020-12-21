@@ -279,7 +279,7 @@ sub	calc_max2
 	$digit = $digit - 1 if($digit >= 3);
 	my $max = 0;
 	$max = int((($v / (10**$digit)) + 0.99999)) * (10**$digit);
-	dp::dp "calc_max2[$v:$max:$digit]\n";
+	#dp::dp "calc_max2[$v:$max:$digit]\n";
 
 	return $max;
 
