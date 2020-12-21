@@ -69,6 +69,10 @@ my $csvf = "tpr_avr#avr#.csv.txt";
 my $avr_date = 0;
 my $DLM = "\t";
 
+my @data = ();
+my $rec = 0;
+$date_name = 0;
+
 my @PARAMS = (
     {	
 		src => "$TKY_DIR/data/positive_rate.json",
@@ -242,12 +246,10 @@ sub	tokyo_info
 	my $positive = decode_json($JSON);
 	#print Dumper $positive;
 
-	my @data = ();
-	my $rec = 0;
 	my @data0 = (@{$positive->{data}});
 	#print Dumper $positive;
 	my %max = ();
-	my $date_name = $items[0];
+	$date_name = $items[0];
 	foreach my $dt (@data0) {
 
 		my $total = 0;
@@ -358,7 +360,7 @@ set ylabel '$ylabel'
 set xtics $xtics
 set terminal pngcairo size 1000, 300 font "IPAexゴシック,8" enhanced
 set y2tics
-set output '$pngf.png'
+set output '/dev/null'
 plot #PLOT_PARAM#
 
 Y_MIN = 0
@@ -383,16 +385,12 @@ _EOD_
 		push(@p, $s);
 	}
 	if(1){
-		my $utime_from = $first_date;
-		my $utime_till = $last_date;
 
-		my $RELATIVE_DATE = 7 * 24 * 60 * 60;
+		my $RELATIVE_DATE = 7;
 		my @aw = ();
 		
-		for(my $date = $utime_till - $RELATIVE_DATE; $date > $utime_from; $date -= $RELATIVE_DATE){
-			my $mark_date = &ut2md($date);
-			#my $a = sprintf("set arrow from '%s',%d to '%s',%d nohead lw 1 dt (3,7) lc rgb \"red\"",
-			#    $mark_date, $ymin, $mark_date, csvlib::calc_max2($max_data));
+		for(my $date = $#data - $RELATIVE_DATE; $date > 0; $date -= $RELATIVE_DATE){
+			my $mark_date  $data[$date]{$date_name};
 			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"red\"",
 				$mark_date,  $mark_date);
 			push(@aw, $a);
