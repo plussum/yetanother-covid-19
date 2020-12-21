@@ -725,7 +725,6 @@ sub	csv2graph
 	#
 	#	グラフ生成
 	#
-
 	my $ymin = csvlib::valdef($gplitem->{ymin}, 0);
 	my $ymax = "";
 	if(defined $gplitem->{ymax}){
@@ -786,6 +785,7 @@ set terminal pngcairo size $TERM_XSIZE, $TERM_YSIZE font "IPAexゴシック,8" e
 #FILLSTYLE#
 set y2tics
 set output '$plot_pngf'
+#ARROW#
 plot #PLOT_PARAM#
 exit
 _EOD_
@@ -834,6 +834,22 @@ _EOD_
 		$pn = "1 with lines title 'no-data'";
 	}
 	$PARAMS =~ s/#PLOT_PARAM#/$pn/;	
+
+	#	Draw one week before
+	my $RELATIVE_DATE = 7;
+	#my $MARK_DATE = $DATES[$end_day-$RELATIVE_DATE];
+	my @aw = ();
+	
+	for(my $date = $end_day - $RELATIVE_DATE; $date > 0; $date -= $RELATIVE_DATE){
+		my $mark_date = $DATES[$date];
+		my $a = sprintf("set arrow from '%s',%d to '%s',%d nohead lw 1 dt (3,7) lc rgb \"red\"",
+            $mark_date, $ymin, $mark_date, csvlib::calc_max2($max_data));
+		push(@aw, $a);
+	}
+	my $arw = join("\n", @aw);
+
+	$PARAMS =~ s/#ARROW#/$arw/;	
+	
 
 	if($gplitem->{logscale}){
 		if($fp->{sub_mode} eq "FT" && $max_data <= 10){

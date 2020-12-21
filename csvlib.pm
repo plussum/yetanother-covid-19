@@ -269,7 +269,21 @@ sub	calc_max
 	return $max;
 
 }
+sub	calc_max2
+{
+	my ($v, $log) = @_;
 
+	$v = 1 if($v < 1);
+
+	my $digit = int(log($v)/log(10));
+	$digit = $digit - 1 if($digit >= 3);
+	my $max = 0;
+	$max = int((($v / (10**$digit)) + 0.99999)) * (10**$digit);
+	dp::dp "calc_max2[$v:$max:$digit]\n";
+
+	return $max;
+
+}
 #
 #	Country Population		(WHOは国が多すぎるのとPDFベースなので、不一致が多くあきらめた)
 #
