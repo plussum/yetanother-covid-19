@@ -577,6 +577,7 @@ sub	graph
 	dp::dp join("\t", "from", $time_from, $utime_from, &ut2dt($utime_from)) ."\n" if($DEBUG);
 	dp::dp join("\t", "till", $time_till, $utime_till, &ut2dt($utime_till)) ."\n" if($DEBUG);
 	dp::dp join("\t", "xtics", $graph_term, $xt_number, $graph_term / $xt_number, $xtics) ."\n" if($DEBUG);
+	dp::dp "$pngf\n";
 
 	my $PARAMS = << "_EOD_";
 set datafile separator '$dlm'
@@ -603,12 +604,13 @@ set xtics $xtics
 set terminal pngcairo size 1000, 300 font "IPAexゴシック,8" enhanced
 $y2tics
 set output '$pngf.png'
-#ARROW#
 plot #PLOT_PARAM#
+
 Y_MIN = 0
 Y_MAX = GPVAL_Y_MAX
 #ARROW#
 set output '$pngf'
+plot #PLOT_PARAM#
 
 exit
 _EOD_
@@ -631,7 +633,25 @@ _EOD_
 		}
 	}
 	my $plot = join(",", @p);
-	$PARAMS =~ s/#PLOT_PARAM#/$plot/;
+	$PARAMS =~ s/#PLOT_PARAM#/$plot/g;
+
+	if(1){
+		my $RELATIVE_DATE = 7 * 24 * 60 * 60;
+		my @aw = ();
+		
+		for(my $date = $utime_till - $RELATIVE_DATE; $date > $utime_from; $date -= $RELATIVE_DATE){
+			my $mark_date = &ut2md($date);
+			#my $a = sprintf("set arrow from '%s',%d to '%s',%d nohead lw 1 dt (3,7) lc rgb \"red\"",
+			#    $mark_date, $ymin, $mark_date, csvlib::calc_max2($max_data));
+			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"red\"",
+				$mark_date,  $mark_date);
+			push(@aw, $a);
+		}
+		my $arw = join("\n", @aw);
+		#dp::dp "ARROW: $arw\n";
+
+		$PARAMS =~ s/#ARROW#/$arw/;	
+	}
 
 	#
 	#	Line 00:00:00 
@@ -664,6 +684,7 @@ _EOD_
 	#dp::dp $PARAMS;
 
 	system("gnuplot $plotf");
+	unlink("$pngf.png");
 }
 
 

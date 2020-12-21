@@ -358,6 +358,12 @@ set ylabel '$ylabel'
 set xtics $xtics
 set terminal pngcairo size 1000, 300 font "IPAexゴシック,8" enhanced
 set y2tics
+set output '$pngf.png'
+plot #PLOT_PARAM#
+
+Y_MIN = 0
+Y_MAX = GPVAL_Y_MAX
+#ARROW#
 set output '$pngf'
 plot #PLOT_PARAM#
 exit
@@ -375,6 +381,26 @@ _EOD_
 				(defined $plp->{item_title} && $plp->{item_title}) ? $plp->{item_title} : $item_names->[$i]
 		);
 		push(@p, $s);
+	}
+	if(1){
+		my $utime_from = $first_date;
+		my $utime_till = $last_date;
+
+		my $RELATIVE_DATE = 7 * 24 * 60 * 60;
+		my @aw = ();
+		
+		for(my $date = $utime_till - $RELATIVE_DATE; $date > $utime_from; $date -= $RELATIVE_DATE){
+			my $mark_date = &ut2md($date);
+			#my $a = sprintf("set arrow from '%s',%d to '%s',%d nohead lw 1 dt (3,7) lc rgb \"red\"",
+			#    $mark_date, $ymin, $mark_date, csvlib::calc_max2($max_data));
+			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"red\"",
+				$mark_date,  $mark_date);
+			push(@aw, $a);
+		}
+		my $arw = join("\n", @aw);
+		#dp::dp "ARROW: $arw\n";
+
+		$PARAMS =~ s/#ARROW#/$arw/;	
 	}
 	my $plot = join(",", @p);
 	$PARAMS =~ s/#PLOT_PARAM#/$plot/;

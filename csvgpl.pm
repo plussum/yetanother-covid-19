@@ -906,6 +906,7 @@ _EOD_
 	print ("gnuplot $plot_cmdf\n") if($VERBOSE || $DEBUG > 1);
 	system("gnuplot $plot_cmdf");
 	#system("cat $plot_cmdf");
+	unlink("$plot_pngf.png");
 
 	#dp::dp "#" x 30 . "\n";
 	#system("echo $plot_valf ; cat $plot_valf");
