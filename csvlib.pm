@@ -120,7 +120,22 @@ sub ymd2tm
 	#$y -= 2100 if($y > 2100);
 	my $tm = timelocal($s, $mn, $h, $d, $m - 1, $y);
 	# print "ymd2tm: " . join("/", $y, $m, $d, $h, $mn, $s), " --> " . &ut2d($tm, "/") . "\n";
+	dp::dp join(",", $y, $m, $d, $h, $mn, $s, $tm) . "\n";
 	return $tm;
+}
+sub ymds2tm
+{
+	my ($ymds) = @_;
+
+	my ($y, $m, $d, $h, $mn, $s) = split(/[\/\-]/, $ymds);
+
+	$y = $y // 2020;
+	$m = $m // 1;
+	$d = $d // 1;
+	$h = $h // 0;
+	$mn = $mn // 0;
+	$s = $s // 0;
+	return &ymd2tm($y, $m, $d, $h, $mn, $s);
 }
 
 #

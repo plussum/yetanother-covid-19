@@ -69,9 +69,6 @@ my $csvf = "tpr_avr#avr#.csv.txt";
 my $avr_date = 0;
 my $DLM = "\t";
 
-my @data = ();
-my $rec = 0;
-$date_name = 0;
 
 my @PARAMS = (
     {	
@@ -214,6 +211,9 @@ sub	tokyo_info
 	my $plotf = $config::PNG_PATH . "/$dst-plot.txt";
 	my @items = @{$p->{items}};
 
+	my @data = ();
+	my $rec = 0;
+	my $date_name = "";
 
 	#
 	#	Read from JSON file
@@ -386,11 +386,18 @@ _EOD_
 	}
 	if(1){
 
-		my $RELATIVE_DATE = 7;
+		dp::dp join(",", $first_date, $last_date) . "\n";
+		my $first_utime = csvlib::ymds2tm($first_date);
+		my $last_utime  = csvlib::ymds2tm($last_date);
+
+		dp::dp join(",", $first_utime, csvlib::ut2d4($first_utime), $last_utime, csvlib::ut2d4($last_utime)) . "\n";
+
+		my $RELATIVE_DATE = 7 * 24 * 60 * 60;
 		my @aw = ();
 		
-		for(my $date = $#data - $RELATIVE_DATE; $date > 0; $date -= $RELATIVE_DATE){
-			my $mark_date  $data[$date]{$date_name};
+		for(my $date = $last_utime - $RELATIVE_DATE; $date > $first_utime; $date -= $RELATIVE_DATE){
+			my $mark_date  = csvlib::ut2d4($date, "-");
+			#dp::dp "## $mark_date\n";
 			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"red\"",
 				$mark_date,  $mark_date);
 			push(@aw, $a);
@@ -401,8 +408,9 @@ _EOD_
 		$PARAMS =~ s/#ARROW#/$arw/;	
 	}
 	my $plot = join(",", @p);
-	$PARAMS =~ s/#PLOT_PARAM#/$plot/;
+	$PARAMS =~ s/#PLOT_PARAM#/$plot/g;
 
+	dp::dp $plotf . "\n";
 	open(PLOT, ">$plotf") || die "cannto create $plotf";
 	print PLOT $PARAMS;
 	close(PLOT);
@@ -412,6 +420,7 @@ _EOD_
 
 	system("gnuplot $plotf");
 }
+
 sub	valdef
 {
 	my($v, $d) = @_;
