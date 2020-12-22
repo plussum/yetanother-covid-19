@@ -603,7 +603,7 @@ set title '$title' font "IPAexゴシック,12" enhanced
 set xtics $xtics
 set terminal pngcairo size 1000, 300 font "IPAexゴシック,8" enhanced
 $y2tics
-set output '$pngf.png'
+set output '/dev/null'
 plot #PLOT_PARAM#
 
 Y_MIN = 0
@@ -684,7 +684,7 @@ _EOD_
 	#dp::dp $PARAMS;
 
 	system("gnuplot $plotf");
-	unlink("$pngf.png");
+	#unlink("$pngf.png");
 }
 
 

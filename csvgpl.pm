@@ -785,7 +785,8 @@ set terminal pngcairo size $TERM_XSIZE, $TERM_YSIZE font "IPAexゴシック,8" e
 #LOGSCALE2#
 #FILLSTYLE#
 set y2tics
-set output '$plot_pngf.png'
+#set output '$plot_pngf.png'
+set output '/dev/null'
 plot #PLOT_PARAM#
 Y_MIN = 0
 Y_MAX = GPVAL_Y_MAX
@@ -906,7 +907,7 @@ _EOD_
 	print ("gnuplot $plot_cmdf\n") if($VERBOSE || $DEBUG > 1);
 	system("gnuplot $plot_cmdf");
 	#system("cat $plot_cmdf");
-	unlink("$plot_pngf.png");
+	#unlink("$plot_pngf.png");
 
 	#dp::dp "#" x 30 . "\n";
 	#system("echo $plot_valf ; cat $plot_valf");
