@@ -2,3 +2,4 @@ COV
 gov/*
 .*.swp
 test*.pl
+*.log
