@@ -69,21 +69,21 @@ our $PARAMS = {			# MODULE PARETER		$mep
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
 		graphp => [		# GPL PARAMETER			$gplp
-			{ext => "#KIND# TOTAL Japan 02/15(#LD#) #SRC#", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, 
+			{ext => "#KIND# TOTAL Japan 02/15(#LD#) #SRC#", start_day => "2020/02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, 
 				target => "", label_skip => 2, graph => "lines"},
-			{ext => "#KIND# TOTAL Japan 02/15(#LD#) #SRC# rl-avr", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, 
+			{ext => "#KIND# TOTAL Japan 02/15(#LD#) #SRC# rl-avr", start_day => "2020/02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, 
 				target => "", label_skip => 2, graph => "lines", avr_date => 7},
 
-			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC#", start_day => "03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, 
+			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC#", start_day => "2020/03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, 
 				target => "", label_skip => 2, graph => "lines"},
-			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC# rl-avr", start_day => "03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, 
+			{ext => "#KIND# TOTAL Japan 03/01(#LD#) #SRC# rl-avr", start_day => "2020/03/01",  lank =>[0, 1] , exclusion => $EXCLUSION, 
 				target => "", label_skip => 2, graph => "lines", avr_date => 7, term_ysize => 300},
 
 			{ext => "#KIND# TOTAL Japan 3w(#LD#) #SRC#", start_day => -21,  lank =>[0, 1] , exclusion => $EXCLUSION, 
 				target => "", label_skip => 2, graph => "lines"},
 			{ext => "#KIND# TOTAL Japan 3w(#LD#) #SRC# rl-avr", start_day => -21,  lank =>[0, 1] , exclusion => $EXCLUSION, 
 				target => "", label_skip => 2, graph => "lines", avr_date => 7},
-			{ext => "#KIND# TOTAL Japan log (#LD#) #SRC#", start_day => "02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, 
+			{ext => "#KIND# TOTAL Japan log (#LD#) #SRC#", start_day => "2020/02/15",  lank =>[0, 1] , exclusion => $EXCLUSION, 
 				target => "", label_skip => 2, graph => "lines", logscale => "y", avr_date => 7},
 		],
 
@@ -103,7 +103,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		lp => $config::RT_LP,,
 		average_date => 7,
 		graphp => [	
-			{ext => "#KIND# TOTAL Japan 0301 #RT_TD#", start_day => "03/01", lank =>[0, 5] , exclusion => $EXCLUSION, taget => "",
+			{ext => "#KIND# TOTAL Japan 0301 #RT_TD#", start_day => "2020/03/01", lank =>[0, 5] , exclusion => $EXCLUSION, taget => "",
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
 			{ext => "#KIND# TOTAL Japan 3w #RT_TD#", start_day => -21, lank =>[0, 5] , exclusion => $EXCLUSION, taget => "",
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
@@ -112,9 +112,9 @@ our $PARAMS = {			# MODULE PARETER		$mep
 	KV => {
 		EXC => "Others",
 		graphp => [
-			{ext => "#KIND# from 03/01 (#LD#) #SRC#", start_day => "03/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
+			{ext => "#KIND# from 03/01 (#LD#) #SRC#", start_day => "2020/03/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
 				target => "", label_skip => 3, graph => "lines"},
-			{ext => "#KIND# from 4/1(#LD#) #SRC#", start_day => "04/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
+			{ext => "#KIND# from 4/1(#LD#) #SRC#", start_day => "2020/04/01",  lank =>[0, 999], exclusion => $EXCLUSION, 
 				target => "", label_skip => 2, graph => "lines"},
 			{ext => "#KIND# from 3week(#LD#) #SRC#", start_day => -21,  lank =>[0, 999], exclusion => $EXCLUSION, 
 				target => "", label_skip => 1, graph => "lines"},

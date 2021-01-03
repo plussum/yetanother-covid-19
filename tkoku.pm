@@ -44,7 +44,7 @@ my $index_file = $tkopdf::index_file;
 my $transaction = $tkopdf::transaction;
 
 my $EXC = "都外";
-my $STD = "05/20";
+my $STD = "2020/05/20";
 our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** TOYO-KU  ****",
     src => "TOYO KU ONLINE",
@@ -311,42 +311,47 @@ sub	pdf2data
 	open(PDF, "$txtf") || die "cannot open $txtf";
 	my $date = "";
 	my $kn = 0;
+	my $ku_flag = 0;
 	while(<PDF>){
 		s/（/(/g;
 		s/）/)/g;
 		chop;
-		if(/【参考】.*区市町村別患者数.*都内発生分.*/){
-			#dp::dp "[$_]\n";
-			s/^.*\((.*)月(.*)日時点.*$/$1\t$2/;
-			#dp::dp "[$_]\n";
-			my ($m, $d) = split(/\t/, $_);
+		#if(/【参考】.*区市町村別患者数.*都内発生分.*/){
+		if(/令和(.+)年(.+)月(.+)日.+時.+分時点/){		# 2021/01/03 Y/M/D
+			my ($y, $m, $d) = ($1, $2, $3);
+			#dp::dp "[$_] $txtf\n";
+			#s/^.*\((.*)月(.*)日時点.*$/$1\t$2/;
+			#my ($y, $m, $d) = split(/\t/, $_);
 			#dp::dp "$m $d -> ";
+			$y = tkopdf::utf2num($y) + 2018;						# 令和 -> 西暦
 			$m = tkopdf::utf2num($m);
 			$d = tkopdf::utf2num($d);
 
 			#dp::dp "$m $d \n";
-			$date = sprintf("%02d/%02d", $m, $d);
+			$y += 2000 if($y < 100);
+			$date = sprintf("%04d/%02d/%02d", $y, $m, $d);
 
 			my $csvf = "$txtf.csv.txt";
 			my $csvd = $date;
-			$csvd =~ s#/#-#;
+			$csvd =~ s#/#-#g;
 			$csvf =~ s/txt/$csvd/; 
 			open(CSV, ">$csvf") || die "cannot open $csvf";
 			print CSV "# " . $date . "\n";
 
-
-			#last if(! ($date ge "04/05" && $date le "04/10"));		#### 
-			#last if($date ne "05/01");		#### 
+			#last if(! ($date ge "2020/04/05" && $date le "2020/04/10"));		#### 
+			#last if($date ne "2020/05/01");		#### 
 
 			$DATE_FLAG{$date} = $date;
-			#dp::dp "$txtf \n";
+			#dp::dp "$date, $txtf \n";
+			#exit;
 		}
-		elsif($date && /今後の調査の状況により、数値は変更される可能性があります/){
-			last;
+		elsif(/【参考】区市町村別患者数/){
+			$ku_flag = 1;
+			#last;
 		}
-		elsif($date) {
+		elsif($date && $ku_flag) {
 			last if($kn++ > 5);
-			#dp::dp $_ . "\n";
+			#dp::dp ">>>" . $_ . "\n";
 			s/東久留米武蔵村山/東久留米  武蔵村山/;
 			s/あきる野西東京/あきる野  西東京/;
 			s/世田谷渋谷/世田谷 渋谷/;

@@ -336,8 +336,9 @@ sub	csv2graph
 		$std = $DATE_NUMBER - $std
 	}	
 
+	#dp::dp "DATE_NO $DATE_NUMBER\n";
 	my $end_day = (defined $gplitem->{end_day}) ? $gplitem->{end_day} : ($DATE_NUMBER + 1);
-	#dp::dp "END_DAY: $end_day  $std\n";
+	#dp::dp "DATE_NO $DATE_NUMBER, from $std to  $end_day\n";
 	if($end_day =~ /[0-9]+\/[0-9]+/){
 		my $n = csvlib::search_list($end_day, @DATE_LABEL);
 		#dp::dp ">>>> $std: $n " . $DATE_LABEL[$n-1] . "\n";
@@ -752,7 +753,7 @@ sub	csv2graph
 		$LAST_DATE  = &date_offset($LAST_DATE,   24 * 60 * 60);
 	}
 
-	my $DATE_FORMAT = "set xdata time\nset timefmt '%m/%d'\nset format x '%m/%d'\n";
+	my $DATE_FORMAT = "set xdata time\nset timefmt '%Y/%m/%d'\nset format x '%m/%d'\n";
 	my $XRANGE = "set xrange ['$START_DATE':'$LAST_DATE']";
 	if(defined $gplitem->{series}){
 		$DATE_FORMAT = "";

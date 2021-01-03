@@ -197,7 +197,7 @@ while(<FD>){
 	$AREA{$area}++;
 	$KIND{$kind}++;
 
-	# dp::dp join(",", $area, $mesh, $kind) . "\n";
+	#dp::dp join(",", $area, $mesh, $kind) . "\n";
 }
 close(FD);
 

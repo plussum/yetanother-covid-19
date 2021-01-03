@@ -70,7 +70,8 @@ sub	jhccse
 		#dp::dp "[$i:$_]($y,$m,$d)";
 		#$_ = sprintf("%04d/%02d/%02d", $y + 2000, $m, $d);
 
-		$_ = sprintf("%02d/%02d", $m, $d); 
+		$y += 2000 if($y < 100);									# 2021.01.03 for Y/M/D
+		$_ = sprintf("%04d/%02d/%02d", $y, $m, $d); 
 		
 		push(@COL, $_);
 	}

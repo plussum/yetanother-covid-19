@@ -111,6 +111,8 @@ my $MIN_TOTAL = 100;
 
 my $WIN_PATH = $config::WIN_PATH;
 
+my $CRON_LOG = ""; # "/home/masataka/who/cron.log";
+
 my $SRC_FILE = "";
 my $MODE = "";
 my $DOWNLOAD = 0;
@@ -189,8 +191,8 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 }
 
 if($CRON){
-	my $log = "tee -a /home/masataka/who/src/cron.log";
-	my $cov19_cmd = "$0 -FULL -S | $log";
+	my $cov19_cmd = "$0 -FULL -S";
+	$cov19_cmd .= " | tee -a $CRON_LOG" if($CRON_LOG);
 	my $cront = 2*60;		# 1min
 	my $force_exec = "";
 	push(@CRON_TAB, csvlib::ut2hm(time)) if($CRON =~ /F$/);
@@ -238,11 +240,13 @@ if($CRON){
 			$force_exec = "";
 			
 			dp::dp "#" x 5 . &str_time($now) . "#" x 5 . "\n";
-			open(LOG, "| $log") || die "Cannto log | $log";
-			print  LOG "#" x 40 . "\n";
-			print  LOG "#" x 5 . &str_time($now) . "\n";
-			print  LOG "#" x 40 . "\n";
-			close(LOG);
+			if($CRON_LOG){
+				open(LOG, "| tee -a $CRON_LOG") || die "Cannto log | tee -a $CRON_LOG";
+				print  LOG "#" x 40 . "\n";
+				print  LOG "#" x 5 . &str_time($now) . "\n";
+				print  LOG "#" x 40 . "\n";
+				close(LOG);
+			}
 
 			system($cov19_cmd);
 			
@@ -735,5 +739,5 @@ sub	str_time
 {
 	my ($time) = @_;
 
-	return "20" . csvlib::ut2d($time) . " " . csvlib::ut2t($time);
+	return  "20" . csvlib::ut2d($time) . " " . csvlib::ut2t($time);
 }

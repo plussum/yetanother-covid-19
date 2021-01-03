@@ -40,7 +40,7 @@ my $index_file = $tkopdf::index_file;
 my $transaction = $tkopdf::transaction;
 
 my $EXC = "都外";
-my $STD = "05/20";
+my $STD = "2020/05/20";
 our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** TOYO-KU  ****",
     src => "TOYO KU ONLINE",
@@ -270,15 +270,18 @@ sub	pdf2data
 		s/）/)/g;
 		chop;
 
-		if(/◆令和.+年(.+)月(.+)日.+時.+分時点/){
+		if(/◆令和(.+)年(.+)月(.+)日.+時.+分時点/){
+			my($y, $m, $d) = ($1, $2, $3);
 			#print "$_\n";
-			s/.*年(.+)月(.+)日.*/$1\t$2/;
+			#  ◆令和２年４月１６日 １８時３０分時点
+			#s/令和(.+).*年(.+)月(.+)日.*/$1\t$1\t$2/;		# 2020/01/03 Y/M/D
 			#print "$_\n";
-			my($m, $d) = split(/\t/, $_);
+			#my($y, $m, $d) = split(/\t/, $_);
+			$y = tkopdf::utf2num($y) + 2018;				# 令和 -> 西暦
 			$m = tkopdf::utf2num($m);
 			$d = tkopdf::utf2num($d);
-			$date = sprintf("%02d/%02d", $m, $d);
-			#print "$date\n";
+			$date = sprintf("%04d/%02d/%02d", $y, $m, $d);
+			#dp::dp"$date $txtf\n";
 			$DATE_FLAG{$date} = $date;
 		}
 		elsif(/10歳未満 +10代 +20代 +30代/){

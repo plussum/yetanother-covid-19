@@ -177,6 +177,7 @@ sub	utf2num
 	my $un = "０１２３４５６７８９";
 	my $number = 0;
 
+	#csvlib::disp_caller(1..3);
 	#dp::dp "\n($utf)\n";
 	for(my $i = 0; $i < length($utf) ; ){
 		$_ = substr($utf, $i, 99);

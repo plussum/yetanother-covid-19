@@ -103,6 +103,8 @@ sub ut2d
 sub ut2d4
 {
 	my ($tm, $dlm) = @_;
+	#csvlib::disp_caller(1..3);
+	$dlm = $dlm // "/";
 	my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime($tm);
 	my $s = sprintf("%04d%s%02d%s%02d", $year + 1900, $dlm, $mon+1, $dlm, $mday);
 	return $s;
@@ -578,5 +580,19 @@ sub	num
 	}
 	return ($v);
 }
+
+sub disp_caller
+{
+    my @level = @_;
+
+    @level = (0..1) if($#level < 0);
+    foreach my $i (@level){
+        my ($package_name, $file_name, $line) = caller($i);
+		last if(! $package_name);
+
+        print "called from[$i]: $package_name :: $file_name #$line\n";
+    }
+}
+
 
 1;

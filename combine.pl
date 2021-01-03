@@ -69,12 +69,15 @@ foreach my $tgc (@TARGET_COUNTRY){
 			],
 		};
 		push(@PARAM_LIST, $p);
-		my $pn = clone($p);
-		$pn->{time_from} = "2020/08/01",
-		push(@PARAM_LIST, $pn);
 
-		$pn = clone($p);
-		$pn->{time_from} = "2020/10/01",
+		#my $pn = clone($p);
+		#$pn->{time_from} = "2020/08/01",
+		#push(@PARAM_LIST, $pn);
+
+		my $tm_from = &ut2md(time - 60 * 24 * 60 * 60);
+		#dp::dp "[$tm_from]\n";
+		my $pn = clone($p);
+		$pn->{time_from} = $tm_from; # "2020/10/01",
 		push(@PARAM_LIST, $pn);
 
 	}
@@ -172,7 +175,8 @@ foreach my $p (@PARAMS){
 	my @dts = (sort keys %DATES);
 	for(my $d = 0; $d < $#dts; $d++){
 		my $dt = $dts[$d];
-		my @record = ("2020/" . $dt);
+		#my @record = ("2020/" . $dt);
+		my @record = ($dt);						# 2021/01/03 Y/M/D
 		my $avr_date = $p->{avr_date} // "";
 		foreach my $item (@ITEMS){
 			foreach my $country (sort keys %COUNTRY_FLAG){
@@ -406,6 +410,7 @@ sub	graph
 		$ymax[$plp_number]   = &valdef($plp->{ymax} // "", "");
 	}
 	
+	dp::dp "$csvf \n";
 	open(CSV, $csvf) || die "cannot open $csvf";
 	my $s = <CSV>;
 	dp::dp $s if($DEBUG);
@@ -427,6 +432,7 @@ sub	graph
 	
 	my $CSV_TIME_FROM = "";		# FIRST DATE
 	my $CSV_TIME_TILL = "";		# LAST_DATE
+	my @LAST_DATA = ();
 	while(<CSV>){
 		s/[\r\n]+$//;
 		my @w = split(/$DLM/, $_);
@@ -446,6 +452,7 @@ sub	graph
 			$STATS{MAX}[$i] = $v if($v > $STATS{MAX}[$i]);
 			$STATS{MIN}[$i] = $v if($v < $STATS{MIN}[$i]);
 			$STATS{TOTAL}[$i] += $v;
+			$LAST_DATA[$i] = $v;
 		}
 	}
 	close(CSV);
@@ -539,15 +546,27 @@ sub	graph
 	my $xrange = sprintf("['%s':'%s']", &ut2md($utime_from), &ut2md($utime_till));
 	$title .=  sprintf(" (%s-%s)", &ut2md($utime_from), &ut2md($utime_till));
 
-	my $perc = 0;
+	#
+	#	Set Percent
+	#
+	# Compare Max Data
+	my $perc = 0;	
 	if($YMAX[0] < $YMAX[1]){
 		$perc = $YMAX[0] / $YMAX[1];
 	}
 	else {
 		$perc = $YMAX[1] / $YMAX[0];
 	}
-	
-	$title .= $perc = sprintf(" [%.1f%%]", $perc * 100);
+	$title .= $perc = sprintf(" MAX[%.1f%%]", $perc * 100);
+
+	# Compare Last Data
+	if($LAST_DATA[0] < $LAST_DATA[1]){
+		$perc = $LAST_DATA[0] / $LAST_DATA[1];
+	}
+	else {
+		$perc = $LAST_DATA[1] / $LAST_DATA[0];
+	}
+	$title .= $perc = sprintf(" LAST[%.1f%%]", $perc * 100);
 
 	#
 	#	calculate xtics
@@ -772,6 +791,7 @@ sub ymd2tm
 {
 	my ($y, $m, $d, $h, $mn, $s) = @_;
 
+	#csvlib::disp_caller(1..2);
 	$m = $m // 1;
 	$d = $d // 1;
 	$h = $h // 0;
