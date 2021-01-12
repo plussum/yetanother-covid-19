@@ -70,16 +70,20 @@ sub	ern
 	#
 	#	平均に変換
 	#
+	my $ern_csv = "$config::WIN_PATH/ern_avr.csv.txt";
+#	dp::dp "$p->{input_file}\n$ern_csv\n";
+#	open(AVR, "> $ern_csv") || die "cannot create $ern_csv";
 	for(my $cn = 0; $cn <= $#COUNTRY_LIST; $cn++){
 		#print "RAW: " . join(",", @{$IMF_DATA[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);
-		for(my $dt = 0; $dt < $date_number; $dt++){
+		for(my $dt = 0; $dt <= $date_number; $dt++){
 			my $total = 0;
 			my $half = int($avr / 2);
-			my $from = $dt - $half;
-			my $to = $dt + $avr - $half;
+			my $full = $avr;
+			my $from = $dt - $avr + 1; # $half;
+			my $to = $dt; # + $avr ; #- $half;
 			# print "($from:$to)";
 			# for(my $i = $from; $i <= $to; $i++){
-			for(my $i = $from; $i < $to; $i++){
+			for(my $i = $from; $i <= $to; $i++){
 				#$total += ($i >= 0) ? $IMF_DATA[$cn][$i] : $IMF_DATA[$cn][0];
 				if($i < 0){
 					$total += $IMF_DATA[$cn][0];
@@ -94,16 +98,21 @@ sub	ern
 			my $a = int(1000 * $total / $avr) / 1000;
 			$AVERAGE[$cn][$dt] = $a;
 		}
-		#print "AVR: " . join(",", @{$AVERAGE[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);
+		#print AVR join("\t", $COUNTRY_LIST[$cn], @{$AVERAGE[$cn]}) . "\n"; # if($COUNTRY_LIST[$cn] =~ /Japan/i);
+		#print join("\t", $COUNTRY_LIST[$cn], @{$AVERAGE[$cn]}) . "\n"; # if($COUNTRY_LIST[$cn] =~ /Japan/i);
 	}
+#	close(AVR);
+#	exit;
 
 	#
 	#	再生産数の計算
 	#
 	my $rate_term = $date_number - $ip - $lp;
-	my $date_term = ($ALL_TERM) ? $date_number : $rate_term;
+	my $date_term = ($ALL_TERM) ? $date_number : ($rate_term - 1);
+	dp::dp "ERN OUTFILE : " .$p->{output_file} . "\n";
+
 	open(RATE, "> " . $p->{output_file}) || die "Cannot create " . $p->{output_file} ;
-	print RATE join($dlm, "Country", "Total", @DATE_LIST[0..($date_term-1)]), "\n";		# 2020/11/12
+	print RATE join($dlm, "Country", "Total", @DATE_LIST[0..($date_term)]), "\n";		# 2020/11/12
 	#print RATE join($dlm, "Country", "Total", @DATE_LIST), "\n";
 	for(my $cn = 0; $cn <= $#COUNTRY_LIST; $cn++){
 		my $country = $COUNTRY_LIST[$cn];
@@ -124,8 +133,11 @@ sub	ern
 				$RATE[$cn][$dt] =  0;
 			}
 		}
-		for(;$dt < $date_number; $dt++){
-			$RATE[$cn][$dt] =  0; # $config::NO_DATA;
+		if($ALL_TERM){
+			dp::dp "ALL_TERM\n";
+			for(;$dt < $date_number; $dt++){
+				$RATE[$cn][$dt] =  0; # "NaN"; # $config::NO_DATA;
+			}
 		}
 		print RATE join($dlm, @{$RATE[$cn]}), "\n";
 		#dp::dp "R0 :$dt: " . join(",", @{$RATE[$cn]}) . "\n" if($COUNTRY_LIST[$cn] =~ /Japan/i);

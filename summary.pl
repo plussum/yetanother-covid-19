@@ -89,6 +89,13 @@ my @summary = (
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_all_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_all_rl_avr_",
 
+			"<H1>Europe</H1>",
+			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_Europe_rl_avr_",
+			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_Europe_rl_avr_",
+			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_Europe_2month_rl_avr_",
+			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_Europe_2month_rl_avr_",
+			"[0-9]{2}_jhccse_NEW_CASES_ERN_DAY_Forcus_area_01_1month_ip_",
+ 
 			"<H1>TOP 1-10 NEW CASES from 03/01</H1>",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_01_05_from_0301_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_06_10_from_0301_rl_avr_",
@@ -113,13 +120,6 @@ my @summary = (
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_2month_06_10_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_2month_11_20_rl_avr_",
 			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_2month_21_30_rl_avr_",
-
-			"<H1>Europe</H1>",
-			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_Europe_rl_avr_",
-			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_Europe_rl_avr_",
-			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_Europe_2month_rl_avr_",
-			"[0-9]{2}_jhccse_NEW_DEATHS_COUNT_DAY_Europe_2month_rl_avr_",
-			"[0-9]{2}_jhccse_NEW_CASES_ERN_DAY_Forcus_area_01_1month_ip_",
 
 			"<H1>Forcusing area</H1>",
 			"[0-9]{2}_jhccse_NEW_CASES_COUNT_DAY_ASIA_0301_rl_avr",

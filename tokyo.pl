@@ -398,7 +398,7 @@ _EOD_
 		for(my $date = $last_utime - $RELATIVE_DATE; $date > $first_utime; $date -= $RELATIVE_DATE){
 			my $mark_date  = csvlib::ut2d4($date, "-");
 			#dp::dp "## $mark_date\n";
-			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"red\"",
+			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"dark-red\"",
 				$mark_date,  $mark_date);
 			push(@aw, $a);
 		}

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+##!/usr/bin/perl
 #
 #
 package csvgpl;
@@ -263,9 +263,9 @@ sub	csv2graph
 	}
 	my $style = csvlib::valdef($gplitem->{graph}, "lines");
 
-	my $thresh_mode = csvlib::valdef($config::THRESH{$mode}, 0);
-	$thresh_mode = csvlib::valdef($mep->{THRESH}{$mode}, $thresh_mode);
-	$thresh_mode = csvlib::valdef($gplitem->{thresh}, $thresh_mode);
+	my $thresh_mode = $config::THRESH{$mode} // "" ;
+	$thresh_mode = $mep->{THRESH}{$mode} // $thresh_mode;
+	$thresh_mode = $gplitem->{thresh} // $thresh_mode;
 	#dp::dp "thresh_mode[$thresh_mode]\n";
 
 #	$plot_pngf =~ s/[\(\) ]//g;
@@ -426,6 +426,7 @@ sub	csv2graph
 			#	dp::dp "Numeric Check: ($dn:$std:$p:$c:$csvf)\n";
 			#}
 			#if($c =~ /^[^0-9]+$/){			# Patch for bug of former data, may be
+
 			if($c =~ /[^0-9\-\.]/){
 				dp::dp "DATA ERROR at $country($dn) $c\n" ;#if($DEBUG);
 				$tl = -1;
@@ -543,6 +544,16 @@ sub	csv2graph
 	my @record = ();
 	my $max_data = 0;
 	#for(my $dt = 0; $dt <= $#DATES; $dt++){
+	if($sub_mode eq "ERN"){
+		for (my $i = 1; $i <= $#Dataset; $i++){
+			for(my $dt = $end_day; $dt > 0; $dt--){
+				my $v = $Dataset[$i][$dt];
+				last if($v != 0);
+				#$Dataset[$i][$dt] = $NO_DATA;
+				#dp::dp "$i:$dt:$v\n";
+			}
+		}
+	}
 	for(my $dt = 0; $dt <= $end_day; $dt++){
 		my $dts  = $DATES[$dt];
 		$dts =~ s#([0-9]{4})([0-9]{2})([0-9]{2})#$1/$2/$3#;
@@ -731,12 +742,14 @@ sub	csv2graph
 	my $ymax = "";
 	if(defined $gplitem->{ymax}){
 		$ymax = $gplitem->{ymax};
+		dp::dp "YMAX by param: $ymax\n";
 	}
 	elsif($fp->{sub_mode} ne "FT"){
 		if($thresh_flag > 0 && $thresh_flag <= $thresh_fag_max) {
 			$ymax = $thresh_ymax;  	# 特異に大きな値の処理
 			#dp::dp "SET YMAX $ymax by THRESH LEVEL\n";
 		}
+		#dp::dp "YMAX by FT: $ymax\n";
 	}
 	my $TITLE = $ext . "  src:" . $clp->{src} ; # . " <$thresh_flag:$thresh_fag_max:$ymax:" . sprintf("$max:%.1f:%.1f>", $avr,$stdv);
 	$TITLE .= "ymax $ymax" if(defined $gplitem->{ymax});
@@ -852,8 +865,9 @@ _EOD_
 		} 
 		$ymax = csvlib::calc_max($max_data, defined $gplitem->{logscale}) if(! $ymax);
 		$ymin = 1 if($ymin < 1);
-		# dp::dp "YRANGE [$ymin:$ymax]\n";
+		#dp::dp "YRANGE logscale [$ymin:$ymax]\n";
 	}
+	#dp::dp "YRANGE: [$ymin:$ymax]\n";
 	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/g;	
 	my $logs = "nologscale";
 	if(defined $gplitem->{logscale}){
@@ -892,7 +906,7 @@ _EOD_
 			my $mark_date = $DATES[$date];
 			#my $a = sprintf("set arrow from '%s',%d to '%s',%d nohead lw 1 dt (3,7) lc rgb \"red\"",
 			#    $mark_date, $ymin, $mark_date, csvlib::calc_max2($max_data));
-			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"red\"",
+			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"dark-red\"",
 				$mark_date,  $mark_date);
 			push(@aw, $a);
 		}

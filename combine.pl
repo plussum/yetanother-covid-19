@@ -28,7 +28,7 @@ my %SRC_CSV = (
 my $LT1 = "lines linewidth 1";
 my $LT2 = "lines linewidth 1 dt (10,5)";
 my $LTW = "lines linewidth 2";
-my $BX1 = "boxes fill";
+my $BX1 = "boxes fill lc rgb \"gray20\"";
 
 my $HTML_DIR = "$config::HTML_PATH";
 my $IMG_DIR  = "$config::PNG_PATH";
@@ -44,10 +44,40 @@ my $CD_RATE = 2.5;			# Axis of New Cases / New Deaths
 my @TARGET_COUNTRY = (
 	{src => "ccse", title => "JHCCSE New Cases/Deathes", list => "Japan,US"},
 	{src => "tko",  title => "Toyo Keizai New Cases/Deathes",list => "東京,大阪,北海道,神奈川,千葉,埼玉,愛知,兵庫,沖縄,熊本,福岡"},
-	{src => "ccse", title => "JHCCSE NEW Cases/Deathes", list => "France,United Kingdom,Italy,Germany,Belgium,Poland,Netherlands,Czechia,Romania,Switzerland,Portugal,Sweden"},
+	{src => "ccse", title => "JHCCSE NEW Cases/Deathes", list => "France,United Kingdom,Italy,Germany,South Africa,Belgium,Poland,Netherlands,Czechia,Romania,Switzerland,Portugal,Sweden"},
 );
 
 
+#
+#	For sort
+#
+my	@COMPARE_FILES = (
+	{data_set => "tko" , thresh_nc => 500, nc => $SRC_CSV{"tko-NC"},  nd => $SRC_CSV{"tko-ND"}, order => []},
+	{data_set => "ccse", thresh_nc => 10000, nc => $SRC_CSV{"ccse-NC"},  nd => $SRC_CSV{"ccse-ND"}, order => []},
+);
+my %TITLE = (
+	ccse => "JHCCSE NEW Cases/Deathes",
+	tko => "Toyo Keizai New Cases/Deathes",
+);
+my $TOP_LIST = 5;
+
+my %COMPARE_DATE = ();
+&load_csv(\%COMPARE_DATE, @COMPARE_FILES);
+
+foreach my $fset (@COMPARE_FILES){
+	my $n = 0;
+	my $data_set = $fset->{data_set};
+	my @target = ();
+	foreach my $country (@{$fset->{order}}){
+		last if($n++ > $TOP_LIST);
+		last if($n > @{$fset->{order}});
+
+		push(@target, $country);
+	}
+	push(@TARGET_COUNTRY, {src => $data_set, title => $TITLE{$data_set} . " TOP $TOP_LIST", list => join(",", @target)});
+}
+
+#####
 #
 #	ADD EU 
 #
@@ -244,6 +274,79 @@ close(HTML);
 exit(0);
 
 #
+#
+#
+sub	load_csv
+{
+	my($dp, @compare) = @_;
+	my $dlm = "\t";
+
+	my @kinds = ("nc", "nd");
+	foreach my $fset (@compare){
+		my %COUNTRY = ();
+		my $data_set = $fset->{data_set};
+		dp::dp "[$data_set]\n";
+		$dp->{$data_set} = {};
+		my @dates = ();
+		my $last = 0;
+		for(my $i = 0; $i <= $#kinds; $i++){
+			my $kind = $kinds[$i];
+			my $fn = $fset->{$kind};
+
+			open(CSV, $fn) || die "Cannot open $fn";
+			my $fl = <CSV>;
+			$fl =~ s/[\r\n]+$//;
+			@dates = split(/$dlm/, $fl);
+			shift(@dates);
+			shift(@dates);
+			$last = $#dates;
+			while(<CSV>){
+				s/[\r\n]+$//;
+				my ($country, $total, @data) = split(/$dlm/, $_);
+			
+				$dp->{$data_set}{$country} = {} if(!defined $dp->{$data_set}{$country});
+				$dp->{$data_set}{$country}{$kind} = [];
+				push(@{$dp->{$data_set}{$country}{$kind}}, @data);
+				#dp::dp "### " . join(", ", $data_set, $country, $kind) . "--> " . join(",",  @{$dp->{$country}{$kind}}). " ($last)\n";
+				#dp::dp "### " . join(", ", $data_set, $country, $kind, $last, $#data) . "--> " . $data[$last]. "\n";
+				$COUNTRY{$country}++;
+			}
+			close(CSV);
+		}
+		foreach my $country (keys %COUNTRY){
+			my $last_nd = $dp->{$data_set}{$country}{nd}[$last] // "-1";
+			my $last_nc = $dp->{$data_set}{$country}{nc}[$last] // "-1";
+			$last_nc = 1 if($last_nc == 0);
+			$dp->{$data_set}{$country}{final_date} = $last_nd / $last_nc;
+
+			my ($nd, $nc) = (0, 0);
+			for(my $i = 3 * ($last / 4); $i <= $last; $i++){
+				$nc += $dp->{$data_set}{$country}{nc}[$i];
+				$nd += $dp->{$data_set}{$country}{nd}[$i];
+			}
+			$nc = 1 if($nc == 0);
+			$dp->{$data_set}{$country}{avr} = $nd / $nc;
+			$dp->{$data_set}{$country}{avr_nd} = $nd;
+			$dp->{$data_set}{$country}{avr_nc} = $nc;
+			
+			#dp::dp "FINAL_DATA: ". join(", ", $country, $last, $last_nd, $last_nc, $nd, $nc) . "\n";
+		}
+	}
+	foreach my $fset (@compare){
+		my $data_set = $fset->{data_set};
+		#dp::dp  "thresh_nc[$data_set][" . $fset->{thresh_nc}. "]\n";
+		#my $fset->{order} = ([]);
+		foreach my $country (sort {$dp->{$data_set}{$b}{avr} <=> $dp->{$data_set}{$a}{avr}} keys %{$dp->{$data_set}}){
+			my $cp = $dp->{$data_set}{$country};
+			next if($cp->{avr_nc} < $fset->{thresh_nc});
+
+			push(@{$fset->{order}}, $country);
+			#dp::dp "$data_set: " . sprintf("$data_set %-20s %5.2f %d/%d", $country, 100 * $cp->{avr}, $cp->{avr_nd}, $cp->{avr_nc}) . "\n";
+		}
+	} 
+
+}
+#
 #	CSVファイルのリストを作成
 #		title => "JHCCSE New Cases/Deathes",
 #		time_from => "-1d",
@@ -306,10 +409,16 @@ sub	get_csvfile
 			}
 			close(FD);
 		}
+
 		$yn++;
 	}
+	
 	return ($yy[0], $yy[0]+$yy[1]);
 }
+
+#
+#
+#
 
 #	{
 #		[
@@ -662,7 +771,7 @@ _EOD_
 			my $mark_date = &ut2md($date);
 			#my $a = sprintf("set arrow from '%s',%d to '%s',%d nohead lw 1 dt (3,7) lc rgb \"red\"",
 			#    $mark_date, $ymin, $mark_date, csvlib::calc_max2($max_data));
-			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"red\"",
+			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"dark-red\"",
 				$mark_date,  $mark_date);
 			push(@aw, $a);
 		}

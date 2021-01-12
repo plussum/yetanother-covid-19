@@ -69,18 +69,18 @@ our $PARAMS = {			# MODULE PARETER		$mep
 #		CC => [0.99, 0.1],
 #		CD => [0.99, 0.1],
 #	},
-	THRESH => { 	# move to config.pm
-		NC => 9,
-		ND => 9,
-		NR => 0,
-		CC => 0,
-		CD => 0,
-		CR => 0,
-
-		ERN => 0,
-		FT => 0,
-		KV => 0,
-	},
+#	THRESH => { 	# move to config.pm
+#		NC => 9,
+#		ND => 9,
+#		NR => 0,
+#		CC => 0,
+#		CD => 0,
+#		CR => 0,
+#
+#		ERN => 0,
+#		FT => 0,
+#		KV => 0,
+#	},
 
 	COUNT => {			# FUNCTION PARAMETER	$funcp
 		EXEC => "",
@@ -89,7 +89,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		graphp_mode => {												# New version of graph pamaeter for each MODE
 			NC => [
 				{ext => "#KIND# Tokyo Age (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines"},
-				{ext => "#KIND# Tokyo Age (#LD#) #SRC# ", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", 
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", 
 						avr_date => 7, nosort => 1},
 				{ext => "#KIND# Tokyo Age (#LD#) #SRC# 2m", start_day => -61,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", 
 						avr_date => 7, nosort => 1},
