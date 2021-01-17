@@ -802,7 +802,7 @@ set y2tics
 #set output '$plot_pngf.png'
 set output '/dev/null'
 plot #PLOT_PARAM#
-Y_MIN = 0
+Y_MIN = #Y_MIN#
 Y_MAX = GPVAL_Y_MAX
 
 #show variables all
@@ -859,16 +859,19 @@ _EOD_
 	$PARAMS =~ s/#PLOT_PARAM#/$pn/g;	
 
 
+	my $accs_ymin = 0;
 	if($gplitem->{logscale}){
 		if($fp->{sub_mode} eq "FT" && $max_data <= 10){
 			$max_data = 100;
 		} 
 		$ymax = csvlib::calc_max($max_data, defined $gplitem->{logscale}) if(! $ymax);
 		$ymin = 1 if($ymin < 1);
+		$accs_ymin = 10;
 		#dp::dp "YRANGE logscale [$ymin:$ymax]\n";
 	}
 	#dp::dp "YRANGE: [$ymin:$ymax]\n";
 	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/g;	
+	$PARAMS =~ s/#Y_MIN#/$accs_ymin/g;	
 	my $logs = "nologscale";
 	if(defined $gplitem->{logscale}){
 		$logs = "logscale " . $gplitem->{logscale}; 
@@ -901,8 +904,9 @@ _EOD_
 		my $RELATIVE_DATE = 7;
 		#my $MARK_DATE = $DATES[$end_day-$RELATIVE_DATE];
 		my @aw = ();
+		my $date = (($final_rec) ? $final_rec : $end_day) - $RELATIVE_DATE; 
 		
-		for(my $date = $end_day - $RELATIVE_DATE; $date > 0; $date -= $RELATIVE_DATE){
+		for(; $date > 0; $date -= $RELATIVE_DATE){
 			my $mark_date = $DATES[$date];
 			#my $a = sprintf("set arrow from '%s',%d to '%s',%d nohead lw 1 dt (3,7) lc rgb \"red\"",
 			#    $mark_date, $ymin, $mark_date, csvlib::calc_max2($max_data));
@@ -989,7 +993,7 @@ sub	load_vals
 			$list[$i] =~ /([\w_]+) = ([0-9\.])/;
 			my( $val_name , $v) = ($1, $2);
 			$gp->{$val_name} = $v;
-			dp::dp "### $list[$i] \n";
+			#dp::dp "### $list[$i] \n";
 		}
 	}
 	foreach my $vn (sort keys %{$gp}){
