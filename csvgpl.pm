@@ -427,7 +427,13 @@ sub	csv2graph
 			#}
 			#if($c =~ /^[^0-9]+$/){			# Patch for bug of former data, may be
 
-			if($c =~ /[^0-9\-\.]/){
+			if($c =~ /[0-9]+e\+[0-9]+$/){
+				my($n, $e) = split(/e\+/, $c);
+				my $cc = $n * (10 ** $e);
+				dp::dp "count: $c ($n, $e) -> " . sprintf("%.2f", $cc) . "\n";
+				$c = $cc;
+			}
+			elsif($c =~ /[^0-9\-\.]/){
 				dp::dp "DATA ERROR at $country($dn) $c\n" ;#if($DEBUG);
 				$tl = -1;
 				last;
@@ -971,7 +977,6 @@ sub	date_offset
 
 	return $ld;
 }
-1;
 sub	load_vals
 {
 	my ($fn, $gp) = @_;
@@ -1000,3 +1005,4 @@ sub	load_vals
 		dp::dp "GPVAL:  $vn => $gp->{$vn}\n";
 	}
 }
+1;

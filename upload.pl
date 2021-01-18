@@ -22,7 +22,7 @@ if($CODE == 0 && $WEB == 0){
 # system("./upload $config::WIN_PATH master");
 #system("./upload $config::WIN_PATH develop");
 
-system("./upload $config::CODE_PATH develop");
+system("./upload $config::CODE_PATH develop") if($CODE);
 
-system("./uploadweb");
+system("./uploadweb") if($WEB);
 
