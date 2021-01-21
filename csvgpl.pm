@@ -430,7 +430,7 @@ sub	csv2graph
 			if($c =~ /[0-9]+e\+[0-9]+$/){
 				my($n, $e) = split(/e\+/, $c);
 				my $cc = $n * (10 ** $e);
-				dp::dp "count: $c ($n, $e) -> " . sprintf("%.2f", $cc) . "\n";
+				#dp::dp "count: $c ($n, $e) -> " . sprintf("%.2f", $cc) . "\n";
 				$c = $cc;
 			}
 			elsif($c =~ /[^0-9\-\.]/){
@@ -748,7 +748,7 @@ sub	csv2graph
 	my $ymax = "";
 	if(defined $gplitem->{ymax}){
 		$ymax = $gplitem->{ymax};
-		dp::dp "YMAX by param: $ymax\n";
+		#dp::dp "YMAX by param: $ymax\n";
 	}
 	elsif($fp->{sub_mode} ne "FT"){
 		if($thresh_flag > 0 && $thresh_flag <= $thresh_fag_max) {

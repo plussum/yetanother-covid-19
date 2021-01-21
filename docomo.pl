@@ -106,13 +106,20 @@ my %TGNS = (PP => 0, PE => 1, PM => 2, PD => 3);
 my @PARAMS = (
 # 	{dst => $END_OF_DATA},
 	{dst => "全国平均",  target_range => [1,999], graph => "AVR,RLAVR", target_area => [], exclusion_are => [],},
+
 	{dst => "サマリ主要地域", target_range => [1,999], graph => "AVR,RLAVR", target_area => [], exclusion_are => [], summary => [@SUMMARY]},
+	{dst => "サマリ主要地域 2m rlavr", target_range => [1,999], graph => "AVR,RLAVR", target_area => [], exclusion_are => [], summary => [@SUMMARY], start_date => -60},
+	{dst => "サマリ主要地域 2m raw", target_range => [1,10], graph => "RAW", target_area => [], exclusion_are => [], summary => [@SUMMARY], start_date => -60},
+
 	{dst => "サマリ全地域",   target_range => [1,999], graph => "AVR,RLAVR", target_area => [], exclusion_are => [], summary => [@SUMMARY_ALL]},
 
 	{dst => "東京 ALL",  target_range => [1,20], graph => "RAW", target_area => [qw(東京都)], exclusion_are => [],},
 	{dst => "東京 ALL",  target_range => [1,20], graph => "RLA", target_area => [qw(東京都)], exclusion_are => [],},
+	{dst => "東京 ALL 2m",  target_range => [1,20], graph => "RAW", target_area => [qw(東京都)], exclusion_are => [], start_date => -60},
+	{dst => "東京 ALL 2m",  target_range => [1,20], graph => "RLA", target_area => [qw(東京都)], exclusion_are => [], start_date => -60},
 
 	{dst => "関東 Top10",  target_range => [1,10], graph => "RAW", target_area => [@kanto], exclusion_are => [],},
+	{dst => "関東 Top10 2m",  target_range => [1,10], graph => "RAW", target_area => [@kanto], exclusion_are => [], start_date => -60},
 	{dst => "関東 Top10",  target_range => [1,10], graph => "RLA", target_area => [@kanto], exclusion_are => [],},
 
 #	{dst => "TokyoAvr",  target_range => [1,999], graph => "AVR", target_area => [@tokyo], exclusion_are => [],	},
@@ -128,6 +135,7 @@ my @PARAMS = (
 	{dst => "全国 top41-50", target_range => [41,50], graph => "RLA", target_area => [], exclusion_are => []},
 
 	{dst => "全国 top10",  target_range => [1,10], graph => "RAW", target_area => [], exclusion_are => [],	},
+	{dst => "全国 top10 2m",  target_range => [1,10], graph => "RAW", target_area => [], exclusion_are => [],	start_date => -60},
 	{dst => "全国 top11-20", target_range => [11,20], graph => "RAW", target_area => [], exclusion_are => [],},
 	{dst => "全国 top21-30", target_range => [21,30], graph => "RAW", target_area => [], exclusion_are => [],},
 	{dst => "全国 top31-40", target_range => [31,40], graph => "RAW", target_area => [], exclusion_are => [],},
@@ -297,6 +305,10 @@ sub	csv2graph
 	my $rn = 1;
 	my $tga = $param->{target_area};
 	my $exc = $param->{exclusion_are};
+	my $start_date = $param->{start_date} // $FIRST_DATE;
+	my $end_date = $param->{end_date} // "$LAST_DATE";
+
+	#dp::dp "#### " . ($param->{start_date} // "--") . " / " . ($param->{end_date} // "--") . "($start_date, $end_date)\n";
 
 	my $dst = $param->{dst};
 	$dst =~ s/[ \/]/_/g;
@@ -347,6 +359,8 @@ sub	csv2graph
 			dst_file => $dst_file,
 			title => "$TITLE_HEAD [$TGK] " . $param->{dst} . " ",
 			target_range => $param->{target_range},
+			start_date => $start_date,
+			end_date => $end_date,
 		};
 		&graph($p);
 	}
@@ -366,6 +380,8 @@ sub	csv2graph
 			dst_file => $dst_file,
 			title => "$TITLE_HEAD  [$TGK] " . $param->{dst} . " (rlavr-$AVR_DATE)",
 			target_range => $param->{target_range},
+			start_date => $start_date,
+			end_date => $end_date,
 		};
 		&graph($p);
 	}
@@ -404,7 +420,10 @@ sub	csv2graph
 			dst_file => $dst_file,
 			title => $title,
 			target_range => $param->{target_range},
+			start_date => $start_date,
+			end_date => $end_date,
 		};
+		#dp::dp "#### ($start_date, $end_date)\n";
 		&graph($p);
 	}
 	dp::dp $dst_file . "\n" if($VERBOSE);
@@ -421,7 +440,6 @@ sub	graph
 	my $row = @{$p->{datap}};
 
 	my $title = $p->{title} . "($LAST_DATE)";
-	my $xtics = 60 * 60 * 24 * 7;
 	my @target_range = (0, 99999);
 	@target_range = (@{$p->{target_range}}) if(defined $p->{target_range});
 	#dp::dp "#### " . join(",", "[" . $p->{target_range}[0] . "]", @target_range) . "\n";
@@ -433,6 +451,31 @@ sub	graph
 
 	my $dlm = $DST_DLM;
 	my $ylabel = "%";
+
+	my $start_date = $p->{start_date} // "NONE";
+	my $end_date = $p->{end_date} // "NONE";
+
+	#dp::dp "#### $start_date -> $end_date\n";
+	if(! ($start_date =~ /\//)){
+		if($start_date < 0){
+			my $sn = $#LABEL + $start_date;
+			$sn = 3 if($sn < 3);
+			$start_date = $LABEL[$sn];
+			#dp::dp "---- $start_date : $sn\n";
+		}
+	}		
+
+	my $start_ut = csvlib::ymds2tm($start_date);
+	my $end_ut = csvlib::ymds2tm($end_date);
+	my $dates = ($end_ut - $start_ut) / (60 * 60 * 24);
+	my $xtics = 60 * 60 * 24 * 7;
+	if($dates < 93){
+		$xtics = 1 * 60 * 60 * 24;
+	}
+	elsif($dates < 120){
+		$xtics = 2 * 60 * 60 * 24;
+	}
+
 
 	#
 	#	Generate CSV Data
@@ -464,7 +507,7 @@ set title '$title' font "IPAexゴシック,12" enhanced
 set ylabel '$ylabel'
 #
 set xtics $xtics
-set xrange ['$FIRST_DATE':'$LAST_DATE']
+set xrange ['$start_date':'$end_date']
 set grid
 set terminal pngcairo size $TERM_X_SIZE, $TERM_Y_SIZE font "IPAexゴシック,8" enhanced
 set output '$pngf'

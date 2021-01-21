@@ -386,11 +386,11 @@ _EOD_
 	}
 	if(1){
 
-		dp::dp join(",", $first_date, $last_date) . "\n";
+		#dp::dp join(",", $first_date, $last_date) . "\n";
 		my $first_utime = csvlib::ymds2tm($first_date);
 		my $last_utime  = csvlib::ymds2tm($last_date);
 
-		dp::dp join(",", $first_utime, csvlib::ut2d4($first_utime), $last_utime, csvlib::ut2d4($last_utime)) . "\n";
+		#dp::dp join(",", $first_utime, csvlib::ut2d4($first_utime), $last_utime, csvlib::ut2d4($last_utime)) . "\n";
 
 		my $RELATIVE_DATE = 7 * 24 * 60 * 60;
 		my @aw = ();

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /mnt/c/cov/plussum.github.io
+cd /mnt/f/_share/cov/plussum.github.io
 scp *.html plus-sum@lab:www/lab/cov19/
 scp -r HTML plus-sum@lab:www/lab/cov19/
 scp -r CSV plus-sum@lab:www/lab/cov19/

@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+date=$(date)
+echo "Started: ${date}" #>> covid_cron.log
+/home/masataka/who/src/cov19.pl -S -FULL &
+date=$(date)
+echo "Done: ${date}" #>> covid_cron.log
