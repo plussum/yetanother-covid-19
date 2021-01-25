@@ -266,19 +266,30 @@ if($FULL_SOURCE){
 		my $rc = system($cmd);
 		$rc = $rc >> 8;
 		dp::dp "RETURN CODE [$rc]: $cmd\n" if($config::VERBOSE);
-		exit 1 if($rc > 0);
+		if($rc > 0){
+			dp::dp "ERROR: RETURN CODE [$rc]: $cmd\n" ;
+			# exit 1;
+		}
 	}
 
+	dp::dp "FULL tokyo.pl -DL $S\n";
 	system("./tokyo.pl -DL $S; ./tokyo.pl  $S -av7");
+	dp::dp "FULL docomo.pl -DL $S -ALL\n";
 	system("./docomo.pl -DL $S -ALL");
 	#system("./tokyo.pl -av7");
+	dp::dp "FULL comine.pl $S \n";
 	system("./combine.pl $S");
+	dp::dp "FULL summary.pl $S \n";
 	system("./summary.pl $S");
+	dp::dp "FULL genindex.pl $S \n";
 	system("./genindex.pl $S");
+	dp::dp "FULL find . -mtime +7 -exec rm {} \\; \n";
 	system("(cd $config::HTML_PATH; find . -mtime +7 -exec rm {} \\;)");
 	system("(cd $config::PNG_PATH; find . -mtime +7 -exec rm {} \\;)");
-	#system("$0 -upload");
-	system("./uploadweb");
+	dp::dp "FULL uploadweb $S \n";
+	system("FULL ./upload.pl");
+	system("./upload.pl");
+	#system("./uploadweb");
 
 	exit(0); 
 }

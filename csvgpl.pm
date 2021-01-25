@@ -291,6 +291,7 @@ sub	csv2graph
 
 	my $DATE_NUMBER = $#DATE_LABEL;
 	my $LAST_DATE = $DATE_LABEL[$DATE_NUMBER];
+	#dp::dp "## $DATE_NUMBER, $LAST_DATE\n";
 	$ext =~ s/#LD#/$LAST_DATE/;
 
 	my $l;
