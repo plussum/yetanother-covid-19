@@ -250,16 +250,26 @@ my @summary = (
 #exit;
 
 my @PNG_FILES = ();
+my %PNG_CTIME = ();
 opendir my $DIRH, $config::PNG_PATH || die "Cannot open $config::PNG_PATH";
 while(my $file = readdir($DIRH)){
 	if($file =~ /\.png$/){
-		my $png_file = $file;
-		push(@PNG_FILES, $png_file);
+		my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+			$atime,$mtime,$ctime,$blksize,$blocks) = stat("$config::PNG_PATH/$file");
+		
+		$PNG_CTIME{$file} = $ctime;
 		#dp::dp $png_file . "\n" ;
 	}
 }
 closedir($DIRH);
 
+#
+#	set latested file fit for the regex
+#
+foreach my $file (sort {$PNG_CTIME{$b} <=> $PNG_CTIME{$a}} keys %PNG_CTIME){
+		push(@PNG_FILES, $file);
+#		dp::dp "$PNG_CTIME{$file}: $file\n";
+}
 
 if($#PNG_FILES < 0){
 	dp::dp "ERROR no data  in the list\n";

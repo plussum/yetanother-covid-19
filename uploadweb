@@ -2,7 +2,11 @@
 
 cd /mnt/f/_share/cov/plussum.github.io
 scp *.html plus-sum@lab:www/lab/cov19/
-scp -r HTML plus-sum@lab:www/lab/cov19/
-scp -r CSV plus-sum@lab:www/lab/cov19/
-scp -r PNG plus-sum@lab:www/lab/cov19/
+#scp -r CSV plus-sum@lab:www/lab/cov19/
+#scp -r PNG plus-sum@lab:www/lab/cov19/
+#scp -r HTML plus-sum@lab:www/lab/cov19
+
+rsync -avz --delete HTML/ plus-sum@lab:www/lab/cov19/HTML
+rsync -avz --delete CSV/ plus-sum@lab:www/lab/cov19/CSV
+rsync -avz --delete PNG/ plus-sum@lab:www/lab/cov19/PNG
 
