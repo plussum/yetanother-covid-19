@@ -83,6 +83,7 @@ our $CSS = << "_EOCSS_";
         span.c {font-size: 12px;}
     -->
     </style>
+	<meta http-equiv="Cache-Control" content="no-cache">
 _EOCSS_
 
 our $CLASS = "class=\"c\"";
