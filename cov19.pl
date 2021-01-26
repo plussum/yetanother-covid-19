@@ -277,8 +277,8 @@ if($FULL_SOURCE){
 	dp::dp "FULL docomo.pl -DL $S -ALL\n";
 	system("./docomo.pl -DL $S -ALL");
 	#system("./tokyo.pl -av7");
-	dp::dp "FULL comine.pl $S \n";
-	system("./combine.pl $S");
+	dp::dp "FULL comine.pl \n";
+	system("./combine.pl ");
 	dp::dp "FULL summary.pl $S \n";
 	system("./summary.pl $S");
 	dp::dp "FULL genindex.pl $S \n";
@@ -286,8 +286,7 @@ if($FULL_SOURCE){
 	dp::dp "FULL find . -mtime +7 -exec rm {} \\; \n";
 	system("(cd $config::HTML_PATH; find . -mtime +7 -exec rm {} \\;)");
 	system("(cd $config::PNG_PATH; find . -mtime +7 -exec rm {} \\;)");
-	dp::dp "FULL uploadweb $S \n";
-	system("FULL ./upload.pl");
+	dp::dp "FULL upload.pl \n";
 	system("./upload.pl");
 	#system("./uploadweb");
 
