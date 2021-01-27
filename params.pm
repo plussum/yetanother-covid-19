@@ -18,6 +18,8 @@ my $EXC_FT = "";
 #my $EUROPE = "Sweden,United Kingdom,UK,Italy,France,Spain,Belgium,Germany,Netherlands,Switzerland";
 my $EUROPE = "France,United Kingdom,Italy,Germany,Netherlands,Belgium,Romania,Poland,Czechia,Portugal,Sweden,Switzerland";
 my $ASIA = "Japan,Taiwan,Malaysia,Philip,Korea,Singapore,Indonesia"; 
+my $EU_AUTH = "Australia,China,New Zealand,Singapore,Korea,Thailand,Japan";
+
 #
 #	mode|sub_mode|aggr_mode =>  "ND,NC,CC,CD,NR,CR" | "" | "*" | "!ND,CD,CR"
 #	mode 	 :ND, NC,CC,CD,NR,CR
@@ -128,6 +130,9 @@ our @PARAMS_COUNT = (
 #    {ext => "#KIND# Vietnam 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, target => "Vietnam", label_skip => 7, graph => "lines"},
 #    {ext => "#KIND# Vietnam 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, target => "Vietnam", label_skip => 7, graph => "lines", avr_date => 7},
 
+    {ext => "#KIND# EU-authorized 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, label_skip => 7, graph => "lines", target => $EU_AUTH , avr_date => 7},
+
+    {ext => "#KIND# ASIA 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, label_skip => 7, graph => "lines", avr_date => 7, target => $ASIA},
     {ext => "#KIND# ASIA 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, label_skip => 7, graph => "lines", target => $ASIA},
     {ext => "#KIND# ASIA 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, label_skip => 7, graph => "lines", avr_date => 7, target => $ASIA},
 
