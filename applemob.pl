@@ -58,7 +58,7 @@ my $CSV_DEF = {
 
 	csv_data => {},
 	key_list => [],
-	label => [],
+	date_list => [],
 	dates => 0,
 	order => {},
 
@@ -116,7 +116,7 @@ if($DOWN_LOAD){
 my $csv_file = $cdp->{csv_file};
 my $data_start = $cdp->{data_start};
 my $src_dlm = $cdp->{src_dlm};
-my $label = $cdp->{label};
+my $date_list = $cdp->{date_list};
 my $key_list = $cdp->{key_list};
 my $csv_data = $cdp->{csv_data};
 
@@ -129,16 +129,17 @@ for(my $i = 0; $i <= $#key_items; $i++){
 #
 #	Load CSV DATA
 #
+dp::dp "$csv_file\n";
 open(FD, $csv_file) || die "Cannot open $csv_file";
 my $line = <FD>;
 $line =~ s/[\r\n]+$//;
 $line = decode('utf-8', $line);
 
 my @w = split(/$src_dlm/, $line);
-@$label = @w[$data_start..$#w];
-$cdp->{dates} = scalar(@$label) - 1;
-my $FIRST_DATE = $label->[0];
-my $LAST_DATE = $label->[$#w - $data_start];
+@$date_list = @w[$data_start..$#w];
+$cdp->{dates} = scalar(@$date_list) - 1;
+my $FIRST_DATE = $date_list->[0];
+my $LAST_DATE = $date_list->[$#w - $data_start];
 
 #dp::dp join(",", "# " . $TGK, @LABEL) . "\n";
 my $ln = 0;
@@ -193,7 +194,7 @@ sub	gen_html
 {
 	my ($cdp, $gdp) = @_;
 
-	my $label = $cdp->{label};
+	my $date_list = $cdp->{date_list};
 	my $key_list = $cdp->{key_list};
 	my $csv_data = $cdp->{csv_data};
 	my $graph_params = $gdp->{graph_params};
@@ -222,32 +223,9 @@ sub	gen_html
 	foreach my $gp (@$graph_params){
 		last if($gp->{dsc} eq $gdp->{END_OF_DATA});
 
-		my $start_date = $gp->{start_date} // "";
-		$start_date = $FIRST_DATE if($start_date eq "");
-		if(! $start_date =~ /[-\/]/){
-			if($start_date < 0){
-				$start_date = $cdp->{dates} + $start_date;
-			}
-			if($start_date < 0 || $start_date > $cdp->{dates}){
-				dp::dp "Error at start date $start_date\n";
-				$start_date = 0;
-			}
-			$start_date = $cdp->{label}->[$start_date];
-		}
-
-		my $end_date = $gp->{end_date} // "";
-		$end_date = $LAST_DATE if($end_date eq "");
-		if(! $end_date =~ /[-\/]/){
-			if($end_date < 0){
-				$endart_date = $cdp->{dates} + $end_date;
-			}
-			if($end_date < 0 || $end_date > $cdp->{dates}){
-				dp::dp "Error at end date $end_date\n";
-				$end_date = $cdp->{dates};
-			}
-			$end_date = $cdp->{label}->[$end_date];
-		}
-		dp::dp "START_DATE: $start_date, $END_DATE: $end_date\n";
+		my $start_date = &date_calc(($gp->{start_date} // ""), $FIRST_DATE, $cdp->{dates}, $cdp->{date_list});
+		my $end_date   = &date_calc(($gp->{end_date} // ""),   $LAST_DATE, $cdp->{dates}, $cdp->{date_list});
+		dp::dp "START_DATE: $start_date, END_DATE: $end_date\n";
 
 		$gp->{start_date} = $start_date;
 		$gp->{end_date} = $end_date;
@@ -284,6 +262,25 @@ sub	gen_html
 	close(HTML);
 }
 
+sub	date_calc
+{
+	my($date, $default, $max, $list) = @_;
+			
+	$date = $date // "";
+	$date = $default if($date eq "");
+
+	if(! $date =~ /[\-\/]/){
+		if($date < 0){
+			$date = $max + $date;
+		}
+		if($date < 0 || $date > $max){
+			dp::dp "Error at date $date\n";
+			$date = 0;
+		}
+		$date = $list->[$date];
+	}
+	return $date;
+}
 
 sub	csv2graph
 {
@@ -293,7 +290,9 @@ sub	csv2graph
 	my $fname = $gp->{fname};
 	my $dst_dlm = $gdp->{dst_dlm};
 
-	my $rn = 1;
+	my @lank = (0, 99999);
+	@lank = (@{$gp->{lank}}) if(defined $gp->{lank});
+
 	#
 	#	Rolling Average
 	#
@@ -333,17 +332,18 @@ sub	csv2graph
 	my $n = 1;
 	foreach my $k (@sorted_keys){
 		#dp::dp join(":", $k, $n) . "\n";
-		$oder->{$k} = $n++;
+		$order->{$k} = $n++;
 	}
 	
 	my @tga = split(/ *, */, $gp->{target});
 	my @exc = split(/ *, */, $gp->{exclusion});
 	my @target_keys = ();
-	foreach my $key (@target){
+	foreach my $key (@sorted_keys){
 		next if($#tga >= 0 && csvlib::search_list($key, @tga) eq "");
 		next if($#exc >= 0 && csvlib::search_list($key, @exc));
-		next if($oder->{$key} < $lank[0] || $order->{$key} > $lank[1]);
+		next if($order->{$key} < $lank[0] || $order->{$key} > $lank[1]);
 
+		dp::dp "### " . join(", ", $key, $order->{$key}) . "\n";
 		push(@target_keys, $key);
 	}
 
@@ -353,22 +353,25 @@ sub	csv2graph
 	my $csv_for_plot = $gdp->{png_path} . "/$fname-plot.csv.txt";
 	dp::dp "### $csv_for_plot\n";
 
-	my $label = $cdp->{label};
-	my $dt_start = csvlib::search_list($start_date, @$label);
-	my $dt_end   = csvlib::search_list($end_date,   @$label);
+	my $date_list = $cdp->{date_list};
+	my $dt_start = csvlib::search_list($gp->{start_date}, @$date_list) - 1;
+	$dt_start = 0 if($dt_start < 0 || $dt_start > $cdp->{dates});
+	my $dt_end   = csvlib::search_list($gp->{end_date},   @$date_list) - 1;
+	$dt_end = $cdp->{dates} if($dt_end < 0 || $dt_end > $cdp->{dates});
+
 	open(CSV, "> $csv_for_plot") || die "$csv_for_plot";
-	print CSV join($dst_dlm, "#date", @target) . "\n";
-	for(my $dt = 0; $dt <= $cdp->{dates}; $dt++){
+	print CSV join($dst_dlm, "#date", @target_keys) . "\n";
+	for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
 		my @w = ();
 		foreach my $key (@target_keys){
 			my $csv = $csv_data->{$key};
 			my $v = $csv->[$dt] // -1;
 			push(@w, $v);
 		}
-		if(! defined $label->[$dt]){
-			dp::dp "### undefined label : $dt\n";
+		if(! defined $date_list->[$dt]){
+			dp::dp "### undefined date_list : $dt\n";
 		}
-		print CSV join($dst_dlm, $label->[$dt], @w) . "\n";
+		print CSV join($dst_dlm, $date_list->[$dt], @w) . "\n";
 	}
 	close(CSV);
 
@@ -382,8 +385,6 @@ sub	graph
 	my($csv_for_plot, $cdp, $gdp, $gp) = @_;
 
 	my $title = $gp->{dsc} . "($LAST_DATE)";
-	my @lank = (0, 99999);
-	@lank = (@{$gp->{lank}}) if(defined $gp->{lank});
 	#dp::dp "#### " . join(",", "[" . $p->{lank}[0] . "]", @lank) . "\n";
 
 	my $fname = $gdp->{png_path} . "/" . $gp->{fname};
@@ -453,13 +454,11 @@ _EOD_
 	close(CSV);
 	$l =~ s/[\r\n]+$//;
 	my @label = split(/$dlm/, $l);
+	dp::dp "### $csvf: $l\n";
 
 	for(my $i = 1; $i < $#label; $i++){
 		my $key = $label[$i];
-		next if($#tga >= 0 && csvlib::search_list($key, @tga) eq "");
-		next if($#exc >= 0 && csvlib::search_list($key, @exc));
-		next if($i < $lank[0] || $i > $lank[1]);
-
+		dp::dp "### $i: $key\n";
 		$pn++;
 		my $pl = sprintf("'%s' using 1:%d with lines title '%d:%s' linewidth %d ", 
 						$csvf, $i + 1, $i, $label[$i], ($pn < 7) ? 2 : 1);
