@@ -85,6 +85,8 @@ my $GRAPH_PARAMS = {
 	graph_params => [
 		{dsc => "Japan", lank => [1,99999], static => "", target => "Japan", exclusion => "", start_date => "", end_date => ""},
 		{dsc => "Japan", lank => [1,99999], static => "rlavr", target => "Japan", exclusion => "", start_date => "", end_date => ""},
+		{dsc => "Japan 2m", lank => [1,99999], static => "", target => "Japan", exclusion => "", start_date => -62, end_date => ""},
+		{dsc => "Japan 2m", lank => [1,99999], static => "rlavr", target => "Japan", exclusion => "", start_date => -62, end_date => ""},
 		{dsc => $END_OF_DATA},
 	],
 };
@@ -275,14 +277,17 @@ sub	csv2graph
 	my @lank = (0, 99999);
 	@lank = (@{$gp->{lank}}) if(defined $gp->{lank});
 
+	my %_csv_data = %$csv_data;
+	my $cvdp = \%_csv_data;
+
 	#
 	#	Rolling Average
 	#
 	if($gp->{static} eq "rlavr"){
 		my $avr_date = $cdp->{avr_date} // $DEFAULT_AVR_DATE;
 		my %sort_value = ();	
-		foreach my $key (keys %$csv_data){
-			my $csv = $csv_data->{$key};
+		foreach my $key (keys %$cvdp){
+			my $csv = $cvdp->{$key};
 			for(my $i = scalar(@$csv) - 1; $i >= $avr_date; $i--){
 				my $tl = 0;
 				for(my $j = $i - $avr_date + 1; $j <= $i; $j++){
@@ -298,13 +303,24 @@ sub	csv2graph
 	}
 	
 	#
+	#	Data range
+	#
+	dp::dp "DATE: " . join(", ", $gp->{start_date}, $gp->{end_date}) . "\n";
+	my $date_list = $cdp->{date_list};
+	my $dt_start = csvlib::search_list($gp->{start_date}, @$date_list) - 1;
+	$dt_start = 0 if($dt_start < 0 || $dt_start > $cdp->{dates});
+	my $dt_end   = csvlib::search_list($gp->{end_date},   @$date_list) - 1;
+	$dt_end = $cdp->{dates} if($dt_end < 0 || $dt_end > $cdp->{dates});
+
+	#
 	#	Sort 
 	#
 	my %SORT_VAL = ();
-	foreach my $key (keys %$csv_data){
-		my $csv = $csv_data->{$key};
+	foreach my $key (keys %$cvdp){
+		my $csv = $cvdp->{$key};
 		my $total = 0;
-		foreach my $v (@$csv){
+		for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
+			my $v = $csv->[$dt] // 0;
 			$v = 0 if(! $v);
 			$total += $v ;
 		}
@@ -338,18 +354,13 @@ sub	csv2graph
 	my $csv_for_plot = $gdp->{png_path} . "/$fname-plot.csv.txt";
 	dp::dp "### $csv_for_plot\n";
 
-	my $date_list = $cdp->{date_list};
-	my $dt_start = csvlib::search_list($gp->{start_date}, @$date_list) - 1;
-	$dt_start = 0 if($dt_start < 0 || $dt_start > $cdp->{dates});
-	my $dt_end   = csvlib::search_list($gp->{end_date},   @$date_list) - 1;
-	$dt_end = $cdp->{dates} if($dt_end < 0 || $dt_end > $cdp->{dates});
 
 	open(CSV, "> $csv_for_plot") || die "$csv_for_plot";
 	print CSV join($dst_dlm, "#date", @target_keys) . "\n";
 	for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
 		my @w = ();
 		foreach my $key (@target_keys){
-			my $csv = $csv_data->{$key};
+			my $csv = $cvdp->{$key};
 			my $v = $csv->[$dt] // -1;
 			push(@w, $v);
 		}
@@ -469,7 +480,9 @@ sub	date_calc
 	$date = $date // "";
 	$date = $default if($date eq "");
 
-	if(! $date =~ /[\-\/]/){
+	#dp::dp "[[$date,$default,$max,$list]]\n";
+	if(! ($date =~ /[0-9][\-\/][0-9]/)){
+		#dp::dp "[[$date]]\n";
 		if($date < 0){
 			$date = $max + $date;
 		}
@@ -477,7 +490,9 @@ sub	date_calc
 			dp::dp "Error at date $date\n";
 			$date = 0;
 		}
+		#dp::dp "[[$date]]\n";
 		$date = $list->[$date];
+		#dp::dp "[[$date]]\n";
 	}
 	return $date;
 }
