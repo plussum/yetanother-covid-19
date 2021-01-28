@@ -40,6 +40,8 @@ my $VERBOSE = 0;
 my $DOWN_LOAD = 0;
 my $DEFAULT_AVR_DATE = 7;
 
+my $KEY_DLM = "-";					# Initial key items
+
 my $SRC_URL_TAG = "https://covid19-static.cdn-apple.com/covid19-mobility-data/2025HotfixDev13/v3/en-us/applemobilitytrends-%04d-%02d-%02d.csv";
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 my $src_url = sprintf($SRC_URL_TAG, $year + 1900, $mon + 1, $mday);
@@ -64,7 +66,8 @@ my $CSV_DEF = {
 
 };
 	
-my $JP_TARGET = "Tokyo,Osaka";
+my $JP_TARGET = "Tokyo$KEY_DLM,Osaka$KEY_DLM";
+my $EXEC = "driving";
 my $END_OF_DATA = "###EOD###";
 my $GRAPH_PARAMS = {
 	html_title => $CSV_DEF->{title},
@@ -84,15 +87,15 @@ my $GRAPH_PARAMS = {
 	default_graph => "line",
 	END_OF_DATA => $END_OF_DATA,
 	graph_params => [
-		{dsc => "Japan", lank => [1,99999], static => "", target => "Japan", exclusion => "", start_date => "", end_date => ""},
-		{dsc => "Japan", lank => [1,99999], static => "rlavr", target => "Japan", exclusion => "", start_date => "", end_date => ""},
-		{dsc => "Japan 2m", lank => [1,99999], static => "", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
-		{dsc => "Japan 2m", lank => [1,99999], static => "rlavr", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
+		{dsc => "Japan", lank => [], static => "", target => "Japan", exclusion => "", start_date => "", end_date => ""},
+		{dsc => "Japan", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => "", end_date => ""},
+		{dsc => "Japan 2m", lank => [], static => "", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
+		{dsc => "Japan 2m", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
 
-		{dsc => "Japan target area", lank => [1,99999], static => "", target => $JP_TARGET, exclusion => "", start_date => "", end_date => ""},
-		{dsc => "Japan target area", lank => [1,99999], static => "rlavr", target => $JP_TARGET, exclusion => "", start_date => "", end_date => ""},
-		{dsc => "Japan target area 2m", lank => [1,99999], static => "", target => $JP_TARGET, exclusion => "", start_date => -93, end_date => ""},
-		{dsc => "Japan target area 2m", lank => [1,99999], static => "rlavr", target => $JP_TARGET, exclusion => "", start_date => -93, end_date => ""},
+		{dsc => "Japan target area", lank => [], static => "", target => $JP_TARGET, exclusion => $EXEC, start_date => "", end_date => ""},
+		{dsc => "Japan target area", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => "", end_date => ""},
+		{dsc => "Japan target area 2m", lank => [], static => "", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
+		{dsc => "Japan target area 2m", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
 
 		{dsc => $END_OF_DATA},
 	],
@@ -130,7 +133,6 @@ my $date_list = $cdp->{date_list};
 my $key_list = $cdp->{key_list};
 my $csv_data = $cdp->{csv_data};
 
-my $KEY_DLM = "-";					# Initial key items
 my @key_items = @{$cdp->{keys}};
 for(my $i = 0; $i <= $#key_items; $i++){
 	$key_list->[$i] = {};
@@ -281,7 +283,7 @@ sub	csv2graph
 	my $fname = $gp->{fname};
 	my $dst_dlm = $gdp->{dst_dlm};
 
-	my @lank = (0, 99999);
+	my @lank = ();
 	@lank = (@{$gp->{lank}}) if(defined $gp->{lank});
 
 	my %cvd = ();
@@ -329,17 +331,23 @@ sub	csv2graph
 	#	Sort 
 	#
 	my %SORT_VAL = ();
-	foreach my $key (keys %$cvdp){
-		my $csv = $cvdp->{$key};
-		my $total = 0;
-		for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
-			my $v = $csv->[$dt] // 0;
-			$v = 0 if(! $v);
-			$total += $v ;
+	my @sorted_keys = ();
+	if(defined $lank[0]){
+		foreach my $key (keys %$cvdp){
+			my $csv = $cvdp->{$key};
+			my $total = 0;
+			for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
+				my $v = $csv->[$dt] // 0;
+				$v = 0 if(! $v);
+				$total += $v ;
+			}
+			$SORT_VAL{$key} = $total;
 		}
-		$SORT_VAL{$key} = $total;
+		@sorted_keys = (sort {$SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
 	}
-	my @sorted_keys = (sort {$SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
+	else {
+		@sorted_keys = (sort keys %$cvdp);
+	}
 
 	my $order = $cdp->{order};
 	my $n = 1;
@@ -355,7 +363,7 @@ sub	csv2graph
 		#dp::dp "--- " . join(", ", $key, $order->{$key}, @lank, @tga) . "\n" if($key =~ /Japan/);
 		next if($#tga >= 0 && csvlib::search_list($key, @tga) eq "");
 		next if($#exc >= 0 && csvlib::search_list($key, @exc));
-		next if($order->{$key} < $lank[0] || $order->{$key} > $lank[1]);
+		next if(defined $lank[0] && ($order->{$key} < $lank[0] || $order->{$key} > $lank[1]));
 
 		#dp::dp "### " . join(", ", $key, $order->{$key}) . "\n";
 		push(@target_keys, $key);

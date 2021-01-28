@@ -6,7 +6,11 @@ scp *.html plus-sum@lab:www/lab/cov19/
 #scp -r PNG plus-sum@lab:www/lab/cov19/
 #scp -r HTML plus-sum@lab:www/lab/cov19
 
+echo "HTML"
 rsync -avz --delete HTML/ plus-sum@lab:www/lab/cov19/HTML
+echo "CSV"
 rsync -avz --delete CSV/ plus-sum@lab:www/lab/cov19/CSV
+echo "PNG"
 rsync -avz --delete PNG/ plus-sum@lab:www/lab/cov19/PNG
+echo "###### SYNC DONE"
 

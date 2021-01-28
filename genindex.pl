@@ -101,6 +101,8 @@ print FRAME "<li><a href =\"HTML/docomoPP.html\" target=\"graph\">モバイル�
 print FRAME "<li><a href =\"HTML/docomoPE.html\" target=\"graph\">モバイル空間統計 緊急事態宣言前比</a></li>\n";
 print FRAME "<li><a href =\"HTML/docomoPM.html\" target=\"graph\">モバイル空間統計 前年同月比</a></li>\n";
 print FRAME "<li><a href =\"HTML/docomoPD.html\" target=\"graph\">モバイル空間統計 前日比</a></li>\n";
+print FRAME "<br><b>Apple</b><br>\n";
+print FRAME "<li><a href =\"HTML/apple_mobile.html\" target=\"graph\">Apple Moviity Trends</a></li>\n";
 print FRAME "<br><b>WHO</b><br>\n";
 print FRAME "<li><a href =\"HTML/$config::WHO_INDEX\" target=\"graph\">WHO_INDEX</a></li>\n";
 print FRAME "<br>\n";
