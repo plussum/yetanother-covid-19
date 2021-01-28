@@ -55,7 +55,7 @@ my $CSV_DEF = {
 	down_load => \&download,
 
 	src_dlm => ",",
-	keys => [1, 2],		# 5, 1, 2
+	keys => [1, 2, 5],		# 5, 1, 2
 	data_start => 6,
 
 	csv_data => {},
@@ -68,6 +68,9 @@ my $CSV_DEF = {
 	
 my $JP_TARGET = "Tokyo$KEY_DLM,Osaka$KEY_DLM";
 my $EXEC = "driving";
+my $US_TARGET = "United States";
+my $US_STATE = "$KEY_DLM" . "United States";
+my $US_EXEC = "";
 my $END_OF_DATA = "###EOD###";
 my $GRAPH_PARAMS = {
 	html_title => $CSV_DEF->{title},
@@ -87,7 +90,19 @@ my $GRAPH_PARAMS = {
 	default_graph => "line",
 	END_OF_DATA => $END_OF_DATA,
 	graph_params => [
+		{dsc => "USA", lank => [], static => "", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
+		{dsc => "USA", lank => [], static => "rlavr", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
+
+		{dsc => $END_OF_DATA},
+
+		{dsc => "USA target area 2m", lank => [0,10], static => "", target => "$US_TARGET", exclusion => $US_EXEC, start_date => -93, end_date => ""},
+		{dsc => "USA target area 2m", lank => [0,10], static => "rlavr", target => "$US_TARGET", exclusion => $US_EXEC, start_date => -93, end_date => ""},
+		{dsc => "USA CITY", lank => [], static => "", target => $US_STATE, exclusion => $US_EXEC, start_date => "", end_date => ""},
+		{dsc => "USA CITY", lank => [], static => "rlavr", target => $US_STATE, exclusion => $US_EXEC, start_date => "", end_date => ""},
+		{dsc => "USA CITY target area 2m", lank => [0,10], static => "", target => "$US_STATE", exclusion => $US_EXEC, start_date => -93, end_date => ""},
+		{dsc => "USA CITY target area 2m", lank => [0,10], static => "rlavr", target => "$US_STATE", exclusion => $US_EXEC, start_date => -93, end_date => ""},
 		{dsc => "Japan", lank => [], static => "", target => "Japan", exclusion => "", start_date => "", end_date => ""},
+
 		{dsc => "Japan", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => "", end_date => ""},
 		{dsc => "Japan 2m", lank => [], static => "", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
 		{dsc => "Japan 2m", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
@@ -96,6 +111,7 @@ my $GRAPH_PARAMS = {
 		{dsc => "Japan target area", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => "", end_date => ""},
 		{dsc => "Japan target area 2m", lank => [], static => "", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
 		{dsc => "Japan target area 2m", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
+
 
 		{dsc => $END_OF_DATA},
 	],

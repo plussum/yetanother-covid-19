@@ -284,8 +284,9 @@ if($FULL_SOURCE){
 	dp::dp "FULL genindex.pl $S \n";
 	system("./genindex.pl $S");
 	dp::dp "FULL find . -mtime +7 -exec rm {} \\; \n";
-	system("(cd $config::HTML_PATH; find . -mtime +7 -exec rm {} \\;)");
-	system("(cd $config::PNG_PATH; find . -mtime +7 -exec rm {} \\;)");
+	system("(cd $config::HTML_PATH; find . -mtime +2 -exec rm {} \\;)");
+	system("(cd $config::CSV_PATH; find . -mtime +2 -exec rm {} \\;)");
+	system("(cd $config::PNG_PATH; find . -mtime +2 -exec rm {} \\;)");
 	dp::dp "FULL upload.pl \n";
 	system("./upload.pl");
 	#system("./uploadweb");
