@@ -184,7 +184,7 @@ sub	gen_html
 	print HTML "<h3>Data Source： <a href=\"$cdp->{main_url}\" target=\"blank\"> $cdp->{html_title} </a></h3>\n";
 
 	foreach my $gp (@$graph_params){
-		&csv2graph($gp);
+		&csv2graph($cdp, $gdp, $gp);
 
 		my $name = $gp->{dsc};
 		$name =~ s/[\/\.\*\ ]/_/g;
@@ -217,138 +217,73 @@ sub	gen_html
 
 sub	csv2graph
 {
-	my($gp) = @_;
+	my($cdp, $gdp, $gp) = @_;
+
+	my $csv_data = $cdp->{csv_data};
 
 	my @MATRIX = ();
-	$MATRIX[0] = [ "# " . $TGK, @LABEL];
+	$MATRIX[0] = [ "# " . $TGK, @{$cdp->{label}}];
+
 
 	{dst => "Japan",  target_range => [1,999], graph => "AVR,RLAVR", target_area => "Japan", exclusion_are => "",},
 	dp::dp "DATA  [$TGK] " . $param->{dst} . " " . $param->{graph} . "\n" if($VERBOSE);
 	#dp::dp join(",", @{$param->{target_area}}) . "\n";
+
 	my $rn = 1;
-	my $tga = $param->{target_area};
-	my $exc = $param->{exclusion_are};
+	my @tga = split(/,/, $param->{target_area});
+	my @exc = split(/,/, $param->{exclusion_are});
 	my $start_date = $param->{start_date} // $FIRST_DATE;
 	my $end_date = $param->{end_date} // "$LAST_DATE";
+
 
 	#dp::dp "#### " . ($param->{start_date} // "--") . " / " . ($param->{end_date} // "--") . "($start_date, $end_date)\n";
 
 	my $dst = $param->{dst};
 	$dst =~ s/[ \/]/_/g;
 
-	foreach my $area (sort keys %REAGION){
-		#dp::dp "## tga " . @$tga . "\n";
-		next if(@$tga > 0 && csvlib::search_list($area, @$tga) eq "");
-		next if(@$exc > 0 && csvlib::search_list($area, @$exc));
+	#
+	#	Select data
+	#
+	my @target_csv = ();
+	foreach my $key (sort keys %$csv_data){
+		next if($#tga >= 0 && csvlib::search_list($area, @tga) eq "");
+		next if($#exc >= 0 && csvlib::search_list($area, @exc));
 		#dp::dp ">>> $area \n";
+		push(@target_csv, $key);
+	}
 
-		foreach my $kind (sort keys %KIND){
-			next if($kind ne $TGK);
-			#dp::dp "### $kind \n";
-
-			my $k = join(",", $area, $kind);
-			next if(! defined $CSV_DATA{$k});
-
-			my @w = split(",", $CSV_DATA{$k});
-			#dp::dp join(",",  $area, $kind,  @w) . "\n";
-			$MATRIX[$rn++] = [$area, @w];
+	#
+	#	Rolling Average
+	#
+	if($param->{static} eq "RLA"){
+		my $avr_date = $cdp->{avr_date};
+		my %sort_value = ();	
+		foreach my $key (@target_csv){
+			my $csv = $csv_data{$key};
+			for(my $i = @$csv; $i >= $avr_date; $i--){
+				my $tl = 0;
+				for(my $j = $i - $avr_date + 1; $j <= $i; $j++){
+					$tl += $csv->[$j];
+				}
+				$csv->[$i] = $tl / $avr_date;
+			}
 		}
 	}
-
-	if($rn <= 1){
-		my $errmes = sprintf("No data found in this parameter [%s][%s][%s]" ,
-			join(",", @{$param->{target_area}}),
-			join(",", @{$param->{exclusion_are}}),
-			join(",", @{$param->{target_kind}})
-		);
-		dp::dp $errmes . "\n"; 
-		next;
-	}
-
-	#
-	#
-	#
-	my @matrix = ();
-	my $p = {};
-	my $dst_file = "";
-
-	my ($col, $row) = csvlib::matrix_convert(\@MATRIX, \@matrix);
-	if($param->{graph} eq "RAW"){
-		my @matrix_sorted = ();
-		csvlib::maratix_sort_max(\@matrix, \@matrix_sorted);
-		$dst_file = join("_", $DST_FILE, $dst);
-		$p = {
-			datap => \@matrix_sorted,
-			dst_file => $dst_file,
-			title => "$TITLE_HEAD [$TGK] " . $param->{dst} . " ",
-			target_range => $param->{target_range},
-			start_date => $start_date,
-			end_date => $end_date,
-		};
-		&graph($p);
-	}
-
-
-	#
-	#
-	#
-	if($param->{graph} eq "RLA"){
-		my @matrix_avr = ();
-		my @matrix_sorted = ();
-		csvlib::matrix_roling_average(\@matrix, \@matrix_avr, $AVR_DATE);
-		csvlib::maratix_sort_max(\@matrix_avr, \@matrix_sorted);
-		$dst_file = $DST_FILE . $dst . "rlavr__maxval";
-		$p = {
-			datap => \@matrix_sorted,
-			dst_file => $dst_file,
-			title => "$TITLE_HEAD  [$TGK] " . $param->{dst} . " (rlavr-$AVR_DATE)",
-			target_range => $param->{target_range},
-			start_date => $start_date,
-			end_date => $end_date,
-		};
-		&graph($p);
-	}
-
-	#
-	#
-	#
-	if($param->{graph} =~ /AVR/){
-		my @matrix_avr = ();
-		my @matrix_rl_avr = ();
-		my @matrix_sorted = ();
-		my $matrixp = \@matrix_avr;
-		my $title = "$TITLE_HEAD [$TGK] " . $param->{dst} . " (avr)";  
-
-		my $sp = $param->{summary};
-		#if($sp){
-		#	dp::dp $sp, @$sp . "\n";
-		#	dp::dp join(",", @$sp) . "\n";
-		#}
 	
-		csvlib::matrix_average(\@matrix, \@matrix_avr, $param->{summary});
-		$dst_file = $DST_FILE . $dst . "avr";
-
-		if($param->{graph} =~ /RLAVR/){
-			#dp::dp "Roling\n";
-			$dst_file .= "rl";
-			$title .= " (rlavr-$AVR_DATE)";
-
-			csvlib::matrix_roling_average(\@matrix_avr, \@matrix_rl_avr, $AVR_DATE) ;
-			csvlib::maratix_sort_max(\@matrix_rl_avr, \@matrix_sorted);
-			$matrixp = \@matrix_sorted;
+	#
+	#
+	#
+	my %SORT_VAL = ();
+	foreach my $key (@target_csv){
+		my $csv = $csv_data{$key};
+		my $total = 0;
+		foreach my $v (@$csv){
+			$total += $v;
 		}
-		
-		$p = {
-			datap => $matrixp,
-			dst_file => $dst_file,
-			title => $title,
-			target_range => $param->{target_range},
-			start_date => $start_date,
-			end_date => $end_date,
-		};
-		#dp::dp "#### ($start_date, $end_date)\n";
-		&graph($p);
+		$SORT_VAL{$key} = $total;
 	}
+		
+
 	dp::dp $dst_file . "\n" if($VERBOSE);
 	return ($dst_file);
 }
