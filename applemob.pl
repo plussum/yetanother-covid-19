@@ -64,11 +64,12 @@ my $CSV_DEF = {
 
 };
 	
+my $JP_TARGET = "Tokyo,Osaka";
 my $END_OF_DATA = "###EOD###";
 my $GRAPH_PARAMS = {
 	html_title => $CSV_DEF->{title},
 	png_path   => "$config::PNG_PATH",
-	png_rel_path => "../",
+	png_rel_path => "../PNG",
 	html_file => "$config::HTML_PATH/apple_mobile.html",
 
 	dst_dlm => "\t",
@@ -85,8 +86,14 @@ my $GRAPH_PARAMS = {
 	graph_params => [
 		{dsc => "Japan", lank => [1,99999], static => "", target => "Japan", exclusion => "", start_date => "", end_date => ""},
 		{dsc => "Japan", lank => [1,99999], static => "rlavr", target => "Japan", exclusion => "", start_date => "", end_date => ""},
-		{dsc => "Japan 2m", lank => [1,99999], static => "", target => "Japan", exclusion => "", start_date => -62, end_date => ""},
-		{dsc => "Japan 2m", lank => [1,99999], static => "rlavr", target => "Japan", exclusion => "", start_date => -62, end_date => ""},
+		{dsc => "Japan 2m", lank => [1,99999], static => "", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
+		{dsc => "Japan 2m", lank => [1,99999], static => "rlavr", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
+
+		{dsc => "Japan target area", lank => [1,99999], static => "", target => $JP_TARGET, exclusion => "", start_date => "", end_date => ""},
+		{dsc => "Japan target area", lank => [1,99999], static => "rlavr", target => $JP_TARGET, exclusion => "", start_date => "", end_date => ""},
+		{dsc => "Japan target area 2m", lank => [1,99999], static => "", target => $JP_TARGET, exclusion => "", start_date => -93, end_date => ""},
+		{dsc => "Japan target area 2m", lank => [1,99999], static => "rlavr", target => $JP_TARGET, exclusion => "", start_date => -93, end_date => ""},
+
 		{dsc => $END_OF_DATA},
 	],
 };
@@ -228,7 +235,7 @@ sub	gen_html
 
 		my $start_date = &date_calc(($gp->{start_date} // ""), $FIRST_DATE, $cdp->{dates}, $cdp->{date_list});
 		my $end_date   = &date_calc(($gp->{end_date} // ""),   $LAST_DATE, $cdp->{dates}, $cdp->{date_list});
-		dp::dp "START_DATE: $start_date, END_DATE: $end_date\n";
+		#dp::dp "START_DATE: $start_date, END_DATE: $end_date\n";
 
 		$gp->{start_date} = $start_date;
 		$gp->{end_date} = $end_date;
@@ -315,6 +322,8 @@ sub	csv2graph
 	$dt_start = 0 if($dt_start < 0 || $dt_start > $cdp->{dates});
 	my $dt_end   = csvlib::search_list($gp->{end_date},   @$date_list) - 1;
 	$dt_end = $cdp->{dates} if($dt_end < 0 || $dt_end > $cdp->{dates});
+	$gp->{dt_start} = $dt_start;
+	$gp->{dt_end}   = $dt_end;
 
 	#
 	#	Sort 
@@ -343,12 +352,12 @@ sub	csv2graph
 	my @exc = split(/ *, */, $gp->{exclusion});
 	my @target_keys = ();
 	foreach my $key (@sorted_keys){
-		dp::dp "--- " . join(", ", $key, $order->{$key}, @lank, @tga) . "\n" if($key =~ /Japan/);
+		#dp::dp "--- " . join(", ", $key, $order->{$key}, @lank, @tga) . "\n" if($key =~ /Japan/);
 		next if($#tga >= 0 && csvlib::search_list($key, @tga) eq "");
 		next if($#exc >= 0 && csvlib::search_list($key, @exc));
 		next if($order->{$key} < $lank[0] || $order->{$key} > $lank[1]);
 
-		dp::dp "### " . join(", ", $key, $order->{$key}) . "\n";
+		#dp::dp "### " . join(", ", $key, $order->{$key}) . "\n";
 		push(@target_keys, $key);
 	}
 
@@ -364,7 +373,8 @@ sub	csv2graph
 		my @w = ();
 		foreach my $key (@target_keys){
 			my $csv = $cvdp->{$key};
-			my $v = $csv->[$dt] // -1;
+			my $v = $csv->[$dt] // "";
+			$v = 0 if($v eq "");
 			push(@w, $v);
 		}
 		if(! defined $date_list->[$dt]){
@@ -436,8 +446,15 @@ set ylabel '$ylabel'
 set xtics $xtics
 set xrange ['$start_date':'$end_date']
 set grid
+
 set terminal pngcairo size $term_x_size, $term_y_size font "IPAexゴシック,8" enhanced
+set output '/dev/null'
+plot #PLOT_PARAM#
+Y_MIN = GPVAL_Y_MIN
+Y_MAX = GPVAL_Y_MAX
+
 set output '$pngf'
+#ARROW#
 plot #PLOT_PARAM#
 exit
 _EOD_
@@ -453,11 +470,11 @@ _EOD_
 	close(CSV);
 	$l =~ s/[\r\n]+$//;
 	my @label = split(/$dlm/, $l);
-	dp::dp "### $csvf: $l\n";
+	#dp::dp "### $csvf: $l\n";
 
 	for(my $i = 1; $i <= $#label; $i++){
 		my $key = $label[$i];
-		dp::dp "### $i: $key\n";
+		#dp::dp "### $i: $key\n";
 		$pn++;
 		my $pl = sprintf("'%s' using 1:%d with lines title '%d:%s' linewidth %d ", 
 						$csvf, $i + 1, $i, $label[$i], ($pn < 7) ? 2 : 1);
@@ -465,7 +482,29 @@ _EOD_
 	}
 	#push(@p, "0 with lines dt '-' title 'base line'");
 	my $plot = join(",", @p);
-	$PARAMS =~ s/#PLOT_PARAM#/$plot/;
+	$PARAMS =~ s/#PLOT_PARAM#/$plot/g;
+
+	my $date_list = $cdp->{date_list};
+	my $dt_start = $gp->{dt_start};
+	my $dt_end = $gp->{dt_end};
+	#dp::dp join(",", @$date_list) . "\n";
+	#dp::dp "###" . join(",", $dt_start, $dt_end, $date_list->[$dt_start], $date_list->[$dt_end], scalar(@$date_list)) . "\n";
+	if(1){
+		my $RELATIVE_DATE = 7;
+		my @aw = ();
+
+		for(my $dn = $gp->{dt_end} - $RELATIVE_DATE; $dn > $gp->{dt_start}; $dn -= $RELATIVE_DATE){
+			my $mark_date = $date_list->[$dn];
+			
+			#dp::dp "ARROW: $dn, $mark_date\n";
+			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"dark-red\"",
+				$mark_date,  $mark_date);
+			push(@aw, $a);
+		}
+		my $arw = join("\n", @aw);
+		#dp::dp "ARROW: $arw\n";
+		$PARAMS =~ s/#ARROW#/$arw/;	
+	}
 
 	open(PLOT, ">$plotf") || die "cannto create $plotf";
 	binmode(PLOT, ":utf8");
