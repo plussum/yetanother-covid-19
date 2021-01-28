@@ -6,6 +6,23 @@
 #	Complete Data
 #	https://covid19-static.cdn-apple.com/covid19-mobility-data/2025HotfixDev13/v3/en-us/applemobilitytrends-2021-01-25.csv
 #
+#	0        1      2                   3                4          5       6         7
+#	geo_type,region,transportation_type,alternative_name,sub-region,country,2020/1/13,2020/1/14,2020/1/15,2020/1/16
+#	country/region,Japan,driving,日本,Japan-driving,,100,97.94,99.14,103.16
+#
+#	CSV_DEFINITON
+#		src_url => source_url of data,
+#		src_csv => download csv data,
+#		keys => [1, 2],		# region, transport
+#		date_start => 6,	# 2020/01/13
+#		html_title => "Apple Mobility Trends",
+#	GRAPH_PARAMN
+#		dsc => "Japan"
+#		target_range => [1,999],
+#		graph => "LINE | BOX",
+#		statics => "RLAVR",
+#		target_area => "Japan,XXX,YYY", 
+#		exclusion_are => ""
 #
 #
 use strict;
@@ -19,88 +36,121 @@ use csvlib;
 binmode(STDOUT, ":utf8");
 
 my $VERBOSE = 0;
-my $END_OF_DATA = "###EOD###";
-my $TERM_X_SIZE = 1000;
-my $TERM_Y_SIZE = 350;
 
 my $DOWN_LOAD = 0;
-my $DST_DLM = "\t";
-my $AVR_DATE = 7;
-my $MAIN_URL = "https://covid19.apple.com/mobility";
+
 my $SRC_URL_TAG = "https://covid19-static.cdn-apple.com/covid19-mobility-data/2025HotfixDev13/v3/en-us/applemobilitytrends-%04d-%02d-%02d.csv";
-my $SRC_CSVF =  "$config::WIN_PATH/applemobile/applemobilitytrends.csv.txt";
-my $TITLE_HEAD = "Apple Mobility Trends";
+my $src_url = sprintf($SRC_URL_TAG, $year + 1900, $mon + 1, $mday);
 
-my $DST_FILE = "$config::PNG_PATH/applemobile";
-my $HTMLF = "$config::HTML_PATH/applemobile.html";
+my $CSV_DEFINTION = {
+	title => "Apple Mobility Trends",
+	main_url => $MAIN_URL,
+	csv_path =>  "$config::WIN_PATH/applemobile/applemobilitytrends.csv.txt",
+	down_load => \&download,
+	src_url => $src_url,		# set
 
-for(@ARGV){
-}
+	src_dlm => ",",
+	dst_dlm => "\t",
+	keys => [1,2],
+	data_start => 6,
 
-my @PARAMS = (
-# 	{dst => $END_OF_DATA},
-	{dst => "Japan",  target_range => [1,999], graph => "AVR,RLAVR", target_area => "Japan", exclusion_are => "",},
-);
+	csv_data => [],
+	key_list => [],
+	label => [],
 
-my @OUTPUT_FILES = ();
+};
+	
+my $GRAPH_PARAMS = {
+	html_tilte => $CSV_DEFINITION->{title},
+	dst_file => "$config::PNG_PATH/apple_mobile",
+	html_file => "$config::HTML_PATH/apple_mobile.html",
+	avr_date => 7,
+	term_x_size => 1000,
+	term_y_size => 350,
+	END_OF_DATA => "###EOD###",
+	graph_params => [
+		{dsc => "Japan",  target_range => [1,999], graph => "LINE", statics => "RLAVR", target_area => "Japan", exclusion_are => "",},
+		{dsc => $END_OF_DATA},
+	],
+};
 
 
 #
 #	Down Load CSV 
 #
+sub	download
+{
+	my ($cdp) = @_;
 
-
-if($DOWN_LOAD){
 	my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-	my $src_url = sprintf($SRC_URL_TAG, $year + 1900, $mon + 1, $mday);
-	my $wget = "wget $src_url -O $SRC_CSVF";
+	my $src_url = $cdp->{src_url};
+	my $wget = "wget $src_url -O " . $cdp->{csv_path};
 	dp::dp $wget ."\n" if($VERBOSE);
 	system($wget);
+	return 1;
 }
 
 #
 #	Lpad CSV File
 #
-my %DATA = ();
-my %REGION = ();
-my %TRANSPORT = ();
+my $cdp = $CSV_DEFINITON;
+if($DOWN_LOAD){
+	my $download = $cdp->{download};
+	$download->($cdp);
+}
 
-open(FD, $SRC_CSVF) || die "Cannot open $SRC_CSVF";
+my $csv_path = $cdp->{csv_path};
+my $data_start = $cdp->{data_start};
+my $src_dlm = $cdp->{src_dlm};
+my $label = $cdp->{csv_data};
+my $key_list = $cdp->{key_list};
+my $csv_data = $cdp->{csv_data};
+
+my $KEY_DLM = "#-#";
+my @key_items = $cdp->{keys};
+for(my $i = 0; $i <= $#key_items; $i++){
+	$key_list->[$i] = {};
+}
+
+#
+#	Load CSV DATA
+#
+open(FD, $csv_path) || die "Cannot open $csv_path";
 my $line = <FD>;
-chop $line;
+$line =~ s/[\r\n]+$//;
 $line = decode('utf-8', $line);
-my @LABEL = split(/,/, $line);
-my $FIRST_DATE = $LABEL[4];
+@$label = split(/$src_dlm/, $line);
+my $FIRST_DATE = $LABEL[$data_start];
 my $LAST_DATE = $LABEL[$#LABEL];
 
 my $ln = 0;
 while(<FD>){
-	#last if($ln++ > 50);
+	#last if($ln > 50);
 	s/[\r\n]+$//;
 	my $line = decode('utf-8', $_);
-	my ($geo_type, $region, $transport, $alternative_name, $sub_reagion, @data) = split(/,/, $line);
+	my @items = split(/$src_dlm/, $line);
 
-	my $k = join(",", $region, $transport);
-	$DATA{$region}{$transport} = [@data];
-	$REGION{$area}++;
-	$TRANSPORT{$kind}++;
-
-	#dp::dp join(",", $area, $mesh, $kind) . "\n";
+	my @gen_key = ();
+	foreach my $n (@key_items){		# set key list
+		my $itm = $items[$n];
+		push(@gen_key, $itm);
+		$key_list->[$n]->{$itm} += 1;
+	}
+	my $k = join($KEY_DLM, @gen_key);				# set key_name
+	$csv_data->{$k}= [@items[$data_start..$#items]];	# set csv data
+	$ln++;
 }
 close(FD);
 
-#
-#
-#
-for(my $i = 0; $i < 5; $i++){
-	shift(@LABEL);
+for(my $i = 0; $i < $data_start; $i++){
+	shift(@$label);
 }
 #dp::dp join(",", "# " . $TGK, @LABEL) . "\n";
 
 #
 #	MAIN LOOP
 #
-&gen_html($HTMLF, @PARAMS);
+&gen_html($cdp, $GRAPH_PARAMS);
 
 exit 0;
 
@@ -109,7 +159,13 @@ exit 0;
 #
 sub	gen_html
 {
-	my ($htmlf, @params) = @_;
+	my ($cdp, $gdp) = @_;
+
+	my $label = $cdp->{csv_data};
+	my $key_list = $cdp->{key_list};
+	my $csv_data = $cdp->{csv_data};
+	my $grap_params = $gdp->{graph_params};
+	my $src_url = $cdp->{src_url};
 
 	my $CSS = $config::CSS;
 	my $class = $config::CLASS;
@@ -119,25 +175,24 @@ sub	gen_html
 
 	print HTML "<HTML>\n";
 	print HTML "<HEAD>\n";
-	print HTML "<TITLE> $TITLE_HEAD </TITLE>\n";
+	print HTML "<TITLE> " . $gdp->{html_title} . "</TITLE>\n";
 	print HTML $CSS;
 	print HTML "</HEAD>\n";
 	print HTML "<BODY>\n";
 	my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
-	print HTML "<h3>データソース： <a href=\"$MAIN_URL\" target=\"blank\"> $TITLE_HEAD </a></h3>\n";
-	#print HTML "<a href=\"$MAIN_URL\" target =\"blank\">$MAIN_URL</a>\n";
+	print HTML "<h3>Data Source： <a href=\"$cdp->{main_url}\" target=\"blank\"> $cdp->{html_title} </a></h3>\n";
 
-	foreach my $p (@params){
-		&csv2graph($p);
+	foreach my $gp (@$graph_params){
+		&csv2graph($gp);
 
-		my $name = $p->{dst};
+		my $name = $gp->{dsc};
 		$name =~ s/[\/\.\*\ ]/_/g;
 
 		print HTML "<span class=\"c\">$now</span><br>\n";
 		print HTML "<img src=\"../PNG/$name.png\">\n";
 		print HTML "<br>\n";
-		print HTML "<span $class> <a href=\"$SRC_URL\" target=\"blank\"> Data Source (CSV) </a></span>\n";
+		print HTML "<span $class> <a href=\"$src_url\" target=\"blank\"> Data Source (CSV) </a></span>\n";
 		print HTML "<hr>\n";
 	
 		print HTML "<span $class>";
@@ -162,13 +217,13 @@ sub	gen_html
 
 sub	csv2graph
 {
-	my($param) = @_;
+	my($gp) = @_;
 
 	my @MATRIX = ();
 	$MATRIX[0] = [ "# " . $TGK, @LABEL];
 
 	{dst => "Japan",  target_range => [1,999], graph => "AVR,RLAVR", target_area => "Japan", exclusion_are => "",},
-	dp::dp "DOCOMO  [$TGK] " . $param->{dst} . " " . $param->{graph} . "\n" if($VERBOSE);
+	dp::dp "DATA  [$TGK] " . $param->{dst} . " " . $param->{graph} . "\n" if($VERBOSE);
 	#dp::dp join(",", @{$param->{target_area}}) . "\n";
 	my $rn = 1;
 	my $tga = $param->{target_area};
@@ -181,7 +236,7 @@ sub	csv2graph
 	my $dst = $param->{dst};
 	$dst =~ s/[ \/]/_/g;
 
-	foreach my $area (sort keys %AREA){
+	foreach my $area (sort keys %REAGION){
 		#dp::dp "## tga " . @$tga . "\n";
 		next if(@$tga > 0 && csvlib::search_list($area, @$tga) eq "");
 		next if(@$exc > 0 && csvlib::search_list($area, @$exc));
@@ -192,9 +247,9 @@ sub	csv2graph
 			#dp::dp "### $kind \n";
 
 			my $k = join(",", $area, $kind);
-			next if(! defined $DOCOMO{$k});
+			next if(! defined $CSV_DATA{$k});
 
-			my @w = split(",", $DOCOMO{$k});
+			my @w = split(",", $CSV_DATA{$k});
 			#dp::dp join(",",  $area, $kind,  @w) . "\n";
 			$MATRIX[$rn++] = [$area, @w];
 		}
