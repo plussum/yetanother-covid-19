@@ -53,7 +53,7 @@ my $CSV_DEF = {
 	down_load => \&download,
 
 	src_dlm => ",",
-	keys => [1,2],
+	keys => [1, 2],		# 5, 1, 2
 	data_start => 6,
 
 	csv_data => {},
@@ -74,7 +74,7 @@ my $GRAPH_PARAMS = {
 	dst_dlm => "\t",
 	avr_date => 7,
 
-	timefmt => '%Y/%m/%d',
+	timefmt => '%Y-%m-%d',
 	format_x => '%m/%d',
 
 	term_x_size => 1000,
@@ -83,7 +83,8 @@ my $GRAPH_PARAMS = {
 	default_graph => "line",
 	END_OF_DATA => $END_OF_DATA,
 	graph_params => [
-		{dsc => "Japan", lank => [1,999], static => "rlavr", target => "Japan", exclusion => "", start_date => "", end_date => ""},
+		{dsc => "Japan", lank => [1,99999], static => "", target => "Japan", exclusion => "", start_date => "", end_date => ""},
+		{dsc => "Japan", lank => [1,99999], static => "rlavr", target => "Japan", exclusion => "", start_date => "", end_date => ""},
 		{dsc => $END_OF_DATA},
 	],
 };
@@ -120,7 +121,7 @@ my $date_list = $cdp->{date_list};
 my $key_list = $cdp->{key_list};
 my $csv_data = $cdp->{csv_data};
 
-my $KEY_DLM = "#";					# Initial key items
+my $KEY_DLM = "-";					# Initial key items
 my @key_items = @{$cdp->{keys}};
 for(my $i = 0; $i <= $#key_items; $i++){
 	$key_list->[$i] = {};
@@ -230,7 +231,7 @@ sub	gen_html
 		$gp->{start_date} = $start_date;
 		$gp->{end_date} = $end_date;
 
-		my $fname = join(" ", $gp->{dsc}, $start_date, $gp->{static});
+		my $fname = join(" ", $gp->{dsc}, $gp->{static}, $start_date);
 
 		$fname =~ s/[\/\.\*\ ]/_/g;
 		$gp->{fname} = $fname;
@@ -262,25 +263,6 @@ sub	gen_html
 	close(HTML);
 }
 
-sub	date_calc
-{
-	my($date, $default, $max, $list) = @_;
-			
-	$date = $date // "";
-	$date = $default if($date eq "");
-
-	if(! $date =~ /[\-\/]/){
-		if($date < 0){
-			$date = $max + $date;
-		}
-		if($date < 0 || $date > $max){
-			dp::dp "Error at date $date\n";
-			$date = 0;
-		}
-		$date = $list->[$date];
-	}
-	return $date;
-}
 
 sub	csv2graph
 {
@@ -309,6 +291,7 @@ sub	csv2graph
 					$tl += $v;
 				}
 				#dp::dp join(", ", $key, $i, $csv->[$i], $tl / $avr_date) . "\n";
+				my $avr= sprintf("%.3f", $tl / $avr_date);
 				$csv->[$i] = $tl / $avr_date;
 			}
 		}
@@ -322,7 +305,8 @@ sub	csv2graph
 		my $csv = $csv_data->{$key};
 		my $total = 0;
 		foreach my $v (@$csv){
-			$total += $v;
+			$v = 0 if(! $v);
+			$total += $v ;
 		}
 		$SORT_VAL{$key} = $total;
 	}
@@ -339,6 +323,7 @@ sub	csv2graph
 	my @exc = split(/ *, */, $gp->{exclusion});
 	my @target_keys = ();
 	foreach my $key (@sorted_keys){
+		dp::dp "--- " . join(", ", $key, $order->{$key}, @lank, @tga) . "\n" if($key =~ /Japan/);
 		next if($#tga >= 0 && csvlib::search_list($key, @tga) eq "");
 		next if($#exc >= 0 && csvlib::search_list($key, @exc));
 		next if($order->{$key} < $lank[0] || $order->{$key} > $lank[1]);
@@ -384,7 +369,7 @@ sub	graph
 {
 	my($csv_for_plot, $cdp, $gdp, $gp) = @_;
 
-	my $title = $gp->{dsc} . "($LAST_DATE)";
+	my $title = join(" ", $gp->{dsc}, $gp->{static}, "($LAST_DATE)");
 	#dp::dp "#### " . join(",", "[" . $p->{lank}[0] . "]", @lank) . "\n";
 
 	my $fname = $gdp->{png_path} . "/" . $gp->{fname};
@@ -456,7 +441,7 @@ _EOD_
 	my @label = split(/$dlm/, $l);
 	dp::dp "### $csvf: $l\n";
 
-	for(my $i = 1; $i < $#label; $i++){
+	for(my $i = 1; $i <= $#label; $i++){
 		my $key = $label[$i];
 		dp::dp "### $i: $key\n";
 		$pn++;
@@ -464,7 +449,7 @@ _EOD_
 						$csvf, $i + 1, $i, $label[$i], ($pn < 7) ? 2 : 1);
 		push(@p, $pl);
 	}
-	push(@p, "0 with lines dt '-' title 'base line'");
+	#push(@p, "0 with lines dt '-' title 'base line'");
 	my $plot = join(",", @p);
 	$PARAMS =~ s/#PLOT_PARAM#/$plot/;
 
@@ -477,3 +462,22 @@ _EOD_
 
 }
 
+sub	date_calc
+{
+	my($date, $default, $max, $list) = @_;
+			
+	$date = $date // "";
+	$date = $default if($date eq "");
+
+	if(! $date =~ /[\-\/]/){
+		if($date < 0){
+			$date = $max + $date;
+		}
+		if($date < 0 || $date > $max){
+			dp::dp "Error at date $date\n";
+			$date = 0;
+		}
+		$date = $list->[$date];
+	}
+	return $date;
+}

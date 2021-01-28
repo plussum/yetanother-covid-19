@@ -173,7 +173,7 @@ sub search_list
     for(my $i = 0; $i <= $#w; $i++){
 		my $ntc = $w[$i];
         if($sk =~ /$ntc/){
-           #dp::dp "search_list: $sk:$ntc\n";
+           dp::dp "search_list: [$sk] [$ntc]\n" if($sk =~ /Japan/);
            return $i + 1;
         }
     }
