@@ -277,8 +277,12 @@ sub	csv2graph
 	my @lank = (0, 99999);
 	@lank = (@{$gp->{lank}}) if(defined $gp->{lank});
 
-	my %_csv_data = %$csv_data;
-	my $cvdp = \%_csv_data;
+	my %cvd = ();
+	my $cvdp = \%cvd;
+	foreach my $key (keys %$csv_data){
+		$cvdp->{$key} = [];
+		push(@{$cvdp->{$key}}, @{$csv_data->{$key}});
+	}
 
 	#
 	#	Rolling Average
@@ -296,8 +300,8 @@ sub	csv2graph
 					$tl += $v;
 				}
 				#dp::dp join(", ", $key, $i, $csv->[$i], $tl / $avr_date) . "\n";
-				my $avr= sprintf("%.3f", $tl / $avr_date);
-				$csv->[$i] = $tl / $avr_date;
+				my $avr = sprintf("%.3f", $tl / $avr_date);
+				$csv->[$i] = $avr;
 			}
 		}
 	}
@@ -353,7 +357,6 @@ sub	csv2graph
 	#
 	my $csv_for_plot = $gdp->{png_path} . "/$fname-plot.csv.txt";
 	dp::dp "### $csv_for_plot\n";
-
 
 	open(CSV, "> $csv_for_plot") || die "$csv_for_plot";
 	print CSV join($dst_dlm, "#date", @target_keys) . "\n";
