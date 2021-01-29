@@ -78,8 +78,10 @@ my @JP_PR_WK =	("sub-region", "", "walking", "", "", "Japan");
 my @JP_CT_TR =	("city", "", "transit", "", "", "Japan"); 
 my @JP_CT_WK =	("city", "", "walking", "", "", "Japan"); 
 
-my @JP_TG_TR =	("sub-region", "Tokyo,Osaka,Kanagawa,Chiba,Saitama,Tochigi,Aichi,Kyoto,Hyogo", "transit", "", "", "Japan"); 
+#my $MAIN_PREF = "東京,神奈川,埼玉,千葉,大阪,京都,兵庫,福岡,愛知,北海道";
+my @JP_TG_TR =	("sub-region", "Tokyo,Kanagawa,Saitama,Chiba,Osaka,Kyoto,Hyogo,Fukuoka,Aichi,Hokaido", "transit", "", "", "Japan"); 
 my @JP_TG_WK =	("sub-region", "Tokyo,Osaka,Kanagawa,Chiba,Saitama,Tochigi,Aichi,Kyoto,Hyogo", "walking", "", "", "Japan"); 
+my @TKO_TG_WK =	("sub-region", "Tokyo", "walking", "", "", "Japan"); 
 my @US_ST_DRV=	("sub-region", "", "driving", "", "", "United State"); 
 my @US_ST_TRN =	("sub-region", "", "transit", "", "", "United State"); 
 my @US_ST_WLK =	("sub-region", "", "walking", "", "", "United State"); 
@@ -106,6 +108,12 @@ my $GRAPH_PARAMS = {
 	additional_plot => 100,
 
 	graph_params => [
+		{dsc => "Japan target area Walking 2", lank => [1,99], static => "rlavr", target_col => [@JP_TG_WK], 
+			start_date => "2020-03-12", end_date => "2021-01-13"},
+		{dsc => "Tokyo target area Walking 2", lank => [1,99], static => "rlavr", target_col => [@TKO_TG_WK], 
+			start_date => "2020-03-12", end_date => "2021-01-13"},
+		{dsc => $END_OF_DATA},
+
 		{dsc => "Japan", lank => [1,99], static => "", target_col => [@JAPAN], start_date => "", end_date => ""},
 		{dsc => "Japan", lank => [1,99], static => "rlavr", target_col => [@JAPAN], start_date => "", end_date => ""},
 		{dsc => "Japan 2m", lank => [1,99], static => "", target_col => [@JAPAN], start_date => -93, end_date => ""},
@@ -118,8 +126,11 @@ my $GRAPH_PARAMS = {
 
 		{dsc => "Japan target area Walking", lank => [1,99], static => "", target_col => [@JP_TG_WK], start_date => "", end_date => ""},
 		{dsc => "Japan target area Walking", lank => [1,99], static => "rlavr", target_col => [@JP_TG_WK], start_date => "", end_date => ""},
+
+
 		{dsc => "Japan target area Walking 2m", lank => [1,99], static => "", target_col => [@JP_TG_WK], start_date => -93, end_date => ""},
 		{dsc => "Japan target area Walking 2m", lank => [1,99], static => "rlavr", target_col => [@JP_TG_WK], start_date => -93, end_date => ""},
+		{dsc => $END_OF_DATA},
 
 		{dsc => "Japan prefecture Transit", lank => [1,20], static => "", target_col => [@JP_PR_TR], start_date => "", end_date => ""},
 		{dsc => "Japan prefecture Transit", lank => [1,20], static => "rlavr", target_col => [@JP_PR_TR], start_date => "", end_date => ""},

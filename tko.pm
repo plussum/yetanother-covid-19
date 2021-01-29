@@ -36,7 +36,7 @@ my $DEBUG = 1;
 #	Parameter set
 #
 our $EXCLUSION = "";
-my $MAIN_PREF = "東京,神奈川,埼玉,千葉,大阪,神戸,福岡,愛知,北海道";
+my $MAIN_PREF = "東京,神奈川,埼玉,千葉,大阪,京都,兵庫,福岡,愛知,北海道";
 my @jag_param = (
 	{ext => "#KIND# Japan TOP20 (#LD#) #SRC#", start_day => "2020/03/12",  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines"},
 #{ext => "EOD"},
@@ -172,12 +172,19 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		graphp => [	
 			{ext => "#KIND# Tokyo from 3/12 #RT_TD#", start_day => "2020/03/12", lank =>[0, 99] , exclusion => $EXCLUSION, target => "東京", 
 				label_skip => 7, graph => "lines", term_ysize => 300, ymax => 10},
+			{ext => "#KIND# Tokyo from 3/12 #RT_TD# 2", start_day => "2020/03/12", lank =>[0, 99] , exclusion => $EXCLUSION, target => "東京", 
+				label_skip => 7, graph => "lines", term_ysize => 300, ymax => ""},
+
 			{ext => "#KIND# Tokyo 2m #RT_TD#", start_day => -61, lank =>[0, 99] , exclusion => $EXCLUSION, target => "東京", 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => ""},
 			{ext => "#KIND# Tokyo 1m #RT_TD#", start_day => -31, lank =>[0, 99] , exclusion => $EXCLUSION, target => "東京", 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => ""},
-			{ext => "#KIND# main pref 1m #RT_TD#", start_day => -31, lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
-				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 10},
+
+			{ext => "#KIND# main pref from 3/12 #RT_TD#", start_day => "2020/03/12", lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
+				label_skip => 7, graph => "lines", term_ysize => 300, ymax => 3},
+
+			{ext => "#KIND# main pref 1m #RT_TD# ", start_day => -31, lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
+				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 2.5},
 			{ext => "#KIND# main pref 1m #RT_TD# ", start_day => -31, lank =>[0, 99] , exclusion => $EXCLUSION, target => $MAIN_PREF, 
 				label_skip => 2, graph => "lines", term_ysize => 300, ymax => 5},
 

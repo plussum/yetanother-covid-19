@@ -10,21 +10,65 @@
 #	geo_type,region,transportation_type,alternative_name,sub-region,country,2020/1/13,2020/1/14,2020/1/15,2020/1/16
 #	country/region,Japan,driving,日本,Japan-driving,,100,97.94,99.14,103.16
 #
-#	CSV_DEF
-#		src_url => source_url of data,
-#		src_csv => download csv data,
-#		keys => [1, 2],		# region, transport
-#		date_start => 6,	# 2020/01/13
-#		html_title => "Apple Mobility Trends",
-#	GRAPH_PARAMN
-#		dsc => "Japan"
-#		lank => [1,999],
-#		graph => "LINE | BOX",
-#		statics => "RLAVR",
-#		target_area => "Japan,XXX,YYY", 
-#		exclusion_are => ""
+#	CSV_DEF = {
+#		title => "Apple Mobility Trends",						# Title of CSV (use for HTML and other)
+#		main_url =>  "https://covid19.apple.com/mobility",		# Main URL to reffer
 #
+#		src_url => $src_url,									# Source URL to download (mainly for HTML)
+#		csv_file =>  "$config::WIN_PATH/apm/abc.csv.txt",		# Dowanloaded file, csv file for anlyize
+#		down_load => \&download,								# Download function (User must define this)
 #
+#		src_dlm => ",",											# Delimitter (usually "," or "\t")
+#		keys => [1, 2],		# 5, 1, 2							# key column numbers  -> Japana-driving
+#		data_start => 6,										# Start column number of dates
+#	};
+#
+##	GRAPH_PARAMN
+#		html_file => "$config::HTML_PATH/apple_mobile.html",	# HTML file to generate
+#		html_title => $CSV_DEF->{title},						# Use for HTML Title
+#		png_path   => "$config::PNG_PATH",						# directory for generating graph items
+#		png_rel_path => "../PNG",								# Relative path of CSV, PNG
+#		GRAPH_PARAMS = {
+#
+#		dst_dlm => "\t",										# Delimitter of csv  for gnueplot
+#		avr_date => 7,											# Default rolling average term (date)
+#	
+#		timefmt => '%Y-%m-%d',									# Time format of CSV (gnueplot)
+#		format_x => '%m/%d',									# Time format for Graph (gnueplot)
+#	
+#		term_x_size => 1000,									# Graph image size (x) PNG
+#		term_y_size => 350,										# Graph image size (y) PNG
+#	
+#		END_OF_DATA => $END_OF_DATA,							# END MARK of graph parameters
+#		graph_params => [
+#			{
+#				dsc => "Japan target prefecture", 				# Description of the graph, use for title and file name
+#				lank => [1,5], 									# Target data for use (#1 to #5)
+#				static => "rlavr", 								# "": Raw, "rlavr":Rolling average
+#				start_date => "", 								# Start date: Date format or number (+: from firsta date, -: from last date)
+#				end_date => ""									# 	2021-01-01, 10, -10
+#				target_col => [ 								### Taget itmes 
+#					"sub-region", 								# Col#0 = sub-region
+#					"Tokyo,Osaka,Kanagawa",						# Col#1 = Tokyo or Osaka or Kanagawa
+#					 "transit", 								# Col#2 = transit
+#					"",											# Col#3 = any (*)
+#					"",											# Col#4 = any (*)
+#					"Japan" 									# Col#5 = Japan
+#				],
+#			},
+#			{dsc => "Japan", lank => [1,99], static => "rlavr", target_col => [@JAPAN], start_date => "", end_date => ""},
+#			{dsc => "Japan 2m", lank => [1,99], static => "", target_col => [@JAPAN], start_date => -93, end_date => ""},
+#			{dsc => "Japan 2m", lank => [1,99], static => "rlavr", target_col => [@JAPAN], start_date => -93, end_date => ""},
+#			{dsc => $END_OF_DATA},
+#		}
+#		#### INITAIL at new
+#		csv_data =>  {},										# Main Data (All data of CSV file)
+#		date_list =>  [],										# Date information 
+#		dates =>  0,											# Number of dates
+#		order =>  {},											# Soreted order of data (key)
+#		key_items =>  {};
+#		avr_date =>  ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
+#	};
 #
 package csvgraph;
 use Exporter;
@@ -56,13 +100,10 @@ sub	new
 	$CDP = $cdp;
 
 	$CDP->{csv_data} = {},
-	$CDP->{key_list} = {},
-	$CDP->{key_list} = [],
 	$CDP->{date_list} = [],
 	$CDP->{dates} = 0,
 	$CDP->{order} = {},
 	$CDP->{key_items} = {};
-	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
 	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
 
 }
@@ -83,14 +124,10 @@ sub	load_csv
 	my $data_start = $cdp->{data_start};
 	my $src_dlm = $cdp->{src_dlm};
 	my $date_list = $cdp->{date_list};
-	my $key_list = $cdp->{key_list};
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
 
 	my @key_items = @{$cdp->{keys}};
-	for(my $i = 0; $i <= $#key_items; $i++){
-		$key_list->[$i] = {};
-	}
 
 	#
 	#	Load CSV DATA
@@ -119,7 +156,6 @@ sub	load_csv
 		foreach my $n (@key_items){
 			my $itm = $items[$n];
 			push(@gen_key, $itm);
-			$key_list->[$kn]->{$itm} += 1;
 			$kn++;
 		}
 		my $k = join($KEY_DLM, @gen_key);				# set key_name
@@ -157,7 +193,6 @@ sub	gen_html
 	my ($cdp, $gdp) = @_;
 
 	my $date_list = $cdp->{date_list};
-	my $key_list = $cdp->{key_list};
 	my $csv_data = $cdp->{csv_data};
 	my $graph_params = $gdp->{graph_params};
 	my $src_url = $cdp->{src_url};
