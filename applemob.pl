@@ -55,7 +55,7 @@ my $CSV_DEF = {
 	down_load => \&download,
 
 	src_dlm => ",",
-	keys => [1, 2, 5],		# 5, 1, 2
+	keys => [1, 2],		# 5, 1, 2
 	data_start => 6,
 
 	csv_data => {},
@@ -90,19 +90,7 @@ my $GRAPH_PARAMS = {
 	default_graph => "line",
 	END_OF_DATA => $END_OF_DATA,
 	graph_params => [
-		{dsc => "USA", lank => [], static => "", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
-		{dsc => "USA", lank => [], static => "rlavr", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
-
-		{dsc => $END_OF_DATA},
-
-		{dsc => "USA target area 2m", lank => [0,10], static => "", target => "$US_TARGET", exclusion => $US_EXEC, start_date => -93, end_date => ""},
-		{dsc => "USA target area 2m", lank => [0,10], static => "rlavr", target => "$US_TARGET", exclusion => $US_EXEC, start_date => -93, end_date => ""},
-		{dsc => "USA CITY", lank => [], static => "", target => $US_STATE, exclusion => $US_EXEC, start_date => "", end_date => ""},
-		{dsc => "USA CITY", lank => [], static => "rlavr", target => $US_STATE, exclusion => $US_EXEC, start_date => "", end_date => ""},
-		{dsc => "USA CITY target area 2m", lank => [0,10], static => "", target => "$US_STATE", exclusion => $US_EXEC, start_date => -93, end_date => ""},
-		{dsc => "USA CITY target area 2m", lank => [0,10], static => "rlavr", target => "$US_STATE", exclusion => $US_EXEC, start_date => -93, end_date => ""},
 		{dsc => "Japan", lank => [], static => "", target => "Japan", exclusion => "", start_date => "", end_date => ""},
-
 		{dsc => "Japan", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => "", end_date => ""},
 		{dsc => "Japan 2m", lank => [], static => "", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
 		{dsc => "Japan 2m", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
@@ -111,6 +99,18 @@ my $GRAPH_PARAMS = {
 		{dsc => "Japan target area", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => "", end_date => ""},
 		{dsc => "Japan target area 2m", lank => [], static => "", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
 		{dsc => "Japan target area 2m", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
+
+		{dsc => $END_OF_DATA},
+
+		{dsc => "USA", lank => [], static => "", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
+		{dsc => "USA", lank => [], static => "rlavr", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
+		{dsc => "USA target area 2m", lank => [0,10], static => "", target => "$US_TARGET", exclusion => $US_EXEC, start_date => -93, end_date => ""},
+		{dsc => "USA target area 2m", lank => [0,10], static => "rlavr", target => "$US_TARGET", exclusion => $US_EXEC, start_date => -93, end_date => ""},
+		{dsc => "USA CITY", lank => [], static => "", target => $US_STATE, exclusion => $US_EXEC, start_date => "", end_date => ""},
+		{dsc => "USA CITY", lank => [], static => "rlavr", target => $US_STATE, exclusion => $US_EXEC, start_date => "", end_date => ""},
+		{dsc => "USA CITY target area 2m", lank => [0,10], static => "", target => "$US_STATE", exclusion => $US_EXEC, start_date => -93, end_date => ""},
+		{dsc => "USA CITY target area 2m", lank => [0,10], static => "rlavr", target => "$US_STATE", exclusion => $US_EXEC, start_date => -93, end_date => ""},
+
 
 
 		{dsc => $END_OF_DATA},
@@ -348,7 +348,9 @@ sub	csv2graph
 	#
 	my %SORT_VAL = ();
 	my @sorted_keys = ();
-	if(defined $lank[0]){
+	my $lank_select = (defined $lank[0] && defined $lank[1] && $lank[0] && $lank[1]) ? 1 : "";
+	dp::dp "### $lank_select\n";
+	if($lank_select){
 		foreach my $key (keys %$cvdp){
 			my $csv = $cvdp->{$key};
 			my $total = 0;
@@ -379,7 +381,7 @@ sub	csv2graph
 		#dp::dp "--- " . join(", ", $key, $order->{$key}, @lank, @tga) . "\n" if($key =~ /Japan/);
 		next if($#tga >= 0 && csvlib::search_list($key, @tga) eq "");
 		next if($#exc >= 0 && csvlib::search_list($key, @exc));
-		next if(defined $lank[0] && ($order->{$key} < $lank[0] || $order->{$key} > $lank[1]));
+		next if($lank_select && ($order->{$key} < $lank[0] || $order->{$key} > $lank[1]));
 
 		#dp::dp "### " . join(", ", $key, $order->{$key}) . "\n";
 		push(@target_keys, $key);
