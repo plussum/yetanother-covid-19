@@ -67,6 +67,10 @@ my $US_TARGET = "United States";
 my $US_STATE = join("$KEY_DLM,", "New Yorl","California");
 my $US_EXEC = "";
 my $END_OF_DATA = "###EOD###";
+my @WW_TR =	("country/region", "", "transit", "", "", ""); 
+my @WW_WK =	("country/region", "", "walking", "", "", ""); 
+my @WW_DR =	("country/region", "", "driving", "", "", ""); 
+
 my @USA =	("country/region", "United State", "", "", "", ""); 
 my @JAPAN =	("country/region", "Japan", "", "", "", ""); 
 my @JP_PR_TR =	("sub-region", "", "transit", "", "", "Japan"); 
@@ -100,10 +104,27 @@ my $GRAPH_PARAMS = {
 
 	graph_params => [
 
-		{dsc => "Japan", lank => [], static => "", target_col => [@JAPAN], start_date => "", end_date => ""},
-		{dsc => "Japan", lank => [], static => "rlavr", target_col => [@JAPAN], start_date => "", end_date => ""},
-		{dsc => "Japan 2m", lank => [], static => "", target_col => [@JAPAN], start_date => -93, end_date => ""},
-		{dsc => "Japan 2m", lank => [], static => "rlavr", target_col => [@JAPAN], start_date => -93, end_date => ""},
+		{dsc => "World wide Transit", lank => [1,10], static => "", target_col => [@WW_TR], start_date => "", end_date => ""},
+		#{dsc => $END_OF_DATA},
+
+		{dsc => "World wide Transit", lank => [1,10], static => "rlavr", target_col => [@WW_TR], start_date => "", end_date => ""},
+		{dsc => "World wide Transit 2m", lank => [1,10], static => "", target_col => [@WW_TR], start_date => -93, end_date => ""},
+		{dsc => "World wide Transit 2m", lank => [1,10], static => "rlavr", target_col => [@WW_TR], start_date => -93, end_date => ""},
+
+		{dsc => "World wide Walking", lank => [1,10], static => "", target_col => [@WW_WK], start_date => "", end_date => ""},
+		{dsc => "World wide Walking", lank => [1,10], static => "rlavr", target_col => [@WW_WK], start_date => "", end_date => ""},
+		{dsc => "World wide Walking 2m", lank => [1,10], static => "", target_col => [@WW_WK], start_date => -93, end_date => ""},
+		{dsc => "World wide Walking 2m", lank => [1,10], static => "rlavr", target_col => [@WW_WK], start_date => -93, end_date => ""},
+
+		{dsc => "World wide Driving", lank => [1,10], static => "", target_col => [@WW_DR], start_date => "", end_date => ""},
+		{dsc => "World wide Driving", lank => [1,10], static => "rlavr", target_col => [@WW_DR], start_date => "", end_date => ""},
+		{dsc => "World wide Driving 2m", lank => [1,10], static => "", target_col => [@WW_DR], start_date => -93, end_date => ""},
+		{dsc => "World wide Transit 2m", lank => [1,10], static => "rlavr", target_col => [@WW_DR], start_date => -93, end_date => ""},
+
+		{dsc => "Japan", lank => [1,10], static => "", target_col => [@JAPAN], start_date => "", end_date => ""},
+		{dsc => "Japan", lank => [1,10], static => "rlavr", target_col => [@JAPAN], start_date => "", end_date => ""},
+		{dsc => "Japan 2m", lank => [1,10], static => "", target_col => [@JAPAN], start_date => -93, end_date => ""},
+		{dsc => "Japan 2m", lank => [1,10], static => "rlavr", target_col => [@JAPAN], start_date => -93, end_date => ""},
 
 		{dsc => "Japan target area Transit", lank => [1,10], static => "", target_col => [@JP_TG_TR], start_date => "", end_date => ""},
 		{dsc => "Japan target area Transit", lank => [1,10], static => "rlavr", target_col => [@JP_TG_TR], start_date => "", end_date => ""},

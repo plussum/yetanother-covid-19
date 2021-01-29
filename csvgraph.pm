@@ -268,7 +268,7 @@ sub	csv2graph
 	#
 	#	Data range
 	#
-	dp::dp "DATE: " . join(", ", $gp->{start_date}, $gp->{end_date}) . "\n";
+	#dp::dp "DATE: " . join(", ", $gp->{start_date}, $gp->{end_date}) . "\n";
 	my $date_list = $cdp->{date_list};
 	my $dt_start = csvlib::search_list($gp->{start_date}, @$date_list) - 1;
 	$dt_start = 0 if($dt_start < 0 || $dt_start > $cdp->{dates});
@@ -346,8 +346,9 @@ sub	csv2graph
 	my $order = $cdp->{order};
 	my $n = 1;
 	foreach my $k (@sorted_keys){
-		#dp::dp join(":", $k, $n) . "\n";
-		$order->{$k} = ($lank_select) ? $n++ : 1;
+		#dp::dp join(":", $k, $n, $SORT_VAL{$k}) . "\n";
+		$order->{$k} = ($lank_select) ? $n : 1;
+		$n++;
 	}
 	#my @tga = split(/ *, */, $gp->{target});
 	#my @exc = split(/ *, */, $gp->{exclusion});
@@ -359,11 +360,12 @@ sub	csv2graph
 	dp::dp "### $csv_for_plot\n";
 
 	my @target_lank = ();
-	foreach my $key (@target_keys){
+	foreach my $key (@sorted_keys){
 		next if($lank_select && ($order->{$key} < $lank[0] || $order->{$key} > $lank[1]));
 		push(@target_lank, $key);
 	}
 	open(CSV, "> $csv_for_plot") || die "$csv_for_plot";
+	binmode(CSV, ":utf8");
 	print CSV join($dst_dlm, "#date", @target_lank) . "\n";
 	for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
 		my @w = ();
@@ -538,8 +540,9 @@ _EOD_
 	print PLOT $PARAMS;
 	close(PLOT);
 
+	#dp::dp "-- Do gnuplot $plotf\n";
 	system("gnuplot $plotf");
-
+	#dp::dp "-- Done\n";
 }
 
 sub	date_calc
