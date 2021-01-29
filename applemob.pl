@@ -58,7 +58,6 @@ my $CSV_DEF = {
 	src_dlm => ",",
 	keys => [1, 2],		# 5, 1, 2
 	data_start => 6,
-
 };
 	
 my $JP_TARGET = join("$KEY_DLM,", "Tokyo","Osaka");
@@ -202,6 +201,46 @@ my $GRAPH_PARAMS = {
 	],
 };
 
+my $ERN_CSV_DEF = {
+	title => "ERN pref",
+	main_url =>  "Dummy",
+	csv_file =>  "$config::WIN_PATH/PNG/09_tko_NEW_CASES_ERN_DAY_main_pref_0401_ip_6_lp_7_rl_avr_7_-plot.csv.txt",
+	src_url => 	"src_url",		# set
+
+	down_load => \&download,
+
+	direct => "vertical",		# vertical or holizontal(Default)
+	timefmt => '%Y/%m/%d',		# comverbt to %Y-%m-%d
+	src_dlm => ",",
+	keys => [0],		# 5, 1, 2
+	data_start => 1,
+};
+
+my $ERN_GRAPH_PARAMS = {
+	html_title => $ERN_CSV_DEF->{title},
+	png_path   => "$config::PNG_PATH",
+	png_rel_path => "../PNG",
+	html_file => "$config::HTML_PATH/csvgraph_test_ern.html",
+
+	dst_dlm => "\t",
+	avr_date => 7,
+
+	timefmt => '%Y-%m-%d',
+	format_x => '%m/%d',
+
+	term_x_size => 1000,
+	term_y_size => 350,
+
+	END_OF_DATA => $END_OF_DATA,
+
+	default_graph => "line",
+	ymin => 0,
+	additional_plot => 1,
+	graph_params => [
+		{dsc => "Japan ERN", lank => [1,99], static => "", target_col => [], 
+			start_date => "2020-03-12", end_date => "2021-01-13"},
+	],
+};
 
 #
 #	Down Load CSV 
@@ -218,7 +257,14 @@ sub	download
 	return 1;
 }
 
+#
+#	ERN
+#
+csvgraph::new($ERN_CSV_DEF); 
+csvgraph::load_csv($ERN_CSV_DEF);
+csvgraph::gen_html($ERN_CSV_DEF, $ERN_GRAPH_PARAMS);
 
+exit;
 #
 #	Generate Graph
 #

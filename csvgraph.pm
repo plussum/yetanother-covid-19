@@ -10,7 +10,7 @@
 #	geo_type,region,transportation_type,alternative_name,sub-region,country,2020/1/13,2020/1/14,2020/1/15,2020/1/16
 #	country/region,Japan,driving,日本,Japan-driving,,100,97.94,99.14,103.16
 #
-#	CSV_DEF = {
+##	CSV_DEF = {
 #		title => "Apple Mobility Trends",						# Title of CSV (use for HTML and other)
 #		main_url =>  "https://covid19.apple.com/mobility",		# Main URL to reffer
 #
@@ -18,9 +18,18 @@
 #		csv_file =>  "$config::WIN_PATH/apm/abc.csv.txt",		# Dowanloaded file, csv file for anlyize
 #		down_load => \&download,								# Download function (User must define this)
 #
+#		timefmt = '%Y-%m-%d',									# 2021-01-02 %Y/%m/%d
 #		src_dlm => ",",											# Delimitter (usually "," or "\t")
 #		keys => [1, 2],		# 5, 1, 2							# key column numbers  -> Japana-driving
 #		data_start => 6,										# Start column number of dates
+#
+#		#### INITAIL at new
+#		csv_data =>  {},										# Main Data (All data of CSV file)
+#		date_list =>  [],										# Date information 
+#		dates =>  0,											# Number of dates
+#		order =>  {},											# Soreted order of data (key)
+#		key_items =>  {};
+#		avr_date =>  ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
 #	};
 #
 ##	GRAPH_PARAMN
@@ -61,13 +70,6 @@
 #			{dsc => "Japan 2m", lank => [1,99], static => "rlavr", target_col => [@JAPAN], start_date => -93, end_date => ""},
 #			{dsc => $END_OF_DATA},
 #		}
-#		#### INITAIL at new
-#		csv_data =>  {},										# Main Data (All data of CSV file)
-#		date_list =>  [],										# Date information 
-#		dates =>  0,											# Number of dates
-#		order =>  {},											# Soreted order of data (key)
-#		key_items =>  {};
-#		avr_date =>  ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
 #	};
 #
 package csvgraph;
@@ -119,6 +121,32 @@ sub	load_csv
 		my $download = $cdp->{download};
 		$download->($cdp);
 	}
+	my $direct = $cdp->{direct} // "";
+	if($direct =~ /vertical/i){
+		&load_csv_vertical($cdp);
+	}
+	else {
+		&load_csv_holizontal($cdp);
+	}
+	#	DEBUG: Dump data 
+	#
+	if(0){
+		my $csv_data = $cdp->{csv_data};
+		dp::dp "Dump CSV Data\n";
+		foreach my $k (keys %$csv_data){
+			my @w = @{$csv_data->{$k}};
+			next if($#w < 0);
+
+			dp::dp join(", ", $k, @w[0..5]) . "\n";
+		}
+		exit;
+	}
+	return 0;
+}
+
+sub	load_csv_holizontal
+{
+	my ($cdp) = @_;
 
 	my $csv_file = $cdp->{csv_file};
 	my $data_start = $cdp->{data_start};
@@ -126,8 +154,7 @@ sub	load_csv
 	my $date_list = $cdp->{date_list};
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
-
-	my @key_items = @{$cdp->{keys}};
+	my @keys = @{$cdp->{keys}};			# Item No for gen HASH Key
 
 	#
 	#	Load CSV DATA
@@ -153,7 +180,7 @@ sub	load_csv
 
 		my @gen_key = ();
 		my $kn = 0;
-		foreach my $n (@key_items){
+		foreach my $n (@keys){
 			my $itm = $items[$n];
 			push(@gen_key, $itm);
 			$kn++;
@@ -166,24 +193,58 @@ sub	load_csv
 		#last if($ln > 50);
 	}
 	close(FD);
-
-	#
-	#	DEBUG: Dump data 
-	#
-	if(0){
-		dp::dp "Dump CSV Data\n";
-		foreach my $k (keys %$csv_data){
-			my @w = @{$csv_data->{$k}};
-			next if($#w < 0);
-
-			dp::dp join(", ", $k, @w[0..5]) . "\n";
-		}
-		exit;
-	}
 	return 0;
 }
 
+sub	load_csv_vertical
+{
+	my ($cdp) = @_;
 
+	my $csv_file = $cdp->{csv_file};
+	my $data_start = $cdp->{data_start};
+	my $src_dlm = $cdp->{src_dlm};
+	my $date_list = $cdp->{date_list};
+	my $csv_data = $cdp->{csv_data};
+	my $key_items = $cdp->{key_items};
+	my @keys = @{$cdp->{keys}};
+	my $timefmt = $cdp->{timefmt} // "%Y-%m-%d";
+
+	#
+	#	Load CSV DATA
+	#
+	dp::dp "$csv_file\n";
+	open(FD, $csv_file) || die "Cannot open $csv_file";
+	my $line = <FD>;
+	$line =~ s/[\r\n]+$//;
+	$line = decode('utf-8', $line);
+
+	my @key_list = split(/$src_dlm/, $line);
+	foreach my $k (@key_list){
+		$csv_data->{$k}= [];		# set csv data array
+		$key_items->{$k} = [$k];
+	}
+	#dp::dp join(",", "# " . $TGK, @LABEL) . "\n";
+	my $ln = 0;
+	while(<FD>){
+		s/[\r\n]+$//;
+		my $line = decode('utf-8', $_);
+		my ($date, @items) = split(/$src_dlm/, $line);
+	
+		$date =~ s#/#-#g if($timefmt eq "%Y/%m/%d");
+		$date_list->[$ln] = $date;
+	
+		for(my $i = 0; $i < $#items; $i++){
+			my $k = $key_list[$i];
+			$csv_data->{$k}->[$ln]= $items[$i];
+		}
+		$ln++;
+	}
+	close(FD);
+
+	$cdp->{dates} = $ln - 1;
+	$FIRST_DATE = $date_list->[0];
+	$LAST_DATE = $date_list->[$ln-1];
+}
 #
 #
 #	&gen_html($cdp, $GRAPH_PARAMS);
