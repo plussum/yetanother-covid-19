@@ -67,6 +67,7 @@ my $US_TARGET = "United States";
 my $US_STATE = join("$KEY_DLM,", "New Yorl","California");
 my $US_EXEC = "";
 my $END_OF_DATA = "###EOD###";
+my @US_STATES =	("sub-region", "", "", "", "", "United State"); 
 my $GRAPH_PARAMS = {
 	html_title => $CSV_DEF->{title},
 	png_path   => "$config::PNG_PATH",
@@ -87,28 +88,33 @@ my $GRAPH_PARAMS = {
 	default_graph => "line",
 	ymin => 0,
 	additional_plot => 100,
+
+	taget_cols => ["sub-region", "", "", "", "", "United State"], 
+
+
 	graph_params => [
-		{dsc => "Japan", lank => [], static => "", target => "Japan", exclusion => "", start_date => "", end_date => ""},
+		{dsc => "USA CITY", lank => [1,10], static => "", target_col => [@US_STATES], start_date => "", end_date => ""},
+		{dsc => "USA CITY", lank => [1,10], static => "rlavr", target_col => [@US_STATES], start_date => "", end_date => ""},
+		{dsc => "USA CITY target area 2m", lank => [0,10], static => "", target_col => [@US_STATES], start_date => -93, end_date => ""},
+		{dsc => "USA CITY target area 2m", lank => [0,10], static => "rlavr", target_col => [@US_STATES], start_date => -93, end_date => ""},
+
+#		{dsc => "Japan", lank => [], static => "", target => "Japan", exclusion => "", start_date => "", end_date => ""},
 		#{dsc => $END_OF_DATA},
 
-		{dsc => "Japan", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => "", end_date => ""},
-		{dsc => "Japan 2m", lank => [], static => "", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
-		{dsc => "Japan 2m", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
+#		{dsc => "Japan", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => "", end_date => ""},
+#		{dsc => "Japan 2m", lank => [], static => "", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
+#		{dsc => "Japan 2m", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
+#
+#		{dsc => "Japan target area", lank => [], static => "", target => $JP_TARGET, exclusion => $EXEC, start_date => "", end_date => ""},
+#		{dsc => "Japan target area", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => "", end_date => ""},
+#		{dsc => "Japan target area 2m", lank => [], static => "", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
+#		{dsc => "Japan target area 2m", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
+#
 
-		{dsc => "Japan target area", lank => [], static => "", target => $JP_TARGET, exclusion => $EXEC, start_date => "", end_date => ""},
-		{dsc => "Japan target area", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => "", end_date => ""},
-		{dsc => "Japan target area 2m", lank => [], static => "", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
-		{dsc => "Japan target area 2m", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
-
-
-		{dsc => "USA", lank => [], static => "", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
-		{dsc => "USA", lank => [], static => "rlavr", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
-		{dsc => "USA target area 2m", lank => [0,10], static => "", target => "$US_TARGET", exclusion => $US_EXEC, start_date => -93, end_date => ""},
-		{dsc => "USA target area 2m", lank => [0,10], static => "rlavr", target => "$US_TARGET", exclusion => $US_EXEC, start_date => -93, end_date => ""},
-		{dsc => "USA CITY", lank => [], static => "", target => $US_STATE, exclusion => $US_EXEC, start_date => "", end_date => ""},
-		{dsc => "USA CITY", lank => [], static => "rlavr", target => $US_STATE, exclusion => $US_EXEC, start_date => "", end_date => ""},
-		{dsc => "USA CITY target area 2m", lank => [0,10], static => "", target => "$US_STATE", exclusion => $US_EXEC, start_date => -93, end_date => ""},
-		{dsc => "USA CITY target area 2m", lank => [0,10], static => "rlavr", target => "$US_STATE", exclusion => $US_EXEC, start_date => -93, end_date => ""},
+	#	{dsc => "USA", lank => [], static => "", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
+	#	{dsc => "USA", lank => [], static => "rlavr", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
+	#	{dsc => "USA target area 2m", lank => [0,10], static => "", target => "$US_TARGET", exclusion => $US_EXEC, start_date => -93, end_date => ""},
+	#	{dsc => "USA target area 2m", lank => [0,10], static => "rlavr", target => "$US_TARGET", exclusion => $US_EXEC, start_date => -93, end_date => ""},
 
 		{dsc => $END_OF_DATA},
 

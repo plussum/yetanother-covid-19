@@ -61,6 +61,7 @@ sub	new
 	$CDP->{date_list} = [],
 	$CDP->{dates} = 0,
 	$CDP->{order} = {},
+	$CDP->{key_items} = {};
 	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
 	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
 
@@ -84,6 +85,7 @@ sub	load_csv
 	my $date_list = $cdp->{date_list};
 	my $key_list = $cdp->{key_list};
 	my $csv_data = $cdp->{csv_data};
+	my $key_items = $cdp->{key_items};
 
 	my @key_items = @{$cdp->{keys}};
 	for(my $i = 0; $i <= $#key_items; $i++){
@@ -122,6 +124,7 @@ sub	load_csv
 		}
 		my $k = join($KEY_DLM, @gen_key);				# set key_name
 		$csv_data->{$k}= [@items[$data_start..$#items]];	# set csv data
+		$key_items->{$k} = [@items[0..($data_start - 1)]];	# set csv data
 		
 		$ln++;
 		#last if($ln > 50);
@@ -305,15 +308,45 @@ sub	csv2graph
 		$order->{$k} = $n++;
 	}
 	
-	my @tga = split(/ *, */, $gp->{target});
-	my @exc = split(/ *, */, $gp->{exclusion});
+	#my @tga = split(/ *, */, $gp->{target});
+	#my @exc = split(/ *, */, $gp->{exclusion});
+
+
+	my @target_col = ();
+	my @non_target_col = ();
+	my $condition = 0;
+	foreach my $sk (@{$gp->{target_col}}){
+		if($sk){
+			my ($tg, $ex) = split(/ *\! */, $sk);
+			my @w = split(/\s*,\s*/, $tg);
+			push(@target_col, [@w]);
+			$condition++;
+
+			@w = ();
+			if($ex){
+				@w = split(/\s*,\s*/, $ex);
+			}
+			push(@non_target_col, [@w]);
+		}
+		else {
+			push(@target_col, []);
+			push(@non_target_col, []);
+		}
+	}
+
 	my @target_keys = ();
+	my $key_items = $cdp->{key_items};
 	foreach my $key (@sorted_keys){
 		#dp::dp "--- " . join(", ", $key, $order->{$key}, @lank, @tga) . "\n" if($key =~ /Japan/);
-		next if($#tga >= 0 && csvlib::search_list($key, @tga) eq "");
-		next if($#exc >= 0 && csvlib::search_list($key, @exc));
-		next if($lank_select && ($order->{$key} < $lank[0] || $order->{$key} > $lank[1]));
+		my $key_in_data = $key_items->{$key};
+		my $res = &check_keys($key_in_data, \@target_col, \@non_target_col);
+		dp::dp "[$key:$condition:$res]\n";
+		next if($res < $condition);
 
+		#next if($#tga >= 0 && csvlib::search_list($key, @tga) eq "");
+		#next if($#exc >= 0 && csvlib::search_list($key, @exc));
+		next if($lank_select && ($order->{$key} < $lank[0] || $order->{$key} > $lank[1]));
+#
 		#dp::dp "### " . join(", ", $key, $order->{$key}) . "\n";
 		push(@target_keys, $key);
 	}
@@ -345,6 +378,23 @@ sub	csv2graph
 	return 1;
 }
 
+sub	check_keys
+{
+	my($key_in_data, $target_col, $non_target_col) = @_;
+
+	my $condition = 0;
+	my $cols = scalar(@$target_col) - 1;
+	for(my $kn = 0; $kn <= $cols; $kn++){
+		next if(! ($target_col->[$kn] // ""));			# no key
+		next if(! ($non_target_col->[$kn] // ""));		# no key
+		
+		#return 0 if(csvlib::search_list($key_in_data->[$kn], @{$non_target_col->[$kn]}) eq "");
+
+		dp::dp join(", ", "data ", $kn, $key_in_data->[$kn], @{$target_col->[$kn]}) . "\n";
+		$condition++ if(csvlib::search_list($key_in_data->[$kn], @{$target_col->[$kn]}) eq "");
+	}
+	return $condition;
+}
 
 sub	graph
 {
