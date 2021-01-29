@@ -277,41 +277,10 @@ sub	csv2graph
 	$gp->{dt_start} = $dt_start;
 	$gp->{dt_end}   = $dt_end;
 
+
 	#
-	#	Sort 
+	#	Select by target_col
 	#
-	my %SORT_VAL = ();
-	my @sorted_keys = ();
-	my $lank_select = (defined $lank[0] && defined $lank[1] && $lank[0] && $lank[1]) ? 1 : "";
-	#dp::dp "### $lank_select\n";
-	if($lank_select){
-		foreach my $key (keys %$cvdp){
-			my $csv = $cvdp->{$key};
-			my $total = 0;
-			for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
-				my $v = $csv->[$dt] // 0;
-				$v = 0 if(! $v);
-				$total += $v ;
-			}
-			$SORT_VAL{$key} = $total;
-		}
-		@sorted_keys = (sort {$SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
-	}
-	else {
-		@sorted_keys = (sort keys %$cvdp);
-	}
-
-	my $order = $cdp->{order};
-	my $n = 1;
-	foreach my $k (@sorted_keys){
-		#dp::dp join(":", $k, $n) . "\n";
-		$order->{$k} = $n++;
-	}
-	
-	#my @tga = split(/ *, */, $gp->{target});
-	#my @exc = split(/ *, */, $gp->{exclusion});
-
-
 	my @target_col = ();
 	my @non_target_col = ();
 	my $condition = 0;
@@ -336,20 +305,52 @@ sub	csv2graph
 
 	my @target_keys = ();
 	my $key_items = $cdp->{key_items};
-	foreach my $key (@sorted_keys){
+	foreach my $key (keys %$cvdp){
 		#dp::dp "--- " . join(", ", $key, $order->{$key}, @lank, @tga) . "\n" if($key =~ /Japan/);
 		my $key_in_data = $key_items->{$key};
 		my $res = &check_keys($key_in_data, \@target_col, \@non_target_col);
-		dp::dp "[$key:$condition:$res]\n";
+		#dp::dp "[$key:$condition:$res]\n";
+		#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
 		next if($res < $condition);
 
 		#next if($#tga >= 0 && csvlib::search_list($key, @tga) eq "");
 		#next if($#exc >= 0 && csvlib::search_list($key, @exc));
-		next if($lank_select && ($order->{$key} < $lank[0] || $order->{$key} > $lank[1]));
-#
-		#dp::dp "### " . join(", ", $key, $order->{$key}) . "\n";
+
 		push(@target_keys, $key);
 	}
+
+	#
+	#	Sort 
+	#
+	my %SORT_VAL = ();
+	my @sorted_keys = ();
+	my $lank_select = (defined $lank[0] && defined $lank[1] && $lank[0] && $lank[1]) ? 1 : "";
+	#dp::dp "### $lank_select\n";
+	if($lank_select){
+		foreach my $key (@target_keys){
+			my $csv = $cvdp->{$key};
+			my $total = 0;
+			for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
+				my $v = $csv->[$dt] // 0;
+				$v = 0 if(! $v);
+				$total += $v ;
+			}
+			$SORT_VAL{$key} = $total;
+		}
+		@sorted_keys = (sort {$SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
+	}
+	else {
+		@sorted_keys = (sort keys %$cvdp);
+	}
+
+	my $order = $cdp->{order};
+	my $n = 1;
+	foreach my $k (@sorted_keys){
+		#dp::dp join(":", $k, $n) . "\n";
+		$order->{$k} = ($lank_select) ? $n++ : 1;
+	}
+	#my @tga = split(/ *, */, $gp->{target});
+	#my @exc = split(/ *, */, $gp->{exclusion});
 
 	#
 	#	Genrarte csv file for plot
@@ -357,11 +358,16 @@ sub	csv2graph
 	my $csv_for_plot = $gdp->{png_path} . "/$fname-plot.csv.txt";
 	dp::dp "### $csv_for_plot\n";
 
+	my @target_lank = ();
+	foreach my $key (@target_keys){
+		next if($lank_select && ($order->{$key} < $lank[0] || $order->{$key} > $lank[1]));
+		push(@target_lank, $key);
+	}
 	open(CSV, "> $csv_for_plot") || die "$csv_for_plot";
-	print CSV join($dst_dlm, "#date", @target_keys) . "\n";
+	print CSV join($dst_dlm, "#date", @target_lank) . "\n";
 	for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
 		my @w = ();
-		foreach my $key (@target_keys){
+		foreach my $key (@target_lank){
 			my $csv = $cvdp->{$key};
 			my $v = $csv->[$dt] // "";
 			$v = 0 if($v eq "");
@@ -390,9 +396,10 @@ sub	check_keys
 		
 		#return 0 if(csvlib::search_list($key_in_data->[$kn], @{$non_target_col->[$kn]}) eq "");
 
-		dp::dp join(", ", "data ", $kn, $key_in_data->[$kn], @{$target_col->[$kn]}) . "\n";
-		$condition++ if(csvlib::search_list($key_in_data->[$kn], @{$target_col->[$kn]}) eq "");
+		#dp::dp join(", ", "data ", $kn, $key_in_data->[$kn], @{$target_col->[$kn]}) . "\n";
+		$condition++ if(csvlib::search_list($key_in_data->[$kn], @{$target_col->[$kn]}));
 	}
+	#dp::dp "----> $condition\n";
 	return $condition;
 }
 

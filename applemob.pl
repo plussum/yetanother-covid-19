@@ -67,7 +67,16 @@ my $US_TARGET = "United States";
 my $US_STATE = join("$KEY_DLM,", "New Yorl","California");
 my $US_EXEC = "";
 my $END_OF_DATA = "###EOD###";
-my @US_STATES =	("sub-region", "", "", "", "", "United State"); 
+my @USA =	("country/region", "United State", "", "", "", ""); 
+my @JAPAN =	("country/region", "Japan", "", "", "", ""); 
+my @JP_PR_TR =	("sub-region", "", "transit", "", "", "Japan"); 
+my @JP_PR_WK =	("sub-region", "", "walking", "", "", "Japan"); 
+my @JP_TG_TR =	("sub-region", "Tokyo,Osaka,Kanagawa,Chiba,Saitama,Tochigi,Aichi,Kyoto,Hyogo", "transit", "", "", "Japan"); 
+my @JP_TG_WK =	("sub-region", "Tokyo,Osaka,Kanagawa,Chiba,Saitama,Tochigi,Aichi,Kyoto,Hyogo", "walking", "", "", "Japan"); 
+my @US_ST_DRV=	("sub-region", "", "driving", "", "", "United State"); 
+my @US_ST_TRN =	("sub-region", "", "transit", "", "", "United State"); 
+my @US_ST_WLK =	("sub-region", "", "walking", "", "", "United State"); 
+
 my $GRAPH_PARAMS = {
 	html_title => $CSV_DEF->{title},
 	png_path   => "$config::PNG_PATH",
@@ -89,27 +98,57 @@ my $GRAPH_PARAMS = {
 	ymin => 0,
 	additional_plot => 100,
 
-	taget_cols => ["sub-region", "", "", "", "", "United State"], 
-
-
 	graph_params => [
-		{dsc => "USA CITY", lank => [1,10], static => "", target_col => [@US_STATES], start_date => "", end_date => ""},
-		{dsc => "USA CITY", lank => [1,10], static => "rlavr", target_col => [@US_STATES], start_date => "", end_date => ""},
-		{dsc => "USA CITY target area 2m", lank => [0,10], static => "", target_col => [@US_STATES], start_date => -93, end_date => ""},
-		{dsc => "USA CITY target area 2m", lank => [0,10], static => "rlavr", target_col => [@US_STATES], start_date => -93, end_date => ""},
 
-#		{dsc => "Japan", lank => [], static => "", target => "Japan", exclusion => "", start_date => "", end_date => ""},
-		#{dsc => $END_OF_DATA},
+		{dsc => "Japan", lank => [], static => "", target_col => [@JAPAN], start_date => "", end_date => ""},
+		{dsc => "Japan", lank => [], static => "rlavr", target_col => [@JAPAN], start_date => "", end_date => ""},
+		{dsc => "Japan 2m", lank => [], static => "", target_col => [@JAPAN], start_date => -93, end_date => ""},
+		{dsc => "Japan 2m", lank => [], static => "rlavr", target_col => [@JAPAN], start_date => -93, end_date => ""},
 
-#		{dsc => "Japan", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => "", end_date => ""},
-#		{dsc => "Japan 2m", lank => [], static => "", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
-#		{dsc => "Japan 2m", lank => [], static => "rlavr", target => "Japan", exclusion => "", start_date => -93, end_date => ""},
-#
-#		{dsc => "Japan target area", lank => [], static => "", target => $JP_TARGET, exclusion => $EXEC, start_date => "", end_date => ""},
-#		{dsc => "Japan target area", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => "", end_date => ""},
-#		{dsc => "Japan target area 2m", lank => [], static => "", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
-#		{dsc => "Japan target area 2m", lank => [], static => "rlavr", target => $JP_TARGET, exclusion => $EXEC, start_date => -93, end_date => ""},
-#
+		{dsc => "Japan target area Transit", lank => [1,10], static => "", target_col => [@JP_TG_TR], start_date => "", end_date => ""},
+		{dsc => "Japan target area Transit", lank => [1,10], static => "rlavr", target_col => [@JP_TG_TR], start_date => "", end_date => ""},
+		{dsc => "Japan target area Transit 2m", lank => [1,10], static => "", target_col => [@JP_TG_TR], start_date => -93, end_date => ""},
+		{dsc => "Japan target area Transit 2m", lank => [1,10], static => "rlavr", target_col => [@JP_TG_TR], start_date => -93, end_date => ""},
+
+		{dsc => "Japan target area Walking", lank => [1,10], static => "", target_col => [@JP_TG_WK], start_date => "", end_date => ""},
+		{dsc => "Japan target area Walking", lank => [1,10], static => "rlavr", target_col => [@JP_TG_WK], start_date => "", end_date => ""},
+		{dsc => "Japan target area Walking 2m", lank => [1,10], static => "", target_col => [@JP_TG_WK], start_date => -93, end_date => ""},
+		{dsc => "Japan target area Walking 2m", lank => [1,10], static => "rlavr", target_col => [@JP_TG_WK], start_date => -93, end_date => ""},
+
+		{dsc => "Japan prefecture Transit", lank => [1,10], static => "", target_col => [@JP_PR_TR], start_date => "", end_date => ""},
+		{dsc => "Japan prefecture Transit", lank => [1,10], static => "rlavr", target_col => [@JP_PR_TR], start_date => "", end_date => ""},
+		{dsc => "Japan prefecture Transit 2m", lank => [1,10], static => "", target_col => [@JP_PR_TR], start_date => -93, end_date => ""},
+		{dsc => "Japan prefecture Transit 2m", lank => [1,10], static => "rlavr", target_col => [@JP_PR_TR], start_date => -93, end_date => ""},
+
+		{dsc => "Japan prefecture Walking", lank => [1,10], static => "", target_col => [@JP_PR_WK], start_date => "", end_date => ""},
+		{dsc => "Japan prefecture Walking", lank => [1,10], static => "rlavr", target_col => [@JP_PR_WK], start_date => "", end_date => ""},
+		{dsc => "Japan prefecture Walking 2m", lank => [1,10], static => "", target_col => [@JP_PR_WK], start_date => -93, end_date => ""},
+		{dsc => "Japan prefecture Walking 2m", lank => [1,10], static => "rlavr", target_col => [@JP_PR_WK], start_date => -93, end_date => ""},
+
+		{dsc => $END_OF_DATA},
+
+		{dsc => "USA DRV", lank => [1,10], static => "", target_col => [@USA], start_date => "", end_date => ""},
+		{dsc => "USA DRV", lank => [1,10], static => "rlavr", target_col => [@USA], start_date => "", end_date => ""},
+		{dsc => "USA DRV 2m", lank => [1,10], static => "", target_col => [@USA], start_date => -93, end_date => ""},
+		{dsc => "USA DRV 2m", lank => [1,10], static => "rlavr", target_col => [@USA], start_date => -93, end_date => ""},
+
+		{dsc => "USA STATES DRV", lank => [1,10], static => "", target_col => [@US_ST_DRV], start_date => "", end_date => ""},
+		{dsc => "USA STATES DRV", lank => [1,10], static => "rlavr", target_col => [@US_ST_DRV], start_date => "", end_date => ""},
+		{dsc => "USA STATES DRV target area 2m", lank => [1,10], static => "", target_col => [@US_ST_DRV], start_date => -93, end_date => ""},
+		{dsc => "USA STATES DRV target area 2m", lank => [1,10], static => "rlavr", target_col => [@US_ST_DRV], start_date => -93, end_date => ""},
+
+		{dsc => "USA STATES TRNSIT", lank => [1,10], static => "", target_col => [@US_ST_TRN], start_date => "", end_date => ""},
+		{dsc => "USA STATES TRNSIT", lank => [1,10], static => "rlavr", target_col => [@US_ST_TRN], start_date => "", end_date => ""},
+		{dsc => "USA STATES TRNSIT 2m", lank => [1,10], static => "", target_col => [@US_ST_TRN], start_date => -93, end_date => ""},
+		{dsc => "USA STATES TRNSIT 2m", lank => [1,10], static => "rlavr", target_col => [@US_ST_TRN], start_date => -93, end_date => ""},
+
+		{dsc => "USA STATES WALK", lank => [1,10], static => "", target_col => [@US_ST_WLK], start_date => "", end_date => ""},
+		{dsc => "USA STATES WALK", lank => [1,10], static => "rlavr", target_col => [@US_ST_WLK], start_date => "", end_date => ""},
+		{dsc => "USA STATES WALK 2m", lank => [1,10], static => "", target_col => [@US_ST_WLK], start_date => -93, end_date => ""},
+		{dsc => "USA STATES WALK 2m", lank => [1,10], static => "rlavr", target_col => [@US_ST_WLK], start_date => -93, end_date => ""},
+
+		{dsc => $END_OF_DATA},
+
 
 	#	{dsc => "USA", lank => [], static => "", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
 	#	{dsc => "USA", lank => [], static => "rlavr", target => $US_TARGET, exclusion => $US_EXEC, start_date => "", end_date => ""},
