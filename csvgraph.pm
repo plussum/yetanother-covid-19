@@ -55,12 +55,15 @@ sub	new
 	
 	$CDP = $cdp;
 
-	$CDP->{csv_data} => {},
-	$CDP->{key_list} => {},
-	$CDP->{key_list} => [],
-	$CDP->{date_list} => [],
-	$CDP->{dates} => 0,
-	$CDP->{order} => {},
+	$CDP->{csv_data} = {},
+	$CDP->{key_list} = {},
+	$CDP->{key_list} = [],
+	$CDP->{date_list} = [],
+	$CDP->{dates} = 0,
+	$CDP->{order} = {},
+	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
+	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
+
 }
 
 #
@@ -99,7 +102,7 @@ sub	load_csv
 	my @w = split(/$src_dlm/, $line);
 	@$date_list = @w[$data_start..$#w];
 	$cdp->{dates} = scalar(@$date_list) - 1;
-	$$CDP->{FIRST_DATE = $date_list->[0];
+	$FIRST_DATE = $date_list->[0];
 	$LAST_DATE = $date_list->[$#w - $data_start];
 
 	#dp::dp join(",", "# " . $TGK, @LABEL) . "\n";
@@ -277,7 +280,7 @@ sub	csv2graph
 	my %SORT_VAL = ();
 	my @sorted_keys = ();
 	my $lank_select = (defined $lank[0] && defined $lank[1] && $lank[0] && $lank[1]) ? 1 : "";
-	dp::dp "### $lank_select\n";
+	#dp::dp "### $lank_select\n";
 	if($lank_select){
 		foreach my $key (keys %$cvdp){
 			my $csv = $cvdp->{$key};
@@ -400,6 +403,9 @@ set ylabel '$ylabel'
 set xtics $xtics
 set xrange ['$start_date':'$end_date']
 set grid
+set yrange [#YRANGE#]
+set y2range [#YRANGE#]
+set y2tics
 
 set terminal pngcairo size $term_x_size, $term_y_size font "IPAexゴシック,8" enhanced
 set output '/dev/null'
@@ -435,8 +441,18 @@ _EOD_
 		push(@p, $pl);
 	}
 	#push(@p, "0 with lines dt '-' title 'base line'");
+	my $additional_plot = $gp->{additional_plot} // ($gdp->{additional_plot} // "");
+    if($additional_plot){
+        #dp::dp "additional_plot: " . $gplitem->{additional_plot} . "\n";
+		push(@p, $additional_plot);
+    }
 	my $plot = join(",", @p);
 	$PARAMS =~ s/#PLOT_PARAM#/$plot/g;
+
+	my $ymin = $gp->{ymin} // ($gdp->{ymin} // "");
+	my $ymax = $gp->{ymax} // ($gdp->{ymax} // "");
+	#dp::dp "YRANGE: [$ymin:$ymax]\n";
+	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/g;	
 
 	my $date_list = $cdp->{date_list};
 	my $dt_start = $gp->{dt_start};
@@ -450,7 +466,7 @@ _EOD_
 		for(my $dn = $gp->{dt_end} - $RELATIVE_DATE; $dn > $gp->{dt_start}; $dn -= $RELATIVE_DATE){
 			my $mark_date = $date_list->[$dn];
 			
-			#dp::dp "ARROW: $dn, $mark_date\n";
+			#dp::dp "ARROW: $dn, [$mark_date]\n";
 			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"dark-red\"",
 				$mark_date,  $mark_date);
 			push(@aw, $a);
