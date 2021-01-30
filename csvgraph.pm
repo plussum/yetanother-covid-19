@@ -80,7 +80,6 @@ use Exporter;
 use strict;
 use warnings;
 use utf8;
-use Statistics::Lite qw(max);
 use Encode 'decode';
 use Data::Dumper;
 use config;
@@ -262,18 +261,23 @@ sub	marge_csv
 {
 	my ($marge, @src_csv) = @_;
 
+	&new($marge);
+
 	my @csv_info = ();
-	my $date_start = "";
+	my $date_start = "0000-00-00";
 	foreach my $cdp (@src_csv){
 		my $dt = $cdp->{date_list}->[0];
+		dp::dp "[$dt]\n";
 		$date_start = $dt if($dt gt $date_start );
 	}
-	my $date_end "";
+	my $date_end = "9999-99-99";
 	foreach my $cdp (@src_csv){
-		my $$dates = $cdp->{dates};
+		my $dates = $cdp->{dates};
 		my $dt = $cdp->{date_list}->[$dates];
-		$date_end = $dt if($dt le $date_start );
+		$date_end = $dt if($dt le $date_end );
 	}
+	dp::dp join(", ", $date_start, $date_end) . "\n";
+
 	for(my $i = 0; $i < $#src_csv; $i++){
 		my $cdp = $src_csv[$i];
 		my $infop = $csv_info[$i];
@@ -294,30 +298,41 @@ sub	marge_csv
 		}
 		$dt_end--;
 		$infop->{date_end} = $dt_end;
+	
+		dp::dp join(", ", $dt_start, $dt_end) . "\n";
 	}
 
-	&new($marge);
+
+	my $m_csv_data = $marge->{csv_data};
+	my $m_date_list = $marge->{date_list};
+	my $m_key_items = $marge->{key_items};
+
+	my $infop = $csv_info[0];
+	my $start = $infop->{date_start};
+	my $end   = $infop->{date_end};
+	$marge->{dates} = $end - $start;
+
+	my $date_list = $src_csv[0]->{date_list};
+	@{$m_date_list} = @{$date_list}[$start..$end];
+	dp::dp "## " . join(",", @{$m_date_list} );
+
 	for(my $csvn = 0; $csvn <= $#src_csv; $csvn++){
 		my $cdp = $src_csv[$csvn];
 		my $csv_data = $cdp->{csv_data};
 		my $infop = $csv_info[$csvn];
 		
-		foreach $k (keys %$csv_data){
+		foreach my $k (keys %$csv_data){
 			my $start = $infop->{date_start};
 			my $end   = $infop->{date_end};
 			my $dates = $end - $start;
 	
-			for(my $i = 0; $i < $dates; $i++){
+			$m_csv_data->{$k} = [];
+			for(my $i = 0; $i <= $dates; $i++){
+				my $v = $csv_data->{$k}->[$i+$start];
+				$m_csv_data->{$k}->[$i] = $v;
 			}
 		}
 	} 
-			
-	$CDP->{csv_data} = {},
-	$CDP->{date_list} = [],
-	$CDP->{dates} = 0,
-	$CDP->{order} = {},
-	$CDP->{key_items} = {};
-	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
 }
 
 #

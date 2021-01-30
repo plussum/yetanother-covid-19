@@ -281,4 +281,4 @@ csvgraph::new($CSV_DEF);
 csvgraph::load_csv($CSV_DEF);
 #csvgraph::gen_html($CSV_DEF, $GRAPH_PARAMS);
 
-csvgraph::marge_csv($MARGE_CSV_DEF, $CSV_DEF, $ERN_CSV);
+csvgraph::marge_csv($MARGE_CSV_DEF, $CSV_DEF, $ERN_CSV_DEF);
