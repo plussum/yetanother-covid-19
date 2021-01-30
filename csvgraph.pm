@@ -129,19 +129,12 @@ sub	load_csv
 	else {
 		&load_csv_holizontal($cdp);
 	}
+
+	#
 	#	DEBUG: Dump data 
 	#
-	if(0){
-		my $csv_data = $cdp->{csv_data};
-		dp::dp "Dump CSV Data\n";
-		foreach my $k (keys %$csv_data){
-			my @w = @{$csv_data->{$k}};
-			next if($#w < 0);
-
-			dp::dp join(", ", $k, @w[0..5]) . "\n";
-		}
-		exit;
-	}
+	&dyump_csv($cdp) if(0);
+	
 	return 0;
 }
 
@@ -241,7 +234,7 @@ sub	load_csv_vertical
 		$date_list->[$ln] = $date;
 		#dp::dp "date:$ln $date\n";
 	
-		for(my $i = 0; $i < $#items; $i++){
+		for(my $i = 0; $i <= $#items; $i++){
 			my $k = $key_list[$i];
 			$csv_data->{$k}->[$ln]= $items[$i];
 		}
@@ -254,6 +247,28 @@ sub	load_csv_vertical
 	$LAST_DATE = $date_list->[$ln-1];
 }
 
+sub	dump_csv
+{
+	my ($cdp, $ok) = @_;
+
+	$ok = $ok // "";
+	my $csv_data = $cdp->{csv_data};
+	my $key_items = $cdp->{key_items};
+	dp::dp "Dump CSV Data\n";
+	foreach my $k (keys %$csv_data){
+		my @w = @{$csv_data->{$k}};
+		my @k = @{$key_items->{$k}};
+		next if($#w < 0);
+
+		dp::dp "[$k](" . join(",", @k) . "]";
+		if(! defined $w[1]){
+			dp::dp " --> csv_data is not assigned\n";
+		}
+		if($ok){
+			dp::dp join(", ", $k, @w[0..5]) . "\n";
+		}
+	}
+}
 #
 #	Marge csvdef
 #
@@ -278,9 +293,13 @@ sub	marge_csv
 	}
 	dp::dp join(", ", $date_start, $date_end) . "\n";
 
+	#
+	#	Check Start date(max) and End date(min)
+	#
 	for(my $i = 0; $i < $#src_csv; $i++){
-		my $cdp = $src_csv[$i];
+		$csv_info[$i] = {};
 		my $infop = $csv_info[$i];
+		my $cdp = $src_csv[$i];
 		my $date_list = $cdp->{date_list};
 
 		my $dt_start = csvlib::search_list($date_start, @$date_list);
@@ -299,10 +318,12 @@ sub	marge_csv
 		$dt_end--;
 		$infop->{date_end} = $dt_end;
 	
-		dp::dp join(", ", $dt_start, $dt_end) . "\n";
+		#dp::dp join(", ", $dt_start, $dt_end) . "\n";
 	}
 
-
+	#
+	#	Marge
+	#
 	my $m_csv_data = $marge->{csv_data};
 	my $m_date_list = $marge->{date_list};
 	my $m_key_items = $marge->{key_items};
@@ -310,11 +331,14 @@ sub	marge_csv
 	my $infop = $csv_info[0];
 	my $start = $infop->{date_start};
 	my $end   = $infop->{date_end};
-	$marge->{dates} = $end - $start;
+	my $dates = $end - $start;
+	$marge->{dates} = $dates;
 
 	my $date_list = $src_csv[0]->{date_list};
 	@{$m_date_list} = @{$date_list}[$start..$end];
-	dp::dp "## " . join(",", @{$m_date_list} );
+	#dp::dp "start:$start, end:$end dates:$dates\n";
+	#dp::dp "## src:" . join(",", @{$date_list} ) . "\n";
+	#dp::dp "## dst:" . join(",", @{$m_date_list} ) . "\n";
 
 	for(my $csvn = 0; $csvn <= $#src_csv; $csvn++){
 		my $cdp = $src_csv[$csvn];
@@ -322,17 +346,22 @@ sub	marge_csv
 		my $infop = $csv_info[$csvn];
 		
 		foreach my $k (keys %$csv_data){
-			my $start = $infop->{date_start};
-			my $end   = $infop->{date_end};
-			my $dates = $end - $start;
-	
 			$m_csv_data->{$k} = [];
-			for(my $i = 0; $i <= $dates; $i++){
-				my $v = $csv_data->{$k}->[$i+$start];
-				$m_csv_data->{$k}->[$i] = $v;
+			my $dp = $csv_data->{$k};
+			my $mdp = $m_csv_data->{$k};
+			if(! defined $dp->[1]){
+				dp::dp "WARNING: no data in [$k]\n";
 			}
+			for(my $i = 0; $i < $dates; $i++){
+				$mdp->[$i] = $dp->[$i] // 0;		# may be something wrong
+			}
+			#@{$m_csv_data->{$k}} = @{$csv_data->{$k}}[$start..$end];
+			#dp::dp ">> src" . join(",", $k, @{$csv_data->{$k}} ) . "\n";
+			#dp::dp ">> dst" . join(",", $k, @{$m_csv_data->{$k}} ) . "\n";
 		}
 	} 
+	
+	&dump_csv($marge, 1);
 }
 
 #
@@ -472,7 +501,6 @@ sub	csv2graph
 	$dt_end = $cdp->{dates} if($dt_end < 0 || $dt_end > $cdp->{dates});
 	$gp->{dt_start} = $dt_start;
 	$gp->{dt_end}   = $dt_end;
-
 
 	#
 	#	Select by target_col

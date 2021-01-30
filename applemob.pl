@@ -251,6 +251,32 @@ my $MARGE_CSV_DEF = {
 	start_date => "2020-04-01",
 	end_date   => "2020-01-14",
 };
+my $MARGE_GRAPH_PARAMS = {
+	html_title => "MARGE Apple Mobility Trends and ERN",
+	png_path   => "$config::PNG_PATH",
+	png_rel_path => "../PNG",
+	html_file => "$config::HTML_PATH/applemobile_ern.html",
+
+	dst_dlm => "\t",
+	avr_date => 7,
+
+	timefmt => '%Y-%m-%d',
+	format_x => '%m/%d',
+
+	term_x_size => 1000,
+	term_y_size => 350,
+
+	END_OF_DATA => $END_OF_DATA,
+
+	default_graph => "line",
+	ymin => 0,
+	additional_plot => 1,
+	graph_params => [
+		{dsc => "Japan ERN", lank => [1,99], static => "", target_col => ["Tokyo,東京"], 
+			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
+	],
+};
+
 
 #
 #	Down Load CSV 
@@ -281,4 +307,6 @@ csvgraph::new($CSV_DEF);
 csvgraph::load_csv($CSV_DEF);
 #csvgraph::gen_html($CSV_DEF, $GRAPH_PARAMS);
 
-csvgraph::marge_csv($MARGE_CSV_DEF, $CSV_DEF, $ERN_CSV_DEF);
+csvgraph::marge_csv($MARGE_CSV_DEF, $ERN_CSV_DEF, $CSV_DEF);
+#csvgraph::marge_csv($MARGE_CSV_DEF, $CSV_DEF, $ERN_CSV_DEF);
+csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);
