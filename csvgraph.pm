@@ -80,6 +80,7 @@ use Exporter;
 use strict;
 use warnings;
 use utf8;
+use Statistics::Lite qw(max);
 use Encode 'decode';
 use Data::Dumper;
 use config;
@@ -109,6 +110,7 @@ sub	new
 	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
 
 }
+
 
 #
 #	Lpad CSV File
@@ -252,6 +254,72 @@ sub	load_csv_vertical
 	$FIRST_DATE = $date_list->[0];
 	$LAST_DATE = $date_list->[$ln-1];
 }
+
+#
+#	Marge csvdef
+#
+sub	marge_csv
+{
+	my ($marge, @src_csv) = @_;
+
+	my @csv_info = ();
+	my $date_start = "";
+	foreach my $cdp (@src_csv){
+		my $dt = $cdp->{date_list}->[0];
+		$date_start = $dt if($dt gt $date_start );
+	}
+	my $date_end "";
+	foreach my $cdp (@src_csv){
+		my $$dates = $cdp->{dates};
+		my $dt = $cdp->{date_list}->[$dates];
+		$date_end = $dt if($dt le $date_start );
+	}
+	for(my $i = 0; $i < $#src_csv; $i++){
+		my $cdp = $src_csv[$i];
+		my $infop = $csv_info[$i];
+		my $date_list = $cdp->{date_list};
+
+		my $dt_start = csvlib::search_list($date_start, @$date_list);
+		if(! $dt_start){
+			dp::dp "WARNING: Date $date_start is not in the data\n";
+			$dt_start = 1;
+		}
+		$dt_start--;
+		$infop->{date_start} = $dt_start;
+
+		my $dt_end = csvlib::search_list($date_end, @$date_list);
+		if(! $dt_end){
+			dp::dp "WARNING: Date $date_end is not in the data\n";
+			$dt_end = 1;
+		}
+		$dt_end--;
+		$infop->{date_end} = $dt_end;
+	}
+
+	&new($marge);
+	for(my $csvn = 0; $csvn <= $#src_csv; $csvn++){
+		my $cdp = $src_csv[$csvn];
+		my $csv_data = $cdp->{csv_data};
+		my $infop = $csv_info[$csvn];
+		
+		foreach $k (keys %$csv_data){
+			my $start = $infop->{date_start};
+			my $end   = $infop->{date_end};
+			my $dates = $end - $start;
+	
+			for(my $i = 0; $i < $dates; $i++){
+			}
+		}
+	} 
+			
+	$CDP->{csv_data} = {},
+	$CDP->{date_list} = [],
+	$CDP->{dates} = 0,
+	$CDP->{order} = {},
+	$CDP->{key_items} = {};
+	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
+}
+
 #
 #
 #	&gen_html($cdp, $GRAPH_PARAMS);

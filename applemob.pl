@@ -242,6 +242,16 @@ my $ERN_GRAPH_PARAMS = {
 	],
 };
 
+my $MARGE_CSV_DEF = {
+	title => "MARGED Apple and ERN pref",
+	main_url =>  "Dummy",
+	csv_file =>  "Dummy",
+	src_url => 	"Dummy",		# set
+
+	start_date => "2020-04-01",
+	end_date   => "2020-01-14",
+};
+
 #
 #	Down Load CSV 
 #
@@ -262,13 +272,13 @@ sub	download
 #
 csvgraph::new($ERN_CSV_DEF); 
 csvgraph::load_csv($ERN_CSV_DEF);
-csvgraph::gen_html($ERN_CSV_DEF, $ERN_GRAPH_PARAMS);
+#csvgraph::gen_html($ERN_CSV_DEF, $ERN_GRAPH_PARAMS);
 
-exit;
 #
 #	Generate Graph
 #
 csvgraph::new($CSV_DEF); 
 csvgraph::load_csv($CSV_DEF);
-csvgraph::gen_html($CSV_DEF, $GRAPH_PARAMS);
+#csvgraph::gen_html($CSV_DEF, $GRAPH_PARAMS);
 
+csvgraph::marge_csv($MARGE_CSV_DEF, $CSV_DEF, $ERN_CSV);
