@@ -256,7 +256,7 @@ sub	dump_csv
 	my $key_items = $cdp->{key_items};
 	my $src_csv = $cdp->{src_csv};
 
-	dp::dp "Dump CSV Data($key_items)\n";
+	#dp::dp "Dump CSV Data($key_items)\n";
 	foreach my $k (keys %$csv_data){
 		my @w = @{$csv_data->{$k}};
 		next if($#w < 0);
@@ -292,7 +292,7 @@ sub	marge_csv
 	my $date_start = "0000-00-00";
 	foreach my $cdp (@src_csv_list){
 		my $dt = $cdp->{date_list}->[0];
-		dp::dp "[$dt]\n";
+		#dp::dp "[$dt]\n";
 		$date_start = $dt if($dt gt $date_start );
 	}
 	my $date_end = "9999-99-99";
@@ -301,7 +301,7 @@ sub	marge_csv
 		my $dt = $cdp->{date_list}->[$dates];
 		$date_end = $dt if($dt le $date_end );
 	}
-	dp::dp join(", ", $date_start, $date_end) . "\n";
+	#dp::dp join(", ", $date_start, $date_end) . "\n";
 
 	#
 	#	Check Start date(max) and End date(min)
@@ -525,7 +525,7 @@ sub	csv2graph
 	my $condition = 0;
 
 	foreach my $sk (@{$gp->{target_col}}){
-		dp::dp "Target col $sk\n";
+		#dp::dp "Target col $sk\n";
 		if($sk){
 			my ($tg, $ex) = split(/ *\! */, $sk);
 			my @w = split(/\s*,\s*/, $tg);
@@ -555,7 +555,7 @@ sub	csv2graph
 
 		if($res >= $condition){
 			push(@target_keys, $key);
-			dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
+			#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
 		}
 	}
 
@@ -565,7 +565,7 @@ sub	csv2graph
 	my %SORT_VAL = ();
 	my @sorted_keys = ();
 	my $lank_select = (defined $lank[0] && defined $lank[1] && $lank[0] && $lank[1]) ? 1 : "";
-	dp::dp "### $lank_select\n";
+	#dp::dp "### $lank_select\n";
 	if($lank_select){
 		foreach my $key (@target_keys){
 			my $csv = $cvdp->{$key};
@@ -746,7 +746,7 @@ _EOD_
 
 	my $src_csv = $cdp->{src_csv} // "";
 	my $y2_source = $gdp->{y2_source} // "";
-	dp::dp "soruce_csv[$src_csv] $y2_source\n";
+	#dp::dp "soruce_csv[$src_csv] $y2_source\n";
 	$src_csv = "" if(! $y2_source);
 
 	for(my $i = 1; $i <= $#label; $i++){
@@ -755,12 +755,17 @@ _EOD_
 		$pn++;
 
 		my $axis = "";
+		my $dot = "";
 		if($y2_source ne ""){		#####
-			dp::dp "csv_source: $key [" . $src_csv->{$key} . "]\n";
-			$axis = ($src_csv->{$key} == $y2_source) ? "axis x1y2" : "axis x1y1" 
+			#dp::dp "csv_source: $key [" . $src_csv->{$key} . "]\n";
+			$axis =	"axis x1y1";
+			if($src_csv->{$key} == $y2_source) {
+				$axis = "axis x1y2" ;
+				$dot = "dt (7,3)";
+			}
 		}
-		dp::dp "axis:[$axis]\n";
-		my $pl = sprintf("'%s' using 1:%d $axis with lines title '%d:%s' linewidth %d ", 
+		#dp::dp "axis:[$axis]\n";
+		my $pl = sprintf("'%s' using 1:%d $axis with lines title '%d:%s' linewidth %d $dot", 
 						$csvf, $i + 1, $i, $label[$i], ($pn < 7) ? 2 : 1);
 		push(@p, $pl);
 	}

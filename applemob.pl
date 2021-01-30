@@ -275,7 +275,15 @@ my $MARGE_GRAPH_PARAMS = {
 	additional_plot => 1,
 	y2_source => 1,		# soruce csv definition for y2
 	graph_params => [
-		{dsc => "Japan ERN", lank => [1,999], static => "", target_col => ["Tokyo-,東京"], 
+		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Tokyo-,東京都"], 
+			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
+		{dsc => "Osaka Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Osaka-,大阪府"], 
+			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
+		{dsc => "Kanagawa Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Kanagawa,神奈川県"], 
+			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
+		{dsc => "Hyogo Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Hyogo,兵庫県"], 
+			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
+		{dsc => "Kyoto Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Kyoto,京都府"], 
 			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
 	],
 };
