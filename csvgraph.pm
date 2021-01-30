@@ -254,13 +254,20 @@ sub	dump_csv
 	$ok = $ok // "";
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
-	dp::dp "Dump CSV Data\n";
+	dp::dp "Dump CSV Data($key_items)\n";
 	foreach my $k (keys %$csv_data){
 		my @w = @{$csv_data->{$k}};
-		my @k = @{$key_items->{$k}};
 		next if($#w < 0);
 
-		dp::dp "[$k](" . join(",", @k) . "]";
+		#my @k = ();
+		#if(! defined $key_items->{$k}){
+		#	dp::dp "Undefined key : [$k]\n";
+		#}	
+		#else {
+		#	@k = @{$key_items->{$k}};
+		#}
+		#dp::dp "[$k](" . join(",", @k) . ")";
+
 		if(! defined $w[1]){
 			dp::dp " --> csv_data is not assigned\n";
 		}
@@ -333,6 +340,8 @@ sub	marge_csv
 	my $end   = $infop->{date_end};
 	my $dates = $end - $start;
 	$marge->{dates} = $dates;
+	$marge->{source_csv} = {};
+	my $source_csv = $marge->{soruce_csv};
 
 	my $date_list = $src_csv[0]->{date_list};
 	@{$m_date_list} = @{$date_list}[$start..$end];
@@ -344,13 +353,16 @@ sub	marge_csv
 		my $cdp = $src_csv[$csvn];
 		my $csv_data = $cdp->{csv_data};
 		my $infop = $csv_info[$csvn];
-		
+
 		foreach my $k (keys %$csv_data){
+			$source_csv->{$k} = $csvn;
 			$m_csv_data->{$k} = [];
+			$m_key_items->{$k} = [$k];
+
 			my $dp = $csv_data->{$k};
 			my $mdp = $m_csv_data->{$k};
 			if(! defined $dp->[1]){
-				dp::dp "WARNING: no data in [$k]\n";
+				dp::dp "WARNING: no data in [$k]\n" if(0);
 			}
 			for(my $i = 0; $i < $dates; $i++){
 				$mdp->[$i] = $dp->[$i] // 0;		# may be something wrong
@@ -361,7 +373,7 @@ sub	marge_csv
 		}
 	} 
 	
-	&dump_csv($marge, 1);
+	&dump_csv($marge, 0);
 }
 
 #
@@ -508,7 +520,9 @@ sub	csv2graph
 	my @target_col = ();
 	my @non_target_col = ();
 	my $condition = 0;
+
 	foreach my $sk (@{$gp->{target_col}}){
+		dp::dp "Target col $sk\n";
 		if($sk){
 			my ($tg, $ex) = split(/ *\! */, $sk);
 			my @w = split(/\s*,\s*/, $tg);
@@ -535,9 +549,11 @@ sub	csv2graph
 		my $res = &check_keys($key_in_data, \@target_col, \@non_target_col);
 		#dp::dp "[$key:$condition:$res]\n";
 		#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
-		next if($res < $condition);
 
-		push(@target_keys, $key);
+		if($res >= $condition){
+			push(@target_keys, $key);
+			dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
+		}
 	}
 
 	#
@@ -546,7 +562,7 @@ sub	csv2graph
 	my %SORT_VAL = ();
 	my @sorted_keys = ();
 	my $lank_select = (defined $lank[0] && defined $lank[1] && $lank[0] && $lank[1]) ? 1 : "";
-	#dp::dp "### $lank_select\n";
+	dp::dp "### $lank_select\n";
 	if($lank_select){
 		foreach my $key (@target_keys){
 			my $csv = $cvdp->{$key};
@@ -639,7 +655,6 @@ sub	graph
 	my $plotf = $fname. "-plot.txt";
 
 	my $dlm = $gdp->{dst_dlm};
-	my $ylabel = "%";
 
 	my $time_format = $gdp->{timefmt};
 	my $format_x = $gdp->{format_x};
@@ -660,6 +675,18 @@ sub	graph
 		$xtics = 2 * 60 * 60 * 24;
 	}
 
+	my $ymin = $gp->{ymin} // ($gdp->{ymin} // "");
+	my $ymax = $gp->{ymax} // ($gdp->{ymax} // "");
+	my $yrange = ($ymin || $ymax) ? "set yrange [$ymin:$ymax]" : "";
+	my $ylabel = $gp->{ylabel} // ($gdp->{ylabel} // "");
+	$ylabel = "set ylabel '$ylabel'"  if($ylabel);
+
+	my $y2min = $gp->{y2min} // ($gdp->{y2min} // "");
+	my $y2max = $gp->{y2max} // ($gdp->{y2max} // "");
+	my $y2range = ($y2min || $y2max) ? "set y2range [$y2min:$y2max]" : "";
+	my $y2label = $gp->{ylabel} // ($gdp->{ylabel} // "");
+	$y2label = "set ylabel '$y2label'" if($y2label);
+	my $y2tics = "set y2tics";		# Set y2tics anyway
 
 	#
 	#	Draw Graph
@@ -678,14 +705,15 @@ set mytics 2
 set key below
 set title '$title' font "IPAexゴシック,12" enhanced
 #set xlabel 'date'
-set ylabel '$ylabel'
+$ylabel
+$y2label
 #
 set xtics $xtics
 set xrange ['$start_date':'$end_date']
 set grid
-set yrange [#YRANGE#]
-set y2range [#YRANGE#]
-set y2tics
+$yrange
+$y2range
+$y2tics
 
 set terminal pngcairo size $term_x_size, $term_y_size font "IPAexゴシック,8" enhanced
 set output '/dev/null'
@@ -713,11 +741,20 @@ _EOD_
 	my @label = split(/$dlm/, $l);
 	#dp::dp "### $csvf: $l\n";
 
+	my $source_csv = $cdp->{srouce_csv} // "";
+	my $y2_source = $gdp->{y2_source} // "";
+	$source_csv = "" if(! $y2_source);
+
 	for(my $i = 1; $i <= $#label; $i++){
 		my $key = $label[$i];
 		#dp::dp "### $i: $key\n";
 		$pn++;
-		my $pl = sprintf("'%s' using 1:%d with lines title '%d:%s' linewidth %d ", 
+
+		my $axis = "";
+		if($y2_source ne ""){		#####
+			$axis = ($source_csv->{$key} == $y2_source) ? "axis x1y1" : "axis x1y2" 
+		}
+		my $pl = sprintf("'%s' using 1:%d $axis with lines title '%d:%s' linewidth %d ", 
 						$csvf, $i + 1, $i, $label[$i], ($pn < 7) ? 2 : 1);
 		push(@p, $pl);
 	}
@@ -729,11 +766,6 @@ _EOD_
     }
 	my $plot = join(",", @p);
 	$PARAMS =~ s/#PLOT_PARAM#/$plot/g;
-
-	my $ymin = $gp->{ymin} // ($gdp->{ymin} // "");
-	my $ymax = $gp->{ymax} // ($gdp->{ymax} // "");
-	#dp::dp "YRANGE: [$ymin:$ymax]\n";
-	$PARAMS =~ s/#YRANGE#/$ymin:$ymax/g;	
 
 	my $date_list = $cdp->{date_list};
 	my $dt_start = $gp->{dt_start};
@@ -762,6 +794,7 @@ _EOD_
 	print PLOT $PARAMS;
 	close(PLOT);
 
+	#system("cat $plotf");
 	#dp::dp "-- Do gnuplot $plotf\n";
 	system("gnuplot $plotf");
 	#dp::dp "-- Done\n";

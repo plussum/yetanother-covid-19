@@ -268,11 +268,14 @@ my $MARGE_GRAPH_PARAMS = {
 
 	END_OF_DATA => $END_OF_DATA,
 
+	ylabel => 'ERN',
+	y2label => '%',
 	default_graph => "line",
 	ymin => 0,
 	additional_plot => 1,
+	y2_soruce => 1,		# soruce csv definition for y2
 	graph_params => [
-		{dsc => "Japan ERN", lank => [1,99], static => "", target_col => ["Tokyo,東京"], 
+		{dsc => "Japan ERN", lank => [1,999], static => "", target_col => ["Tokyo,東京"], 
 			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
 	],
 };
@@ -307,6 +310,6 @@ csvgraph::new($CSV_DEF);
 csvgraph::load_csv($CSV_DEF);
 #csvgraph::gen_html($CSV_DEF, $GRAPH_PARAMS);
 
-csvgraph::marge_csv($MARGE_CSV_DEF, $ERN_CSV_DEF, $CSV_DEF);
-#csvgraph::marge_csv($MARGE_CSV_DEF, $CSV_DEF, $ERN_CSV_DEF);
+#csvgraph::marge_csv($MARGE_CSV_DEF, $ERN_CSV_DEF, $CSV_DEF);
+csvgraph::marge_csv($MARGE_CSV_DEF, $CSV_DEF, $ERN_CSV_DEF);
 csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);
