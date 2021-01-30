@@ -273,9 +273,9 @@ my $MARGE_GRAPH_PARAMS = {
 	default_graph => "line",
 	ymin => 0,
 	additional_plot => 1,
-	y2_soruce => 1,		# soruce csv definition for y2
+	y2_source => 1,		# soruce csv definition for y2
 	graph_params => [
-		{dsc => "Japan ERN", lank => [1,999], static => "", target_col => ["Tokyo,東京"], 
+		{dsc => "Japan ERN", lank => [1,999], static => "", target_col => ["Tokyo-,東京"], 
 			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
 	],
 };

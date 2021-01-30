@@ -254,6 +254,8 @@ sub	dump_csv
 	$ok = $ok // "";
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
+	my $src_csv = $cdp->{src_csv};
+
 	dp::dp "Dump CSV Data($key_items)\n";
 	foreach my $k (keys %$csv_data){
 		my @w = @{$csv_data->{$k}};
@@ -272,7 +274,8 @@ sub	dump_csv
 			dp::dp " --> csv_data is not assigned\n";
 		}
 		if($ok){
-			dp::dp join(", ", $k, @w[0..5]) . "\n";
+			my $scv = $src_csv->{$k} // "--";
+			dp::dp join(", ", $k, "[$scv]", @w[0..5]) . "\n";
 		}
 	}
 }
@@ -281,19 +284,19 @@ sub	dump_csv
 #
 sub	marge_csv
 {
-	my ($marge, @src_csv) = @_;
+	my ($marge, @src_csv_list) = @_;
 
 	&new($marge);
 
 	my @csv_info = ();
 	my $date_start = "0000-00-00";
-	foreach my $cdp (@src_csv){
+	foreach my $cdp (@src_csv_list){
 		my $dt = $cdp->{date_list}->[0];
 		dp::dp "[$dt]\n";
 		$date_start = $dt if($dt gt $date_start );
 	}
 	my $date_end = "9999-99-99";
-	foreach my $cdp (@src_csv){
+	foreach my $cdp (@src_csv_list){
 		my $dates = $cdp->{dates};
 		my $dt = $cdp->{date_list}->[$dates];
 		$date_end = $dt if($dt le $date_end );
@@ -303,10 +306,10 @@ sub	marge_csv
 	#
 	#	Check Start date(max) and End date(min)
 	#
-	for(my $i = 0; $i < $#src_csv; $i++){
+	for(my $i = 0; $i < $#src_csv_list; $i++){
 		$csv_info[$i] = {};
 		my $infop = $csv_info[$i];
-		my $cdp = $src_csv[$i];
+		my $cdp = $src_csv_list[$i];
 		my $date_list = $cdp->{date_list};
 
 		my $dt_start = csvlib::search_list($date_start, @$date_list);
@@ -340,22 +343,22 @@ sub	marge_csv
 	my $end   = $infop->{date_end};
 	my $dates = $end - $start;
 	$marge->{dates} = $dates;
-	$marge->{source_csv} = {};
-	my $source_csv = $marge->{soruce_csv};
+	$marge->{src_csv} = {};
+	my $src_csv = $marge->{src_csv};
 
-	my $date_list = $src_csv[0]->{date_list};
+	my $date_list = $src_csv_list[0]->{date_list};
 	@{$m_date_list} = @{$date_list}[$start..$end];
 	#dp::dp "start:$start, end:$end dates:$dates\n";
 	#dp::dp "## src:" . join(",", @{$date_list} ) . "\n";
 	#dp::dp "## dst:" . join(",", @{$m_date_list} ) . "\n";
 
-	for(my $csvn = 0; $csvn <= $#src_csv; $csvn++){
-		my $cdp = $src_csv[$csvn];
+	for(my $csvn = 0; $csvn <= $#src_csv_list; $csvn++){
+		my $cdp = $src_csv_list[$csvn];
 		my $csv_data = $cdp->{csv_data};
 		my $infop = $csv_info[$csvn];
 
 		foreach my $k (keys %$csv_data){
-			$source_csv->{$k} = $csvn;
+			$src_csv->{$k} = $csvn;
 			$m_csv_data->{$k} = [];
 			$m_key_items->{$k} = [$k];
 
@@ -741,9 +744,10 @@ _EOD_
 	my @label = split(/$dlm/, $l);
 	#dp::dp "### $csvf: $l\n";
 
-	my $source_csv = $cdp->{srouce_csv} // "";
+	my $src_csv = $cdp->{src_csv} // "";
 	my $y2_source = $gdp->{y2_source} // "";
-	$source_csv = "" if(! $y2_source);
+	dp::dp "soruce_csv[$src_csv] $y2_source\n";
+	$src_csv = "" if(! $y2_source);
 
 	for(my $i = 1; $i <= $#label; $i++){
 		my $key = $label[$i];
@@ -752,8 +756,10 @@ _EOD_
 
 		my $axis = "";
 		if($y2_source ne ""){		#####
-			$axis = ($source_csv->{$key} == $y2_source) ? "axis x1y1" : "axis x1y2" 
+			dp::dp "csv_source: $key [" . $src_csv->{$key} . "]\n";
+			$axis = ($src_csv->{$key} == $y2_source) ? "axis x1y2" : "axis x1y1" 
 		}
+		dp::dp "axis:[$axis]\n";
 		my $pl = sprintf("'%s' using 1:%d $axis with lines title '%d:%s' linewidth %d ", 
 						$csvf, $i + 1, $i, $label[$i], ($pn < 7) ? 2 : 1);
 		push(@p, $pl);
