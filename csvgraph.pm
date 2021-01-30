@@ -380,6 +380,64 @@ sub	marge_csv
 }
 
 #
+#	Add Average
+#
+sub	average
+{
+	my ($cdp, $name, ) = @_;
+
+	#
+	#	Calc average
+	#
+
+	my $csv_data = $cdp->{csv_data};
+	my $dates = $cdp->{dates};
+
+	foreach my $k (keys %$csv_data){
+		my $dp = $csv_data->{$k};
+		
+		my $total = 0;
+		for(my $i = 0; $i < $dates; $i++){
+			$mdp->[$i] = $dp->[$i] // 0;		# may be something wrong
+		}
+		#@{$m_csv_data->{$k}} = @{$csv_data->{$k}}[$start..$end];
+		#dp::dp ">> src" . join(",", $k, @{$csv_data->{$k}} ) . "\n";
+		#dp::dp ">> dst" . join(",", $k, @{$m_csv_data->{$k}} ) . "\n";
+	} 
+	
+	foreach my $key (keys %$csv_data){
+		my @avr_key = (@{$key_items->{$k}}){
+		$avr_key[$target_col] = $name;
+
+		my @gen_key = ();
+		my $kn = 0;
+		foreach my $n (@keys){
+			my $itm = $items[$n];
+			$itm = $name if($n == $target_col);
+			push(@gen_key, $itm);
+			$kn++;
+		}
+		my $k = join($KEY_DLM, @gen_key);				# set key_name
+		if(! defined $csv_data->{$k}){
+			$csv_data->{$k}= [];	# set csv data
+			$key_items->{$k} = []:	# set key data
+		}
+
+		$csv_data->{$k}= [@items[$data_start..$#items]];	# set csv data
+		$key_items->{$k} = [@items[0..($data_start - 1)]];	# set csv data
+		
+		$ln++;
+		#last if($ln > 50);
+	}
+	close(FD);
+	return 0;
+}
+		
+	}
+	&dump_csv($marge, 0);
+}
+
+#
 #
 #	&gen_html($cdp, $GRAPH_PARAMS);
 #
@@ -454,7 +512,9 @@ sub	gen_html
 	close(HTML);
 }
 
-
+#
+#
+#
 sub	csv2graph
 {
 	my($cdp, $gdp, $gp) = @_;
