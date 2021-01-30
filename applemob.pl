@@ -211,7 +211,7 @@ my $ERN_CSV_DEF = {
 
 	direct => "vertical",		# vertical or holizontal(Default)
 	timefmt => '%Y/%m/%d',		# comverbt to %Y-%m-%d
-	src_dlm => ",",
+	src_dlm => "\t",
 	keys => [0],		# 5, 1, 2
 	data_start => 1,
 };
@@ -238,7 +238,7 @@ my $ERN_GRAPH_PARAMS = {
 	additional_plot => 1,
 	graph_params => [
 		{dsc => "Japan ERN", lank => [1,99], static => "", target_col => [], 
-			start_date => "2020-03-12", end_date => "2021-01-13"},
+			start_date => "2020-04-01", end_date => "2021-01-13", ymax => 3},
 	],
 };
 

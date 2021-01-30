@@ -85,7 +85,7 @@ use Data::Dumper;
 use config;
 use csvlib;
 
-binmode(STDOUT, ":utf8");
+#binmode(STDOUT, ":utf8");
 
 my $VERBOSE = 0;
 my $DEFAULT_AVR_DATE = 7;
@@ -219,11 +219,17 @@ sub	load_csv_vertical
 	$line = decode('utf-8', $line);
 
 	my @key_list = split(/$src_dlm/, $line);
+	if($#key_list <= 1){
+		dp::dp "WARNING: may be wrong delimitter [$src_dlm]\n";
+		dp::dp $line . "\n";
+	}
+	shift(@key_list);
 	foreach my $k (@key_list){
 		$csv_data->{$k}= [];		# set csv data array
 		$key_items->{$k} = [$k];
 	}
-	#dp::dp join(",", "# " . $TGK, @LABEL) . "\n";
+	#dp::dp join(",", "# " , @key_list) . "\n";
+
 	my $ln = 0;
 	while(<FD>){
 		s/[\r\n]+$//;
@@ -232,6 +238,7 @@ sub	load_csv_vertical
 	
 		$date =~ s#/#-#g if($timefmt eq "%Y/%m/%d");
 		$date_list->[$ln] = $date;
+		#dp::dp "date:$ln $date\n";
 	
 		for(my $i = 0; $i < $#items; $i++){
 			my $k = $key_list[$i];
@@ -364,11 +371,21 @@ sub	csv2graph
 	#
 	#	Data range
 	#
-	#dp::dp "DATE: " . join(", ", $gp->{start_date}, $gp->{end_date}) . "\n";
 	my $date_list = $cdp->{date_list};
-	my $dt_start = csvlib::search_list($gp->{start_date}, @$date_list) - 1;
+	#dp::dp "DATE: " . join(", ", $gp->{start_date}, $gp->{end_date}, "#", @$date_list) . "\n";
+	my $dt_start = csvlib::search_list($gp->{start_date}, @$date_list);
+	if(! $dt_start){
+		dp::dp "WARNING: Date $gp->{start_date} is not in the data\n";
+		$dt_start = 1;
+	}
+	$dt_start--;
 	$dt_start = 0 if($dt_start < 0 || $dt_start > $cdp->{dates});
-	my $dt_end   = csvlib::search_list($gp->{end_date},   @$date_list) - 1;
+	my $dt_end   = csvlib::search_list($gp->{end_date},   @$date_list);
+	if(! $dt_end){
+		dp::dp "WARNING: Date $gp->{start_date} is not in the data\n";
+		$dt_end = $dt_end + 1;
+	}
+	$dt_end--;
 	$dt_end = $cdp->{dates} if($dt_end < 0 || $dt_end > $cdp->{dates});
 	$gp->{dt_start} = $dt_start;
 	$gp->{dt_end}   = $dt_end;
@@ -408,9 +425,6 @@ sub	csv2graph
 		#dp::dp "[$key:$condition:$res]\n";
 		#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
 		next if($res < $condition);
-
-		#next if($#tga >= 0 && csvlib::search_list($key, @tga) eq "");
-		#next if($#exc >= 0 && csvlib::search_list($key, @exc));
 
 		push(@target_keys, $key);
 	}
@@ -581,6 +595,7 @@ _EOD_
 	my $pn = 0;
 
 	open(CSV, $csvf) || die "cannot open $csvf";
+	binmode(CSV, ":utf8");
 	my $l = <CSV>;
 	close(CSV);
 	$l =~ s/[\r\n]+$//;
