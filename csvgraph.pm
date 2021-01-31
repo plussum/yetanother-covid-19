@@ -220,7 +220,7 @@ sub	load_csv_vertical
 	}
 	shift(@key_list);
 	foreach my $k (@key_list){
-		$k =~ s/^[0-9]+:// if($remove_head);			# 
+		#$k =~ s/^[0-9]+:// if($remove_head);			# 
 		$csv_data->{$k}= [];		# set csv data array
 		$key_items->{$k} = [$k];
 	}
@@ -369,7 +369,7 @@ sub	marge_csv
 			if(! defined $dp->[1]){
 				dp::dp "WARNING: no data in [$k]\n" if(0);
 			}
-			for(my $i = 0; $i < $dates; $i++){
+			for(my $i = 0; $i <= $dates; $i++){
 				$mdp->[$i] = $dp->[$i] // 0;		# may be something wrong
 			}
 			#@{$m_csv_data->{$k}} = @{$csv_data->{$k}}[$start..$end];
@@ -417,7 +417,7 @@ sub	average
 
 		my $csvp = $csv_data->{$key};				# add data to average
 		my $avr_csvp = $csv_data->{$ak};
-		for(my $i = 0; $i < $cdp->{dates}; $i++){
+		for(my $i = 0; $i <= $dates; $i++){
 			my $v = $csvp->[$i] // 0;
 			my $va = $avr_csvp->[$i] // 0;
 			$v = 0 if($v eq "");
@@ -432,7 +432,7 @@ sub	average
 	#
 	foreach my $ak (keys %ak_list){
 		my $avr_csvp = $csv_data->{$ak};
-		for(my $i = 0; $i < $dates; $i++){
+		for(my $i = 0; $i <= $dates; $i++){
 			my $va = $avr_csvp->[$i];
 			$avr_csvp->[$i] = $va / $ak_list{$ak};
 		}
@@ -606,6 +606,7 @@ sub	csv2graph
 			push(@non_target_col, []);
 		}
 	}
+	dp::dp "Condition: $condition\n";
 
 	my @target_keys = ();
 	my $key_items = $cdp->{key_items};
@@ -613,7 +614,7 @@ sub	csv2graph
 		#dp::dp "--- " . join(", ", $key, $order->{$key}, @lank, @tga) . "\n" if($key =~ /Japan/);
 		my $key_in_data = $key_items->{$key};
 		my $res = &check_keys($key_in_data, \@target_col, \@non_target_col);
-		#dp::dp "[$key:$condition:$res]\n";
+		#dp::dp "[$key:$condition:$res]\n" if($res > 1);
 		#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
 
 		if($res >= $condition){
@@ -629,8 +630,9 @@ sub	csv2graph
 	my %SORT_VAL = ();
 	my @sorted_keys = ();
 	my $src_csv = $cdp->{src_csv} // "";
+	$lank[0] = 1 if(defined $lank[0] && ! $lank[0]);
 	my $lank_select = (defined $lank[0] && defined $lank[1] && $lank[0] && $lank[1]) ? 1 : "";
-	dp::dp "### SORT ($lank_select)($src_csv)\n";
+	#dp::dp "### SORT ($lank_select)($src_csv) ($lank[0])($lank[1])\n";
 	if($lank_select){
 		foreach my $key (@target_keys){
 			my $csv = $cvdp->{$key};
@@ -654,7 +656,6 @@ sub	csv2graph
 			@sorted_keys = (sort keys @target_keys);
 		}
 		else {
-			dp::dp join(",", $src_csv, @target_keys) . "\n";
 			@sorted_keys = (sort {$src_csv->{$a} <=> $src_csv->{$b} or $a cmp $b} @target_keys);
 		}
 	}
@@ -706,6 +707,7 @@ sub	check_keys
 {
 	my($key_in_data, $target_col, $non_target_col) = @_;
 
+	my $kid = join(",", @$key_in_data);
 	my $condition = 0;
 	my $cols = scalar(@$target_col) - 1;
 	for(my $kn = 0; $kn <= $cols; $kn++){
@@ -714,10 +716,10 @@ sub	check_keys
 		
 		#return 0 if(csvlib::search_list($key_in_data->[$kn], @{$non_target_col->[$kn]}) eq "");
 
-		#dp::dp join(", ", "data ", $kn, $key_in_data->[$kn], @{$target_col->[$kn]}) . "\n";
+		#dp::dp join(", ", "data ", $kn, $key_in_data->[$kn], @{$target_col->[$kn]}) . "\n" if($kid =~ /Tokyo/);
 		$condition++ if(csvlib::search_list($key_in_data->[$kn], @{$target_col->[$kn]}));
 	}
-	#dp::dp "----> $condition\n";
+	#dp::dp "----> $condition\n" if($kid =~ /Tokyo/);
 	return $condition;
 }
 
@@ -884,9 +886,9 @@ _EOD_
 	close(PLOT);
 
 	#system("cat $plotf");
-	dp::dp "-- Do gnuplot $plotf\n";
+	#dp::dp "-- Do gnuplot $plotf\n";
 	system("gnuplot $plotf");
-	dp::dp "-- Done\n";
+	#dp::dp "-- Done\n";
 }
 
 sub	date_calc
