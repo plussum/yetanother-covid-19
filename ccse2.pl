@@ -76,6 +76,7 @@ my $GRAPH_PARAMS = {
 		{dsc => "Japan ", lank => [1,99], static => "rlavr", target_col => ["","Japan"], },
 		{dsc => "Japan ", lank => [1,99], static => "ern", target_col => ["","Japan"], 
 			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
+		{dsc => "World top 10 ", lank => [1,10], static => "", target_col => ["",""], },
 		{dsc => "World top 10 ", lank => [1,10], static => "rlavr", target_col => ["",""], },
 	],
 };

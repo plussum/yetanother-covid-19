@@ -314,6 +314,22 @@ sub	cumrative2daily
 }
 
 #
+#	Reduce CSV DATA with replace data set
+#
+sub	reduce
+{
+	my($cdp, $target_keys) = @_;
+
+	my $csv_data = $cdp->{csv_data};
+	my $new_csv = {};
+	foreach my $key (@$target_keys){
+		$new_csv->{$key} = $csv_data->{$k};
+	}
+	$csv_data = "";		# make sure for free csv data
+	$csv_data = $new_csv;
+}
+
+#
 #	Marge csvdef
 #
 sub	marge_csv
@@ -410,7 +426,6 @@ sub	marge_csv
 			#dp::dp ">> dst" . join(",", $k, @{$m_csv_data->{$k}} ) . "\n";
 		}
 	} 
-	
 	&dump_csv($marge, 0);
 }
 
@@ -702,6 +717,7 @@ sub	date_range
 	$gp->{dt_start} = $dt_start;
 	$gp->{dt_end}   = $dt_end;
 }
+
 
 #
 #	Select CSV DATA
