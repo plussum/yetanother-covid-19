@@ -384,57 +384,58 @@ sub	marge_csv
 #
 sub	average
 {
-	my ($cdp, $name, ) = @_;
+	my ($cdp, $target_col, $name) = @_;
+	$name = $name // "avr";
 
 	#
-	#	Calc average
+	#	Calc total
 	#
-
 	my $csv_data = $cdp->{csv_data};
+	my $key_items = $cdp->{key_items};
+
 	my $dates = $cdp->{dates};
-
-	foreach my $k (keys %$csv_data){
-		my $dp = $csv_data->{$k};
-		
-		my $total = 0;
-		for(my $i = 0; $i < $dates; $i++){
-			$mdp->[$i] = $dp->[$i] // 0;		# may be something wrong
-		}
-		#@{$m_csv_data->{$k}} = @{$csv_data->{$k}}[$start..$end];
-		#dp::dp ">> src" . join(",", $k, @{$csv_data->{$k}} ) . "\n";
-		#dp::dp ">> dst" . join(",", $k, @{$m_csv_data->{$k}} ) . "\n";
-	} 
-	
+	my @keys = @{$cdp->{keys}};						# Item No for gen HASH Key
+	my %ak_list = ();
 	foreach my $key (keys %$csv_data){
-		my @avr_key = (@{$key_items->{$k}}){
-		$avr_key[$target_col] = $name;
+		my @avr_key_items = (@{$key_items->{$key}});	# generate average key items
+		$avr_key_items[$target_col] = $name;
 
-		my @gen_key = ();
-		my $kn = 0;
+		my @gen_key = ();							# generate average key
 		foreach my $n (@keys){
-			my $itm = $items[$n];
-			$itm = $name if($n == $target_col);
+			my $itm = $avr_key_items[$n];
 			push(@gen_key, $itm);
-			$kn++;
 		}
-		my $k = join($KEY_DLM, @gen_key);				# set key_name
-		if(! defined $csv_data->{$k}){
-			$csv_data->{$k}= [];	# set csv data
-			$key_items->{$k} = []:	# set key data
+		my $ak = join($KEY_DLM, @gen_key);			# set key_name
+		$ak_list{$ak}++;							# set average key list
+
+		if(! defined $csv_data->{$ak}){				# initail average data
+			$csv_data->{$ak}= [];					# set csv data
+			$key_items->{$ak} = [@avr_key_items];	# set key data
 		}
 
-		$csv_data->{$k}= [@items[$data_start..$#items]];	# set csv data
-		$key_items->{$k} = [@items[0..($data_start - 1)]];	# set csv data
-		
-		$ln++;
-		#last if($ln > 50);
+		my $csvp = $csv_data->{$key};				# add data to average
+		my $avr_csvp = $csv_data->{$ak};
+		for(my $i = 0; $i < $cdp->{dates}; $i++){
+			my $v = $csvp->[$i] // 0;
+			my $va = $avr_csvp->[$i] // 0;
+			$v = 0 if($v eq "");
+			$va = 0 if($va eq "");
+			#dp::dp "$i: $key -> [$v]  $ak -> [$va]\n";
+			$avr_csvp->[$i] = $v + $va;
+		}
 	}
-	close(FD);
-	return 0;
-}
-		
+
+	#
+	#	Total to average
+	#
+	foreach my $ak (keys %ak_list){
+		my $avr_csvp = $csv_data->{$ak};
+		for(my $i = 0; $i < $dates; $i++){
+			my $va = $avr_csvp->[$i];
+			$avr_csvp->[$i] = $va / $ak_list{$ak};
+		}
 	}
-	&dump_csv($marge, 0);
+	#&dump_csv($cdp, 1);
 }
 
 #

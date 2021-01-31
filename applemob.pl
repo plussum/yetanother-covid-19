@@ -78,6 +78,8 @@ my @JP_CT_TR =	("city", "", "transit", "", "", "Japan");
 my @JP_CT_WK =	("city", "", "walking", "", "", "Japan"); 
 
 #my $MAIN_PREF = "東京,神奈川,埼玉,千葉,大阪,京都,兵庫,福岡,愛知,北海道";
+my @JP_TG_ALL =	("sub-region", "Tokyo,Kanagawa,Saitama,Chiba,Osaka,Kyoto,Hyogo,Fukuoka,Aichi,Hokaido", "", "", "", "Japan"); 
+my @TKO_TG_ALL =	("sub-region", "Tokyo", "", "", "", "Japan"); 
 my @JP_TG_TR =	("sub-region", "Tokyo,Kanagawa,Saitama,Chiba,Osaka,Kyoto,Hyogo,Fukuoka,Aichi,Hokaido", "transit", "", "", "Japan"); 
 my @JP_TG_WK =	("sub-region", "Tokyo,Osaka,Kanagawa,Chiba,Saitama,Tochigi,Aichi,Kyoto,Hyogo", "walking", "", "", "Japan"); 
 my @TKO_TG_WK =	("sub-region", "Tokyo", "walking", "", "", "Japan"); 
@@ -107,6 +109,9 @@ my $GRAPH_PARAMS = {
 	additional_plot => 100,
 
 	graph_params => [
+		{dsc => "Japan target area Walking 2", lank => [1,99], static => "rlavr", target_col => [@TKO_TG_ALL], 
+			start_date => "2020-03-12", end_date => "2021-01-13"},
+		{dsc => $END_OF_DATA},
 		{dsc => "Japan target area Walking 2", lank => [1,99], static => "rlavr", target_col => [@JP_TG_WK], 
 			start_date => "2020-03-12", end_date => "2021-01-13"},
 		{dsc => "Tokyo target area Walking 2", lank => [1,99], static => "rlavr", target_col => [@TKO_TG_WK], 
@@ -201,94 +206,6 @@ my $GRAPH_PARAMS = {
 	],
 };
 
-my $ERN_CSV_DEF = {
-	title => "ERN pref",
-	main_url =>  "Dummy",
-	csv_file =>  "$config::WIN_PATH/PNG/09_tko_NEW_CASES_ERN_DAY_main_pref_0401_ip_6_lp_7_rl_avr_7_-plot.csv.txt",
-	src_url => 	"src_url",		# set
-
-	down_load => \&download,
-
-	direct => "vertical",		# vertical or holizontal(Default)
-	timefmt => '%Y/%m/%d',		# comverbt to %Y-%m-%d
-	src_dlm => "\t",
-	keys => [0],		# 5, 1, 2
-	data_start => 1,
-};
-
-my $ERN_GRAPH_PARAMS = {
-	html_title => $ERN_CSV_DEF->{title},
-	png_path   => "$config::PNG_PATH",
-	png_rel_path => "../PNG",
-	html_file => "$config::HTML_PATH/csvgraph_test_ern.html",
-
-	dst_dlm => "\t",
-	avr_date => 7,
-
-	timefmt => '%Y-%m-%d',
-	format_x => '%m/%d',
-
-	term_x_size => 1000,
-	term_y_size => 350,
-
-	END_OF_DATA => $END_OF_DATA,
-
-	default_graph => "line",
-	ymin => 0,
-	additional_plot => 1,
-	graph_params => [
-		{dsc => "Japan ERN", lank => [1,99], static => "", target_col => [], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => 3},
-	],
-};
-
-my $MARGE_CSV_DEF = {
-	title => "MARGED Apple and ERN pref",
-	main_url =>  "Dummy",
-	csv_file =>  "Dummy",
-	src_url => 	"Dummy",		# set
-
-	start_date => "2020-04-01",
-	end_date   => "2020-01-14",
-};
-my $MARGE_GRAPH_PARAMS = {
-	html_title => "MARGE Apple Mobility Trends and ERN",
-	png_path   => "$config::PNG_PATH",
-	png_rel_path => "../PNG",
-	html_file => "$config::HTML_PATH/applemobile_ern.html",
-
-	dst_dlm => "\t",
-	avr_date => 7,
-
-	timefmt => '%Y-%m-%d',
-	format_x => '%m/%d',
-
-	term_x_size => 1000,
-	term_y_size => 350,
-
-	END_OF_DATA => $END_OF_DATA,
-
-	ylabel => 'ERN',
-	y2label => '%',
-	default_graph => "line",
-	ymin => 0,
-	additional_plot => 1,
-	y2_source => 1,		# soruce csv definition for y2
-	graph_params => [
-		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Tokyo-,東京都"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
-		{dsc => "Osaka Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Osaka-,大阪府"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
-		{dsc => "Kanagawa Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Kanagawa,神奈川県"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
-		{dsc => "Hyogo Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Hyogo,兵庫県"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
-		{dsc => "Kyoto Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Kyoto,京都府"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
-	],
-};
-
-
 #
 #	Down Load CSV 
 #
@@ -305,19 +222,10 @@ sub	download
 }
 
 #
-#	ERN
-#
-csvgraph::new($ERN_CSV_DEF); 
-csvgraph::load_csv($ERN_CSV_DEF);
-#csvgraph::gen_html($ERN_CSV_DEF, $ERN_GRAPH_PARAMS);
-
-#
 #	Generate Graph
 #
 csvgraph::new($CSV_DEF); 
 csvgraph::load_csv($CSV_DEF);
-#csvgraph::gen_html($CSV_DEF, $GRAPH_PARAMS);
+csvgraph::average($CSV_DEF, 2, "avr");
+csvgraph::gen_html($CSV_DEF, $GRAPH_PARAMS);
 
-#csvgraph::marge_csv($MARGE_CSV_DEF, $ERN_CSV_DEF, $CSV_DEF);
-csvgraph::marge_csv($MARGE_CSV_DEF, $CSV_DEF, $ERN_CSV_DEF);
-csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);
