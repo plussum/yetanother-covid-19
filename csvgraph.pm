@@ -109,6 +109,7 @@ sub	new
 	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
 	$CDP->{load_order} = [];
 
+	$CDP->{timefmt} = $CDP->{timefmt} // "%Y-%m-%d";
 }
 
 
@@ -150,6 +151,7 @@ sub	load_csv_holizontal
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
 	my @keys = @{$cdp->{keys}};			# Item No for gen HASH Key
+	my $timefmt = $cdp->{timefmt};
 
 	#
 	#	Load CSV DATA
@@ -162,7 +164,6 @@ sub	load_csv_holizontal
 
 	my @w = split(/$src_dlm/, $line);
 	@$date_list = @w[$data_start..$#w];
-	my $timefmt = $cdp->{timefmt};
 	for(my $i = 0; $i < scalar(@$date_list); $i++){
 		$date_list->[$i] = &timefmt($timefmt, $date_list->[$i]);
 	}
@@ -210,7 +211,7 @@ sub	load_csv_vertical
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
 	my @keys = @{$cdp->{keys}};
-	my $timefmt = $cdp->{timefmt} // "%Y-%m-%d";
+	my $timefmt = $cdp->{timefmt};
 
 	#
 	#	Load CSV DATA
@@ -260,6 +261,7 @@ sub	timefmt
 {
 	my ($timefmt, $date) = @_;
 
+	#dp::dp "[$timefmt][$date]\n";
 	if($timefmt eq "%Y/%m/%d"){
 		$date =~ s#/#-#g;
 	}
@@ -323,7 +325,7 @@ sub	reduce
 	my $csv_data = $cdp->{csv_data};
 	my $new_csv = {};
 	foreach my $key (@$target_keys){
-		$new_csv->{$key} = $csv_data->{$k};
+		$new_csv->{$key} = $csv_data->{$key};
 	}
 	$csv_data = "";		# make sure for free csv data
 	$csv_data = $new_csv;
@@ -844,7 +846,7 @@ sub	check_keys
 		dp::dp "###!!!! key in data not defined [$key]\n";
 	}
 	#dp::dp "key_in_data: $key_in_data " . scalar(@$key_in_data) . " [$key]\n";
-	#my $kid = join(",", @$key_in_data);
+	my $kid = join(",", @$key_in_data);
 	my $condition = 0;
 	my $cols = scalar(@$target_col) - 1;
 	for(my $kn = 0; $kn <= $cols; $kn++){
