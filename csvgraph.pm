@@ -107,6 +107,7 @@ sub	new
 	$CDP->{order} = {},
 	$CDP->{key_items} = {};
 	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
+	$CDP->{load_order} = [];
 
 }
 
@@ -166,6 +167,7 @@ sub	load_csv_holizontal
 	$LAST_DATE = $date_list->[$#w - $data_start];
 
 	#dp::dp join(",", "# " . $TGK, @LABEL) . "\n";
+	my $load_order = $cdp->{load_order};
 	my $ln = 0;
 	while(<FD>){
 		s/[\r\n]+$//;
@@ -182,6 +184,7 @@ sub	load_csv_holizontal
 		my $k = join($KEY_DLM, @gen_key);				# set key_name
 		$csv_data->{$k}= [@items[$data_start..$#items]];	# set csv data
 		$key_items->{$k} = [@items[0..($data_start - 1)]];	# set csv data
+		push(@$load_order, $k);
 		
 		$ln++;
 		#last if($ln > 50);
@@ -313,6 +316,7 @@ sub	marge_csv
 		my $infop = $csv_info[$i];
 		my $cdp = $src_csv_list[$i];
 		my $date_list = $cdp->{date_list};
+		push(@{$marge->{load_order}}, @{$cdp->{load_order}});
 
 		my $dt_start = csvlib::search_list($date_start, @$date_list);
 		if(! $dt_start){
@@ -516,51 +520,135 @@ sub	gen_html
 }
 
 #
-#
+#	Generate Graph fro CSV_DATA and Graph Parameters
 #
 sub	csv2graph
 {
 	my($cdp, $gdp, $gp) = @_;
-
 	my $csv_data = $cdp->{csv_data};
-	my $fname = $gp->{fname};
-	my $dst_dlm = $gdp->{dst_dlm};
+
+	my @target_keys = ();
+	&select_keys($cdp, $gp->{target_col}, \@target_keys);	# select data for target_keys
+	&date_range($cdp, $gdp, $gp); 						# Data range (set dt_start, dt_end (position of array)
+
+	my %work_csv = ();									# copy csv data to work csv
+	foreach my $key (@target_keys){						#
+		$work_csv{$key} = [];
+		#dp::dp "$key: $csv_data->{$key}\n";
+		push(@{$work_csv{$key}}, @{$csv_data->{$key}});
+	}
+	
+	if($gp->{static} eq "rlavr"){ 						# Rolling Average
+		&rolling_average($cdp, \%work_csv, $gdp, $gp);
+	}
 
 	my @lank = ();
 	@lank = (@{$gp->{lank}}) if(defined $gp->{lank});
+	$lank[0] = 1 if(defined $lank[0] && ! $lank[0]);
+	my $lank_select = (defined $lank[0] && defined $lank[1] && $lank[0] && $lank[1]) ? 1 : "";
 
-	my %cvd = ();
-	my $cvdp = \%cvd;
-	foreach my $key (keys %$csv_data){
-		$cvdp->{$key} = [];
-		push(@{$cvdp->{$key}}, @{$csv_data->{$key}});
+	my @sorted_keys = ();								# sort
+	if($lank_select){
+		&sort_csv($cdp, \%work_csv, $gp, \@target_keys, \@sorted_keys);
+	}
+	else {
+		@sorted_keys = @{$cdp->{loeaded_order}};		# no sort, load Order
+	}
+
+	my $order = $cdp->{order};							# set order of key
+	my $n = 1;
+	foreach my $k (@sorted_keys){
+		$order->{$k} = ($lank_select) ? $n : 1;
+		$n++;
 	}
 
 	#
-	#	Rolling Average
+	#	Genrarte csv file for plot
 	#
-	if($gp->{static} eq "rlavr"){
-		my $avr_date = $cdp->{avr_date} // $DEFAULT_AVR_DATE;
-		my %sort_value = ();	
-		foreach my $key (keys %$cvdp){
-			my $csv = $cvdp->{$key};
-			for(my $i = scalar(@$csv) - 1; $i >= $avr_date; $i--){
-				my $tl = 0;
-				for(my $j = $i - $avr_date + 1; $j <= $i; $j++){
-					my $v = $csv->[$j] // 0;
-					$v = 0 if(!$v);
-					$tl += $v;
-				}
-				#dp::dp join(", ", $key, $i, $csv->[$i], $tl / $avr_date) . "\n";
-				my $avr = sprintf("%.3f", $tl / $avr_date);
-				$csv->[$i] = $avr;
-			}
+
+	my @output_keys = ();
+	foreach my $key (@sorted_keys){
+		next if($lank_select && ($order->{$key} < $lank[0] || $order->{$key} > $lank[1]));
+		push(@output_keys, $key);
+	}
+	my $csv_for_plot = &gen_csv_file($cdp, $gdp, $gp, \%work_csv, \@output_keys);		# Generate CSV File
+
+	&graph($csv_for_plot, $cdp, $gdp, $gp);					# Generate Graph
+	return 1;
+}
+
+#
+#	Generate CSV File
+#
+sub	gen_csv_file
+{
+	my($cdp, $gdp, $gp, $work_csvp, $output_keysp) = @_;
+	my $fname = $gp->{fname};
+	my $date_list = $cdp->{date_list};
+	my $dst_dlm = $gdp->{dst_dlm};
+	my $dt_start = $gp->{dt_start};
+	my $dt_end = $gp->{dt_end};
+
+	#dp::dp "[$dt_start][$dt_end]\n";
+	my $csv_for_plot = $gdp->{png_path} . "/$fname-plot.csv.txt";
+	dp::dp "### $csv_for_plot\n";
+	open(CSV, "> $csv_for_plot") || die "cannot create $csv_for_plot";
+	binmode(CSV, ":utf8");
+	print CSV join($dst_dlm, "#date", @$output_keysp) . "\n";
+	for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
+		my @w = ();
+		foreach my $key (@$output_keysp){
+			my $csv = $work_csvp->{$key};
+			my $v = $csv->[$dt] // "";
+			$v = 0 if($v eq "");
+			push(@w, $v);
 		}
+		if(! defined $date_list->[$dt]){
+			dp::dp "### undefined date_list : $dt\n";
+		}
+		print CSV join($dst_dlm, $date_list->[$dt], @w) . "\n";
 	}
-	
-	#
-	#	Data range
-	#
+	close(CSV);
+
+	return $csv_for_plot;
+}
+
+#
+#	SORT
+#
+sub	sort_csv
+{
+	my ($cdp, $cvdp, $gp, $target_keysp, $sorted_keysp) = @_;
+	my $dt_start = $gp->{dt_start};
+	my $dt_end = $gp->{dt_end};
+
+	my %SORT_VAL = ();
+	my $src_csv = $cdp->{src_csv} // "";
+	foreach my $key (@$target_keysp){
+		my $csv = $cvdp->{$key};
+		my $total = 0;
+		for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
+			my $v = $csv->[$dt] // 0;
+			$v = 0 if(! $v);
+			$total += $v ;
+		}
+		$SORT_VAL{$key} = $total;
+	}
+	if(! $src_csv){		# Marged CSV
+		@$sorted_keysp = (sort {$SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
+	}
+	else {
+		@$sorted_keysp = (sort {$src_csv->{$a} <=> $src_csv->{$b} or $SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
+	}
+}
+
+#
+#	Data range
+#
+sub	date_range
+{
+	my($cdp, $gdp, $gp) = @_;
+
 	my $date_list = $cdp->{date_list};
 	#dp::dp "DATE: " . join(", ", $gp->{start_date}, $gp->{end_date}, "#", @$date_list) . "\n";
 	my $dt_start = csvlib::search_list($gp->{start_date}, @$date_list);
@@ -579,15 +667,19 @@ sub	csv2graph
 	$dt_end = $cdp->{dates} if($dt_end < 0 || $dt_end > $cdp->{dates});
 	$gp->{dt_start} = $dt_start;
 	$gp->{dt_end}   = $dt_end;
+}
 
-	#
-	#	Select by target_col
-	#
+#
+#	Select CSV DATA
+#
+sub	select_keys
+{
+	my($cdp, $target_colp, $target_keys) = @_;
+
 	my @target_col = ();
 	my @non_target_col = ();
 	my $condition = 0;
-
-	foreach my $sk (@{$gp->{target_col}}){
+	foreach my $sk (@$target_colp){
 		#dp::dp "Target col $sk\n";
 		if($sk){
 			my ($tg, $ex) = split(/ *\! */, $sk);
@@ -606,108 +698,54 @@ sub	csv2graph
 			push(@non_target_col, []);
 		}
 	}
-	#dp::dp "Condition: $condition\n";
 
-	my @target_keys = ();
+	#dp::dp "Condition: $condition\n";
 	my $key_items = $cdp->{key_items};
-	foreach my $key (keys %$cvdp){
-		#dp::dp "--- " . join(", ", $key, $order->{$key}, @lank, @tga) . "\n" if($key =~ /Japan/);
+	foreach my $key (keys %$key_items){
 		my $key_in_data = $key_items->{$key};
-		my $res = &check_keys($key_in_data, \@target_col, \@non_target_col);
+		my $res = &check_keys($key_in_data, \@target_col, \@non_target_col, $key);
 		#dp::dp "[$key:$condition:$res]\n" if($res > 1);
 		#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
-
 		if($res >= $condition){
-			push(@target_keys, $key);
+			push(@$target_keys, $key);
 			#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
 		}
 	}
-	#dp::dp "## TARGET_KEYS " . join(", ", @target_keys) . "\n";
-
-	#
-	#	Sort 
-	#
-	my %SORT_VAL = ();
-	my @sorted_keys = ();
-	my $src_csv = $cdp->{src_csv} // "";
-	$lank[0] = 1 if(defined $lank[0] && ! $lank[0]);
-	my $lank_select = (defined $lank[0] && defined $lank[1] && $lank[0] && $lank[1]) ? 1 : "";
-	#dp::dp "### SORT ($lank_select)($src_csv) ($lank[0])($lank[1])\n";
-	if($lank_select){
-		foreach my $key (@target_keys){
-			my $csv = $cvdp->{$key};
-			my $total = 0;
-			for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
-				my $v = $csv->[$dt] // 0;
-				$v = 0 if(! $v);
-				$total += $v ;
-			}
-			$SORT_VAL{$key} = $total;
-		}
-		if(! $src_csv){
-			@sorted_keys = (sort {$SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
-		}
-		else {
-			@sorted_keys = (sort {$src_csv->{$a} <=> $src_csv->{$b} or $SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
-		}
-	}
-	else {
-		if(! $src_csv){
-			@sorted_keys = (sort keys @target_keys);
-		}
-		else {
-			@sorted_keys = (sort {$src_csv->{$a} <=> $src_csv->{$b} or $a cmp $b} @target_keys);
-		}
-	}
-
-	my $order = $cdp->{order};
-	my $n = 1;
-	foreach my $k (@sorted_keys){
-		#dp::dp join(":", $k, $n, $SORT_VAL{$k}) . "\n";
-		$order->{$k} = ($lank_select) ? $n : 1;
-		$n++;
-	}
-	#my @tga = split(/ *, */, $gp->{target});
-	#my @exc = split(/ *, */, $gp->{exclusion});
-
-	#
-	#	Genrarte csv file for plot
-	#
-	my $csv_for_plot = $gdp->{png_path} . "/$fname-plot.csv.txt";
-	dp::dp "### $csv_for_plot\n";
-
-	my @target_lank = ();
-	foreach my $key (@sorted_keys){
-		next if($lank_select && ($order->{$key} < $lank[0] || $order->{$key} > $lank[1]));
-		push(@target_lank, $key);
-	}
-	open(CSV, "> $csv_for_plot") || die "$csv_for_plot";
-	binmode(CSV, ":utf8");
-	print CSV join($dst_dlm, "#date", @target_lank) . "\n";
-	for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
-		my @w = ();
-		foreach my $key (@target_lank){
-			my $csv = $cvdp->{$key};
-			my $v = $csv->[$dt] // "";
-			$v = 0 if($v eq "");
-			push(@w, $v);
-		}
-		if(! defined $date_list->[$dt]){
-			dp::dp "### undefined date_list : $dt\n";
-		}
-		print CSV join($dst_dlm, $date_list->[$dt], @w) . "\n";
-	}
-	close(CSV);
-
-	&graph($csv_for_plot, $cdp, $gdp, $gp);
-	return 1;
+	#dp::dp "## TARGET_KEYS " . join(", ", @$target_keys) . "\n";
+	return(scalar(@$target_keys) - 1);
 }
+
+sub	rolling_average
+{
+	my($cdp, $work_csvp, $gdp, $gp) = @_;
+
+	my $avr_date = $cdp->{avr_date} // $DEFAULT_AVR_DATE;
+	my %sort_value = ();	
+	foreach my $key (keys %$work_csvp){
+		my $csv = $work_csvp->{$key};
+		for(my $i = scalar(@$csv) - 1; $i >= $avr_date; $i--){
+			my $tl = 0;
+			for(my $j = $i - $avr_date + 1; $j <= $i; $j++){
+				my $v = $csv->[$j] // 0;
+				$v = 0 if(!$v);
+				$tl += $v;
+			}
+			#dp::dp join(", ", $key, $i, $csv->[$i], $tl / $avr_date) . "\n";
+			my $avr = sprintf("%.3f", $tl / $avr_date);
+			$csv->[$i] = $avr;
+		}
+	}
+}	
 
 sub	check_keys
 {
-	my($key_in_data, $target_col, $non_target_col) = @_;
+	my($key_in_data, $target_col, $non_target_col, $key) = @_;
 
-	my $kid = join(",", @$key_in_data);
+	if(!defined $key_in_data){
+		dp::dp "###!!!! key in data not defined [$key]\n";
+	}
+	#dp::dp "key_in_data: $key_in_data " . scalar(@$key_in_data) . " [$key]\n";
+	#my $kid = join(",", @$key_in_data);
 	my $condition = 0;
 	my $cols = scalar(@$target_col) - 1;
 	for(my $kn = 0; $kn <= $cols; $kn++){
@@ -723,6 +761,9 @@ sub	check_keys
 	return $condition;
 }
 
+#
+#	Generate Glaph from csv file by gnuplot
+#
 sub	graph
 {
 	my($csv_for_plot, $cdp, $gdp, $gp) = @_;
