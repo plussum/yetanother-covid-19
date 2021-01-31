@@ -95,23 +95,77 @@ our $CDP = {};
 my $FIRST_DATE = "";
 my $LAST_DATE  = "";
 
+my @cdp_arrays = ("date_list", "keys");
+my @cdp_hashs = ("order");
+my @cdp_hash_with_keys = ("csv_data", "key_items");
+my @cdp_values = ("title", "main_url", "src_url", "csv_file",
+		"down_load", 
+		"src_dlm", "timefmt", "data_start");
+
 sub	new
 {
 	my ($cdp) = @_;
 	
 	$CDP = $cdp;
 
-	$CDP->{csv_data} = {},
-	$CDP->{date_list} = [],
+	foreach my $item (@cdp_arrays){
+		$cdp->{$item} = [];
+	}
+	foreach my $item (@cdp_hashs){
+		$cdp->{$item} = {};
+	}
 	$CDP->{dates} = 0,
-	$CDP->{order} = {},
-	$CDP->{key_items} = {};
 	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
-	$CDP->{load_order} = [];
-
 	$CDP->{timefmt} = $CDP->{timefmt} // "%Y-%m-%d";
+
+	#$CDP->{csv_data} = {},
+	#$CDP->{date_list} = [],
+	#$CDP->{order} = {},
+	#$CDP->{key_items} = {};
+	#$CDP->{load_order} = [];
+	#$CDP->{src_csv} = [];
+
+
 }
 
+#
+#	Dump csv definition
+#
+sub	dump_cdp
+{
+	my ($cdp, $p) = @_;
+
+	my $ok = $p->{ok} // 1;
+	my $lines = $p->{lines} // "";
+	
+	#
+	#	Dump Values
+	#
+	foreach my $item (@cdp_values){
+		print join("\t", $item, $cdp->{$item}) . "\n"; 
+	}
+
+	my $csv_data = $cdp->{csv_data};
+	my $key_items = $cdp->{key_items};
+	my $src_csv = $cdp->{src_csv};
+
+	#dp::dp "Dump CSV Data($key_items)\n";
+	my $ln = 0;
+	foreach my $k (keys %$csv_data){
+		my @w = @{$csv_data->{$k}};
+		next if($#w < 0);
+
+		if(! defined $w[1]){
+			dp::dp " --> csv_data is not assigned\n";
+		}
+		if($ok){
+			last if($lines && $ln++ > $lines);
+
+			my $scv = $src_csv->{$k} // "--";
+			dp::dp join(", ", $k, "[$scv]", @w[0..5]) . "\n";
+		}
+	}
+}
 
 #
 #	Lpad CSV File
@@ -135,11 +189,18 @@ sub	load_csv
 	#
 	#	DEBUG: Dump data 
 	#
-	&dyump_csv($cdp) if(0);
+	&dump_cdp($cdp, {ok => 0}) if(0);
 	
 	return 0;
 }
 
+#
+#	load holizontal csv file
+#
+#			01/01, 01/02, 01/03 ...
+#	key1
+#	key1
+#
 sub	load_csv_holizontal
 {
 	my ($cdp) = @_;
@@ -199,6 +260,14 @@ sub	load_csv_holizontal
 	return 0;
 }
 
+#
+#	Load vetical csv file
+#
+#			key1,key2,key3
+#	01/01
+#	01/02
+#	01/03
+#
 sub	load_csv_vertical
 {
 	my ($cdp) = @_;
@@ -257,6 +326,9 @@ sub	load_csv_vertical
 	$LAST_DATE = $date_list->[$ln-1];
 }
 
+#
+#	Combert time format
+#
 sub	timefmt
 {
 	my ($timefmt, $date) = @_;
@@ -272,29 +344,6 @@ sub	timefmt
 	return $date;
 }
 
-sub	dump_csv
-{
-	my ($cdp, $ok) = @_;
-
-	$ok = $ok // "";
-	my $csv_data = $cdp->{csv_data};
-	my $key_items = $cdp->{key_items};
-	my $src_csv = $cdp->{src_csv};
-
-	#dp::dp "Dump CSV Data($key_items)\n";
-	foreach my $k (keys %$csv_data){
-		my @w = @{$csv_data->{$k}};
-		next if($#w < 0);
-
-		if(! defined $w[1]){
-			dp::dp " --> csv_data is not assigned\n";
-		}
-		if($ok){
-			my $scv = $src_csv->{$k} // "--";
-			dp::dp join(", ", $k, "[$scv]", @w[0..5]) . "\n";
-		}
-	}
-}
 
 #
 #	Cumrative data to daily data
@@ -315,21 +364,6 @@ sub	cumrative2daily
 	}
 }
 
-#
-#	Reduce CSV DATA with replace data set
-#
-sub	reduce
-{
-	my($cdp, $target_keys) = @_;
-
-	my $csv_data = $cdp->{csv_data};
-	my $new_csv = {};
-	foreach my $key (@$target_keys){
-		$new_csv->{$key} = $csv_data->{$key};
-	}
-	$csv_data = "";		# make sure for free csv data
-	$csv_data = $new_csv;
-}
 
 #
 #	Marge csvdef
@@ -365,20 +399,18 @@ sub	marge_csv
 		my $date_list = $cdp->{date_list};
 		push(@{$marge->{load_order}}, @{$cdp->{load_order}});
 
-		my $dt_start = csvlib::search_list($date_start, @$date_list);
-		if(! $dt_start){
+		my $dt_start = csvlib::search_listn($date_start, @$date_list);
+		if($dt_start < 0){
 			dp::dp "WARNING: Date $date_start is not in the data\n";
-			$dt_start = 1;
+			$dt_start = 0;
 		}
-		$dt_start--;
 		$infop->{date_start} = $dt_start;
 
-		my $dt_end = csvlib::search_list($date_end, @$date_list);
-		if(! $dt_end){
+		my $dt_end = csvlib::search_listn($date_end, @$date_list);
+		if($dt_end < 0){
 			dp::dp "WARNING: Date $date_end is not in the data\n";
-			$dt_end = 1;
+			$dt_end = 0;
 		}
-		$dt_end--;
 		$infop->{date_end} = $dt_end;
 	
 		#dp::dp join(", ", $dt_start, $dt_end) . "\n";
@@ -428,7 +460,55 @@ sub	marge_csv
 			#dp::dp ">> dst" . join(",", $k, @{$m_csv_data->{$k}} ) . "\n";
 		}
 	} 
-	&dump_csv($marge, 0);
+	&dump_cdp($marge, {ok => 0});
+}
+
+#
+#	Reduce CSV DATA with replace data set
+#
+sub	copy_cdp
+{
+	my($cdp, $dst_cdp) = @_;
+	
+	&reduce_cdp($cdp, $dst_cdp, $cdp->{load_order});
+}
+
+sub	reduce_cdp_target
+{
+	my ($cdp, $dst_cdp, $target_colp) = @_;
+
+	my @target_keys = ();
+	&select_keys($cdp, $target_colp, \@target_keys);
+	&reduce_cdp(($cdp, $dst_cdp, \@target_keys);
+}
+
+sub	reduce_cdp
+{
+	my($cdp, $dst_cdp, $target_keys) = @_;
+
+	&new($dst_cdp);
+
+	@{$dst_cdp->{load_order}} = @$target_keys;		
+
+	my @arrays = ("date_list", "keys");
+	my @hashs = ("order");
+	my @hash_with_keys = ("csv_data", "key_items");
+
+	%$dst_cdp = %$cdp;
+	foreach my $array_item (@arrays){
+		@{$dst_cdp->{$array_item}} = @{$cdp->{$array_item}};
+	}
+	foreach my $hash_item (@hashs){
+		%{$dst_cdp->{$hash_item}} = %{$cdp->{$hash_item}};
+	}
+
+	foreach my $hwk (@hash_with_keys){
+		my $src = $cdp->{$hwk};
+		my $dst = $dst_cdp->{$hwk};
+		foreach my $key (@$target_keys){
+			@{$src->{$key}} = @{$dst->{$key}};
+		}
+	}
 }
 
 #
@@ -487,7 +567,7 @@ sub	average
 			$avr_csvp->[$i] = $va / $ak_list{$ak};
 		}
 	}
-	#&dump_csv($cdp, 1);
+	#&dump_cdp($cdp, {ok => 0});
 }
 
 #

@@ -181,6 +181,22 @@ sub search_list
     return "";
 }
 
+sub search_listn
+{
+    my ($sk, @w) = @_;
+
+    #dp::dp "search_list: $sk:" . join(",", @w, $#w) . "\n";
+    for(my $i = 0; $i <= $#w; $i++){
+		my $ntc = $w[$i];
+        if($sk =~ /$ntc/){
+           #dp::dp "search_list: [$sk] [$ntc]\n" if($sk =~ /Japan/);
+           return $i ;
+        }
+    }
+    #dp::dp "Not in the list: $sk\n" ;
+    return -1;
+}
+
 sub search_listp
 {
     my ($sk, $wp) = @_;
