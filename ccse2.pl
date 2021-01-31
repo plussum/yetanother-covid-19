@@ -50,6 +50,7 @@ my $CSV_DEF = {
 
 my $END_OF_DATA = "###EOD###";
 
+my $ern_adp	= "1 with lines title 'ern=1' lw 1 lc 'red' dt (3,7)";
 my $GRAPH_PARAMS = {
 	html_title => $CSV_DEF->{title},
 	png_path   => "$config::PNG_PATH",
@@ -72,7 +73,10 @@ my $GRAPH_PARAMS = {
 	#additional_plot => "100 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
 
 	graph_params => [
-		{dsc => "Japan ", lank => [], static => "rlavr", target_col => ["","Japan"], },
+		{dsc => "Japan ", lank => [1,99], static => "rlavr", target_col => ["","Japan"], },
+		{dsc => "Japan ", lank => [1,99], static => "ern", target_col => ["","Japan"], 
+			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
+		{dsc => "World top 10 ", lank => [1,10], static => "rlavr", target_col => ["",""], },
 	],
 };
 
@@ -96,5 +100,6 @@ sub	download
 #
 csvgraph::new($CSV_DEF); 
 csvgraph::load_csv($CSV_DEF);
+csvgraph::cumrative2daily($CSV_DEF);
 csvgraph::gen_html($CSV_DEF, $GRAPH_PARAMS);
 

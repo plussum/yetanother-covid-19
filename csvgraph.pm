@@ -163,23 +163,15 @@ sub	load_csv_holizontal
 	my @w = split(/$src_dlm/, $line);
 	@$date_list = @w[$data_start..$#w];
 	my $timefmt = $cdp->{timefmt};
-	if($timefmt eq "%Y/%m/%d"){
-		for(my $i = 0; $i < scalar(@$date_list); $i++){
-			$date_list->[$i] =~ s#/#-#g;
-		}
-	}
-	elsif($timefmt eq "%m/%d/%y"){
-		for(my $i = 0; $i < scalar(@$date_list); $i++){
-			my($m, $d, $y) = split(/\//, $date_list->[$i]);
-			$date_list->[$i] = sprintf("%04d-%02d-%02d", $y + 2000, $m, $d);
-		}
+	for(my $i = 0; $i < scalar(@$date_list); $i++){
+		$date_list->[$i] = &timefmt($timefmt, $date_list->[$i]);
 	}
 		
 	$cdp->{dates} = scalar(@$date_list) - 1;
 	$FIRST_DATE = $date_list->[0];
 	$LAST_DATE = $date_list->[$#w - $data_start];
 
-	dp::dp join(",", "# ", @$date_list) . "\n";
+	#dp::dp join(",", "# ", @$date_list) . "\n";
 	my $load_order = $cdp->{load_order};
 	my $ln = 0;
 	while(<FD>){
@@ -248,8 +240,7 @@ sub	load_csv_vertical
 		my $line = decode('utf-8', $_);
 		my ($date, @items) = split(/$src_dlm/, $line);
 	
-		$date =~ s#/#-#g if($timefmt eq "%Y/%m/%d");
-		$date_list->[$ln] = $date;
+		$date_list->[$ln] = &timefmt($timefmt, $date);
 		#dp::dp "date:$ln $date\n";
 	
 		for(my $i = 0; $i <= $#items; $i++){
@@ -263,6 +254,20 @@ sub	load_csv_vertical
 	$cdp->{dates} = $ln - 1;
 	$FIRST_DATE = $date_list->[0];
 	$LAST_DATE = $date_list->[$ln-1];
+}
+
+sub	timefmt
+{
+	my ($timefmt, $date) = @_;
+
+	if($timefmt eq "%Y/%m/%d"){
+		$date =~ s#/#-#g;
+	}
+	elsif($timefmt eq "%m/%d/%y"){
+		my($m, $d, $y) = split(/\//, $date);
+		$date = sprintf("%04d-%02d-%02d", $y + 2000, $m, $d);
+	}
+	return $date;
 }
 
 sub	dump_csv
@@ -279,15 +284,6 @@ sub	dump_csv
 		my @w = @{$csv_data->{$k}};
 		next if($#w < 0);
 
-		#my @k = ();
-		#if(! defined $key_items->{$k}){
-		#	dp::dp "Undefined key : [$k]\n";
-		#}	
-		#else {
-		#	@k = @{$key_items->{$k}};
-		#}
-		#dp::dp "[$k](" . join(",", @k) . ")";
-
 		if(! defined $w[1]){
 			dp::dp " --> csv_data is not assigned\n";
 		}
@@ -297,6 +293,26 @@ sub	dump_csv
 		}
 	}
 }
+
+#
+#	Cumrative data to daily data
+#
+sub	cumrative2daily
+{
+	my($cdp) = @_;
+
+	my $csv_data = $cdp->{csv_data};
+
+	foreach my $k  (keys %$csv_data){
+		my $dp = $csv_data->{$k};
+		#dp::dp "##" . join(",", $k, $csv_data, $dp) . "\n";
+		my $dates = scalar(@$dp) - 1;
+		for(my $i = $dates; $i > 0; $i--){
+			$dp->[$i] = $dp->[$i] - $dp->[$i-1];
+		}
+	}
+}
+
 #
 #	Marge csvdef
 #
@@ -555,6 +571,9 @@ sub	csv2graph
 	if($gp->{static} eq "rlavr"){ 						# Rolling Average
 		&rolling_average($cdp, \%work_csv, $gdp, $gp);
 	}
+	elsif($gp->{static} eq "ern"){ 						# Rolling Average
+		&ern($cdp, \%work_csv, $gdp, $gp);
+	}
 
 	my @lank = ();
 	@lank = (@{$gp->{lank}}) if(defined $gp->{lank});
@@ -730,28 +749,77 @@ sub	select_keys
 	return(scalar(@$target_keys) - 1);
 }
 
+#
+#	Calc Rolling Average
+#
 sub	rolling_average
 {
 	my($cdp, $work_csvp, $gdp, $gp) = @_;
 
 	my $avr_date = $cdp->{avr_date} // $DEFAULT_AVR_DATE;
-	my %sort_value = ();	
 	foreach my $key (keys %$work_csvp){
-		my $csv = $work_csvp->{$key};
-		for(my $i = scalar(@$csv) - 1; $i >= $avr_date; $i--){
+		my $dp = $work_csvp->{$key};
+		for(my $i = scalar(@$dp) - 1; $i >= $avr_date; $i--){
 			my $tl = 0;
 			for(my $j = $i - $avr_date + 1; $j <= $i; $j++){
-				my $v = $csv->[$j] // 0;
+				my $v = $dp->[$j] // 0;
 				$v = 0 if(!$v);
 				$tl += $v;
 			}
 			#dp::dp join(", ", $key, $i, $csv->[$i], $tl / $avr_date) . "\n";
 			my $avr = sprintf("%.3f", $tl / $avr_date);
-			$csv->[$i] = $avr;
+			$dp->[$i] = $avr;
 		}
 	}
 }	
 
+#
+#	ERN
+#
+sub	ern
+{
+	my($cdp, $work_csvp, $gdp, $gp) = @_;
+
+	my $lp = $gp->{lp} // ($gdp->{lp} // $config::RT_LP);
+	my $ip = $gp->{ip} // ($gdp->{ip} // $config::RT_IP);	# 5 感染期間
+	my $avr_date = $cdp->{avr_date} // $DEFAULT_AVR_DATE;
+
+	my %rl_avr = ();
+	&rolling_average($cdp, $work_csvp, $gdp, $gp);
+
+	my $date_number = $cdp->{dates};
+	my $rate_term = $date_number - $ip - $lp;
+	my $date_term = $rate_term - 1;
+	foreach my $key (keys %$work_csvp){
+		my $dp = $work_csvp->{$key};
+		my @ern = ();
+		my $dt = 0;
+		for($dt = 0; $dt < $rate_term; $dt++){
+			my $ppre = $ip * $dp->[$dt+$lp+$ip];
+			my $pat = 0;
+			for(my $d = $dt + 1; $d <= ($dt + $ip); $d++){
+				$pat += $dp->[$d];
+			}
+			# print "$country $dt: $ppre / $pat\n";
+			if($pat > 0){
+				$ern[$dt] =  int(1000 * $ppre / $pat) / 1000;
+			}
+			else {
+				$ern[$dt] =  0;
+			}
+		}
+		for(; $dt <= $date_number; $dt++){
+			$ern[$dt] = "NaN";
+		}
+		@$dp = @ern;
+	}
+
+}	
+
+
+#
+#	Check keys for select
+#
 sub	check_keys
 {
 	my($key_in_data, $target_col, $non_target_col, $key) = @_;
@@ -812,17 +880,18 @@ sub	graph
 		$xtics = 2 * 60 * 60 * 24;
 	}
 
+	#dp::dp "ymin: [$gdp->{ymin}]\n";
 	my $ymin = $gp->{ymin} // ($gdp->{ymin} // "");
 	my $ymax = $gp->{ymax} // ($gdp->{ymax} // "");
-	my $yrange = ($ymin || $ymax) ? "set yrange [$ymin:$ymax]" : "";
+	my $yrange = ($ymin ne ""|| $ymax ne "") ? "set yrange [$ymin:$ymax]" : "# yrange";
 	my $ylabel = $gp->{ylabel} // ($gdp->{ylabel} // "");
 	$ylabel = "set ylabel '$ylabel'"  if($ylabel);
 
 	my $y2min = $gp->{y2min} // ($gdp->{y2min} // "");
 	my $y2max = $gp->{y2max} // ($gdp->{y2max} // "");
-	my $y2range = ($y2min || $y2max) ? "set y2range [$y2min:$y2max]" : "";
+	my $y2range = ($y2min ne ""|| $y2max ne "") ? "set y2range [$y2min:$y2max]" : "# y2range";
 	my $y2label = $gp->{y2label} // ($gdp->{y2label} // "");
-	$y2label = "set y2label '$y2label'" if($y2label);
+	$y2label = ($y2label) ? "set y2label '$y2label'" : "# y2label";
 	my $y2tics = "set y2tics";		# Set y2tics anyway
 
 	#
