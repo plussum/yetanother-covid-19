@@ -88,7 +88,7 @@ my $GRAPH_PARAMS = {
 
 	default_graph => "line",
 	ymin => 0,
-	additional_plot => 100,
+	additional_plot => "100 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
 
 	graph_params => [
 		#{dsc => "Tokyo Apple mobility Trends and ERN", lank => [], static => "rlavr", target_col => ["Tokyo-,東京都"], 
@@ -105,8 +105,8 @@ my $WLK = "walking";
 my $AVR = "avr";
 my $jp_target = "Tokyo,Kanagawa,Saitama,Chiba,Osaka,Kyoto,Hyogo,Fukuoka,Aichi,Hokaido";
 my @targets = (
-	{dsc => "Japan Target average", target_col => [$SUBR, $jp_target, $AVR, "", "", "Japan"], ,lank => [1, 20]} ,
-	{dsc => "Japan all verage", target_col => [$SUBR, "", $AVR, "", "", "Japan"], ,lank => [1, 20]} ,
+	{dsc => "Japan Target average", target_col => [$SUBR, $jp_target, $AVR, "", "", "Japan"], ,lank => [1, 10]} ,
+	{dsc => "Japan all average", target_col => [$REG, "Japan", "", "", "", ""], ,lank => [1, 10]} ,
 	{dsc => "Japan Target walk", target_col => [$SUBR, $jp_target, "walking", "", "", "Japan"], ,lank => [1, 20]} ,
 	{dsc => "Tokyo Target all", target_col => [$SUBR, "Tokyo", "", "", "", "Japan"],,lank => [1, 20]} ,
 
@@ -122,6 +122,7 @@ my @targets = (
 	{dsc => "Japan walking", target_col => [$SUBR, $jp_target, $WLK, "", "", "Japan"], ,lank => [1, 20]} ,
 	{dsc => "Japan transit ", target_col => [$SUBR, "Tokyo", $TRN, "", "", "Japan"],,lank => [1, 20]} ,
 	{dsc => "Japan driving ", target_col => [$SUBR, "Tokyo", $DRV, "", "", "Japan"],,lank => [1, 20]} ,
+	{dsc => $END_OF_DATA},
 );
 
 
@@ -137,6 +138,7 @@ my @statics = ("", "rlavr");
 my $gpa = $GRAPH_PARAMS->{graph_params};
 my $i = 0;
 foreach my $tc (@targets){
+	last if($tc->{dsc} eq $END_OF_DATA);
 	foreach my $dt (@dates){
 		foreach my $st (@statics){
 			$gpa->[$i++] = {

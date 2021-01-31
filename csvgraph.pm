@@ -606,7 +606,7 @@ sub	csv2graph
 			push(@non_target_col, []);
 		}
 	}
-	dp::dp "Condition: $condition\n";
+	#dp::dp "Condition: $condition\n";
 
 	my @target_keys = ();
 	my $key_items = $cdp->{key_items};
@@ -851,7 +851,7 @@ _EOD_
 	#push(@p, "0 with lines dt '-' title 'base line'");
 	my $additional_plot = $gp->{additional_plot} // ($gdp->{additional_plot} // "");
     if($additional_plot){
-        dp::dp "additional_plot: " . $additional_plot . "\n";
+        #dp::dp "additional_plot: " . $additional_plot . "\n";
 		push(@p, $additional_plot);
     }
 
