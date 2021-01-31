@@ -106,14 +106,14 @@ my $MARGE_GRAPH_PARAMS = {
 
 	END_OF_DATA => $END_OF_DATA,
 
-	ylabel => 'ERN',
-	y2label => '%',
+	ylabel => '%',
+	y2label => 'ERN',
 	default_graph => "line",
 	ymin => 0,
 	additional_plot => $ap,
 	y2_source => 0,		# soruce csv definition for y2
 	graph_params => [
-		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Tokyo-,東京都"], 
+		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [], static => "rlavr", target_col => ["Tokyo-,東京都"], 
 			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
 		{dsc => "Osaka Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Osaka-,大阪府"], 
 			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},

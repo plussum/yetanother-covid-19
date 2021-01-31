@@ -621,14 +621,16 @@ sub	csv2graph
 			#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
 		}
 	}
+	#dp::dp "## TARGET_KEYS " . join(", ", @target_keys) . "\n";
 
 	#
 	#	Sort 
 	#
 	my %SORT_VAL = ();
 	my @sorted_keys = ();
+	my $src_csv = $cdp->{src_csv} // "";
 	my $lank_select = (defined $lank[0] && defined $lank[1] && $lank[0] && $lank[1]) ? 1 : "";
-	#dp::dp "### $lank_select\n";
+	dp::dp "### SORT ($lank_select)($src_csv)\n";
 	if($lank_select){
 		foreach my $key (@target_keys){
 			my $csv = $cvdp->{$key};
@@ -640,10 +642,21 @@ sub	csv2graph
 			}
 			$SORT_VAL{$key} = $total;
 		}
-		@sorted_keys = (sort {$SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
+		if(! $src_csv){
+			@sorted_keys = (sort {$SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
+		}
+		else {
+			@sorted_keys = (sort {$src_csv->{$a} <=> $src_csv->{$b} or $SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
+		}
 	}
 	else {
-		@sorted_keys = (sort keys %$cvdp);
+		if(! $src_csv){
+			@sorted_keys = (sort keys @target_keys);
+		}
+		else {
+			dp::dp join(",", $src_csv, @target_keys) . "\n";
+			@sorted_keys = (sort {$src_csv->{$a} <=> $src_csv->{$b} or $a cmp $b} @target_keys);
+		}
 	}
 
 	my $order = $cdp->{order};
@@ -750,8 +763,8 @@ sub	graph
 	my $y2min = $gp->{y2min} // ($gdp->{y2min} // "");
 	my $y2max = $gp->{y2max} // ($gdp->{y2max} // "");
 	my $y2range = ($y2min || $y2max) ? "set y2range [$y2min:$y2max]" : "";
-	my $y2label = $gp->{ylabel} // ($gdp->{ylabel} // "");
-	$y2label = "set ylabel '$y2label'" if($y2label);
+	my $y2label = $gp->{y2label} // ($gdp->{y2label} // "");
+	$y2label = "set y2label '$y2label'" if($y2label);
 	my $y2tics = "set y2tics";		# Set y2tics anyway
 
 	#
@@ -810,7 +823,7 @@ _EOD_
 	my $src_csv = $cdp->{src_csv} // "";
 	my $y2_source = $gdp->{y2_source} // "";
 	#dp::dp "soruce_csv[$src_csv] $y2_source\n";
-	$src_csv = "" if(! $y2_source);
+	$src_csv = "" if($y2_source eq "");
 
 	for(my $i = 1; $i <= $#label; $i++){
 		my $key = $label[$i];
@@ -820,7 +833,8 @@ _EOD_
 		my $axis = "";
 		my $dot = "";
 		if($y2_source ne ""){		#####
-			dp::dp "csv_source: $key [" . $src_csv->{$key} . "]\n";
+			#dp::dp "csv_source: $key [" . $src_csv->{$key} . "]\n";
+			#dp::dp "csv_source: $key [" . $src_csv . "]\n";
 			$axis =	"axis x1y1";
 			if($src_csv->{$key} == $y2_source) {
 				$axis = "axis x1y2" ;
@@ -870,9 +884,9 @@ _EOD_
 	close(PLOT);
 
 	#system("cat $plotf");
-	#dp::dp "-- Do gnuplot $plotf\n";
+	dp::dp "-- Do gnuplot $plotf\n";
 	system("gnuplot $plotf");
-	#dp::dp "-- Done\n";
+	dp::dp "-- Done\n";
 }
 
 sub	date_calc
