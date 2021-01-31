@@ -489,7 +489,8 @@ sub	gen_html
 
 		my $fname = join(" ", $gp->{dsc}, $gp->{static}, $start_date);
 
-		$fname =~ s/[\/\.\*\ ]/_/g;
+		$fname =~ s/[\/\.\*\ #]/_/g;
+		$fname =~ s/__+/_/g;
 		$gp->{fname} = $fname;
 
 		&csv2graph($cdp, $gdp, $gp);

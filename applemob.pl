@@ -105,18 +105,24 @@ my $WLK = "walking";
 my $AVR = "avr";
 my $jp_target = "Tokyo,Kanagawa,Saitama,Chiba,Osaka,Kyoto,Hyogo,Fukuoka,Aichi,Hokaido";
 my @targets = (
+	{dsc => "WorldWid transit  1-10", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [ 1, 10]} ,
+	{dsc => "WorldWid transit 11-10", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [11, 20]} ,
+	{dsc => "WorldWid transit 21-30", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [21, 30]} ,
+	{dsc => "WorldWid transit 21-40", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [31, 40]} ,
+	{dsc => $END_OF_DATA},
+
 	{dsc => "Japan Target average", target_col => [$SUBR, $jp_target, $AVR, "", "", "Japan"], ,lank => [1, 10]} ,
 	{dsc => "Japan all average", target_col => [$REG, "Japan", "", "", "", ""], ,lank => [1, 10]} ,
 	{dsc => "Japan Target walk", target_col => [$SUBR, $jp_target, "walking", "", "", "Japan"], ,lank => [1, 20]} ,
 	{dsc => "Tokyo Target all", target_col => [$SUBR, "Tokyo", "", "", "", "Japan"],,lank => [1, 20]} ,
 
-	{dsc => "US States driving", target_col => [$SUBR, "", $DRV, "", "", "United State"], ,lank => [1, 20]} ,
-	{dsc => "US States transit", target_col => [$SUBR, "", $TRN, "", "", "United State"], ,lank => [1, 20]} ,
-	{dsc => "US States walk", target_col => [$SUBR, "", $WLK, "", "", "United State"], ,lank => [1, 20]} ,
-
 	{dsc => "WorldWid transit", target_col => [$REG, "", $TRN, "", "", ""], ,lank => [1, 20]} ,
 	{dsc => "WorldWid walking", target_col => [$REG, "", $WLK, "", "", ""], ,lank => [1, 20]} ,
 	{dsc => "WorldWid driving", target_col => [$REG, "", $DRV, "", "", ""], ,lank => [1, 20]} ,
+
+	{dsc => "US States driving", target_col => [$SUBR, "", $DRV, "", "", "United State"], ,lank => [1, 20]} ,
+	{dsc => "US States transit", target_col => [$SUBR, "", $TRN, "", "", "United State"], ,lank => [1, 20]} ,
+	{dsc => "US States walk", target_col => [$SUBR, "", $WLK, "", "", "United State"], ,lank => [1, 20]} ,
 
 	{dsc => "Japan all", target_col => [$SUBR, $jp_target, "", "", "", "Japan"], } ,
 	{dsc => "Japan walking", target_col => [$SUBR, $jp_target, $WLK, "", "", "Japan"], ,lank => [1, 20]} ,
@@ -142,7 +148,7 @@ foreach my $tc (@targets){
 	foreach my $dt (@dates){
 		foreach my $st (@statics){
 			$gpa->[$i++] = {
-				dsc => $tc->{dsc},
+				dsc => "#$i " . $tc->{dsc},
 				lank => ($tc->{lank} // [1,20]),
 				static => $st,
 				target_col => $tc->{target_col},
@@ -150,6 +156,7 @@ foreach my $tc (@targets){
 				end_date => $dt->[1],
 				ymax => ($tc->{ymax} // ""),
 			};
+			
 		}
 	}
 }
