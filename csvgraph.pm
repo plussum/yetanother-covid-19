@@ -162,11 +162,24 @@ sub	load_csv_holizontal
 
 	my @w = split(/$src_dlm/, $line);
 	@$date_list = @w[$data_start..$#w];
+	my $timefmt = $cdp->{timefmt};
+	if($timefmt eq "%Y/%m/%d"){
+		for(my $i = 0; $i < scalar(@$date_list); $i++){
+			$date_list->[$i] =~ s#/#-#g;
+		}
+	}
+	elsif($timefmt eq "%m/%d/%y"){
+		for(my $i = 0; $i < scalar(@$date_list); $i++){
+			my($m, $d, $y) = split(/\//, $date_list->[$i]);
+			$date_list->[$i] = sprintf("%04d-%02d-%02d", $y + 2000, $m, $d);
+		}
+	}
+		
 	$cdp->{dates} = scalar(@$date_list) - 1;
 	$FIRST_DATE = $date_list->[0];
 	$LAST_DATE = $date_list->[$#w - $data_start];
 
-	#dp::dp join(",", "# " . $TGK, @LABEL) . "\n";
+	dp::dp join(",", "# ", @$date_list) . "\n";
 	my $load_order = $cdp->{load_order};
 	my $ln = 0;
 	while(<FD>){
@@ -553,7 +566,8 @@ sub	csv2graph
 		&sort_csv($cdp, \%work_csv, $gp, \@target_keys, \@sorted_keys);
 	}
 	else {
-		@sorted_keys = @{$cdp->{loeaded_order}};		# no sort, load Order
+		my $load_order = $cdp->{load_order};
+		@sorted_keys = @$load_order;		# no sort, load Order
 	}
 
 	my $order = $cdp->{order};							# set order of key
