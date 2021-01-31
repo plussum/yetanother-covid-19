@@ -84,6 +84,11 @@ my $MARGE_CSV_DEF = {
 	start_date => "2020-04-01",
 	end_date   => "2020-01-14",
 };
+my @additonal_plot = (
+	"100 axis x1y1 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
+	"1 axis x1y2 with lines title 'ern=1' lw 1 lc 'red' dt (3,7)",
+);
+my $ap = join(",", @additonal_plot);
 my $MARGE_GRAPH_PARAMS = {
 	html_title => "MARGE Apple Mobility Trends and ERN",
 	png_path   => "$config::PNG_PATH",
@@ -105,8 +110,8 @@ my $MARGE_GRAPH_PARAMS = {
 	y2label => '%',
 	default_graph => "line",
 	ymin => 0,
-	additional_plot => 1,
-	y2_source => 1,		# soruce csv definition for y2
+	additional_plot => $ap,
+	y2_source => 0,		# soruce csv definition for y2
 	graph_params => [
 		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Tokyo-,東京都"], 
 			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
@@ -147,5 +152,5 @@ csvgraph::average($CSV_DEF, 2, "avr");
 csvgraph::new($ERN_CSV_DEF); 		# Load ERN
 csvgraph::load_csv($ERN_CSV_DEF);
 
-csvgraph::marge_csv($MARGE_CSV_DEF, $CSV_DEF, $ERN_CSV_DEF);
+csvgraph::marge_csv($MARGE_CSV_DEF, $ERN_CSV_DEF, $CSV_DEF);
 csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);

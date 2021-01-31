@@ -194,6 +194,7 @@ sub	load_csv_vertical
 {
 	my ($cdp) = @_;
 
+	my $remove_head = 1;
 	my $csv_file = $cdp->{csv_file};
 	my $data_start = $cdp->{data_start};
 	my $src_dlm = $cdp->{src_dlm};
@@ -219,6 +220,7 @@ sub	load_csv_vertical
 	}
 	shift(@key_list);
 	foreach my $k (@key_list){
+		$k =~ s/^[0-9]+:// if($remove_head);			# 
 		$csv_data->{$k}= [];		# set csv data array
 		$key_items->{$k} = [$k];
 	}
@@ -818,7 +820,7 @@ _EOD_
 		my $axis = "";
 		my $dot = "";
 		if($y2_source ne ""){		#####
-			#dp::dp "csv_source: $key [" . $src_csv->{$key} . "]\n";
+			dp::dp "csv_source: $key [" . $src_csv->{$key} . "]\n";
 			$axis =	"axis x1y1";
 			if($src_csv->{$key} == $y2_source) {
 				$axis = "axis x1y2" ;
@@ -833,9 +835,10 @@ _EOD_
 	#push(@p, "0 with lines dt '-' title 'base line'");
 	my $additional_plot = $gp->{additional_plot} // ($gdp->{additional_plot} // "");
     if($additional_plot){
-        #dp::dp "additional_plot: " . $gplitem->{additional_plot} . "\n";
+        dp::dp "additional_plot: " . $additional_plot . "\n";
 		push(@p, $additional_plot);
     }
+
 	my $plot = join(",", @p);
 	$PARAMS =~ s/#PLOT_PARAM#/$plot/g;
 
