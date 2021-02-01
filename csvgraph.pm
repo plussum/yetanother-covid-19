@@ -1066,6 +1066,7 @@ _EOD_
 	$l =~ s/[\r\n]+$//;
 	my @label = split(/$dlm/, $l);
 	#dp::dp "### $csvf: $l\n";
+	dp::dp "### $csvf\n";
 
 	my $src_csv = $cdp->{src_csv} // "";
 	my $y2_source = $gdp->{y2_source} // "";
@@ -1131,7 +1132,7 @@ _EOD_
 	close(PLOT);
 
 	#system("cat $plotf");
-	#dp::dp "-- Do gnuplot $plotf\n";
+	dp::dp "gnuplot $plotf\n";
 	system("gnuplot $plotf");
 	#dp::dp "-- Done\n";
 }
