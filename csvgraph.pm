@@ -85,7 +85,7 @@ use Data::Dumper;
 use config;
 use csvlib;
 
-#binmode(STDOUT, ":utf8");
+binmode(STDOUT, ":utf8");
 
 my $VERBOSE = 0;
 my $DEFAULT_AVR_DATE = 7;
@@ -650,6 +650,7 @@ sub	gen_html
 			for(my $j = 0; $j < $lcount; $j++){
 				last if(($i + $j) > $#lbl);
 				print HTML "<td>" . $lbl[$i+$j] . "</td>";
+				dp::dp "HTML LABEL: " . $lbl[$i+$j] . "\n";
 			}
 			print HTML "</tr>\n";
 		}
