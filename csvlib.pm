@@ -186,10 +186,18 @@ sub search_listn
     my ($sk, @w) = @_;
 
     #dp::dp "search_list: $sk:" . join(",", @w, $#w) . "\n";
+	#&disp_caller(1..3);
     for(my $i = 0; $i <= $#w; $i++){
 		my $ntc = $w[$i];
-        if($sk =~ /$ntc/){
-           #dp::dp "search_list: [$sk] [$ntc]\n" if($sk =~ /Japan/);
+		if($ntc =~ /^~(.+)/){
+			$ntc =  $1;
+        	if($sk =~ /$ntc/){
+			   #dp::dp "search_list: [$sk] [$ntc]\n"; # if($sk =~ /Japan/);
+				return $i;
+			}
+		}
+        elsif($sk eq $ntc){
+           #dp::dp "search_list: [$sk] [$ntc]\n";# if($sk =~ /Japan/);
            return $i ;
         }
     }
@@ -603,10 +611,10 @@ sub disp_caller
 
     @level = (0..1) if($#level < 0);
     foreach my $i (@level){
-        my ($package_name, $file_name, $line) = caller($i);
+        my ($package_name, $file_name, $line, $sub) = caller($i);
 		last if(! $package_name);
 
-        print "called from[$i]: $package_name :: $file_name #$line\n";
+        print "called from[$i]: $package_name :: $file_name #$line $sub\n";
     }
 }
 

@@ -751,6 +751,10 @@ sub	csv2graph
 
 	my @target_keys = ();
 	&select_keys($cdp, $gp->{target_col}, \@target_keys);	# select data for target_keys
+	if($#target_keys < 0){
+		dp::dp "WARNING: No data $cdp->{title} / keys:" . join("; ", @{$gp->{target_col}}) . "\n";
+		return 0;
+	}
 	&date_range($cdp, $gdp, $gp); 						# Data range (set dt_start, dt_end (position of array)
 
 	my %work_csv = ();									# copy csv data to work csv
@@ -860,6 +864,11 @@ sub	sort_csv
 	my %SORT_VAL = ();
 	my $src_csv = $cdp->{src_csv} // "";
 	foreach my $key (@$target_keysp){
+		if(! $key){
+			dp::dp "WARING at sort_csv: empty key [$key]\n";
+			next;
+		}
+
 		my $csv = $cvdp->{$key};
 		my $total = 0;
 		for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
@@ -868,6 +877,9 @@ sub	sort_csv
 			$total += $v ;
 		}
 		$SORT_VAL{$key} = $total;
+		if($src_csv && (! defined $src_csv->{$key})){
+			dp::dp "WARING at sort_csv: No src_csv definition for [$key]\n";
+		}
 	}
 	if(! $src_csv){		# Marged CSV
 		@$sorted_keysp = (sort {$SORT_VAL{$b} <=> $SORT_VAL{$a}} keys %SORT_VAL);
@@ -973,6 +985,7 @@ sub	check_keys
 	my $kid = join(",", @$key_in_data);
 	my $condition = 0;
 	my $cols = scalar(@$target_col) - 1;
+
 	for(my $kn = 0; $kn <= $cols; $kn++){
 		next if(! ($target_col->[$kn] // ""));			# no key
 		next if(! ($non_target_col->[$kn] // ""));		# no key

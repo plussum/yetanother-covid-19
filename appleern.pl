@@ -48,6 +48,10 @@ my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 my $src_url = sprintf($SRC_URL_TAG, $year + 1900, $mon + 1, $mday);
 my $ern_adp	= "1 with lines title 'ern=1' lw 1 lc 'red' dt (3,7)";
 
+
+#
+#	Definion of Apple Mobility Trends CSV Format
+#
 my $AMT_DEF = {
 	title => "Apple Mobility Trends",
 	main_url =>  "https://covid19.apple.com/mobility",
@@ -63,6 +67,9 @@ my $AMT_DEF = {
 	data_start => 6,
 };
 
+#
+#	Definition of Graph Parameter for Apple Mobility Trends
+#
 my $REG = "country/region";
 my $SUBR = "sub-region";
 my $CITY = "city";
@@ -80,18 +87,14 @@ my $AMT_GRAPH = {
 	dst_dlm => "\t",
 	avr_date => 7,
 
-	timefmt => '%Y-%m-%d',
-	format_x => '%m/%d',
-
-	term_x_size => 1000,
-	term_y_size => 350,
+	timefmt => '%Y-%m-%d', format_x => '%m/%d',
+	term_x_size => 1000, term_y_size => 350,
+	ymin => 0,
 
 	END_OF_DATA => $END_OF_DATA,
 
 	default_graph => "line",
-	ymin => 0,
 	additional_plot => "100 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
-
 	graph_params => [
 		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,10], static => "", 
 			target_col => [$REG, "Japan", "", "", ""], 
@@ -99,7 +102,9 @@ my $AMT_GRAPH = {
 	],
 };
 
-
+#
+#	Definition of Johns Hpkings University CCSE CSV format
+#
 my $CCSE_DEF = {
 	title => "Johns Hopkins Global",
 	main_url =>  "https://covid19.apple.com/mobility",
@@ -123,18 +128,13 @@ my $CCSE_GRAPH = {
 
 	dst_dlm => "\t",
 	avr_date => 7,
+	default_graph => "line",
 
-	timefmt => '%Y-%m-%d',
-	format_x => '%m/%d',
-
-	term_x_size => 1000,
-	term_y_size => 350,
+	timefmt => '%Y-%m-%d', format_x => '%m/%d',
+	term_x_size => 1000, term_y_size => 350,
+	ymin => 0,
 
 	END_OF_DATA => $END_OF_DATA,
-
-	default_graph => "line",
-	ymin => 0,
-	#additional_plot => "100 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
 
 	graph_params => [
 		{dsc => "Japan ern", lank => [1,99], static => "", target_col => ["","Japan"], 
@@ -147,35 +147,21 @@ my $CCSE_GRAPH = {
 	],
 };
 
-my $ERN_CSV_DEF = {
-	title => "ERN pref",
-	main_url =>  "Dummy",
-	csv_file =>  "$config::WIN_PATH/PNG/09_tko_NEW_CASES_ERN_DAY_main_pref_0401_ip_6_lp_7_rl_avr_7_-plot.csv.txt",
-	src_url => 	"src_url",		# set
-
-	down_load => \&download,
-
-	direct => "vertical",		# vertical or holizontal(Default)
-	timefmt => '%Y/%m/%d',		# comverbt to %Y-%m-%d
-	src_dlm => "\t",
-	keys => [0],		# 5, 1, 2
-	data_start => 1,
-};
-
+#
+#	Definition of Marged CSV from Apple Mobility Trends and Johns Hopkings Univ. CCSE
+#
 my $MARGE_CSV_DEF = {
 	title => "MARGED Apple and ERN pref",
 	main_url =>  "Marged, no url",
 	csv_file =>  "Marged, no csv file",
 	src_url => 	"Marged, no src url",		# set
-
-	#start_date => "2020-04-01",
-	#end_date   => "2020-01-14",
 };
-my @additonal_plot = (
+my @additonal_plot_list = (
 	"100 axis x1y1 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
 	"1 axis x1y2 with lines title 'ern=1' lw 1 lc 'red' dt (3,7)",
 );
-my $ap = join(",", @additonal_plot);
+my $additional_plot = join(",", @additonal_plot_list);
+
 my $MARGE_GRAPH_PARAMS = {
 	html_title => "MARGE Apple Mobility Trends and ERN",
 	png_path   => "$config::PNG_PATH",
@@ -184,42 +170,58 @@ my $MARGE_GRAPH_PARAMS = {
 
 	dst_dlm => "\t",
 	avr_date => 7,
-
-	timefmt => '%Y-%m-%d',
-	format_x => '%m/%d',
-
-	term_x_size => 1000,
-	term_y_size => 350,
-
 	END_OF_DATA => $END_OF_DATA,
-
-	y2label => 'ERN',
-	y2min => 0,
-	y2max => 3,
-	ylabel => '%',
-	ymin => 0,
 	default_graph => "line",
-	additional_plot => $ap,
-	y2_source => 0,		# soruce csv definition for y2
+
+	timefmt => '%Y-%m-%d', format_x => '%m/%d',
+	term_x_size => 1000, term_y_size => 350,
+
+	y2label => 'ERN', y2min => 0, y2max => 3, y2_source => 0,		# soruce csv definition for y2
+	ylabel => '%', ymin => 0,
+	additional_plot => $additional_plot,
+
 	graph_params => [
-		{dsc => "Japan ", lank => [1,99], static => "", target_col => ["Japan"], 
-			ylabel => "ern", y2label => "ern", additional_plot => $ap, ymin => "", ymax => "", y2min => 0, y2max => 3},
-		{dsc => $END_OF_DATA},
+#		{dsc => "Japan ", lank => [1,99], static => "", target_col => ["Japan"] },
+#		{dsc => "USA",    lank => [1,99], static => "", target_col => ["US,United State"], },
 
-		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,10], static => "ern", target_col => ["Tokyo-,Japan"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => "", ymax => 3},
-
-		{dsc => "Osaka Apple mobility Trends and ERN", lank => [1,999], static => "", target_col => ["Osaka-,大阪府"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
-		{dsc => "Kanagawa Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Kanagawa,神奈川県"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
-		{dsc => "Hyogo Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Hyogo,兵庫県"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
-		{dsc => "Kyoto Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Kyoto,京都府"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
+#		{dsc => $END_OF_DATA},
+#		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,10], static => "ern", target_col => ["Tokyo-,Japan"], 
+#			start_date => "2020-04-01", end_date => "2021-01-13", ymax => "", ymax => 3},
+#
+#		{dsc => "Osaka Apple mobility Trends and ERN", lank => [1,999], static => "", target_col => ["Osaka-,大阪府"], 
+#			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
+#		{dsc => "Kanagawa Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Kanagawa,神奈川県"], 
+#			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
+#		{dsc => "Hyogo Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Hyogo,兵庫県"], 
+#			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
+#		{dsc => "Kyoto Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Kyoto,京都府"], 
+#			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
 	],
 };
 
+my @TARGET_REAGION = (
+		"Japan", "US,United State", 
+		"United Kingdom,UK", "Russia", "France", "Spain", "Italy", "Germany", "Poland", "Ukraine", "Netherlands", "Czechia", "Romania",
+			"Belgium", "Portugal", "Sweden",
+		"India", "Iran", "Indonesia", "Israel", "Iraq","Pakistan",
+		"Brazil", "Colombia", "Argentina", "Mexico", "Canada", "Chile",
+		"South Africa", 
+);
+my $TARGET_GRAPH_TAG = {dsc => "", lank => [1,10], static => "", target_col => [] };
+my $gp = $MARGE_GRAPH_PARAMS->{graph_params};
+
+foreach my $reagion (@TARGET_REAGION){
+	push (@$gp, {
+		dsc => "Mobiliy and ERN $reagion",
+		lank => [1,10],
+		static => "",
+		target_col => [$reagion],
+		}
+	);
+} 
+foreach my $p (@$gp){
+	dp::dp join(", ", $p->{dsc}, @{$p->{target_col}}, @{$p->{lank}}, ) . "\n";
+}
 
 #
 #	Down Load CSV 
@@ -227,33 +229,23 @@ my $MARGE_GRAPH_PARAMS = {
 sub	download
 {
 	my ($cdp) = @_;
-
-	my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-	my $src_url = $cdp->{src_url};
-	my $wget = "wget $src_url -O " . $cdp->{csv_file};
-	dp::dp $wget ."\n" if($VERBOSE);
-	system($wget);
 	return 1;
 }
 
 #
 #
 #
-if(1){
-	csvgraph::new($AMT_DEF); 			# Load Apple Mobility Trends
-	csvgraph::load_csv($AMT_DEF);
-	csvgraph::average($AMT_DEF, 2, "avr");
-	csvgraph::comvert2rlavr($AMT_DEF);
-	csvgraph::gen_html($AMT_DEF, $AMT_GRAPH);
-}
+csvgraph::new($AMT_DEF); 						# Load Apple Mobility Trends
+csvgraph::load_csv($AMT_DEF);
+csvgraph::average($AMT_DEF, 2, "avr");
+csvgraph::comvert2rlavr($AMT_DEF);
+#csvgraph::gen_html($AMT_DEF, $AMT_GRAPH);		# Generate Graph/HTHML
 
-#csvgraph::new($ERN_CSV_DEF); 		# Load ERN
-#csvgraph::load_csv($ERN_CSV_DEF);
-csvgraph::new($CCSE_DEF); 			# Load ERN
+csvgraph::new($CCSE_DEF); 						# Load Johns Hopkings University CCSE
 csvgraph::load_csv($CCSE_DEF);
-csvgraph::comvert2ern($CCSE_DEF);
-csvgraph::gen_html($CCSE_DEF, $CCSE_GRAPH);
+csvgraph::comvert2ern($CCSE_DEF);				# Calc ERN
+csvgraph::gen_html($CCSE_DEF, $CCSE_GRAPH);		# Generate Graph/HTML
 
-csvgraph::marge_csv($MARGE_CSV_DEF, $CCSE_DEF, $AMT_DEF);
+csvgraph::marge_csv($MARGE_CSV_DEF, $CCSE_DEF, $AMT_DEF);		# Marge CCSE(ERN) and Apple Mobility Trends
 #csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
-csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);
+csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);		# Gererate Graph
