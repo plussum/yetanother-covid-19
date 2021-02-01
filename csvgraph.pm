@@ -829,7 +829,7 @@ sub	select_keys
 				@w = split(/\s*,\s*/, $ex);
 			}
 			push(@non_target_col, [@w]);
-			dp::dp "NoneTarget:[$clm] " . join(",", @w) . "\n";
+			#dp::dp "NoneTarget:[$clm] " . join(",", @w) . "\n";
 		}
 		else {
 			push(@target_col, []);
@@ -838,8 +838,8 @@ sub	select_keys
 		$clm++;
 	}
 
-	dp::dp "Condition: $condition " . join(", ", @$target_colp) . "\n";
-	dp::dp "Nontarget: " . join(",", @non_target_col) . "\n";
+	#dp::dp "Condition: $condition " . join(", ", @$target_colp) . "\n";
+	#dp::dp "Nontarget: " . join(",", @non_target_col) . "\n";
 	my $key_items = $cdp->{key_items};
 	foreach my $key (keys %$key_items){
 		my $key_in_data = $key_items->{$key};
@@ -892,7 +892,7 @@ sub	check_keys
 			$condition++ 									# Hit to target
 		}
 	}
-	dp::dp "----> $condition: $kid\n" if($kid =~ /country.*Japan/);
+	#dp::dp "----> $condition: $kid\n" if($kid =~ /country.*Japan/);
 	return $condition;
 }
 
