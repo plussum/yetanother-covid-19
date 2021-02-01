@@ -55,6 +55,7 @@ my $CSV_DEF = {
 
 	down_load => \&download,
 
+	direct => "holizontal",
 	src_dlm => ",",
 	keys => [1, 2],		# 5, 1, 2
 	data_start => 6,
@@ -109,7 +110,7 @@ my @targets = (
 	{dsc => "WorldWid transit 11-10", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [11, 20]} ,
 	{dsc => "WorldWid transit 21-30", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [21, 30]} ,
 	{dsc => "WorldWid transit 21-40", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [31, 40]} ,
-	{dsc => $END_OF_DATA},
+	#{dsc => $END_OF_DATA},
 
 	{dsc => "Japan Target average", target_col => [$SUBR, $jp_target, $AVR, "", "", "Japan"], ,lank => [1, 10]} ,
 	{dsc => "Japan all average", target_col => [$REG, "Japan", "", "", "", ""], ,lank => [1, 10]} ,

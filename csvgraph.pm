@@ -95,7 +95,7 @@ our $CDP = {};
 my $FIRST_DATE = "";
 my $LAST_DATE  = "";
 
-my @cdp_arrays = ("date_list", "keys");
+my @cdp_arrays = ("date_list", "keys", "load_order");
 my @cdp_hashs = ("order");
 my @cdp_hash_with_keys = ("csv_data", "key_items");
 my @cdp_values = ("title", "main_url", "src_url", "csv_file",
@@ -106,17 +106,16 @@ sub	new
 {
 	my ($cdp) = @_;
 	
-	$CDP = $cdp;
-
 	foreach my $item (@cdp_arrays){
-		$cdp->{$item} = [];
+		$cdp->{$item} = [] if(! defined $cdp->{$item});
 	}
-	foreach my $item (@cdp_hashs){
-		$cdp->{$item} = {};
+	foreach my $item (@cdp_hashs, @cdp_hash_with_keys){
+		$cdp->{$item} = {} if(! defined $cdp->{$item});
 	}
-	$CDP->{dates} = 0,
-	$CDP->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
-	$CDP->{timefmt} = $CDP->{timefmt} // "%Y-%m-%d";
+
+	$cdp->{dates} = 0,
+	$cdp->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
+	$cdp->{timefmt} = $CDP->{timefmt} // "%Y-%m-%d";
 
 	#$CDP->{csv_data} = {},
 	#$CDP->{date_list} = [],
@@ -124,8 +123,6 @@ sub	new
 	#$CDP->{key_items} = {};
 	#$CDP->{load_order} = [];
 	#$CDP->{src_csv} = [];
-
-
 }
 
 #
@@ -137,6 +134,7 @@ sub	dump_cdp
 
 	my $ok = $p->{ok} // 1;
 	my $lines = $p->{lines} // "";
+	my $items =$p->{items} // 5;
 	
 	#
 	#	Dump Values
@@ -148,8 +146,11 @@ sub	dump_cdp
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
 	my $src_csv = $cdp->{src_csv};
+	my $load_order = $cdp->{load_order};
 
-	#dp::dp "Dump CSV Data($key_items)\n";
+	my $key_count = keys (%$csv_data);
+	dp::dp "Dump CSV Data($key_items)  $key_count \n";
+	#dp::dp "LOAD ORDER " . join(",", @$load_order) . "\n";
 	my $ln = 0;
 	foreach my $k (keys %$csv_data){
 		my @w = @{$csv_data->{$k}};
@@ -159,10 +160,10 @@ sub	dump_cdp
 			dp::dp " --> csv_data is not assigned\n";
 		}
 		if($ok){
-			last if($lines && $ln++ > $lines);
+			last if($lines && $ln++ >= $lines);
 
 			my $scv = $src_csv->{$k} // "--";
-			dp::dp join(", ", $k, "[$scv]", @w[0..5]) . "\n";
+			dp::dp "[$ln] " . join(", ", $k, "[$scv]", @w[0..$items]) . "\n";
 		}
 	}
 }
@@ -189,7 +190,7 @@ sub	load_csv
 	#
 	#	DEBUG: Dump data 
 	#
-	&dump_cdp($cdp, {ok => 0}) if(0);
+	&dump_cdp($cdp, {ok => 1, lines => 5}) if(1);
 	
 	return 0;
 }
@@ -234,6 +235,7 @@ sub	load_csv_holizontal
 	$LAST_DATE = $date_list->[$#w - $data_start];
 
 	#dp::dp join(",", "# ", @$date_list) . "\n";
+	#dp::dp "keys : ", join(",", @keys). "\n";
 	my $load_order = $cdp->{load_order};
 	my $ln = 0;
 	while(<FD>){
@@ -479,7 +481,7 @@ sub	reduce_cdp_target
 
 	my @target_keys = ();
 	&select_keys($cdp, $target_colp, \@target_keys);
-	&reduce_cdp(($cdp, $dst_cdp, \@target_keys);
+	&reduce_cdp($cdp, $dst_cdp, \@target_keys);
 }
 
 sub	reduce_cdp
@@ -617,6 +619,7 @@ sub	gen_html
 
 		$fname =~ s/[\/\.\*\ #]/_/g;
 		$fname =~ s/__+/_/g;
+		$fname =~ s/^_//;
 		$gp->{fname} = $fname;
 
 		&csv2graph($cdp, $gdp, $gp);
@@ -708,6 +711,7 @@ sub	csv2graph
 	return 1;
 }
 
+
 #
 #	Generate CSV File
 #
@@ -722,7 +726,7 @@ sub	gen_csv_file
 
 	#dp::dp "[$dt_start][$dt_end]\n";
 	my $csv_for_plot = $gdp->{png_path} . "/$fname-plot.csv.txt";
-	dp::dp "### $csv_for_plot\n";
+	#dp::dp "### $csv_for_plot\n";
 	open(CSV, "> $csv_for_plot") || die "cannot create $csv_for_plot";
 	binmode(CSV, ":utf8");
 	print CSV join($dst_dlm, "#date", @$output_keysp) . "\n";
@@ -831,7 +835,7 @@ sub	select_keys
 		}
 	}
 
-	#dp::dp "Condition: $condition\n";
+	#dp::dp "Condition: $condition " . join(", ", @$target_colp) . "\n";
 	my $key_items = $cdp->{key_items};
 	foreach my $key (keys %$key_items){
 		my $key_in_data = $key_items->{$key};
@@ -845,6 +849,34 @@ sub	select_keys
 	}
 	#dp::dp "## TARGET_KEYS " . join(", ", @$target_keys) . "\n";
 	return(scalar(@$target_keys) - 1);
+}
+#
+#	Check keys for select
+#
+sub	check_keys
+{
+	my($key_in_data, $target_col, $non_target_col, $key) = @_;
+
+	if(!defined $key_in_data){
+		dp::dp "###!!!! key in data not defined [$key]\n";
+	}
+	#dp::dp "key_in_data: $key_in_data " . scalar(@$key_in_data) . " [$key]\n";
+	my $kid = join(",", @$key_in_data);
+	my $condition = 0;
+	my $cols = scalar(@$target_col) - 1;
+	for(my $kn = 0; $kn <= $cols; $kn++){
+		next if(! ($target_col->[$kn] // ""));			# no key
+		next if(! ($non_target_col->[$kn] // ""));		# no key
+		
+		#return 0 if(csvlib::search_list($key_in_data->[$kn], @{$non_target_col->[$kn]}) eq "");
+
+		#dp::dp join(", ", "data ", $kn, $key_in_data->[$kn], @{$target_col->[$kn]}) . "\n";# if($kid =~ /Tokyo/);
+		if(csvlib::search_listn($key_in_data->[$kn], @{$target_col->[$kn]}) >= 0){
+			$condition++ 
+		}
+	}
+	#dp::dp "----> $condition\n"; # if($kid =~ /Tokyo/);
+	return $condition;
 }
 
 #
@@ -914,33 +946,6 @@ sub	ern
 
 }	
 
-
-#
-#	Check keys for select
-#
-sub	check_keys
-{
-	my($key_in_data, $target_col, $non_target_col, $key) = @_;
-
-	if(!defined $key_in_data){
-		dp::dp "###!!!! key in data not defined [$key]\n";
-	}
-	#dp::dp "key_in_data: $key_in_data " . scalar(@$key_in_data) . " [$key]\n";
-	my $kid = join(",", @$key_in_data);
-	my $condition = 0;
-	my $cols = scalar(@$target_col) - 1;
-	for(my $kn = 0; $kn <= $cols; $kn++){
-		next if(! ($target_col->[$kn] // ""));			# no key
-		next if(! ($non_target_col->[$kn] // ""));		# no key
-		
-		#return 0 if(csvlib::search_list($key_in_data->[$kn], @{$non_target_col->[$kn]}) eq "");
-
-		#dp::dp join(", ", "data ", $kn, $key_in_data->[$kn], @{$target_col->[$kn]}) . "\n" if($kid =~ /Tokyo/);
-		$condition++ if(csvlib::search_list($key_in_data->[$kn], @{$target_col->[$kn]}));
-	}
-	#dp::dp "----> $condition\n" if($kid =~ /Tokyo/);
-	return $condition;
-}
 
 #
 #	Generate Glaph from csv file by gnuplot
