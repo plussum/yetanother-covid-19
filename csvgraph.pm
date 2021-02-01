@@ -637,6 +637,7 @@ sub	gen_html
 		my $dst_dlm = $gdp->{dst_dlm} // "\t";
 		my $csv_file = $gdp->{png_path} . "/$fname-plot.csv.txt";
 		open(CSV, $csv_file) || die "canot open $csv_file";
+		binmode(CSV, ":utf8");
 		my $l = <CSV>;
 		close(CSV);
 		$l =~ s/[\r\n]+$//;
@@ -644,17 +645,19 @@ sub	gen_html
 		shift(@lbl);
 
 		my $lcount = 10;
-		print HTML "\n<span $class>\n<table>\n<tbody>\n";
+		print HTML "<span class=\"c\">\n";
+		print HTML "<table>\n<tbody>\n";
 		for (my $i = 0; $i < $#lbl; $i += $lcount){
 			print HTML "<tr>";
 			for(my $j = 0; $j < $lcount; $j++){
 				last if(($i + $j) > $#lbl);
 				print HTML "<td>" . $lbl[$i+$j] . "</td>";
-				dp::dp "HTML LABEL: " . $lbl[$i+$j] . "\n";
+				#dp::dp "HTML LABEL: " . $lbl[$i+$j] . "\n";
 			}
 			print HTML "</tr>\n";
 		}
-		print HTML "</tbody>\n</table>\n</span>\n";
+		print HTML "</tbody>\n</table>\n";
+		print HTML "</span>\n";
 
 		print HTML "<span $class> <a href=\"$src_url\" target=\"blank\"> Data Source (CSV) </a></span>\n";
 		#
