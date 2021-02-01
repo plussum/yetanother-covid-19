@@ -627,15 +627,41 @@ sub	gen_html
 		print HTML "<span class=\"c\">$now</span><br>\n";
 		print HTML "<img src=\"../PNG/$fname.png\">\n";
 		print HTML "<br>\n";
-		print HTML "<span $class> <a href=\"$src_url\" target=\"blank\"> Data Source (CSV) </a></span>\n";
-		print HTML "<hr>\n";
 	
-		print HTML "<span $class>";
+		#
+		#	Lbale name on HTML for search
+		#
+		my $dst_dlm = $gdp->{dst_dlm} // "\t";
+		my $csv_file = $gdp->{png_path} . "/$fname-plot.csv.txt";
+		open(CSV, $csv_file) || die "canot open $csv_file";
+		my $l = <CSV>;
+		close(CSV);
+		$l =~ s/[\r\n]+$//;
+		my @lbl = split($dst_dlm, $l);
+		shift(@lbl);
 
+		my $lcount = 10;
+		print HTML "\n<span $class>\n<table>\n<tbody>\n";
+		for (my $i = 0; $i < $#lbl; $i += $lcount){
+			print HTML "<tr>";
+			for(my $j = 0; $j < $lcount; $j++){
+				last if(($i + $j) > $#lbl);
+				print HTML "<td>" . $lbl[$i+$j] . "</td>";
+			}
+			print HTML "</tr>\n";
+		}
+		print HTML "</tbody>\n</table>\n</span>\n";
+
+		print HTML "<span $class> <a href=\"$src_url\" target=\"blank\"> Data Source (CSV) </a></span>\n";
+		#
+		#	References
+		#
 		my @refs = (join(":", "PNG", $png_rel_path . "/$fname.png"),
 					join(":", "CSV", $png_rel_path . "/$fname-plot.csv.txt"),
 					join(":", "PLT", $png_rel_path . "/$fname-plot.txt"),
 		);
+		print HTML "<hr>\n";
+		print HTML "<span $class>";
 		foreach my $r (@refs){
 			my ($tag, $path) = split(":", $r);
 			print HTML "$tag:<a href=\"$path\" target=\"blank\">$path</a>\n"; 
@@ -699,7 +725,6 @@ sub	csv2graph
 	#
 	#	Genrarte csv file for plot
 	#
-
 	my @output_keys = ();
 	foreach my $key (@sorted_keys){
 		next if($lank_select && ($order->{$key} < $lank[0] || $order->{$key} > $lank[1]));
@@ -729,7 +754,15 @@ sub	gen_csv_file
 	#dp::dp "### $csv_for_plot\n";
 	open(CSV, "> $csv_for_plot") || die "cannot create $csv_for_plot";
 	binmode(CSV, ":utf8");
-	print CSV join($dst_dlm, "#date", @$output_keysp) . "\n";
+
+	my $order = $cdp->{order};
+	my @csv_label = ();
+	foreach my $k (@$output_keysp){
+		my $label = join(":", $order->{$k}, $k);
+		push(@csv_label, $label);
+	}
+	print CSV join($dst_dlm, "#date", @csv_label) . "\n";
+
 	for(my $dt = $dt_start; $dt <= $dt_end; $dt++){
 		my @w = ();
 		foreach my $key (@$output_keysp){
@@ -856,6 +889,7 @@ sub	select_keys
 	#dp::dp "## TARGET_KEYS " . join(", ", @$target_keys) . "\n";
 	return(scalar(@$target_keys) - 1);
 }
+
 #
 #	Check keys for select
 #
@@ -1090,8 +1124,10 @@ _EOD_
 			}
 		}
 		#dp::dp "axis:[$axis]\n";
-		my $pl = sprintf("'%s' using 1:%d $axis with lines title '%d:%s' linewidth %d $dot", 
-						$csvf, $i + 1, $i, $label[$i], ($pn < 7) ? 2 : 1);
+		#my $pl = sprintf("'%s' using 1:%d $axis with lines title '%d:%s' linewidth %d $dot", 
+		#				$csvf, $i + 1, $i, $label[$i], ($pn < 7) ? 2 : 1);
+		my $pl = sprintf("'%s' using 1:%d $axis with lines title '%s' linewidth %d $dot", 
+						$csvf, $i + 1, $label[$i], ($pn < 7) ? 2 : 1);
 		push(@p, $pl);
 	}
 	#push(@p, "0 with lines dt '-' title 'base line'");

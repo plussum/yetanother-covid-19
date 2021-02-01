@@ -83,7 +83,7 @@ my $GRAPH_PARAMS = {
 	format_x => '%m/%d',
 
 	term_x_size => 1000,
-	term_y_size => 350,
+	term_y_size => 450,
 
 	END_OF_DATA => $END_OF_DATA,
 
@@ -107,30 +107,41 @@ my $AVR = "avr";
 my $jp_target = "Tokyo,Kanagawa,Saitama,Chiba,Osaka,Kyoto,Hyogo,Fukuoka,Aichi,Hokaido";
 my @targets = (
 
-	{dsc => "Japan Target average", target_col => [$SUBR, $jp_target, $AVR, "", "", "Japan"], ,lank => [1, 10]} ,
-	{dsc => "Japan all average", target_col => [$REG, "Japan", "!$AVR", "", "", ""], ,lank => [1, 10]} ,
-	{dsc => "Japan Target walk", target_col => [$SUBR, $jp_target, "walking", "", "", "Japan"], ,lank => [1, 20]} ,
-	{dsc => "Tokyo Target all", target_col => [$SUBR, "Tokyo", "!$AVR", "", "", "Japan"],,lank => [1, 20]} ,
-	{dsc => "Tokyo 23 Target all", target_col => [$CITY, "Tokyo", "", "", "", "Japan"],,lank => [1, 20]} ,
+	{dsc => "Japan All transport", target_col => [$REG, "Japan", "!$AVR", "", "", ""], ,lank => [1, 10]} ,
+#	{dsc => $END_OF_DATA},
+	{dsc => "Japan Select average", target_col => [$SUBR, $jp_target, $AVR, "", "", "Japan"], ,lank => [1, 10]} ,
+	{dsc => "Japan Select area walking", target_col => [$SUBR, $jp_target, "$WLK", "", "", "Japan"], ,lank => [1, 20]} ,
+	{dsc => "Japan Select area transit", target_col => [$SUBR, $jp_target, "$TRN", "", "", "Japan"], } ,
+	{dsc => "Japan Select area driving", target_col => [$SUBR, $jp_target, "$DRV", "", "", "Japan"], } ,
 
-	{dsc => "WorldWid transit  1-10", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [ 1, 10]} ,
-	{dsc => "WorldWid transit 11-10", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [11, 20]} ,
-	{dsc => "WorldWid transit 21-30", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [21, 30]} ,
-	{dsc => "WorldWid transit 21-40", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [31, 40]} ,
+	{dsc => "Tokyo-to all",    target_col => [$SUBR, "Tokyo", "!$AVR", "", "", "Japan"],,lank => [1, 20]} ,
+	{dsc => "Tokyo 23-ku all", target_col => [$CITY, "Tokyo", "!$AVR", "", "", "Japan"],,lank => [1, 20]} ,
+
+	{dsc => "Japan average 1-10", target_col => [$SUBR, "", "$AVR", "", "", "Japan"], ,lank => [1, 10]} ,
+	{dsc => "Japan average 11-20", target_col => [$SUBR, "", "$AVR", "", "", "Japan"], ,lank => [11, 20]} ,
+	{dsc => "Japan average 21-30", target_col => [$SUBR, "", "$AVR", "", "", "Japan"], ,lank => [21, 30]} ,
+	{dsc => "Japan average 31-40", target_col => [$SUBR, "", "$AVR", "", "", "Japan"], ,lank => [31, 40]} ,
+	{dsc => "Japan average 41- ", target_col => [$SUBR, "", "$AVR", "", "", "Japan"], ,lank => [41, 99]} ,
+
+#	{dsc => "Tokyo-to transit", target_col => [$SUBR, "Tokyo", $TRN, "", "", "Japan"],,lank => [1, 20]} ,
+#	{dsc => "Tokyo-to walking", target_col => [$SUBR, "Tokyo", $WLK, "", "", "Japan"],,lank => [1, 20]} ,
+#	{dsc => "Tokyo-to driving", target_col => [$SUBR, "Tokyo", $DRV, "", "", "Japan"],,lank => [1, 20]} ,
+
+
+	{dsc => "WorldWid average  1-10", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [ 1, 10]} ,
+	{dsc => "WorldWid average 11-10", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [11, 20]} ,
+	{dsc => "WorldWid average 21-30", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [21, 30]} ,
+	{dsc => "WorldWid average 21-40", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [31, 40]} ,
 
 	#{dsc => $END_OF_DATA},
-	{dsc => "WorldWid transit", target_col => [$REG, "", $TRN, "", "", ""], ,lank => [1, 20]} ,
-	{dsc => "WorldWid walking", target_col => [$REG, "", $WLK, "", "", ""], ,lank => [1, 20]} ,
-	{dsc => "WorldWid driving", target_col => [$REG, "", $DRV, "", "", ""], ,lank => [1, 20]} ,
+	{dsc => "WorldWid transit 1-20", target_col => [$REG, "", $TRN, "", "", ""], ,lank => [1, 20]} ,
+	{dsc => "WorldWid walking 1-20", target_col => [$REG, "", $WLK, "", "", ""], ,lank => [1, 20]} ,
+	{dsc => "WorldWid driving 1-20", target_col => [$REG, "", $DRV, "", "", ""], ,lank => [1, 20]} ,
 
-	{dsc => "US States driving", target_col => [$SUBR, "", $DRV, "", "", "United State"], ,lank => [1, 20]} ,
-	{dsc => "US States transit", target_col => [$SUBR, "", $TRN, "", "", "United State"], ,lank => [1, 20]} ,
-	{dsc => "US States walk", target_col => [$SUBR, "", $WLK, "", "", "United State"], ,lank => [1, 20]} ,
+	{dsc => "US States driving 1-20", target_col => [$SUBR, "", $DRV, "", "", "United State"], ,lank => [1, 20]} ,
+	{dsc => "US States transit 1-20", target_col => [$SUBR, "", $TRN, "", "", "United State"], ,lank => [1, 20]} ,
+	{dsc => "US States walking 1-20", target_col => [$SUBR, "", $WLK, "", "", "United State"], ,lank => [1, 20]} ,
 
-	{dsc => "Japan all", target_col => [$SUBR, $jp_target, "!$AVR", "", "", "Japan"], } ,
-	{dsc => "Japan walking", target_col => [$SUBR, $jp_target, $WLK, "", "", "Japan"], ,lank => [1, 20]} ,
-	{dsc => "Japan transit ", target_col => [$SUBR, "Tokyo", $TRN, "", "", "Japan"],,lank => [1, 20]} ,
-	{dsc => "Japan driving ", target_col => [$SUBR, "Tokyo", $DRV, "", "", "Japan"],,lank => [1, 20]} ,
 	{dsc => $END_OF_DATA},
 );
 
