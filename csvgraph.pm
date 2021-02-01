@@ -87,6 +87,7 @@ use csvlib;
 
 binmode(STDOUT, ":utf8");
 
+my $DEBUG = 0;
 my $VERBOSE = 0;
 my $DEFAULT_AVR_DATE = 7;
 my $KEY_DLM = "-";					# Initial key items
@@ -217,7 +218,7 @@ sub	load_csv
 	#
 	#	DEBUG: Dump data 
 	#
-	&dump_cdp($cdp, {ok => 1, lines => 5}) if(0);
+	&dump_cdp($cdp, {ok => 1, lines => 5}) if($VERBOSE > 1);
 	
 	return 0;
 }
@@ -403,27 +404,28 @@ sub	marge_csv
 
 	&new($marge);
 
-	my @csv_info = ();
 	my $date_start = "0000-00-00";
 	foreach my $cdp (@src_csv_list){
-		dp::dp "marge: $cdp->{title} " . ($cdp->{date_list}->[0] // "undef") . "\n";
 		my $dt = $cdp->{date_list}->[0];
 		$date_start = $dt if($dt gt $date_start );
-		dp::dp "date_start[$dt] $date_start\n";
+		#dp::dp "date_start[$dt] $date_start\n";
 	}
 	my $date_end = "9999-99-99";
 	foreach my $cdp (@src_csv_list){
 		my $dates = $cdp->{dates};
 		my $dt = $cdp->{date_list}->[$dates];
 		$date_end = $dt if($dt le $date_end );
-		dp::dp "date_end[$dt] $date_end\n";
+		#dp::dp "date_end[$dt] $date_end\n";
 	}
-	dp::dp join(", ", $date_start, $date_end) . "\n";
+	my $dates = csvlib::date2ut($date_end, "-") - csvlib::date2ut($date_start, "-");
+	$dates /= 60 * 60 * 24;
+	dp::dp join(", ", $date_start, $date_end, $dates) . "\n" if($DEBUG);
 
 	#
 	#	Check Start date(max) and End date(min)
 	#
-	for(my $i = 0; $i < $#src_csv_list; $i++){
+	my @csv_info = ();
+	for(my $i = 0; $i <= $#src_csv_list; $i++){
 		$csv_info[$i] = {};
 		my $infop = $csv_info[$i];
 		my $cdp = $src_csv_list[$i];
@@ -444,7 +446,7 @@ sub	marge_csv
 		}
 		$infop->{date_end} = $dt_end;
 	
-		#dp::dp join(", ", $dt_start, $dt_end) . "\n";
+		#dp::dp ">>>>>>>>>> date:[$i] " . join(", ", $dt_start, $dt_end) . "\n";
 	}
 
 	#
@@ -455,17 +457,12 @@ sub	marge_csv
 	my $m_key_items = $marge->{key_items};
 
 	my $infop = $csv_info[0];
-	my $start = $infop->{date_start};
-	my $end   = $infop->{date_end};
-	my $dates = $end - $start;
 	$marge->{dates} = $dates;
 	$marge->{src_csv} = {};
 	$marge->{data_start} = 1;
 	my $src_csv = $marge->{src_csv};
-	dp::dp ">>> Dates: $dates, $start, $end   $m_csv_data\n";
+	#dp::dp ">>> Dates: $dates,  $m_csv_data\n";
 
-	my $date_list = $src_csv_list[0]->{date_list};
-	@{$m_date_list} = @{$date_list}[$start..$end];
 	#dp::dp "start:$start, end:$end dates:$dates\n";
 	#dp::dp "## src:" . join(",", @{$date_list} ) . "\n";
 	#dp::dp "## dst:" . join(",", @{$m_date_list} ) . "\n";
@@ -473,7 +470,15 @@ sub	marge_csv
 	for(my $csvn = 0; $csvn <= $#src_csv_list; $csvn++){
 		my $cdp = $src_csv_list[$csvn];
 		my $csv_data = $cdp->{csv_data};
+
 		my $infop = $csv_info[$csvn];
+		my $start = $infop->{date_start} // "UNDEF";
+		my $end   = $infop->{date_end} // "UNDEF";
+		dp::dp "marge [$csvn] date $start to $end\n" if($DEBUG);
+		if($csvn == 0){
+			my $date_list = $cdp->{date_list};
+			@{$m_date_list} = @{$date_list}[$start..$end];
+		}
 
 		foreach my $k (keys %$csv_data){
 			$src_csv->{$k} = $csvn;
@@ -486,14 +491,14 @@ sub	marge_csv
 				dp::dp "WARNING: no data in [$k]\n" if(0);
 			}
 			for(my $i = 0; $i <= $dates; $i++){
-				$mdp->[$i] = $dp->[$i] // 0;		# may be something wrong
+				$mdp->[$i] = $dp->[$start + $i] // 0;		# may be something wrong
 			}
 			#@{$m_csv_data->{$k}} = @{$csv_data->{$k}}[$start..$end];
 			#dp::dp ">> src" . join(",", $k, @{$csv_data->{$k}} ) . "\n";
 			#dp::dp ">> dst" . join(",", $k, @{$m_csv_data->{$k}} ) . "\n";
 		}
 	} 
-	&dump_cdp($marge, {ok => 1, lines => 5}) if(0);
+	&dump_cdp($marge, {ok => 1, lines => 5}) if($DEBUG);
 }
 
 #
@@ -945,7 +950,9 @@ sub	select_keys
 
 		if($res >= $condition){
 			push(@$target_keys, $key);
-			dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
+			if($VERBOSE){
+				dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
+			}
 		}
 	}
 	#dp::dp "## TARGET_KEYS " . join(", ", @$target_keys) . "\n";
@@ -1029,9 +1036,9 @@ sub	comvert2rlavr
 	my $work_csvp = \%work_csv;
 
 	&dup_csv($cdp, $work_csvp, "");
-	&dump_csv_data($work_csvp, {ok => 1, lines => 5, message => "comver2rlavr:dup"}) if(1);
+	#&dump_csv_data($work_csvp, {ok => 1, lines => 5, message => "comver2rlavr:dup"}) if(1);
 	&rolling_average($cdp, $work_csvp, $gdp, $gp);
-	&dump_csv_data($work_csvp, {ok => 1, lines => 5, message => "comver2rlavr:ern"}) if(1);
+	#&dump_csv_data($work_csvp, {ok => 1, lines => 5, message => "comver2rlavr:ern"}) if(1);
 	$cdp->{csv_data} = "";
 	$cdp->{csv_data} = $work_csvp;
 }
@@ -1052,10 +1059,10 @@ sub	comvert2ern
 	my $ern_csvp = \%ern_csv;
 
 	&dup_csv($cdp, $ern_csvp, "");
-	&dump_csv_data($ern_csvp, {ok => 1, lines => 5, message => "comver2ern:dup"}) if(1);
+	#&dump_csv_data($ern_csvp, {ok => 1, lines => 5, message => "comver2ern:dup"}) if(1);
 
 	&ern($cdp, $ern_csvp, $gdp, $gp);
-	&dump_csv_data($ern_csvp, {ok => 1, lines => 5, message => "comver2ern:ern"}) if(1);
+	#&dump_csv_data($ern_csvp, {ok => 1, lines => 5, message => "comver2ern:ern"}) if(1);
 	$cdp->{csv_data} = "";
 	$cdp->{csv_data} = $ern_csvp;
 }

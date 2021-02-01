@@ -145,22 +145,22 @@ sub ymds2tm
 #
 sub	date2ut
 {
-	my ($dt, $dlm, $yn, $mn, $dn, $hn, $mnn, $sn) = @_;
+	my ($dt, $dlm, $yn, $mn, $dn, $hn, $mnn, $sn)  = @_;
 
 	my @w = split(/$dlm/, $dt);
 	my ($y, $m, $d, $h, $mi, $s) = ();
 	
-	$y = &valdef($w[$yn], 0);
-	$m = &valdef($w[$mn], 0);
-	$d = &valdef($w[$dn], 0);
+	$y = $w[$yn//0] // 0;
+	$m = $w[$mn//1] // 0;
+	$d = $w[$dn//2] // 0;
 
 	if(! defined $hn){
 		return &ymd2tm($y, $m, $d, 0, 0, 0);
 	}
 
-	$h  = &valdef($w[$hn], 0);
-	$mi = &valdef($w[$mnn], 0);
-	$s  = &valdef($w[$sn], 0);
+	$h  = $w[$hn//3] // 0;
+	$mi = $w[$mnn//4] // 0;
+	$s  = $w[$sn//5] // 0;
 
 	return &ymd2tm($y, $m, $d, $h, $mi, $s);
 } 

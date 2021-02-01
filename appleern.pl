@@ -255,5 +255,5 @@ csvgraph::comvert2ern($CCSE_DEF);
 csvgraph::gen_html($CCSE_DEF, $CCSE_GRAPH);
 
 csvgraph::marge_csv($MARGE_CSV_DEF, $CCSE_DEF, $AMT_DEF);
-csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
+#csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
 csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);
