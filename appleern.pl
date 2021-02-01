@@ -175,8 +175,8 @@ csvgraph::average($AMT_DEF, 2, "avr");
 #csvgraph::load_csv($ERN_CSV_DEF);
 csvgraph::new($CCSE_DEF); 			# Load ERN
 csvgraph::load_csv($CCSE_DEF);
-#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5});
-csvgraph::comvert2ern($CCSE_DEF, {});
+csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5});
+csvgraph::comvert2ern($CCSE_DEF);
 csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5});
 
 csvgraph::marge_csv($MARGE_CSV_DEF, $CCSE_DEF, $AMT_DEF);

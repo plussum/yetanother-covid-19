@@ -135,8 +135,9 @@ sub	dump_cdp
 	my $ok = $p->{ok} // 1;
 	my $lines = $p->{lines} // "";
 	my $items =$p->{items} // 5;
-	
-	print "#" x 10 . " CSV DUMP " . $cdp->{title} . " " . "#" x 10 ."\n";
+	my $mess = $p->{message} // "";
+
+	print "#" x 10 . "[$mess] CSV DUMP " . $cdp->{title} . " " . "#" x 10 ."\n";
 	#
 	#	Dump Values
 	#
@@ -146,13 +147,30 @@ sub	dump_cdp
 
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
-	my $src_csv = $cdp->{src_csv};
 	my $load_order = $cdp->{load_order};
 
 	my $key_count = keys (%$csv_data);
 	
 	print "-------- Dump CSV Data($key_items)  $key_count ----------\n";
+	$p->{src_csv} = $cdp->{src_csv};
+	&dump_csv_data($csv_data, $p);
 	#dp::dp "LOAD ORDER " . join(",", @$load_order) . "\n";
+
+	print "#" x 40 . "\n\n";
+}
+
+sub	dump_csv_data
+{
+	my($csv_data, $p) = @_;
+	my $ok = $p->{ok} // 1;
+	my $lines = $p->{lines} // "";
+	my $items = $p->{items} // 5;
+	my $src_csv = $p->{src_csv} // "";
+	my $mess = $p->{message} // "";
+
+	dp::dp "------ [$mess] Dump csv data ($csv_data) --------\n";
+	csvlib::disp_caller(1..3);
+	dp::dp "-" x 30 . "\n";
 	my $ln = 0;
 	foreach my $k (keys %$csv_data){
 		my @w = @{$csv_data->{$k}};
@@ -164,12 +182,14 @@ sub	dump_cdp
 		if($ok){
 			last if($lines && $ln++ >= $lines);
 
-			my $scv = $src_csv->{$k} // "--";
+			my $scv = "--";
+			$scv = $src_csv->{$k} if($src_csv && defined $src_csv->{$k});
 			print "[$ln] " . join(", ", $k, "[$scv]", @w[0..$items]) . "\n";
 		}
 	}
-	print "#" x 40 . "\n\n";
+	dp::dp "-" x 30 . "\n";
 }
+
 
 #
 #	Lpad CSV File
@@ -687,14 +707,25 @@ sub	gen_html
 
 sub	dup_csv
 {
-	my ($cdp, $work_csv, $target_keys);
+	my ($cdp, $work_csv, $target_keys) = @_;
 
+	dp::dp "dup_csv"; 
+	csvlib::disp_caller(1..3);
+	dp::dp "dup_csv: cdp[$cdp] csv_data\n";
 	my $csv_data = $cdp->{csv_data};
+	dp::dp "dup_csv: cdp[$cdp] csv_data : $csv_data\n";
 	$target_keys = $target_keys // "";
 	if(! $target_keys){
-		$target_keys = [];
+		my @tgk = ();
 		my $csv_data = $cdp->{csv_data};
-		@$target_keys = keys %$csv_data;
+		#dp::dp ">>dup_csv cdp[$cdp] csv_data[$csv_data]\n";
+		foreach my $k (keys %$csv_data){
+			push(@tgk, $k);
+		}
+		#@$target_keys = (keys %$csv_data);
+		#dp::dp "DUP.... " . join(",", @tgk) . "\n";
+		$target_keys = \@tgk;
+		#exit;
 	}
 	foreach my $key (@$target_keys){						#
 		$work_csv->{$key} = [];
@@ -995,11 +1026,18 @@ sub	comvert2ern
 		ip => $p->{ip} // $config::RT_IP,
 	};
 	my $gdp = {};
-	my $ern_csvp = {};
+	my %ern_csv = ();
+	my $ern_csvp = \%ern_csv;
 
+	#dp::dp ">>>> comvert2ern CDP: [$cdp] $cdp->{csv_data}\n";
+	#&dump_csv_data($cdp->{csv_data}, {ok => 1, lines => 5, message => "comver2ern:cdp"}) if(1);
+	#dp::dp ">>>> comvert2ern CDP: [$cdp] $cdp->{csv_data}\n";
 	&dup_csv($cdp, $ern_csvp, "");
+	#dp::dp ">>>> comvert2ern CDP: [$cdp] $cdp->{csv_data}\n";
+	&dump_csv_data($ern_csvp, {ok => 1, lines => 5, message => "comver2ern:dup"}) if(1);
 
 	&ern($cdp, $ern_csvp, $gdp, $gp);
+	&dump_csv_data($ern_csvp, {ok => 1, lines => 5, message => "comver2ern:ern"}) if(1);
 	$cdp->{csv_data} = "";
 	$cdp->{csv_data} = $ern_csvp;
 }
