@@ -104,6 +104,7 @@ my $DRV = "driving";
 my $TRN = "transit";
 my $WLK = "walking";
 my $AVR = "avr";
+
 my $jp_target = "Tokyo,Kanagawa,Saitama,Chiba,Osaka,Kyoto,Hyogo,Fukuoka,Aichi,Hokaido";
 my @targets = (
 

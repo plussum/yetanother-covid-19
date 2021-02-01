@@ -210,6 +210,10 @@ sub	load_csv
 		&load_csv_holizontal($cdp);
 	}
 
+	if(($cdp->{cumrative} // "")){
+		&cumrative2daily($cdp);
+	}
+
 	#
 	#	DEBUG: Dump data 
 	#
@@ -709,11 +713,8 @@ sub	dup_csv
 {
 	my ($cdp, $work_csv, $target_keys) = @_;
 
-	dp::dp "dup_csv"; 
-	csvlib::disp_caller(1..3);
-	dp::dp "dup_csv: cdp[$cdp] csv_data\n";
 	my $csv_data = $cdp->{csv_data};
-	dp::dp "dup_csv: cdp[$cdp] csv_data : $csv_data\n";
+	#dp::dp "dup_csv: cdp[$cdp] csv_data : $csv_data\n";
 	$target_keys = $target_keys // "";
 	if(! $target_keys){
 		my @tgk = ();
@@ -943,7 +944,7 @@ sub	select_keys
 
 		if($res >= $condition){
 			push(@$target_keys, $key);
-			#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
+			dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
 		}
 	}
 	#dp::dp "## TARGET_KEYS " . join(", ", @$target_keys) . "\n";
@@ -1017,6 +1018,26 @@ sub	rolling_average
 #
 #	combert csv data to ERN
 #
+sub	comvert2rlavr
+{
+	my($cdp, $p) = @_;
+
+	my $gdp = {};
+	my $gp = {};
+	my %work_csv = ();
+	my $work_csvp = \%work_csv;
+
+	&dup_csv($cdp, $work_csvp, "");
+	&dump_csv_data($work_csvp, {ok => 1, lines => 5, message => "comver2rlavr:dup"}) if(1);
+	&rolling_average($cdp, $work_csvp, $gdp, $gp);
+	&dump_csv_data($work_csvp, {ok => 1, lines => 5, message => "comver2rlavr:ern"}) if(1);
+	$cdp->{csv_data} = "";
+	$cdp->{csv_data} = $work_csvp;
+}
+
+#
+#	combert csv data to ERN
+#
 sub	comvert2ern
 {
 	my($cdp, $p) = @_;
@@ -1029,11 +1050,7 @@ sub	comvert2ern
 	my %ern_csv = ();
 	my $ern_csvp = \%ern_csv;
 
-	#dp::dp ">>>> comvert2ern CDP: [$cdp] $cdp->{csv_data}\n";
-	#&dump_csv_data($cdp->{csv_data}, {ok => 1, lines => 5, message => "comver2ern:cdp"}) if(1);
-	#dp::dp ">>>> comvert2ern CDP: [$cdp] $cdp->{csv_data}\n";
 	&dup_csv($cdp, $ern_csvp, "");
-	#dp::dp ">>>> comvert2ern CDP: [$cdp] $cdp->{csv_data}\n";
 	&dump_csv_data($ern_csvp, {ok => 1, lines => 5, message => "comver2ern:dup"}) if(1);
 
 	&ern($cdp, $ern_csvp, $gdp, $gp);
@@ -1082,7 +1099,7 @@ sub	ern
 			$ern[$dt] = "NaN";
 		}
 		@$dp = @ern;
-		dp::dp join(",", @$dp[0..5]). "\n";
+		#dp::dp join(",", @$dp[0..5]). "\n";
 	}
 
 }	

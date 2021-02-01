@@ -46,7 +46,6 @@ my $KEY_DLM = "-";					# Initial key items
 my $SRC_URL_TAG = "https://covid19-static.cdn-apple.com/covid19-mobility-data/2025HotfixDev13/v3/en-us/applemobilitytrends-%04d-%02d-%02d.csv";
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 my $src_url = sprintf($SRC_URL_TAG, $year + 1900, $mon + 1, $mday);
-my $ern_adp	= "1 with lines title 'ern=1' lw 1 lc 'red' dt (3,7)";
 
 my $AMT_DEF = {
 	title => "Apple Mobility Trends",
@@ -62,50 +61,13 @@ my $AMT_DEF = {
 	keys => [1, 2],		# 5, 1, 2
 	data_start => 6,
 };
-
-my $REG = "country/region";
-my $SUBR = "sub-region";
-my $CITY = "city";
-my $DRV = "driving";
-my $TRN = "transit";
-my $WLK = "walking";
-my $AVR = "avr";
-
-my $AMT_GRAPH = {
-	html_title => $AMT_DEF->{title},
-	png_path   => "$config::PNG_PATH",
-	png_rel_path => "../PNG",
-	html_file => "$config::HTML_PATH/apple_mobile.html",
-
-	dst_dlm => "\t",
-	avr_date => 7,
-
-	timefmt => '%Y-%m-%d',
-	format_x => '%m/%d',
-
-	term_x_size => 1000,
-	term_y_size => 350,
-
-	END_OF_DATA => $END_OF_DATA,
-
-	default_graph => "line",
-	ymin => 0,
-	additional_plot => "100 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
-
-	graph_params => [
-		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,10], static => "", 
-			target_col => [$REG, "Japan", "", "", ""], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
-	],
-};
-
-
+	
 my $CCSE_DEF = {
 	title => "Johns Hopkins Global",
 	main_url =>  "https://covid19.apple.com/mobility",
 	csv_file =>  "$config::CSV_PATH/time_series_covid19_confirmed_global.csv",
 	src_url => $src_url,		# set
-	cumrative => 1,
+
 	down_load => \&download,
 
 	src_dlm => ",",
@@ -115,36 +77,7 @@ my $CCSE_DEF = {
 	direct => "holizontal",		# vertical or holizontal(Default)
 	timefmt => '%m/%d/%y',		# comverbt to %Y-%m-%d
 };
-my $CCSE_GRAPH = {
-	html_title => $CCSE_DEF->{title},
-	png_path   => "$config::PNG_PATH",
-	png_rel_path => "../PNG",
-	html_file => "$config::HTML_PATH/ccse2.html",
-
-	dst_dlm => "\t",
-	avr_date => 7,
-
-	timefmt => '%Y-%m-%d',
-	format_x => '%m/%d',
-
-	term_x_size => 1000,
-	term_y_size => 350,
-
-	END_OF_DATA => $END_OF_DATA,
-
-	default_graph => "line",
-	ymin => 0,
-	#additional_plot => "100 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
-
-	graph_params => [
-		{dsc => "Japan ", lank => [1,99], static => "rlavr", target_col => ["","Japan"], },
-		{dsc => "Japan ", lank => [1,99], static => "ern", target_col => ["","Japan"], 
-			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
-		{dsc => "World top 10 ", lank => [1,10], static => "", target_col => ["",""], },
-		{dsc => "World top 10 ", lank => [1,10], static => "rlavr", target_col => ["",""], },
-	],
-};
-
+	
 my $ERN_CSV_DEF = {
 	title => "ERN pref",
 	main_url =>  "Dummy",
@@ -198,13 +131,11 @@ my $MARGE_GRAPH_PARAMS = {
 	ymin => 0,
 	default_graph => "line",
 	additional_plot => $ap,
-	#y2_source => 0,		# soruce csv definition for y2
+	y2_source => 0,		# soruce csv definition for y2
 	graph_params => [
-#		{dsc => "Japan ", lank => [1,99], static => "ern", target_col => ["","Japan"], 
-#			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
-		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,10], static => "ern", target_col => ["Tokyo-,Japan"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => "", ymax => 3},
-		{dsc => $END_OF_DATA},
+		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Tokyo-,Japan"], 
+			start_date => "2020-04-01", end_date => "2021-01-13", ymax => "", y2max => 3},
+	#	{dsc => $END_OF_DATA},
 
 		{dsc => "Osaka Apple mobility Trends and ERN", lank => [1,999], static => "", target_col => ["Osaka-,大阪府"], 
 			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
@@ -240,16 +171,14 @@ csvgraph::new($AMT_DEF); 			# Load Apple Mobility Trends
 csvgraph::load_csv($AMT_DEF);
 csvgraph::average($AMT_DEF, 2, "avr");
 #csvgraph::comvert2rlavr($AMT_DEF);
-csvgraph::gen_html($AMT_DEF, $AMT_GRAPH);
 
 #csvgraph::new($ERN_CSV_DEF); 		# Load ERN
 #csvgraph::load_csv($ERN_CSV_DEF);
 csvgraph::new($CCSE_DEF); 			# Load ERN
 csvgraph::load_csv($CCSE_DEF);
+#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5});
 csvgraph::comvert2ern($CCSE_DEF);
-csvgraph::gen_html($CCSE_DEF, $CCSE_GRAPH);
-
-exit;
+#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5});
 
 csvgraph::marge_csv($MARGE_CSV_DEF, $CCSE_DEF, $AMT_DEF);
 csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
