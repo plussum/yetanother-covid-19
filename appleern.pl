@@ -155,4 +155,5 @@ csvgraph::new($ERN_CSV_DEF); 		# Load ERN
 csvgraph::load_csv($ERN_CSV_DEF);
 
 csvgraph::marge_csv($MARGE_CSV_DEF, $ERN_CSV_DEF, $CSV_DEF);
+exit;
 csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);

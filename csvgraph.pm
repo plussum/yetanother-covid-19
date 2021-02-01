@@ -106,6 +106,13 @@ sub	new
 {
 	my ($cdp) = @_;
 	
+	&init_cdp($cdp);
+}
+
+sub	init_cdp
+{
+	my ($cdp) = @_;
+	
 	foreach my $item (@cdp_arrays){
 		$cdp->{$item} = [] if(! defined $cdp->{$item});
 	}
@@ -116,13 +123,6 @@ sub	new
 	$cdp->{dates} = 0,
 	$cdp->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
 	$cdp->{timefmt} = $CDP->{timefmt} // "%Y-%m-%d";
-
-	#$CDP->{csv_data} = {},
-	#$CDP->{date_list} = [],
-	#$CDP->{order} = {},
-	#$CDP->{key_items} = {};
-	#$CDP->{load_order} = [];
-	#$CDP->{src_csv} = [];
 }
 
 #
@@ -140,7 +140,7 @@ sub	dump_cdp
 	#	Dump Values
 	#
 	foreach my $item (@cdp_values){
-		print join("\t", $item, $cdp->{$item}) . "\n"; 
+		print join("\t", $item, $cdp->{$item}// "undefined") . "\n"; 
 	}
 
 	my $csv_data = $cdp->{csv_data};
@@ -157,7 +157,7 @@ sub	dump_cdp
 		next if($#w < 0);
 
 		if(! defined $w[1]){
-			dp::dp " --> csv_data is not assigned\n";
+			dp::dp " --> [$k] csv_data is not assigned\n";
 		}
 		if($ok){
 			last if($lines && $ln++ >= $lines);
@@ -432,6 +432,7 @@ sub	marge_csv
 	$marge->{dates} = $dates;
 	$marge->{src_csv} = {};
 	my $src_csv = $marge->{src_csv};
+	dp::dp "Dates: $dates, $start, $end   $m_csv_data\n";
 
 	my $date_list = $src_csv_list[0]->{date_list};
 	@{$m_date_list} = @{$date_list}[$start..$end];
@@ -446,10 +447,10 @@ sub	marge_csv
 
 		foreach my $k (keys %$csv_data){
 			$src_csv->{$k} = $csvn;
-			$m_csv_data->{$k} = [];
 			$m_key_items->{$k} = [$k];
 
 			my $dp = $csv_data->{$k};
+			$m_csv_data->{$k} = [];
 			my $mdp = $m_csv_data->{$k};
 			if(! defined $dp->[1]){
 				dp::dp "WARNING: no data in [$k]\n" if(0);
@@ -462,7 +463,7 @@ sub	marge_csv
 			#dp::dp ">> dst" . join(",", $k, @{$m_csv_data->{$k}} ) . "\n";
 		}
 	} 
-	&dump_cdp($marge, {ok => 0});
+	&dump_cdp($marge, {ok => 1, lines => 5}) if(1);
 }
 
 #
