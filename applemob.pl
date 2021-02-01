@@ -106,17 +106,20 @@ my $WLK = "walking";
 my $AVR = "avr";
 my $jp_target = "Tokyo,Kanagawa,Saitama,Chiba,Osaka,Kyoto,Hyogo,Fukuoka,Aichi,Hokaido";
 my @targets = (
+
+	{dsc => "Japan all average", target_col => [$REG, "Japan", "!$AVR", "", "", ""], ,lank => [1, 10]} ,
+	{dsc => $END_OF_DATA},
+	{dsc => "Japan Target average", target_col => [$SUBR, $jp_target, $AVR, "", "", "Japan"], ,lank => [1, 10]} ,
+	{dsc => "Japan Target walk", target_col => [$SUBR, $jp_target, "walking", "", "", "Japan"], ,lank => [1, 20]} ,
+	{dsc => "Tokyo Target all", target_col => [$SUBR, "Tokyo", "", "", "", "Japan"],,lank => [1, 20]} ,
+	{dsc => "Tokyo 23 Target all", target_col => [$CITY, "Tokyo", "", "", "", "Japan"],,lank => [1, 20]} ,
+
 	{dsc => "WorldWid transit  1-10", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [ 1, 10]} ,
 	{dsc => "WorldWid transit 11-10", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [11, 20]} ,
 	{dsc => "WorldWid transit 21-30", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [21, 30]} ,
 	{dsc => "WorldWid transit 21-40", target_col => [$REG, "", $AVR, "", "", ""], ,lank => [31, 40]} ,
+
 	#{dsc => $END_OF_DATA},
-
-	{dsc => "Japan Target average", target_col => [$SUBR, $jp_target, $AVR, "", "", "Japan"], ,lank => [1, 10]} ,
-	{dsc => "Japan all average", target_col => [$REG, "Japan", "", "", "", ""], ,lank => [1, 10]} ,
-	{dsc => "Japan Target walk", target_col => [$SUBR, $jp_target, "walking", "", "", "Japan"], ,lank => [1, 20]} ,
-	{dsc => "Tokyo Target all", target_col => [$SUBR, "Tokyo", "", "", "", "Japan"],,lank => [1, 20]} ,
-
 	{dsc => "WorldWid transit", target_col => [$REG, "", $TRN, "", "", ""], ,lank => [1, 20]} ,
 	{dsc => "WorldWid walking", target_col => [$REG, "", $WLK, "", "", ""], ,lank => [1, 20]} ,
 	{dsc => "WorldWid driving", target_col => [$REG, "", $DRV, "", "", ""], ,lank => [1, 20]} ,

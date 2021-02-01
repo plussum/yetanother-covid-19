@@ -4,10 +4,13 @@
 cd $1
 pwd;
 
+$comment = $3
+
 eval `ssh-agent`
 ssh-add ~/.ssh/pls_git 
 
 git add .
-git commit -m "update"
+echo "git commit -m " "$3"
+git commit -m "$3"
 
 git push origin $2

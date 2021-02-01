@@ -815,6 +815,7 @@ sub	select_keys
 	my @target_col = ();
 	my @non_target_col = ();
 	my $condition = 0;
+	my $clm = 0;
 	foreach my $sk (@$target_colp){
 		#dp::dp "Target col $sk\n";
 		if($sk){
@@ -828,20 +829,25 @@ sub	select_keys
 				@w = split(/\s*,\s*/, $ex);
 			}
 			push(@non_target_col, [@w]);
+			dp::dp "NoneTarget:[$clm] " . join(",", @w) . "\n";
 		}
 		else {
 			push(@target_col, []);
 			push(@non_target_col, []);
 		}
+		$clm++;
 	}
 
-	#dp::dp "Condition: $condition " . join(", ", @$target_colp) . "\n";
+	dp::dp "Condition: $condition " . join(", ", @$target_colp) . "\n";
+	dp::dp "Nontarget: " . join(",", @non_target_col) . "\n";
 	my $key_items = $cdp->{key_items};
 	foreach my $key (keys %$key_items){
 		my $key_in_data = $key_items->{$key};
 		my $res = &check_keys($key_in_data, \@target_col, \@non_target_col, $key);
 		#dp::dp "[$key:$condition:$res]\n" if($res > 1);
 		#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
+		next if ($res < 0);
+
 		if($res >= $condition){
 			push(@$target_keys, $key);
 			#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
@@ -868,14 +874,25 @@ sub	check_keys
 		next if(! ($target_col->[$kn] // ""));			# no key
 		next if(! ($non_target_col->[$kn] // ""));		# no key
 		
-		#return 0 if(csvlib::search_list($key_in_data->[$kn], @{$non_target_col->[$kn]}) eq "");
+		#dp::dp ">>> " . join(",", $key_in_data->[$kn] . ":", @{$non_target_col->[$kn]}) . "\n" if($kid =~ /country.*Japan/);
+		if(scalar(@{$non_target_col->[$kn]}) > 0){			# Check execlusion
+			if(csvlib::search_listn($key_in_data->[$kn], @{$non_target_col->[$kn]}) >= 0){
+				#dp::dp "EXECLUSION: $kid \n";
+				$condition = -1;							# hit to execlusion
+				last;
+			}
+			elsif(scalar(@{$target_col->[$kn]}) <= 0){		# Only execlusions were set (no specific target)
+				$condition++;				
+				next;
+			}
+		}
 
 		#dp::dp join(", ", "data ", $kn, $key_in_data->[$kn], @{$target_col->[$kn]}) . "\n";# if($kid =~ /Tokyo/);
 		if(csvlib::search_listn($key_in_data->[$kn], @{$target_col->[$kn]}) >= 0){
-			$condition++ 
+			$condition++ 									# Hit to target
 		}
 	}
-	#dp::dp "----> $condition\n"; # if($kid =~ /Tokyo/);
+	dp::dp "----> $condition: $kid\n" if($kid =~ /country.*Japan/);
 	return $condition;
 }
 
