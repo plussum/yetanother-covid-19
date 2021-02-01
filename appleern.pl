@@ -137,11 +137,13 @@ my $CCSE_GRAPH = {
 	#additional_plot => "100 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
 
 	graph_params => [
-		{dsc => "Japan ", lank => [1,99], static => "rlavr", target_col => ["","Japan"], },
-		{dsc => "Japan ", lank => [1,99], static => "ern", target_col => ["","Japan"], 
+		{dsc => "Japan ern", lank => [1,99], static => "", target_col => ["","Japan"], 
 			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
-		{dsc => "World top 10 ", lank => [1,10], static => "", target_col => ["",""], },
-		{dsc => "World top 10 ", lank => [1,10], static => "rlavr", target_col => ["",""], },
+#		{dsc => "Japan rlavr", lank => [1,5], static => "rlavr", target_col => ["","Japan"], },
+#		{dsc => "Japan ", lank => [1,5], static => "ern", target_col => ["","Japan"], 
+#			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
+#		{dsc => "World top 10 ", lank => [1,10], static => "", target_col => ["",""], },
+#		{dsc => "World top 10 ", lank => [1,10], static => "rlavr", target_col => ["",""], },
 	],
 };
 
@@ -198,13 +200,14 @@ my $MARGE_GRAPH_PARAMS = {
 	ymin => 0,
 	default_graph => "line",
 	additional_plot => $ap,
-	#y2_source => 0,		# soruce csv definition for y2
+	y2_source => 0,		# soruce csv definition for y2
 	graph_params => [
-#		{dsc => "Japan ", lank => [1,99], static => "ern", target_col => ["","Japan"], 
-#			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
+		{dsc => "Japan ", lank => [1,99], static => "", target_col => ["Japan"], 
+			ylabel => "ern", y2label => "ern", additional_plot => $ap, ymin => "", ymax => "", y2min => 0, y2max => 3},
+		{dsc => $END_OF_DATA},
+
 		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,10], static => "ern", target_col => ["Tokyo-,Japan"], 
 			start_date => "2020-04-01", end_date => "2021-01-13", ymax => "", ymax => 3},
-		{dsc => $END_OF_DATA},
 
 		{dsc => "Osaka Apple mobility Trends and ERN", lank => [1,999], static => "", target_col => ["Osaka-,大阪府"], 
 			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
@@ -236,11 +239,13 @@ sub	download
 #
 #
 #
-csvgraph::new($AMT_DEF); 			# Load Apple Mobility Trends
-csvgraph::load_csv($AMT_DEF);
-csvgraph::average($AMT_DEF, 2, "avr");
-#csvgraph::comvert2rlavr($AMT_DEF);
-csvgraph::gen_html($AMT_DEF, $AMT_GRAPH);
+if(1){
+	csvgraph::new($AMT_DEF); 			# Load Apple Mobility Trends
+	csvgraph::load_csv($AMT_DEF);
+	csvgraph::average($AMT_DEF, 2, "avr");
+	csvgraph::comvert2rlavr($AMT_DEF);
+	csvgraph::gen_html($AMT_DEF, $AMT_GRAPH);
+}
 
 #csvgraph::new($ERN_CSV_DEF); 		# Load ERN
 #csvgraph::load_csv($ERN_CSV_DEF);
@@ -248,8 +253,6 @@ csvgraph::new($CCSE_DEF); 			# Load ERN
 csvgraph::load_csv($CCSE_DEF);
 csvgraph::comvert2ern($CCSE_DEF);
 csvgraph::gen_html($CCSE_DEF, $CCSE_GRAPH);
-
-exit;
 
 csvgraph::marge_csv($MARGE_CSV_DEF, $CCSE_DEF, $AMT_DEF);
 csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});

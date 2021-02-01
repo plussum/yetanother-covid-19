@@ -406,6 +406,7 @@ sub	marge_csv
 	my @csv_info = ();
 	my $date_start = "0000-00-00";
 	foreach my $cdp (@src_csv_list){
+		dp::dp "marge: $cdp->{title} " . ($cdp->{date_list}->[0] // "undef") . "\n";
 		my $dt = $cdp->{date_list}->[0];
 		$date_start = $dt if($dt gt $date_start );
 		dp::dp "date_start[$dt] $date_start\n";
@@ -932,7 +933,7 @@ sub	select_keys
 		$clm++;
 	}
 
-	#dp::dp "Condition: $condition " . join(", ", @$target_colp) . "\n";
+	dp::dp "Condition: $condition " . join(", ", @$target_colp) . "\n";
 	#dp::dp "Nontarget: " . join(",", @non_target_col) . "\n";
 	my $key_items = $cdp->{key_items};
 	foreach my $key (keys %$key_items){
