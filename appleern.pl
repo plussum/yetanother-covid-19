@@ -55,6 +55,8 @@ my $CSV_DEF = {
 
 	down_load => \&download,
 
+	direct => "holizontal",		# vertical or holizontal(Default)
+	timefmt => '%Y-%m-%d',		# comverbt to %Y-%m-%d
 	src_dlm => ",",
 	keys => [1, 2],		# 5, 1, 2
 	data_start => 6,
@@ -77,12 +79,12 @@ my $ERN_CSV_DEF = {
 
 my $MARGE_CSV_DEF = {
 	title => "MARGED Apple and ERN pref",
-	main_url =>  "Dummy",
-	csv_file =>  "Dummy",
-	src_url => 	"Dummy",		# set
+	main_url =>  "Marged, no url",
+	csv_file =>  "Marged, no csv file",
+	src_url => 	"Marged, no src url",		# set
 
-	start_date => "2020-04-01",
-	end_date   => "2020-01-14",
+	#start_date => "2020-04-01",
+	#end_date   => "2020-01-14",
 };
 my @additonal_plot = (
 	"100 axis x1y1 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
@@ -114,7 +116,7 @@ my $MARGE_GRAPH_PARAMS = {
 	y2_source => 0,		# soruce csv definition for y2
 	graph_params => [
 		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Tokyo-,東京都"], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
+			start_date => "2020-04-01", end_date => "2021-01-13", ymax => "", y2max => 3},
 	#	{dsc => $END_OF_DATA},
 
 		{dsc => "Osaka Apple mobility Trends and ERN", lank => [1,999], static => "rlavr", target_col => ["Osaka-,大阪府"], 
@@ -155,5 +157,4 @@ csvgraph::new($ERN_CSV_DEF); 		# Load ERN
 csvgraph::load_csv($ERN_CSV_DEF);
 
 csvgraph::marge_csv($MARGE_CSV_DEF, $ERN_CSV_DEF, $CSV_DEF);
-exit;
 csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);

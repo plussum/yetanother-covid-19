@@ -121,8 +121,8 @@ sub	init_cdp
 	}
 
 	$cdp->{dates} = 0,
-	$cdp->{avr_date} = ($CDP->{avr_date} // $DEFAULT_AVR_DATE),
-	$cdp->{timefmt} = $CDP->{timefmt} // "%Y-%m-%d";
+	$cdp->{avr_date} = ($cdp->{avr_date} // $DEFAULT_AVR_DATE),
+	$cdp->{timefmt} = $cdp->{timefmt} // "%Y-%m-%d";
 }
 
 #
@@ -190,7 +190,7 @@ sub	load_csv
 	#
 	#	DEBUG: Dump data 
 	#
-	&dump_cdp($cdp, {ok => 1, lines => 5}) if(1);
+	&dump_cdp($cdp, {ok => 1, lines => 5}) if(0);
 	
 	return 0;
 }
@@ -313,7 +313,7 @@ sub	load_csv_vertical
 		my ($date, @items) = split(/$src_dlm/, $line);
 	
 		$date_list->[$ln] = &timefmt($timefmt, $date);
-		#dp::dp "date:$ln $date\n";
+		#dp::dp "date:$ln $date " . $date_list->[$ln] . " ($timefmt) $cdp->{title}\n";
 	
 		for(my $i = 0; $i <= $#items; $i++){
 			my $k = $key_list[$i];
@@ -380,16 +380,17 @@ sub	marge_csv
 	my $date_start = "0000-00-00";
 	foreach my $cdp (@src_csv_list){
 		my $dt = $cdp->{date_list}->[0];
-		#dp::dp "[$dt]\n";
 		$date_start = $dt if($dt gt $date_start );
+		dp::dp "date_start[$dt] $date_start\n";
 	}
 	my $date_end = "9999-99-99";
 	foreach my $cdp (@src_csv_list){
 		my $dates = $cdp->{dates};
 		my $dt = $cdp->{date_list}->[$dates];
 		$date_end = $dt if($dt le $date_end );
+		dp::dp "date_end[$dt] $date_end\n";
 	}
-	#dp::dp join(", ", $date_start, $date_end) . "\n";
+	dp::dp join(", ", $date_start, $date_end) . "\n";
 
 	#
 	#	Check Start date(max) and End date(min)
@@ -431,8 +432,9 @@ sub	marge_csv
 	my $dates = $end - $start;
 	$marge->{dates} = $dates;
 	$marge->{src_csv} = {};
+	$marge->{data_start} = 1;
 	my $src_csv = $marge->{src_csv};
-	dp::dp "Dates: $dates, $start, $end   $m_csv_data\n";
+	dp::dp ">>> Dates: $dates, $start, $end   $m_csv_data\n";
 
 	my $date_list = $src_csv_list[0]->{date_list};
 	@{$m_date_list} = @{$date_list}[$start..$end];
@@ -1110,6 +1112,7 @@ _EOD_
 
 	for(my $i = 1; $i <= $#label; $i++){
 		my $key = $label[$i];
+		$key =~ s/^[0-9]+://;
 		#dp::dp "### $i: $key\n";
 		$pn++;
 
@@ -1119,6 +1122,7 @@ _EOD_
 			#dp::dp "csv_source: $key [" . $src_csv->{$key} . "]\n";
 			#dp::dp "csv_source: $key [" . $src_csv . "]\n";
 			$axis =	"axis x1y1";
+			#dp::dp "$src_csv->{$key},$y2_source:\n";
 			if($src_csv->{$key} == $y2_source) {
 				$axis = "axis x1y2" ;
 				$dot = "dt (7,3)";
