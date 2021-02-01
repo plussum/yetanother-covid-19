@@ -47,7 +47,7 @@ my $SRC_URL_TAG = "https://covid19-static.cdn-apple.com/covid19-mobility-data/20
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 my $src_url = sprintf($SRC_URL_TAG, $year + 1900, $mon + 1, $mday);
 
-my $CSV_DEF = {
+my $AMT_DEF = {
 	title => "Apple Mobility Trends",
 	main_url =>  "https://covid19.apple.com/mobility",
 	csv_file =>  "$config::WIN_PATH/applemobile/applemobilitytrends.csv.txt",
@@ -60,6 +60,22 @@ my $CSV_DEF = {
 	src_dlm => ",",
 	keys => [1, 2],		# 5, 1, 2
 	data_start => 6,
+};
+	
+my $CCSE_DEF = {
+	title => "Johns Hopkins Global",
+	main_url =>  "https://covid19.apple.com/mobility",
+	csv_file =>  "$config::CSV_PATH/time_series_covid19_confirmed_global.csv",
+	src_url => $src_url,		# set
+
+	down_load => \&download,
+
+	src_dlm => ",",
+	keys => [1, 0],		# 5, 1, 2
+	data_start => 4,
+
+	direct => "holizontal",		# vertical or holizontal(Default)
+	timefmt => '%m/%d/%y',		# comverbt to %Y-%m-%d
 };
 	
 my $ERN_CSV_DEF = {
@@ -108,10 +124,12 @@ my $MARGE_GRAPH_PARAMS = {
 
 	END_OF_DATA => $END_OF_DATA,
 
-	ylabel => '%',
 	y2label => 'ERN',
-	default_graph => "line",
+	y2min => 0,
+	y2max => 3,
+	ylabel => '%',
 	ymin => 0,
+	default_graph => "line",
 	additional_plot => $ap,
 	y2_source => 0,		# soruce csv definition for y2
 	graph_params => [
@@ -149,12 +167,18 @@ sub	download
 #
 #
 #
-csvgraph::new($CSV_DEF); 			# Load Apple Mobility Trends
-csvgraph::load_csv($CSV_DEF);
-csvgraph::average($CSV_DEF, 2, "avr");
+csvgraph::new($AMT_DEF); 			# Load Apple Mobility Trends
+csvgraph::load_csv($AMT_DEF);
+csvgraph::average($AMT_DEF, 2, "avr");
 
-csvgraph::new($ERN_CSV_DEF); 		# Load ERN
-csvgraph::load_csv($ERN_CSV_DEF);
+#csvgraph::new($ERN_CSV_DEF); 		# Load ERN
+#csvgraph::load_csv($ERN_CSV_DEF);
+csvgraph::new($CCSE_DEF); 			# Load ERN
+csvgraph::load_csv($CCSE_DEF);
+#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5});
+csvgraph::comvert2ern($CCSE_DEF, {});
+csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5});
 
-csvgraph::marge_csv($MARGE_CSV_DEF, $ERN_CSV_DEF, $CSV_DEF);
+csvgraph::marge_csv($MARGE_CSV_DEF, $CCSE_DEF, $AMT_DEF);
+csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
 csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);

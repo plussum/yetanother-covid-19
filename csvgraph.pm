@@ -136,6 +136,7 @@ sub	dump_cdp
 	my $lines = $p->{lines} // "";
 	my $items =$p->{items} // 5;
 	
+	print "#" x 10 . " CSV DUMP " . $cdp->{title} . " " . "#" x 10 ."\n";
 	#
 	#	Dump Values
 	#
@@ -149,7 +150,8 @@ sub	dump_cdp
 	my $load_order = $cdp->{load_order};
 
 	my $key_count = keys (%$csv_data);
-	dp::dp "Dump CSV Data($key_items)  $key_count \n";
+	
+	print "-------- Dump CSV Data($key_items)  $key_count ----------\n";
 	#dp::dp "LOAD ORDER " . join(",", @$load_order) . "\n";
 	my $ln = 0;
 	foreach my $k (keys %$csv_data){
@@ -163,9 +165,10 @@ sub	dump_cdp
 			last if($lines && $ln++ >= $lines);
 
 			my $scv = $src_csv->{$k} // "--";
-			dp::dp "[$ln] " . join(", ", $k, "[$scv]", @w[0..$items]) . "\n";
+			print "[$ln] " . join(", ", $k, "[$scv]", @w[0..$items]) . "\n";
 		}
 	}
+	print "#" x 40 . "\n\n";
 }
 
 #
@@ -465,7 +468,7 @@ sub	marge_csv
 			#dp::dp ">> dst" . join(",", $k, @{$m_csv_data->{$k}} ) . "\n";
 		}
 	} 
-	&dump_cdp($marge, {ok => 1, lines => 5}) if(1);
+	&dump_cdp($marge, {ok => 1, lines => 5}) if(0);
 }
 
 #
@@ -682,6 +685,24 @@ sub	gen_html
 	close(HTML);
 }
 
+sub	dup_csv
+{
+	my ($cdp, $work_csv, $target_keys);
+
+	my $csv_data = $cdp->{csv_data};
+	$target_keys = $target_keys // "";
+	if(! $target_keys){
+		$target_keys = [];
+		my $csv_data = $cdp->{csv_data};
+		@$target_keys = keys %$csv_data;
+	}
+	foreach my $key (@$target_keys){						#
+		$work_csv->{$key} = [];
+		#dp::dp "$key: $csv_data->{$key}\n";
+		push(@{$work_csv->{$key}}, @{$csv_data->{$key}});
+	}
+}
+
 #
 #	Generate Graph fro CSV_DATA and Graph Parameters
 #
@@ -695,11 +716,12 @@ sub	csv2graph
 	&date_range($cdp, $gdp, $gp); 						# Data range (set dt_start, dt_end (position of array)
 
 	my %work_csv = ();									# copy csv data to work csv
-	foreach my $key (@target_keys){						#
-		$work_csv{$key} = [];
-		#dp::dp "$key: $csv_data->{$key}\n";
-		push(@{$work_csv{$key}}, @{$csv_data->{$key}});
-	}
+	&dup_csv($cdp, \%work_csv, \@target_keys);
+#	foreach my $key (@target_keys){						#
+#		$work_csv{$key} = [];
+#		#dp::dp "$key: $csv_data->{$key}\n";
+#		push(@{$work_csv{$key}}, @{$csv_data->{$key}});
+#	}
 	
 	if($gp->{static} eq "rlavr"){ 						# Rolling Average
 		&rolling_average($cdp, \%work_csv, $gdp, $gp);
@@ -962,6 +984,27 @@ sub	rolling_average
 }	
 
 #
+#	combert csv data to ERN
+#
+sub	comvert2ern
+{
+	my($cdp, $p) = @_;
+
+	my $gp  = {
+		lp => $p->{lp} // $config::RT_LP,
+		ip => $p->{ip} // $config::RT_IP,
+	};
+	my $gdp = {};
+	my $ern_csvp = {};
+
+	&dup_csv($cdp, $ern_csvp, "");
+
+	&ern($cdp, $ern_csvp, $gdp, $gp);
+	$cdp->{csv_data} = "";
+	$cdp->{csv_data} = $ern_csvp;
+}
+
+#
 #	ERN
 #
 sub	ern
@@ -972,6 +1015,7 @@ sub	ern
 	my $ip = $gp->{ip} // ($gdp->{ip} // $config::RT_IP);	# 5 感染期間
 	my $avr_date = $cdp->{avr_date} // $DEFAULT_AVR_DATE;
 
+	dp::dp "ERN: $lp, $ip\n";
 	my %rl_avr = ();
 	&rolling_average($cdp, $work_csvp, $gdp, $gp);
 
@@ -1000,6 +1044,7 @@ sub	ern
 			$ern[$dt] = "NaN";
 		}
 		@$dp = @ern;
+		dp::dp join(",", @$dp[0..5]). "\n";
 	}
 
 }	
