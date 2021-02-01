@@ -83,7 +83,7 @@ my $GRAPH_PARAMS = {
 	format_x => '%m/%d',
 
 	term_x_size => 1000,
-	term_y_size => 450,
+	term_y_size => 350,
 
 	END_OF_DATA => $END_OF_DATA,
 
