@@ -409,40 +409,110 @@ sub	load_json
 	close(FD);
 	my $positive = decode_json($JSON);
 	#print Dumper $positive;
-
 	my @data0 = (@{$positive->{data}});
-	#print Dumper $positive;
-	#[421] csvgraph.pm $VAR1 = {
-    #     'pcr_positive_count' => 5,
-    #     'antigen_positive_count' => undef,
-    #     'pcr_negative_count' => 69,
-    #     'negative_count' => 69,
-    #     'antigen_negative_count' => undef,
-    #     'positive_rate' => undef,
-    #     'positive_count' => 5,
-    #     'diagnosed_date' => '2020-02-16',
-    #     'weekly_average_diagnosed_count' => undef
 	dp::dp "### $date_key\n";
-	for(my $i = 0; $i <= $#data0; $i++){
-		my $datap = $data0[$i];
+	if(!defined $csv_data){
+		dp::dp "somthing wrong at json, csv_data\n";
+		$csv_data = {};
+		$cdp->{csv_data} = $csv_data;
+	}
+	foreach my $k (@items){
+		$key_items->{$k} = [$k];
+		$csv_data->{$k} = [];
+		dp::dp "csv_data($k) :". $csv_data->{$k} . "\n";
+	}	
+	for(my $rn = 0; $rn <= $#data0; $rn++){
+		my $datap = $data0[$rn];
 		my $date = $datap->{$date_key};
-		$date_list->[$i] = $date;
-		foreach (my $itn = 0; $itn <= $#items; $itn++){
+		$date_list->[$rn] = $date;
+		for(my $itn = 0; $itn <= $#items; $itn++){
 			my $k = $items[$itn];
 			my $v = $datap->{$k} // 0;
-			$key_items->{$k} = [$k] if($itn == 0);
-
-			my $dp = $csv_data->{$k};
-			$dp->[$i] = $v;
-			#dp::dp Dumper $dt;
-			dp::dp "$k:$itn: $v\n";
+			$csv_data->{$k}->[$rn] = $v;
+			#dp::dp "$k:$itn: $v ($csv_data->{$k})\n" if($rn < 3);
 		}
-		#dp::dp  join(",", @$dp) . "\n";
+		#dp::dp  join(",", @$dp) . "\n" if($i < 3);
 	}
+	#print Dumper $date_list;
+	#print Dumper $csv_data;
+	#foreach my $k (@items){
+	#	print Dumper $csv_data->{$k};
+	#}
 	$cdp->{dates} = $#data0;
 	$FIRST_DATE = $date_list->[0];
 	$LAST_DATE = $date_list->[$#data0];
 }
+
+#
+#
+#
+sub	load_transaction
+{
+	my ($cdp) = @_;
+
+	my $csv_file = $cdp->{csvfile};
+	my $data_start = $cdp->{data_start};
+	my $date_list = $cdp->{date_list};
+	my $csv_data = $cdp->{csv_data};
+	my $key_items = $cdp->{key_items};
+	my @keys = @{$cdp->{keys}};
+	my $timefmt = $cdp->{timefmt};
+
+	my $src_file = $agp->{input_file};
+	my $out_file = $agp->{output_file};
+
+	#dp::dp "$src_file -> $out_file\n";
+	my %DATES = ();
+	my %PREFS = ();
+	my %COUNT = ();
+	my %TOTAL = ();
+
+	open(FD, $csv_file) || die "cannot open $csv_file";
+	<FD>;
+	my @items = &csv($_);
+
+	my $dt_end = -1;
+	while(<FD>){
+		my (@vals)  = &csv($_);
+
+		my @keys = @vals[0..($data_start -1)]:
+		$y += 2000 if($y < 100);
+		my $ymd = sprintf("%04d-%02d-%02d", $vals[0], $vals[1], $vals[2]);		# 2020/01/03 Y/M/D
+
+		if(($date_list->[$dt_end] // "") ne $ymd){
+			$date_list->[$dt_end++] = $ymd;
+		}
+		foreach my $i (@$key_items){
+		}
+		for(my $i = $data_start; $i <= $#items; $i++){
+			my $k = $items[$i];
+			my $v = $vals[$vn] // 0;
+			$v = 0 if($v eq "-");
+			
+			my $dp = $csv_data->{$k};
+			$dp->[$rn] = $v;
+		}
+		#dp::dp "$vn:[$v]\n" if(!$v || $v =~ /[^0-9]/);
+	}
+	close(FD);
+
+	$cdp->{dates} = $dt_end;
+	$FIRST_DATE = $date_list->[0];
+	$LAST_DATE = $date_list->[$dt_end];
+}
+
+sub	csv
+{
+	my ($line) = @_;
+
+	$line =~ s/"*[\r\n]+$//;
+	$line =~ s/",/,/g;
+	$line =~ s/,"/,/g;
+	return (split(/,/, $line));
+}
+
+1;
+
 
 #
 #	Combert time format

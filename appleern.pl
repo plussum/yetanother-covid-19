@@ -255,7 +255,6 @@ csvgraph::new($TOKYO_DEF); 						# Load Apple Mobility Trends
 csvgraph::load_csv($TOKYO_DEF);
 csvgraph::dump_cdp($TOKYO_DEF, {ok => 1, lines => 5});
 #csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
-exit ;
 
 #
 #	Down Load CSV 
