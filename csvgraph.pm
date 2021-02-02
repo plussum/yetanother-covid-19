@@ -385,7 +385,7 @@ sub	load_json
 
 	my $remove_head = 1;
 	my $src_file = $cdp->{src_file};
-	my @items = $cdp->{json_items};
+	my @items = @{$cdp->{json_items}};
 	my $date_key = shift(@items);
 
 	$cdp->{data_start} = $cdp->{data_start} // 1 ;
@@ -422,6 +422,7 @@ sub	load_json
     #     'positive_count' => 5,
     #     'diagnosed_date' => '2020-02-16',
     #     'weekly_average_diagnosed_count' => undef
+	dp::dp "### $date_key\n";
 	for(my $i = 0; $i <= $#data0; $i++){
 		my $datap = $data0[$i];
 		my $date = $datap->{$date_key};
