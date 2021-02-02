@@ -90,7 +90,7 @@ binmode(STDOUT, ":utf8");
 my $DEBUG = 0;
 my $VERBOSE = 0;
 my $DEFAULT_AVR_DATE = 7;
-my $KEY_DLM = "-";					# Initial key items
+my $DEFAULT_KEY_DLM = "-";					# Initial key items
 our $CDP = {};
 
 my $FIRST_DATE = "";
@@ -124,6 +124,7 @@ sub	init_cdp
 	$cdp->{dates} = 0,
 	$cdp->{avr_date} = ($cdp->{avr_date} // $DEFAULT_AVR_DATE),
 	$cdp->{timefmt} = $cdp->{timefmt} // "%Y-%m-%d";
+	$cdp->{key_dlm} = $cdp->{key_dlm} // $DEFAULT_KEY_DLM;
 }
 
 #
@@ -265,6 +266,7 @@ sub	load_csv_holizontal
 	#dp::dp join(",", "# ", @$date_list) . "\n";
 	#dp::dp "keys : ", join(",", @keys). "\n";
 	my $load_order = $cdp->{load_order};
+	my $key_dlm = $cdp->{key_dlm} // $DEFAULT_KEY_DLM;
 	my $ln = 0;
 	while(<FD>){
 		s/[\r\n]+$//;
@@ -278,7 +280,7 @@ sub	load_csv_holizontal
 			push(@gen_key, $itm);
 			$kn++;
 		}
-		my $k = join($KEY_DLM, @gen_key);				# set key_name
+		my $k = join($key_dlm, @gen_key);				# set key_name
 		$csv_data->{$k}= [@items[$data_start..$#items]];	# set csv data
 		$key_items->{$k} = [@items[0..($data_start - 1)]];	# set csv data
 		push(@$load_order, $k);
@@ -565,6 +567,7 @@ sub	average
 
 	my $dates = $cdp->{dates};
 	my @keys = @{$cdp->{keys}};						# Item No for gen HASH Key
+	my $key_dlm = $cdp->{key_dlm} // $DEFAULT_KEY_DLM;
 	my %ak_list = ();
 	foreach my $key (keys %$csv_data){
 		my @avr_key_items = (@{$key_items->{$key}});	# generate average key items
@@ -575,7 +578,7 @@ sub	average
 			my $itm = $avr_key_items[$n];
 			push(@gen_key, $itm);
 		}
-		my $ak = join($KEY_DLM, @gen_key);			# set key_name
+		my $ak = join($key_dlm, @gen_key);			# set key_name
 		$ak_list{$ak}++;							# set average key list
 
 		if(! defined $csv_data->{$ak}){				# initail average data
@@ -653,7 +656,8 @@ sub	gen_html
 
 		my $fname = join(" ", $gp->{dsc}, $gp->{static}, $start_date);
 
-		$fname =~ s/[\/\.\*\ #]/_/g;
+		#$fname =~ s/[\/\.\*\ #]/_/g;
+		$fname =~ s/\W+/_/g;
 		$fname =~ s/__+/_/g;
 		$fname =~ s/^_//;
 		$gp->{fname} = $fname;
@@ -898,15 +902,15 @@ sub	date_range
 
 	my $date_list = $cdp->{date_list};
 	#dp::dp "DATE: " . join(", ", $gp->{start_date}, $gp->{end_date}, "#", @$date_list) . "\n";
-	my $dt_start = csvlib::search_list($gp->{start_date}, @$date_list);
-	if(! $dt_start){
+	my $dt_start = csvlib::search_listn($gp->{start_date}, @$date_list);
+	if($dt_start < 0){
 		dp::dp "WARNING: Date $gp->{start_date} is not in the data\n";
 		$dt_start = 1;
 	}
 	$dt_start--;
 	$dt_start = 0 if($dt_start < 0 || $dt_start > $cdp->{dates});
-	my $dt_end   = csvlib::search_list($gp->{end_date},   @$date_list);
-	if(! $dt_end){
+	my $dt_end   = csvlib::search_listn($gp->{end_date},   @$date_list);
+	if($dt_end < 0){
 		dp::dp "WARNING: Date $gp->{start_date} is not in the data\n";
 		$dt_end = $dt_end + 1;
 	}

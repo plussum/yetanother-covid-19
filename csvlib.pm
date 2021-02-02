@@ -189,15 +189,17 @@ sub search_listn
 	#&disp_caller(1..3);
     for(my $i = 0; $i <= $#w; $i++){
 		my $ntc = $w[$i];
-		if($ntc =~ /^~(.+)/){
-			$ntc =  $1;
+		#dp::dp "search_list: $sk:$ntc\n" if($sk =~ /Japan/);
+		if($ntc =~ /^\~/){
+			$ntc =~ s/.//;
+			#dp::dp "search_list: ~ [$sk] [$ntc]\n"; # if($sk =~ /Japan/);
         	if($sk =~ /$ntc/){
-			   #dp::dp "search_list: [$sk] [$ntc]\n"; # if($sk =~ /Japan/);
+			   dp::dp "search_list: ~ [$sk] [$ntc]\n"; # if($sk =~ /Japan/);
 				return $i;
 			}
 		}
         elsif($sk eq $ntc){
-           #dp::dp "search_list: [$sk] [$ntc]\n";# if($sk =~ /Japan/);
+           dp::dp "search_list: = [$sk] [$ntc]\n";# if($sk =~ /Japan/);
            return $i ;
         }
     }

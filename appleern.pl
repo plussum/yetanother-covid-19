@@ -41,7 +41,6 @@ my $DOWN_LOAD = 0;
 
 my $DEFAULT_AVR_DATE = 7;
 my $END_OF_DATA = "###EOD###";
-my $KEY_DLM = "-";					# Initial key items
 
 my $SRC_URL_TAG = "https://covid19-static.cdn-apple.com/covid19-mobility-data/2025HotfixDev13/v3/en-us/applemobilitytrends-%04d-%02d-%02d.csv";
 my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
@@ -63,6 +62,7 @@ my $AMT_DEF = {
 	direct => "holizontal",		# vertical or holizontal(Default)
 	timefmt => '%Y-%m-%d',		# comverbt to %Y-%m-%d
 	src_dlm => ",",
+	key_dlm => "#",
 	keys => [1, 2],		# 5, 1, 2
 	data_start => 6,
 };
@@ -200,28 +200,37 @@ my $MARGE_GRAPH_PARAMS = {
 };
 
 my @TARGET_REAGION = (
-		"Japan", "US,United State", 
-		"United Kingdom,UK", "Russia", "France", "Spain", "Italy", "Germany", "Poland", "Ukraine", "Netherlands", "Czechia", "Romania",
+		"Japan", "US,United States", 
+		"United Kingdom", "France", "Spain", "Italy", "Russia", 
+			"Germany", "Poland", "Ukraine", "Netherlands", "Czechia,Czech Republic", "Romania",
 			"Belgium", "Portugal", "Sweden",
-		"India", "Iran", "Indonesia", "Israel", "Iraq","Pakistan",
-		"Brazil", "Colombia", "Argentina", "Mexico", "Canada", "Chile",
+		"India",  "Indonesia", "Israel", # "Iran", "Iraq","Pakistan",
+		"Brazil", "Colombia", "Argentina",  "Canada", "Chile", #"Mexico",
 		"South Africa", 
 );
 my $TARGET_GRAPH_TAG = {dsc => "", lank => [1,10], static => "", target_col => [] };
 my $gp = $MARGE_GRAPH_PARAMS->{graph_params};
 
 foreach my $reagion (@TARGET_REAGION){
+	my $rn = $reagion;
+	$rn =~ s/,.*$//;
+	my @rr = ();
+	foreach my $r (split(/,/, $reagion)){
+		push(@rr, "$r-", "~$r#");
+	}
+	$reagion = join(",", @rr);
+	
 	push (@$gp, {
-		dsc => "Mobiliy and ERN $reagion",
+		dsc => "Mobiliy and ERN $rn",
 		lank => [1,10],
 		static => "",
 		target_col => [$reagion],
 		}
 	);
 } 
-foreach my $p (@$gp){
-	dp::dp join(", ", $p->{dsc}, @{$p->{target_col}}, @{$p->{lank}}, ) . "\n";
-}
+#foreach my $p (@$gp){
+#	dp::dp join(", ", $p->{dsc}, @{$p->{target_col}}, @{$p->{lank}}, ) . "\n";
+#}
 
 #
 #	Down Load CSV 
@@ -230,6 +239,20 @@ sub	download
 {
 	my ($cdp) = @_;
 	return 1;
+}
+
+if(0){
+	my @skeys = (
+		["Japan", "~Japan-"],
+		["United Kingdom", "United Kingdom-"],
+	);
+	my @items = ("Japan", "Japan-", "United State", "United Kingdom-Falkland Islands");
+	foreach my $item ("Japan", "Japan-", "United State"){
+		for my $skey (@skeys){
+			dp::dp csvlib::search_listn($item, @$skey) . "[$item]" . join(",", @$skey) . "\n";
+		}
+	}
+	exit;
 }
 
 #
