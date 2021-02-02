@@ -1001,6 +1001,7 @@ sub	csv2graph
 		push(@output_keys, $key);
 	}
 	my $csv_for_plot = &gen_csv_file($cdp, $gdp, $gp, \%work_csv, \@output_keys);		# Generate CSV File
+	dp::dp "$csv_for_plot\n";
 
 	&graph($csv_for_plot, $cdp, $gdp, $gp);					# Generate Graph
 	return 1;
@@ -1020,7 +1021,7 @@ sub	gen_csv_file
 	my $dt_end = $gp->{dt_end};
 
 	#dp::dp "[$dt_start][$dt_end]\n";
-	my $csv_for_plot = $gdp->{png_path} . $gp->{plot_cmd}; #"/$fname-plot.csv.txt";
+	my $csv_for_plot = $gdp->{png_path} . "/" . $gp->{plot_csv}; #"/$fname-plot.csv.txt";
 	#dp::dp "### $csv_for_plot\n";
 	open(CSV, "> $csv_for_plot") || die "cannot create $csv_for_plot";
 	binmode(CSV, ":utf8");
@@ -1447,7 +1448,7 @@ _EOD_
 			#dp::dp "csv_source: $key [" . $src_csv . "]\n";
 			$axis =	"axis x1y1";
 			#dp::dp "$src_csv->{$key},$y2_source:\n";
-			if($src_csv->{$key} == $y2_source) {
+			if($src_csv && $src_csv->{$key} == $y2_source) {
 				$axis = "axis x1y2" ;
 				$dot = "dt (7,3)";
 			}

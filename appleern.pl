@@ -249,12 +249,34 @@ my $TOKYO_DEF = {
 	keys => [0],		# 5, 1, 2
 	data_start => 1,
 };
+my $TOKYO_GRAPH = {
+	html_title => $TOKYO_DEF->{title},
+	png_path   => "$config::PNG_PATH",
+	png_rel_path => "../PNG",
+	html_file => "$config::HTML_PATH/tokyoTest.html",
+
+	dst_dlm => "\t",
+	avr_date => 7,
+	END_OF_DATA => $END_OF_DATA,
+	default_graph => "line",
+
+	timefmt => '%Y-%m-%d', format_x => '%m/%d',
+	term_x_size => 1000, term_y_size => 350,
+
+	y2label => 'ERN', y2min => 0, y2max => 3, y2_source => 0,		# soruce csv definition for y2
+	ylabel => '%', ymin => 0,
+	additional_plot => "",
+
+	graph_params => [
+		{dsc => "Japan ", lank => [1,10], static => "", target_col => ["",""] },
+	],
+};
 
 
-#csvgraph::new($TOKYO_DEF); 						# Load Apple Mobility Trends
-#csvgraph::load_csv($TOKYO_DEF);
-#csvgraph::dump_cdp($TOKYO_DEF, {ok => 1, lines => 5});
-#csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
+csvgraph::new($TOKYO_DEF); 						# Load Apple Mobility Trends
+csvgraph::load_csv($TOKYO_DEF);
+csvgraph::dump_cdp($TOKYO_DEF, {ok => 1, lines => 5});
+csvgraph::gen_html($TOKYO_DEF, $TOKYO_GRAPH);		# Generate Graph/HTHML
 
 
 #
@@ -273,16 +295,41 @@ my $TKO_TRAN_DEF =
 	down_load => \&download,
 
 	direct => "transaction",		# vertical or holizontal(Default)
+	cumrative => 1,
 	timefmt => '%Y:0-%m:1-%d:2',		# comverbt to %Y-%m-%d
 	src_dlm => ",",
 	key_dlm => "#",
 	keys => [3],		# PrefectureNameJ, and Column name
 	data_start => 5,
 };
+my $TKO_TRAN_GRAPH = {
+	html_title => $TKO_TRAN_DEF->{title},
+	png_path   => "$config::PNG_PATH",
+	png_rel_path => "../PNG",
+	html_file => "$config::HTML_PATH/tokyoTest2.html",
+
+	dst_dlm => "\t",
+	avr_date => 7,
+	END_OF_DATA => $END_OF_DATA,
+	default_graph => "line",
+
+	timefmt => '%Y-%m-%d', format_x => '%m/%d',
+	term_x_size => 1000, term_y_size => 350,
+
+	y2label => 'ERN', y2min => 0, y2max => 3, y2_source => 0,		# soruce csv definition for y2
+	ylabel => '%', ymin => 0,
+	additional_plot => "",
+
+	graph_params => [
+		{dsc => "TRY! ", lank => [1,10], static => "", target_col => ["","","","","Tokyo"] },
+		{dsc => "TRY 2! ", lank => [1,10], static => "", target_col => ["","","","","", "testedPositive"] },
+	],
+};
+
 csvgraph::new($TKO_TRAN_DEF); 						# Load Apple Mobility Trends
 csvgraph::load_csv($TKO_TRAN_DEF);
 csvgraph::dump_cdp($TKO_TRAN_DEF, {ok => 1, lines => 5});
-#csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
+csvgraph::gen_html($TKO_TRAN_DEF, $TKO_TRAN_GRAPH);		# Generate Graph/HTHML
 exit;
 #
 #	Down Load CSV 
