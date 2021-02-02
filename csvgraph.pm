@@ -210,6 +210,9 @@ sub	load_csv
 	if($direct =~ /json/i){
 		&load_json($cdp);
 	}
+	elsif($direct =~ /transact/i){
+		&load_transaction($cdp);
+	}
 	elsif($direct =~ /vertical/i){
 		&load_csv_vertical($cdp);
 	}
@@ -450,51 +453,75 @@ sub	load_transaction
 {
 	my ($cdp) = @_;
 
-	my $csv_file = $cdp->{csvfile};
+	my $csv_file = $cdp->{csv_file};
 	my $data_start = $cdp->{data_start};
 	my $date_list = $cdp->{date_list};
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
 	my @keys = @{$cdp->{keys}};
 	my $timefmt = $cdp->{timefmt};
-
-	my $src_file = $agp->{input_file};
-	my $out_file = $agp->{output_file};
-
-	#dp::dp "$src_file -> $out_file\n";
-	my %DATES = ();
-	my %PREFS = ();
-	my %COUNT = ();
-	my %TOTAL = ();
+	my $key_dlm = $cdp->{key_dlm} // "#";
+	my $load_order = $cdp->{load_order};
 
 	open(FD, $csv_file) || die "cannot open $csv_file";
-	<FD>;
-	my @items = &csv($_);
+	binmode(FD, ":utf8");
+	my $line = <FD>;
+	$line =~ s/[\r\n]+$//;
+	my @items = &csv($line);
+
+	dp::dp "load_transaction: " . join(", ", @items) . "\n";
 
 	my $dt_end = -1;
 	while(<FD>){
 		my (@vals)  = &csv($_);
 
-		my @keys = @vals[0..($data_start -1)]:
-		$y += 2000 if($y < 100);
+		$vals[0] += 2000 if($vals[0] < 100);
 		my $ymd = sprintf("%04d-%02d-%02d", $vals[0], $vals[1], $vals[2]);		# 2020/01/03 Y/M/D
 
-		if(($date_list->[$dt_end] // "") ne $ymd){
-			$date_list->[$dt_end++] = $ymd;
+		if($dt_end < 0 || ($date_list->[$dt_end] // "") ne $ymd){
+			$date_list->[++$dt_end] = $ymd;
 		}
-		foreach my $i (@$key_items){
+
+		my @gen_key = ();			# Generate key
+		foreach my $n (@keys){
+			my $itm = $vals[$n];
+			push(@gen_key, $itm);
 		}
+		#dp::dp "$ymd: " . join(",", @gen_key) . "\n";
+
+		#
+		#		year,month,prefJ,PrefE,testedPositive,PeopleTested,Hospitalzed....
+		#		2020,2,東京,Tokyo,3,130,,,,,
+		#
 		for(my $i = $data_start; $i <= $#items; $i++){
-			my $k = $items[$i];
-			my $v = $vals[$vn] // 0;
-			$v = 0 if($v eq "-");
-			
-			my $dp = $csv_data->{$k};
-			$dp->[$rn] = $v;
+			my $item_name = $items[$i];
+			my $k = join($key_dlm, @gen_key, $item_name);				# set key_name
+			if(! defined $csv_data->{$k}){
+				#dp::dp "load_transaction: assinge csv_data [$k]\n";
+
+				$csv_data->{$k} = [];
+				$key_items->{$k} = [];
+				@{$key_items->{$k}} = (@vals[0..($data_start - 1)], $item_name);
+
+				push(@$load_order, $k);
+			}
+			my $v = $vals[$i] // 0;
+			$v = 0 if(!$v || $v eq "-");
+			$csv_data->{$k}->[$dt_end] = $v;
+			#dp::dp "load_transaction: $ymd " . join(",", $k, $dt_end, $v, "#", @{$csv_data->{$k}}) . "\n";
 		}
-		#dp::dp "$vn:[$v]\n" if(!$v || $v =~ /[^0-9]/);
 	}
 	close(FD);
+
+	#
+	#	Set unassgined data with 0
+	#
+	foreach my $k (keys %$csv_data){
+		my $dp = $csv_data->{$k};
+		for(my $i = 0; $i <= $dt_end; $i++){
+			$dp->[$i] = $dp->[$i] // 0;
+		}
+	}
 
 	$cdp->{dates} = $dt_end;
 	$FIRST_DATE = $date_list->[0];
@@ -660,7 +687,7 @@ sub	marge_csv
 }
 
 #
-#	Reduce CSV DATA with replace data set
+#	Copy and Reduce CSV DATA with replace data set
 #
 sub	copy_cdp
 {

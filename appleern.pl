@@ -251,11 +251,39 @@ my $TOKYO_DEF = {
 };
 
 
-csvgraph::new($TOKYO_DEF); 						# Load Apple Mobility Trends
-csvgraph::load_csv($TOKYO_DEF);
-csvgraph::dump_cdp($TOKYO_DEF, {ok => 1, lines => 5});
+#csvgraph::new($TOKYO_DEF); 						# Load Apple Mobility Trends
+#csvgraph::load_csv($TOKYO_DEF);
+#csvgraph::dump_cdp($TOKYO_DEF, {ok => 1, lines => 5});
 #csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
 
+
+#
+# year,month,date,prefectureNameJ,prefectureNameE,testedPositive,peopleTested,hospitalized,serious,discharged,deaths,effectiveReproductionNumber
+# 2020,2,8,東京,Tokyo,3,,,,,,
+#
+#
+my $TKO_PATH = "$config::WIN_PATH/tokyokeizai";
+my $BASE_DIR = "$TKO_PATH/covid19/data";
+my $TKO_TRAN_DEF = 
+{
+	title => "Japan COVID-19 data (Tokyo Keizai)",
+	main_url => "-- tokyo keizai data --- ",
+	csv_file => "$BASE_DIR/prefectures.csv",
+	src_url => 	"--- src url ---",		# set
+	down_load => \&download,
+
+	direct => "transaction",		# vertical or holizontal(Default)
+	timefmt => '%Y:0-%m:1-%d:2',		# comverbt to %Y-%m-%d
+	src_dlm => ",",
+	key_dlm => "#",
+	keys => [3],		# PrefectureNameJ, and Column name
+	data_start => 5,
+};
+csvgraph::new($TKO_TRAN_DEF); 						# Load Apple Mobility Trends
+csvgraph::load_csv($TKO_TRAN_DEF);
+csvgraph::dump_cdp($TKO_TRAN_DEF, {ok => 1, lines => 5});
+#csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
+exit;
 #
 #	Down Load CSV 
 #
