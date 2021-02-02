@@ -81,6 +81,7 @@ use strict;
 use warnings;
 use utf8;
 use Encode 'decode';
+use JSON qw/encode_json decode_json/;
 use Data::Dumper;
 use config;
 use csvlib;
@@ -204,8 +205,12 @@ sub	load_csv
 		my $download = $cdp->{download};
 		$download->($cdp);
 	}
+
 	my $direct = $cdp->{direct} // "";
-	if($direct =~ /vertical/i){
+	if($direct =~ /json/i){
+		&load_json($cdp);
+	}
+	elsif($direct =~ /vertical/i){
 		&load_csv_vertical($cdp);
 	}
 	else {
@@ -356,6 +361,86 @@ sub	load_csv_vertical
 	$cdp->{dates} = $ln - 1;
 	$FIRST_DATE = $date_list->[0];
 	$LAST_DATE = $date_list->[$ln-1];
+}
+
+#{	
+#		src => "$TKY_DIR/data/positive_rate.json",
+#		date => "diagnosed_date",
+#		dst => "tky_pr",
+#		title => "Tokyo Positive Rate",
+#		ylabel => "daiagnosed count",
+#		y2label => "positive rate",
+#		items => [qw (diagnosed_date positive_count negative_count positive_rate)],
+#		y2max => "positive_rate",
+#		dt_start => "0000-00-00",
+#		plot => [
+#			{colm => '($2+$3)', axis => "x1y1", graph => "boxes fill",  item_title => "test total"},
+#			{colm => '2', axis => "x1y1", graph => "boxes fill",  item_title => "positive count"},
+#			{colm => '4', axis => "x1y2", graph => "lines linewidth 2",  item_title => "positive rate"},
+#		],
+#	}
+sub	load_json
+{
+	my ($cdp) = @_;
+
+	my $remove_head = 1;
+	my $src_file = $cdp->{src_file};
+	my @items = $cdp->{json_items};
+	my $date_key = shift(@items);
+
+	$cdp->{data_start} = $cdp->{data_start} // 1 ;
+	my $date_list = $cdp->{date_list};
+	my $csv_data = $cdp->{csv_data};
+	my $key_items = $cdp->{key_items};
+	my @keys = @{$cdp->{keys}};
+	my $timefmt = $cdp->{timefmt};
+
+	my $rec = 0;
+	my $date_name = "";
+
+	#
+	#	Read from JSON file
+	#
+	my $JSON = "";
+	open(FD, $src_file) || die "cannot open $src_file";
+	while(<FD>){
+		$JSON .= $_;
+	}
+	close(FD);
+	my $positive = decode_json($JSON);
+	#print Dumper $positive;
+
+	my @data0 = (@{$positive->{data}});
+	#print Dumper $positive;
+	#[421] csvgraph.pm $VAR1 = {
+    #     'pcr_positive_count' => 5,
+    #     'antigen_positive_count' => undef,
+    #     'pcr_negative_count' => 69,
+    #     'negative_count' => 69,
+    #     'antigen_negative_count' => undef,
+    #     'positive_rate' => undef,
+    #     'positive_count' => 5,
+    #     'diagnosed_date' => '2020-02-16',
+    #     'weekly_average_diagnosed_count' => undef
+	for(my $i = 0; $i <= $#data0; $i++){
+		my $datap = $data0[$i];
+		my $date = $datap->{$date_key};
+		$date_list->[$i] = $date;
+		foreach (my $itn = 0; $itn <= $#items; $itn++){
+			my $k = $items[$itn];
+			my $v = $datap->{$k} // 0;
+			$key_items->{$k} = [$k] if($itn == 0);
+
+			my $dp = $csv_data->{$k};
+			$dp->[$i] = $v;
+			#dp::dp Dumper $dt;
+			dp::dp "$k:$itn: $v\n";
+		}
+		#dp::dp  join(",", @$dp) . "\n";
+	}
+	$cdp->{dates} = $#data0;
+	$FIRST_DATE = $date_list->[0];
+	$LAST_DATE = $date_list->[$#data0];
 }
 
 #
@@ -554,7 +639,7 @@ sub	reduce_cdp
 #
 #	Add Average
 #
-sub	average
+sub	add_average
 {
 	my ($cdp, $target_col, $name) = @_;
 	$name = $name // "avr";
@@ -647,32 +732,17 @@ sub	gen_html
 	foreach my $gp (@$graph_params){
 		last if($gp->{dsc} eq $gdp->{END_OF_DATA});
 
-		my $start_date = &date_calc(($gp->{start_date} // ""), $FIRST_DATE, $cdp->{dates}, $cdp->{date_list});
-		my $end_date   = &date_calc(($gp->{end_date} // ""),   $LAST_DATE, $cdp->{dates}, $cdp->{date_list});
-		#dp::dp "START_DATE: $start_date, END_DATE: $end_date\n";
-
-		$gp->{start_date} = $start_date;
-		$gp->{end_date} = $end_date;
-
-		my $fname = join(" ", $gp->{dsc}, $gp->{static}, $start_date);
-
-		#$fname =~ s/[\/\.\*\ #]/_/g;
-		$fname =~ s/\W+/_/g;
-		$fname =~ s/__+/_/g;
-		$fname =~ s/^_//;
-		$gp->{fname} = $fname;
-
 		&csv2graph($cdp, $gdp, $gp);
 
 		print HTML "<span class=\"c\">$now</span><br>\n";
-		print HTML "<img src=\"../PNG/$fname.png\">\n";
+		print HTML '<img src="' . $png_rel_path . "/" . $gp->{plot_png} . '">' . "\n";
 		print HTML "<br>\n";
 	
 		#
 		#	Lbale name on HTML for search
 		#
 		my $dst_dlm = $gdp->{dst_dlm} // "\t";
-		my $csv_file = $gdp->{png_path} . "/$fname-plot.csv.txt";
+		my $csv_file = $gdp->{png_path} . "/" . $gp->{plot_csv};
 		open(CSV, $csv_file) || die "canot open $csv_file";
 		binmode(CSV, ":utf8");
 		my $l = <CSV>;
@@ -700,9 +770,9 @@ sub	gen_html
 		#
 		#	References
 		#
-		my @refs = (join(":", "PNG", $png_rel_path . "/$fname.png"),
-					join(":", "CSV", $png_rel_path . "/$fname-plot.csv.txt"),
-					join(":", "PLT", $png_rel_path . "/$fname-plot.txt"),
+		my @refs = (join(":", "PNG", $png_rel_path . $gp->{plot_png}),
+					join(":", "CSV", $png_rel_path . $gp->{plot_csv}),
+					join(":", "PLT", $png_rel_path . $gp->{plot_cmd}),
 		);
 		print HTML "<hr>\n";
 		print HTML "<span $class>";
@@ -753,21 +823,45 @@ sub	csv2graph
 	my($cdp, $gdp, $gp) = @_;
 	my $csv_data = $cdp->{csv_data};
 
+	#
+	#	Set Date Infomation to Graph Parameter
+	#
+	my $start_date = &date_calc(($gp->{start_date} // ""), $FIRST_DATE, $cdp->{dates}, $cdp->{date_list});
+	my $end_date   = &date_calc(($gp->{end_date} // ""),   $LAST_DATE, $cdp->{dates}, $cdp->{date_list});
+	#dp::dp "START_DATE: $start_date, END_DATE: $end_date\n";
+	$gp->{start_date} = $start_date;
+	$gp->{end_date} = $end_date;
+	&date_range($cdp, $gdp, $gp); 						# Data range (set dt_start, dt_end (position of array)
+
+	#
+	#	Set File Name
+	#
+	my $fname = $gp->{fname} // "";
+	if(! $fname){
+		$fname = join(" ", $gp->{dsc}, $gp->{static}, $gp->{start_date});
+		$fname =~ s/[\/\.\*\ #]/_/g;
+		$fname =~ s/\W+/_/g;
+		$fname =~ s/__+/_/g;
+		$fname =~ s/^_//;
+		$gp->{fname} = $fname;
+	}
+	$gp->{plot_png} = $gp->{plot_png} // "$fname.png";
+	$gp->{plot_csv} = $gp->{plot_csv} // "$fname-plot.csv.txt";
+	$gp->{plot_cmd} = $gp->{plot_cmd} // "$fname-plot.txt";
+
+	
+	#
+	#	select data and generate csv data
+	#
 	my @target_keys = ();
 	&select_keys($cdp, $gp->{target_col}, \@target_keys);	# select data for target_keys
 	if($#target_keys < 0){
 		dp::dp "WARNING: No data $cdp->{title} / keys:" . join("; ", @{$gp->{target_col}}) . "\n";
 		return 0;
 	}
-	&date_range($cdp, $gdp, $gp); 						# Data range (set dt_start, dt_end (position of array)
 
 	my %work_csv = ();									# copy csv data to work csv
 	&dup_csv($cdp, \%work_csv, \@target_keys);
-#	foreach my $key (@target_keys){						#
-#		$work_csv{$key} = [];
-#		#dp::dp "$key: $csv_data->{$key}\n";
-#		push(@{$work_csv{$key}}, @{$csv_data->{$key}});
-#	}
 	
 	if($gp->{static} eq "rlavr"){ 						# Rolling Average
 		&rolling_average($cdp, \%work_csv, $gdp, $gp);
@@ -776,6 +870,9 @@ sub	csv2graph
 		&ern($cdp, \%work_csv, $gdp, $gp);
 	}
 
+	#
+	#	Sort target record
+	#
 	my @lank = ();
 	@lank = (@{$gp->{lank}}) if(defined $gp->{lank});
 	$lank[0] = 1 if(defined $lank[0] && ! $lank[0]);
@@ -798,7 +895,7 @@ sub	csv2graph
 	}
 
 	#
-	#	Genrarte csv file for plot
+	#	Genrarte csv file and graph (png)
 	#
 	my @output_keys = ();
 	foreach my $key (@sorted_keys){
@@ -825,7 +922,7 @@ sub	gen_csv_file
 	my $dt_end = $gp->{dt_end};
 
 	#dp::dp "[$dt_start][$dt_end]\n";
-	my $csv_for_plot = $gdp->{png_path} . "/$fname-plot.csv.txt";
+	my $csv_for_plot = $gdp->{png_path} . $gp->{plot_cmd}; #"/$fname-plot.csv.txt";
 	#dp::dp "### $csv_for_plot\n";
 	open(CSV, "> $csv_for_plot") || die "cannot create $csv_for_plot";
 	binmode(CSV, ":utf8");

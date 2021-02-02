@@ -33,6 +33,7 @@ use Data::Dumper;
 use config;
 use csvlib;
 use csvgraph;
+use dp;
 
 binmode(STDOUT, ":utf8");
 
@@ -205,7 +206,7 @@ my @TARGET_REAGION = (
 			"Germany", "Poland", "Ukraine", "Netherlands", "Czechia,Czech Republic", "Romania",
 			"Belgium", "Portugal", "Sweden",
 		"India",  "Indonesia", "Israel", # "Iran", "Iraq","Pakistan",
-		"Brazil", "Colombia", "Argentina",  "Canada", "Chile", #"Mexico",
+		"Brazil", "Colombia", "Argentina",  "Canada", "Chile", "Mexico",
 		"South Africa", 
 );
 my $TARGET_GRAPH_TAG = {dsc => "", lank => [1,10], static => "", target_col => [] };
@@ -231,6 +232,30 @@ foreach my $reagion (@TARGET_REAGION){
 #foreach my $p (@$gp){
 #	dp::dp join(", ", $p->{dsc}, @{$p->{target_col}}, @{$p->{lank}}, ) . "\n";
 #}
+
+my $TKY_DIR = "$config::WIN_PATH/tokyo/covid19"; # "/home/masataka/who/tokyo/covid19";
+my $TOKYO_DEF = {
+	title => "Tokyo Positive Rate",
+	main_url => "-- tokyo data --- ",
+	src_file => "$TKY_DIR/data/positive_rate.json",
+	src_url => 	"--- src url ---",		# set
+	json_items => [qw (diagnosed_date positive_count negative_count positive_rate)],
+	down_load => \&download,
+
+	direct => "json",		# vertical or holizontal(Default)
+	timefmt => '%Y-%m-%d',		# comverbt to %Y-%m-%d
+	src_dlm => ",",
+	key_dlm => "#",
+	keys => [0],		# 5, 1, 2
+	data_start => 1,
+};
+
+
+csvgraph::new($TOKYO_DEF); 						# Load Apple Mobility Trends
+csvgraph::load_csv($TOKYO_DEF);
+csvgraph::dump_cdp($TOKYO_DEF, {ok => 1, lines => 5});
+#csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
+exit ;
 
 #
 #	Down Load CSV 
@@ -263,11 +288,9 @@ csvgraph::load_csv($AMT_DEF);
 my $amt_country = {};
 csvgraph::reduce_cdp_target($AMT_DEF, $amt_country, ["$REG"]);
 csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
-exit;
-
 csvgraph::add_average($amt_country, 2, "avr");
 csvgraph::comvert2rlavr($amt_country);
-#csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
+csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
 
 csvgraph::new($CCSE_DEF); 						# Load Johns Hopkings University CCSE
 csvgraph::load_csv($CCSE_DEF);
@@ -279,3 +302,12 @@ csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
 csvgraph::marge_csv($MARGE_CSV_DEF, $ccse_country, $amt_country);		# Marge CCSE(ERN) and Apple Mobility Trends
 #csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
 csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);		# Gererate Graph
+exit;
+
+my $gdp = $MARGE_GRAPH_PARAMS;
+foreach my $gp (@{$gdp->{graph_params}}){
+	csvgraph::csv2graph($MARGE_CSV_DEF, $gdp, $gp);
+	dp::dp join(",", $gp->{dsc}, $gp->{start_date}, $gp->{end_date},
+			$gp->{fname}, $gp->{plot_png}, $gp->{plot_csv}, $gp->{plot_cmd}) . "\n";
+}
+
