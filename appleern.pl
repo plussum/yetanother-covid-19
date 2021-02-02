@@ -260,15 +260,22 @@ if(0){
 #
 csvgraph::new($AMT_DEF); 						# Load Apple Mobility Trends
 csvgraph::load_csv($AMT_DEF);
-csvgraph::average($AMT_DEF, 2, "avr");
-csvgraph::comvert2rlavr($AMT_DEF);
-#csvgraph::gen_html($AMT_DEF, $AMT_GRAPH);		# Generate Graph/HTHML
+my $amt_country = {};
+csvgraph::reduce_cdp_target($AMT_DEF, $amt_country, ["$REG"]);
+csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
+exit;
+
+csvgraph::add_average($amt_country, 2, "avr");
+csvgraph::comvert2rlavr($amt_country);
+#csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
 
 csvgraph::new($CCSE_DEF); 						# Load Johns Hopkings University CCSE
 csvgraph::load_csv($CCSE_DEF);
-csvgraph::comvert2ern($CCSE_DEF);				# Calc ERN
-csvgraph::gen_html($CCSE_DEF, $CCSE_GRAPH);		# Generate Graph/HTML
+my $ccse_country = {};
+csvgraph::reduce_cdp_target($CCSE_DEF, $ccse_country, ["NULL"]);
+csvgraph::comvert2ern($ccse_country);				# Calc ERN
+csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
 
-csvgraph::marge_csv($MARGE_CSV_DEF, $CCSE_DEF, $AMT_DEF);		# Marge CCSE(ERN) and Apple Mobility Trends
+csvgraph::marge_csv($MARGE_CSV_DEF, $ccse_country, $amt_country);		# Marge CCSE(ERN) and Apple Mobility Trends
 #csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
 csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);		# Gererate Graph
