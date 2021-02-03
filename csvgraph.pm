@@ -165,17 +165,23 @@ sub dump_key_items
 {
 	my($key_items, $p) = @_;
 	my $ok = $p->{ok} // 1;
-	my $lines = $p->{lines} // "";
+	my $lines = $p->{lines} // 5;
 	my $items = $p->{items} // 5;
 	my $src_csv = $p->{src_csv} // "";
 	my $mess = $p->{message} // "";
 	my $search_key = $p->{search_key} // "";
+	$lines = 0 if($search_key && ! defined $p->{lines});
 
-	dp::dp "------ [$mess] Dump keyitems data ($key_items) --------\n";
+	print "------ [$mess] Dump keyitems data ($key_items) search_key[$search_key] --------\n";
 	my $ln = 0;
 	foreach my $k (keys %$key_items){
-		last if($ln++ > $items);
-		print "key_items $k: " . "\n" ; #. join(",", @{$key_items->{$k}}[0..10]) . "\n";
+		if($search_key &&  $k =~ /$search_key/){
+			print "key_items[$ln] $k: " . join(",", @{$key_items->{$k}}, " [$search_key]") . "\n";
+		}
+		elsif($lines eq "" || $ln <= $lines){
+			print "key_items[$ln] $k: " . join(",", @{$key_items->{$k}}) . "\n";
+		}
+		$ln++;
 	}
 }
 
@@ -188,10 +194,11 @@ sub	dump_csv_data
 	my $src_csv = $p->{src_csv} // "";
 	my $mess = $p->{message} // "";
 	my $search_key = $p->{search_key} // "";
+	$lines = 0 if($search_key && ! defined $p->{lines});
 
-	dp::dp "------ [$mess] Dump csv data ($csv_data) --------\n";
+	print "------ [$mess] Dump csv data ($csv_data) --------\n";
 	csvlib::disp_caller(1..3);
-	dp::dp "-" x 30 . "\n";
+	print "-" x 30 . "\n";
 	my $ln = 0;
 	foreach my $k (keys %$csv_data){
 		my @w = @{$csv_data->{$k}};
@@ -201,16 +208,17 @@ sub	dump_csv_data
 			dp::dp " --> [$k] csv_data is not assigned\n";
 		}
 		if($ok){
-			if($lines && $ln++ >= $lines){
-				last if(!$search_key);
-				next if(! ($k =~ /$search_key/));
-				dp::dp "much [$k] =~ [$search_key]\n";
-			}
-
 			my $scv = "--";
 			$scv = $src_csv->{$k} if($src_csv && defined $src_csv->{$k});
-			print "[$ln] " . join(", ", $k, "[$scv]", @w[0..$items]) . "\n";
+
+			if($search_key && $k =~ /search_key/){
+				print "[$ln] " . join(", ", $k, "[$scv]", @w[0..$items]) . " [$search_key]\n";
+			}
+			elsif($lines eq "" || $ln < $lines){
+				print "[$ln] " . join(", ", $k, "[$scv]", @w[0..$items]) . "\n";
+			}
 		}
+		$ln++;
 	}
 	dp::dp "-" x 30 . "\n";
 }
@@ -626,7 +634,11 @@ sub	marge_csv
 	}
 	my $dates = csvlib::date2ut($date_end, "-") - csvlib::date2ut($date_start, "-");
 	$dates /= 60 * 60 * 24;
-	dp::dp join(", ", $date_start, $date_end, $dates) . "\n" if($DEBUG);
+
+	$marge->{dates} = int($dates);
+	$marge->{start_date} = $date_start;
+	$marge->{end_date} = $date_end;
+	dp::dp join(", ", $date_start, $date_end, $dates) . "\n" ;# if($DEBUG);
 
 	#
 	#	Check Start date(max) and End date(min)
@@ -662,6 +674,7 @@ sub	marge_csv
 	my $m_csv_data = $marge->{csv_data};
 	my $m_date_list = $marge->{date_list};
 	my $m_key_items = $marge->{key_items};
+
 
 	my $infop = $csv_info[0];
 	$marge->{dates} = $dates;
@@ -728,12 +741,12 @@ sub	reduce_cdp_target
 	my $ft = $target_colp->[0] ;
 	if(0 && $ft eq "NULL"){
 		$dumpf = 1;
-		dp::dp "###### TARGET_KEYS #######\n";
-		dp::dp join("\n", @target_keys);
+		#dp::dp "###### TARGET_KEYS #######\n";
+		#dp::dp join("\n", @target_keys);
 		#dp::dp "################\n";
 	}
 	&reduce_cdp($dst_cdp, $cdp, \@target_keys);
-	&dump_cdp($dst_cdp, {ok => 1, lines => 20, items => 20}); # if($DEBUG);
+	&dump_cdp($dst_cdp, {ok => 1, lines => 20, items => 20}) if($DEBUG);
 	$dumpf = 0;
 }
 
@@ -771,15 +784,17 @@ sub	reduce_cdp
 	}
 	my $dst_key = $dst_cdp->{key_items};
 	my $dst_csv = $dst_cdp->{csv_data};
-	my $kn = 0;
-	foreach my $key (keys %$dst_csv){
-		last if($kn++ > 5);
+	if($DEBUG){
+		my $kn = 0;
+		foreach my $key (keys %$dst_csv){
+			last if($kn++ > 5);
 
-		dp::dp "############ $key\n" if($key =~ /Canada/);
-		dp::dp "csv[$key] " . join(",", @{$dst_csv->{$key}}[0..5]) . "\n";
-		dp::dp "key[$key] " . join(",", @{$dst_key->{$key}}[0..5]) . "\n";
+			#dp::dp "############ $key\n" if($key =~ /Canada/);
+			#dp::dp "csv[$key] " . join(",", @{$dst_csv->{$key}}[0..5]) . "\n";
+			#dp::dp "key[$key] " . join(",", @{$dst_key->{$key}}[0..5]) . "\n";
+		}
+		&dump_cdp($dst_cdp, {ok => 1, lines => 20, items => 20}); # if($DEBUG);
 	}
-	&dump_cdp($dst_cdp, {ok => 1, lines => 20, items => 20}); # if($DEBUG);
 }
 
 #
@@ -815,7 +830,7 @@ sub	select_keys
 		$clm++;
 	}
 
-	dp::dp "Condition: $condition " . join(", ", @$target_colp) . "\n";
+	#dp::dp "Condition: $condition " . join(", ", @$target_colp) . "\n";
 	#dp::dp "Nontarget: " . join(",", @non_target_col_array) . "\n";
 	my $key_items = $cdp->{key_items};
 	foreach my $key (keys %$key_items){
@@ -885,7 +900,7 @@ sub	check_keys
 			$condition++ 									# Hit to target
 		}
 	}
-	dp::dp "----> $condition: $kid\n" if($kid =~ /Canada/);
+	#dp::dp "----> $condition: $kid\n" if($kid =~ /Canada/);
 	return $condition;
 }
 
@@ -957,8 +972,8 @@ sub	gen_graph_by_list
 	my($cdp, $gdp) = @_;
 	foreach my $gp (@{$gdp->{graph_params}}){
 		&csv2graph($cdp, $gdp, $gp);
-		dp::dp join(",", $gp->{dsc}, $gp->{start_date}, $gp->{end_date},
-				$gp->{fname}, $gp->{plot_png}, $gp->{plot_csv}, $gp->{plot_cmd}) . "\n";
+		#dp::dp join(",", $gp->{dsc}, $gp->{start_date}, $gp->{end_date},
+		#		$gp->{fname}, $gp->{plot_png}, $gp->{plot_csv}, $gp->{plot_cmd}) . "\n";
 	}
 	return (@{$gdp->{graph_params}});
 }
@@ -1093,9 +1108,11 @@ sub	csv2graph
 	#
 	#	Set Date Infomation to Graph Parameter
 	#
-	my $start_date = &date_calc(($gp->{start_date} // ""), $FIRST_DATE, $cdp->{dates}, $cdp->{date_list});
-	my $end_date   = &date_calc(($gp->{end_date} // ""),   $LAST_DATE, $cdp->{dates}, $cdp->{date_list});
-	#dp::dp "START_DATE: $start_date, END_DATE: $end_date\n";
+	my $date_list = $cdp->{date_list};
+	my $dates = $cdp->{dates};
+	my $start_date = &date_calc(($gp->{start_date} // ""), $date_list->[0], $cdp->{dates}, $date_list);
+	my $end_date   = &date_calc(($gp->{end_date} // ""),   $date_list->[$dates], $cdp->{dates}, $date_list);
+	#dp::dp "START_DATE: $start_date [" . ($gp->{start_date} // "NULL"). "] END_DATE: $end_date [" . ($gp->{end_date}//"NULL") . "]\n";
 	$gp->{start_date} = $start_date;
 	$gp->{end_date} = $end_date;
 	&date_range($cdp, $gdp, $gp); 						# Data range (set dt_start, dt_end (position of array)
@@ -1121,8 +1138,8 @@ sub	csv2graph
 	#
 	my @target_keys = ();
 	&select_keys($cdp, $gp->{target_col}, \@target_keys);	# select data for target_keys
-	dp::dp "target_key: " . join(" : ", @target_keys). "\n";
-	dp::dp "target_col: " . join(" : ", @{$gp->{target_col}}) . "\n";
+	#dp::dp "target_key: " . join(" : ", @target_keys). "\n" ;
+	#dp::dp "target_col: " . join(" : ", @{$gp->{target_col}}) . "\n";
 	if($#target_keys < 0){
 		dp::dp "WARNING: No data $cdp->{title} / keys:" . join("; ", @{$gp->{target_col}}) . "\n";
 		return 0;
@@ -1171,7 +1188,7 @@ sub	csv2graph
 		push(@output_keys, $key);
 	}
 	my $csv_for_plot = &gen_csv_file($cdp, $gdp, $gp, \%work_csv, \@output_keys);		# Generate CSV File
-	dp::dp "$csv_for_plot\n";
+	#dp::dp "$csv_for_plot\n";
 
 	&graph($csv_for_plot, $cdp, $gdp, $gp);					# Generate Graph
 	return 1;
@@ -1266,18 +1283,22 @@ sub	date_range
 {
 	my($cdp, $gdp, $gp) = @_;
 
+	my $id = $cdp->{id} // ($cdp->{title} // "no-id");
 	my $date_list = $cdp->{date_list};
-	#dp::dp "DATE: " . join(", ", $gp->{start_date}, $gp->{end_date}, "#", @$date_list) . "\n";
+	#dp::dp "DATE: " . join(", ", $gp->{start_date}, $gp->{end_date}, "#", @$date_list[0..5]) . "\n";
 	my $dt_start = csvlib::search_listn($gp->{start_date}, @$date_list);
 	if($dt_start < 0){
-		dp::dp "WARNING: Date $gp->{start_date} is not in the data\n";
+		dp::dp "WARNING[$id]: Date $gp->{start_date} is not in the data ($cdp->{title}) " . join(",", @$date_list[0..5]) ."\n";
+		csvlib::disp_caller(1..3);
 		$dt_start = 1;
 	}
 	$dt_start--;
 	$dt_start = 0 if($dt_start < 0 || $dt_start > $cdp->{dates});
 	my $dt_end   = csvlib::search_listn($gp->{end_date},   @$date_list);
 	if($dt_end < 0){
-		dp::dp "WARNING: Date $gp->{start_date} is not in the data\n";
+		my $dtc = scalar(@$date_list) - 1;
+		dp::dp "WARNING[$id]: Date $gp->{end_date} is not in the data ($cdp->{title}) $dtc" . join(",", @$date_list[($dtc-5)..$dtc]) ."\n";
+		csvlib::disp_caller(1..3);
 		$dt_end = $dt_end + 1;
 	}
 	$dt_end--;
@@ -1503,7 +1524,7 @@ _EOD_
 	$l =~ s/[\r\n]+$//;
 	my @label = split(/$dlm/, $l);
 	#dp::dp "### $csvf: $l\n";
-	dp::dp "### $csvf\n";
+	#dp::dp "### $csvf\n";
 
 	my $src_csv = $cdp->{src_csv} // "";
 	my $y2_source = $gdp->{y2_source} // "";
@@ -1573,7 +1594,7 @@ _EOD_
 	close(PLOT);
 
 	#system("cat $plotf");
-	dp::dp "gnuplot $plotf\n";
+	#dp::dp "gnuplot $plotf\n";
 	system("gnuplot $plotf");
 	#dp::dp "-- Done\n";
 }
