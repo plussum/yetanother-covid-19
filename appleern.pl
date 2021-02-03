@@ -54,6 +54,8 @@ my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 my $src_url = sprintf($SRC_URL_TAG, $year + 1900, $mon + 1, $mday);
 my $ern_adp	= "1 with lines title 'ern=1' lw 1 lc 'red' dt (3,7)";
 
+
+#####################################################
 #
 #	Definion of Apple Mobility Trends CSV Format
 #
@@ -74,9 +76,6 @@ my $AMT_DEF = {
 	data_start => 6,
 };
 
-#
-#	Definition of Graph Parameter for Apple Mobility Trends
-#
 my $REG = "country/region";
 my $SUBR = "sub-region";
 my $CITY = "city";
@@ -150,11 +149,6 @@ my $CCSE_GRAPH = {
 #		{dsc => "Japan ern", lank => [1,99], static => "", target_col => ["","Japan"], 
 #			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
 
-#		{dsc => "Japan rlavr", lank => [1,5], static => "rlavr", target_col => ["","Japan"], },
-#		{dsc => "Japan ", lank => [1,5], static => "ern", target_col => ["","Japan"], 
-#			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
-#		{dsc => "World top 10 ", lank => [1,10], static => "", target_col => ["",""], },
-#		{dsc => "World top 10 ", lank => [1,10], static => "rlavr", target_col => ["",""], },
 	],
 };
 
@@ -274,20 +268,20 @@ my $TOKYO_GRAPH = {
 	],
 };
 
-
+####################################################################
 #
 # year,month,date,prefectureNameJ,prefectureNameE,testedPositive,peopleTested,hospitalized,serious,discharged,deaths,effectiveReproductionNumber
 # 2020,2,8,東京,Tokyo,3,,,,,,
 #
 #
 my $TKO_PATH = "$config::WIN_PATH/tokyokeizai";
-my $BASE_DIR = "$TKO_PATH/covid19/data";
+#/mnt/f/_share/cov/plussum.github.io/tokyokeizai/prefecture.csv.txt
 my $TKO_TRAN_DEF = 
 {
 	id => "tko",
 	title => "Japan COVID-19 data (Tokyo Keizai)",
 	main_url => "-- tokyo keizai data --- ",
-	csv_file => "$BASE_DIR/prefectures.csv",
+	csv_file => "$TKO_PATH/prefecture.csv.txt",
 	src_url => 	"--- src url ---",		# set
 	down_load => \&download,
 
