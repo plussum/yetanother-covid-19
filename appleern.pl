@@ -145,8 +145,9 @@ my $CCSE_GRAPH = {
 	END_OF_DATA => $END_OF_DATA,
 
 	graph_params => [
-		{dsc => "Japan ern", lank => [1,99], static => "", target_col => ["","Japan"], 
-			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
+#		{dsc => "Japan ern", lank => [1,99], static => "", target_col => ["","Japan"], 
+#			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
+
 #		{dsc => "Japan rlavr", lank => [1,5], static => "rlavr", target_col => ["","Japan"], },
 #		{dsc => "Japan ", lank => [1,5], static => "ern", target_col => ["","Japan"], 
 #			ylabel => "ern", y2label => "ern", additional_plot => $ern_adp, ymax => 3},
@@ -208,7 +209,7 @@ my $MARGE_GRAPH_PARAMS = {
 };
 
 my @TARGET_REAGION = (
-		"Canada", 
+		"Canada-", 
 );
 my @TARGET_REAGION__ = (
 		"Japan", "US,United States", 
@@ -226,15 +227,6 @@ my @TARGET_REAGION__ = (
 #
 #	Generate Graph of Apple Mobility Trends and John Hopings CCSE-ERN
 #
-# Load Apple Mobility Trends
-csvgraph::new($AMT_DEF); 
-csvgraph::load_csv($AMT_DEF);
-my $amt_country = {};
-csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, ["$REG"]);
-csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
-csvgraph::add_average($amt_country, 2, "avr");
-csvgraph::comvert2rlavr($amt_country);
-csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
 
 #	Load Johns Hoping Univercity CCSE
 csvgraph::new($CCSE_DEF); 							# Load Johns Hopkings University CCSE
@@ -255,6 +247,16 @@ foreach my $reagion (@TARGET_REAGION){
 csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
 csvgraph::comvert2ern($ccse_country);				# Calc ERN
 exit;
+
+# Load Apple Mobility Trends
+csvgraph::new($AMT_DEF); 
+csvgraph::load_csv($AMT_DEF);
+my $amt_country = {};
+csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, ["$REG"]);
+csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
+csvgraph::add_average($amt_country, 2, "avr");
+csvgraph::comvert2rlavr($amt_country);
+csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
 #	Generate Marged Graph of Apple Mobility Trends and CCSE-ERN
 csvgraph::marge_csv($MARGE_CSV_DEF, $ccse_country, $amt_country);		# Marge CCSE(ERN) and Apple Mobility Trends
 #csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
