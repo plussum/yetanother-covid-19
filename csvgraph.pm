@@ -443,7 +443,7 @@ sub	load_json
 	my $positive = decode_json($JSON);
 	#print Dumper $positive;
 	my @data0 = (@{$positive->{data}});
-	dp::dp "### $date_key\n";
+	#dp::dp "### $date_key\n";
 	if(!defined $csv_data){
 		dp::dp "somthing wrong at json, csv_data\n";
 		$csv_data = {};
@@ -452,7 +452,7 @@ sub	load_json
 	foreach my $k (@items){
 		$key_items->{$k} = [$k];
 		$csv_data->{$k} = [];
-		dp::dp "csv_data($k) :". $csv_data->{$k} . "\n";
+		#dp::dp "csv_data($k) :". $csv_data->{$k} . "\n";
 	}	
 	for(my $rn = 0; $rn <= $#data0; $rn++){
 		my $datap = $data0[$rn];
@@ -542,6 +542,7 @@ sub	load_transaction
 		}
 	}
 	close(FD);
+	dp::dp "##### data_end at transaction: $dt_end: $date_list->[$dt_end]\n";
 
 	#
 	#	Set unassgined data with 0
@@ -1292,7 +1293,6 @@ sub	date_range
 		csvlib::disp_caller(1..3);
 		$dt_start = 1;
 	}
-	$dt_start--;
 	$dt_start = 0 if($dt_start < 0 || $dt_start > $cdp->{dates});
 	my $dt_end   = csvlib::search_listn($gp->{end_date},   @$date_list);
 	if($dt_end < 0){
@@ -1301,7 +1301,6 @@ sub	date_range
 		csvlib::disp_caller(1..3);
 		$dt_end = $dt_end + 1;
 	}
-	$dt_end--;
 	$dt_end = $cdp->{dates} if($dt_end < 0 || $dt_end > $cdp->{dates});
 	$gp->{dt_start} = $dt_start;
 	$gp->{dt_end}   = $dt_end;

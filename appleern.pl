@@ -54,7 +54,6 @@ my($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 my $src_url = sprintf($SRC_URL_TAG, $year + 1900, $mon + 1, $mday);
 my $ern_adp	= "1 with lines title 'ern=1' lw 1 lc 'red' dt (3,7)";
 
-
 #
 #	Definion of Apple Mobility Trends CSV Format
 #
@@ -230,72 +229,13 @@ my @TARGET_REAGION = (
 #	Generate Graph of Apple Mobility Trends and John Hopings CCSE-ERN
 #
 
-#	Load Johns Hoping Univercity CCSE
-csvgraph::new($CCSE_DEF); 							# Load Johns Hopkings University CCSE
-csvgraph::load_csv($CCSE_DEF);
-#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 1, items => 10, search_key => "Canada"}); # if($DEBUG);
-my $ccse_country = {};
-csvgraph::reduce_cdp_target($ccse_country, $CCSE_DEF, ["NULL"]);	# Select Country
-$ccse_country->{title} .= "-- reduced";
-#csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 5, items => 10, search_key => "Japan"}); # if($DEBUG);
-#csvgraph::dump_csv_data($ccse_country->{csv_data}, {ok => 1, lines => 5, search_key => "Canada"});
-#csvgraph::dump_key_items($ccse_country->{key_items}, {ok => 1, lines => 5, search_key => "Japan"});
-my $gp = $CCSE_GRAPH->{graph_params};
-foreach my $reagion (@TARGET_REAGION){
-	push (@$gp, {
-		dsc => "CCSE $reagion",
-		lank => [1,10],
-		static => "rlavr",
-		target_col => ["", $reagion],
-		}
-	);
-}
-csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
-csvgraph::comvert2ern($ccse_country);				# Calc ERN
-
-# Load Apple Mobility Trends
-csvgraph::new($AMT_DEF); 
-csvgraph::load_csv($AMT_DEF);
-my $amt_country = {};
-csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, ["$REG"]);
-#csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
-csvgraph::add_average($amt_country, 2, "avr");
-csvgraph::comvert2rlavr($amt_country);
-csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
-
-#	Generate Marged Graph of Apple Mobility Trends and CCSE-ERN
-csvgraph::marge_csv($MARGE_CSV_DEF, $ccse_country, $amt_country);		# Marge CCSE(ERN) and Apple Mobility Trends
-#csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
-
-$gp = $MARGE_GRAPH_PARAMS->{graph_params};
-foreach my $reagion (@TARGET_REAGION){
-	my $rn = $reagion;
-	$rn =~ s/,.*$//;
-	my @rr = ();
-	foreach my $r (split(/,/, $reagion)){
-		push(@rr, "$r-", "~$r#");
-	}
-	$reagion = join(",", @rr);
-	
-	push (@$gp, {
-		dsc => "Mobiliy and ERN $rn",
-		lank => [1,10],
-		static => "",
-		target_col => [$reagion],
-		}
-	);
-} 
-csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);		# Gererate Graph
-csvgraph::gen_graph_by_list($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);
-
-
 ####################################################################
 #
 #	Tokyo Positive Rate from Tokyo Opensource (JSON)
 #
 my $TKY_DIR = "$config::WIN_PATH/tokyo/covid19"; # "/home/masataka/who/tokyo/covid19";
 my $TOKYO_DEF = {
-	id => "tko-json",
+	id => "tkopen",
 	title => "Tokyo Positive Rate",
 	main_url => "-- tokyo data --- ",
 	src_file => "$TKY_DIR/data/positive_rate.json",
@@ -334,12 +274,6 @@ my $TOKYO_GRAPH = {
 	],
 };
 
-#	Generate Graph
-csvgraph::new($TOKYO_DEF); 						# Load Apple Mobility Trends
-csvgraph::load_csv($TOKYO_DEF);
-#csvgraph::dump_cdp($TOKYO_DEF, {ok => 1, lines => 5});
-csvgraph::gen_html($TOKYO_DEF, $TOKYO_GRAPH);		# Generate Graph/HTHML
-
 
 #
 # year,month,date,prefectureNameJ,prefectureNameE,testedPositive,peopleTested,hospitalized,serious,discharged,deaths,effectiveReproductionNumber
@@ -350,7 +284,7 @@ my $TKO_PATH = "$config::WIN_PATH/tokyokeizai";
 my $BASE_DIR = "$TKO_PATH/covid19/data";
 my $TKO_TRAN_DEF = 
 {
-	id => "TokyoKeizai",
+	id => "tko",
 	title => "Japan COVID-19 data (Tokyo Keizai)",
 	main_url => "-- tokyo keizai data --- ",
 	csv_file => "$BASE_DIR/prefectures.csv",
@@ -390,14 +324,107 @@ my $TKO_TRAN_GRAPH = {
 		{dsc => "Japan serious", lank => [1,10], static => "rlavr", target_col => ["","","","","", "serious"] },
 		{dsc => "Japan discharged", lank => [1,10], static => "rlavr", target_col => ["","","","","", "discharged"] },
 		{dsc => "Japan deaths", lank => [1,10], static => "rlavr", target_col => ["","","","","", "deaths"] },
-		{dsc => "Japan ERN", lank => [1,10], static => "", target_col => ["","","","","", "effectiveReproductionNumber"], ymax => 3},
+		{dsc => "Japan ERN", lank => [1,10], static => "", target_col => ["","","","","Tokyo", "effectiveReproductionNumber"], ymin => "",ymax => ""},
 	],
 };
 
-csvgraph::new($TKO_TRAN_DEF); 						# Load Apple Mobility Trends
-csvgraph::load_csv($TKO_TRAN_DEF);
-#csvgraph::dump_cdp($TKO_TRAN_DEF, {ok => 1, lines => 5});
-csvgraph::gen_html($TKO_TRAN_DEF, $TKO_TRAN_GRAPH);		# Generate Graph/HTHML
+####################################
+#
+#
+#
+my @cdp_list = ($AMT_DEF, $CCSE_DEF, $MARGE_CSV_DEF, $TKO_TRAN_DEF, $TOKYO_DEF); 
+my %golist = ();
+if($#ARGV >= 0){
+	for(@ARGV){
+		foreach my $cdp (@cdp_list){
+			$golist{$_} = 1 if($cdp->{id} eq $_);
+		}
+	}
+}
+else {
+	foreach my $cdp (@cdp_list){
+		my $id = $cdp->{id};
+		$golist{$id} = 1 ;
+	}
+}
+my $ccse_country = {};
+#	Load Johns Hoping Univercity CCSE
+if($golist{ccse}){
+	csvgraph::new($CCSE_DEF); 							# Load Johns Hopkings University CCSE
+	csvgraph::load_csv($CCSE_DEF);
+	#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 1, items => 10, search_key => "Canada"}); # if($DEBUG);
+	csvgraph::reduce_cdp_target($ccse_country, $CCSE_DEF, ["NULL"]);	# Select Country
+	$ccse_country->{title} .= "-- reduced";
+	#csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 5, items => 10, search_key => "Japan"}); # if($DEBUG);
+	#csvgraph::dump_csv_data($ccse_country->{csv_data}, {ok => 1, lines => 5, search_key => "Canada"});
+	#csvgraph::dump_key_items($ccse_country->{key_items}, {ok => 1, lines => 5, search_key => "Japan"});
+	my $gp = $CCSE_GRAPH->{graph_params};
+	foreach my $reagion (@TARGET_REAGION){
+		push (@$gp, {
+			dsc => "CCSE $reagion",
+			lank => [1,10],
+			static => "rlavr",
+			target_col => ["", $reagion],
+			}
+		);
+	}
+	csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
+	csvgraph::comvert2ern($ccse_country);				# Calc ERN
+}
+
+# Load Apple Mobility Trends
+my $amt_country = {};
+if($golist{amt}){
+	csvgraph::new($AMT_DEF); 
+	csvgraph::load_csv($AMT_DEF);
+	csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, ["$REG"]);
+	#csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
+	csvgraph::add_average($amt_country, 2, "avr");
+	csvgraph::comvert2rlavr($amt_country);
+	csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
+}
+
+#	Generate Marged Graph of Apple Mobility Trends and CCSE-ERN
+if($golist{"amt-ccse"}){
+	csvgraph::marge_csv($MARGE_CSV_DEF, $ccse_country, $amt_country);		# Marge CCSE(ERN) and Apple Mobility Trends
+	#csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
+
+	my $gp = $MARGE_GRAPH_PARAMS->{graph_params};
+	foreach my $reagion (@TARGET_REAGION){
+		my $rn = $reagion;
+		$rn =~ s/,.*$//;
+		my @rr = ();
+		foreach my $r (split(/,/, $reagion)){
+			push(@rr, "$r-", "~$r#");
+		}
+		$reagion = join(",", @rr);
+		
+		push (@$gp, {
+			dsc => "Mobiliy and ERN $rn",
+			lank => [1,10],
+			static => "",
+			target_col => [$reagion],
+			}
+		);
+	} 
+	csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);		# Gererate Graph
+	csvgraph::gen_graph_by_list($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);
+}
+
+#	Generate Graph
+if($golist{"tko-json"}){
+	csvgraph::new($TOKYO_DEF); 						# Load Apple Mobility Trends
+	csvgraph::load_csv($TOKYO_DEF);
+	#csvgraph::dump_cdp($TOKYO_DEF, {ok => 1, lines => 5});
+	csvgraph::gen_html($TOKYO_DEF, $TOKYO_GRAPH);		# Generate Graph/HTHML
+}
+
+if($golist{tko}){
+	csvgraph::new($TKO_TRAN_DEF); 						# Load Apple Mobility Trends
+	csvgraph::load_csv($TKO_TRAN_DEF);
+	#csvgraph::dump_cdp($TKO_TRAN_DEF, {ok => 1, lines => 5});
+	csvgraph::gen_html($TKO_TRAN_DEF, $TKO_TRAN_GRAPH);		# Generate Graph/HTHML
+}
 
 #
 #	Down Load CSV 
