@@ -693,21 +693,21 @@ sub	copy_cdp
 {
 	my($cdp, $dst_cdp) = @_;
 	
-	&reduce_cdp($cdp, $dst_cdp, $cdp->{load_order});
+	&reduce_cdp($dst_cdp, $cdp, $cdp->{load_order});
 }
 
 sub	reduce_cdp_target
 {
-	my ($cdp, $dst_cdp, $target_colp) = @_;
+	my ($dst_cdp, $cdp, $target_colp) = @_;
 
 	my @target_keys = ();
 	&select_keys($cdp, $target_colp, \@target_keys);
-	&reduce_cdp($cdp, $dst_cdp, \@target_keys);
+	&reduce_cdp($dst_cdp, $cdp, \@target_keys);
 }
 
 sub	reduce_cdp
 {
-	my($cdp, $dst_cdp, $target_keys) = @_;
+	my($dst_cdp, $cdp, $target_keys) = @_;
 
 	&new($dst_cdp);
 
@@ -795,6 +795,20 @@ sub	add_average
 }
 
 #
+#	Generate png, plot-csv.txt, plot-cmv
+#
+sub	gen_graph_by_list
+{
+	my($cdp, $gdp) = @_;
+	foreach my $gp (@{$gdp->{graph_params}}){
+		&csv2graph($cdp, $gdp, $gp);
+		dp::dp join(",", $gp->{dsc}, $gp->{start_date}, $gp->{end_date},
+				$gp->{fname}, $gp->{plot_png}, $gp->{plot_csv}, $gp->{plot_cmd}) . "\n";
+	}
+	return (@{$gdp->{graph_params}});
+}
+
+#
 #
 #	&gen_html($cdp, $GRAPH_PARAMS);
 #
@@ -868,9 +882,9 @@ sub	gen_html
 		#
 		#	References
 		#
-		my @refs = (join(":", "PNG", $png_rel_path . $gp->{plot_png}),
-					join(":", "CSV", $png_rel_path . $gp->{plot_csv}),
-					join(":", "PLT", $png_rel_path . $gp->{plot_cmd}),
+		my @refs = (join(":", "PNG", $png_rel_path . "/" .$gp->{plot_png}),
+					join(":", "CSV", $png_rel_path . "/" .$gp->{plot_csv}),
+					join(":", "PLT", $png_rel_path . "/" .$gp->{plot_cmd}),
 		);
 		print HTML "<hr>\n";
 		print HTML "<span $class>";

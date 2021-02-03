@@ -40,6 +40,12 @@ binmode(STDOUT, ":utf8");
 my $VERBOSE = 0;
 my $DOWN_LOAD = 0;
 
+my $WIN_PATH = "/mnt/f/_share/cov/plussum.github.io";
+my $HTML_PATH = "$WIN_PATH/HTML2",
+my $PNG_PATH  = "$WIN_PATH/PNG2",
+my $PNG_REL_PATH  = "../PNG2",
+my $CSV_PATH  = $config::WIN_PATH;
+
 my $DEFAULT_AVR_DATE = 7;
 my $END_OF_DATA = "###EOD###";
 
@@ -81,9 +87,9 @@ my $AVR = "avr";
 
 my $AMT_GRAPH = {
 	html_title => $AMT_DEF->{title},
-	png_path   => "$config::PNG_PATH",
-	png_rel_path => "../PNG",
-	html_file => "$config::HTML_PATH/apple_mobile.html",
+	png_path   => "$PNG_PATH",
+	png_rel_path => $PNG_REL_PATH,
+	html_file => "$HTML_PATH/apple_mobile.html",
 
 	dst_dlm => "\t",
 	avr_date => 7,
@@ -106,10 +112,11 @@ my $AMT_GRAPH = {
 #
 #	Definition of Johns Hpkings University CCSE CSV format
 #
+my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 my $CCSE_DEF = {
 	title => "Johns Hopkins Global",
 	main_url =>  "https://covid19.apple.com/mobility",
-	csv_file =>  "$config::CSV_PATH/time_series_covid19_confirmed_global.csv",
+	csv_file =>  "$CCSE_BASE_DIR/time_series_covid19_confirmed_global.csv",
 	src_url => $src_url,		# set
 	cumrative => 1,
 	down_load => \&download,
@@ -123,9 +130,9 @@ my $CCSE_DEF = {
 };
 my $CCSE_GRAPH = {
 	html_title => $CCSE_DEF->{title},
-	png_path   => "$config::PNG_PATH",
-	png_rel_path => "../PNG",
-	html_file => "$config::HTML_PATH/ccse2.html",
+	png_path   => "$PNG_PATH",
+	png_rel_path => $PNG_REL_PATH,
+	html_file => "$HTML_PATH/ccse2.html",
 
 	dst_dlm => "\t",
 	avr_date => 7,
@@ -165,9 +172,9 @@ my $additional_plot = join(",", @additonal_plot_list);
 
 my $MARGE_GRAPH_PARAMS = {
 	html_title => "MARGE Apple Mobility Trends and ERN",
-	png_path   => "$config::PNG_PATH",
-	png_rel_path => "../PNG",
-	html_file => "$config::HTML_PATH/applemobile_ern.html",
+	png_path   => "$PNG_PATH",
+	png_rel_path => $PNG_REL_PATH,
+	html_file => "$HTML_PATH/applemobile_ern.html",
 
 	dst_dlm => "\t",
 	avr_date => 7,
@@ -232,7 +239,38 @@ foreach my $reagion (@TARGET_REAGION){
 #foreach my $p (@$gp){
 #	dp::dp join(", ", $p->{dsc}, @{$p->{target_col}}, @{$p->{lank}}, ) . "\n";
 #}
+#
+#	Generate Graph of Apple Mobility Trends and John Hopings CCSE-ERN
+#
+# Load Apple Mobility Trends
+csvgraph::new($AMT_DEF); 
+csvgraph::load_csv($AMT_DEF);
+my $amt_country = {};
+csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, ["$REG"]);
+csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
+csvgraph::add_average($amt_country, 2, "avr");
+csvgraph::comvert2rlavr($amt_country);
+csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
 
+#	Load Johns Hoping Univercity CCSE
+csvgraph::new($CCSE_DEF); 							# Load Johns Hopkings University CCSE
+csvgraph::load_csv($CCSE_DEF);
+my $ccse_country = {};
+csvgraph::reduce_cdp_target($ccse_country, $CCSE_DEF, ["NULL"]);	# Select Country
+csvgraph::comvert2ern($ccse_country);				# Calc ERN
+csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
+
+#	Generate Marged Graph of Apple Mobility Trends and CCSE-ERN
+csvgraph::marge_csv($MARGE_CSV_DEF, $ccse_country, $amt_country);		# Marge CCSE(ERN) and Apple Mobility Trends
+#csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
+csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);		# Gererate Graph
+csvgraph::gen_graph_by_list($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);
+
+
+####################################################################
+#
+#	Tokyo Positive Rate from Tokyo Opensource (JSON)
+#
 my $TKY_DIR = "$config::WIN_PATH/tokyo/covid19"; # "/home/masataka/who/tokyo/covid19";
 my $TOKYO_DEF = {
 	title => "Tokyo Positive Rate",
@@ -251,9 +289,9 @@ my $TOKYO_DEF = {
 };
 my $TOKYO_GRAPH = {
 	html_title => $TOKYO_DEF->{title},
-	png_path   => "$config::PNG_PATH",
-	png_rel_path => "../PNG",
-	html_file => "$config::HTML_PATH/tokyoTest.html",
+	png_path   => "$PNG_PATH",
+	png_rel_path => $PNG_REL_PATH,
+	html_file => "$HTML_PATH/tokyoTest.html",
 
 	dst_dlm => "\t",
 	avr_date => 7,
@@ -268,14 +306,15 @@ my $TOKYO_GRAPH = {
 	additional_plot => "",
 
 	graph_params => [
-		{dsc => "Japan ", lank => [1,10], static => "", target_col => ["",""] },
+		{dsc => "Tokyo ", lank => [1,10], static => "", target_col => ["",""] },
+		{dsc => "Tokyo ", lank => [1,10], static => "rlavr", target_col => ["",""] },
 	],
 };
 
-
+#	Generate Graph
 csvgraph::new($TOKYO_DEF); 						# Load Apple Mobility Trends
 csvgraph::load_csv($TOKYO_DEF);
-csvgraph::dump_cdp($TOKYO_DEF, {ok => 1, lines => 5});
+#csvgraph::dump_cdp($TOKYO_DEF, {ok => 1, lines => 5});
 csvgraph::gen_html($TOKYO_DEF, $TOKYO_GRAPH);		# Generate Graph/HTHML
 
 
@@ -304,9 +343,9 @@ my $TKO_TRAN_DEF =
 };
 my $TKO_TRAN_GRAPH = {
 	html_title => $TKO_TRAN_DEF->{title},
-	png_path   => "$config::PNG_PATH",
-	png_rel_path => "../PNG",
-	html_file => "$config::HTML_PATH/tokyoTest2.html",
+	png_path   => "$PNG_PATH",
+	png_rel_path => $PNG_REL_PATH,
+	html_file => "$HTML_PATH/tokyoTest2.html",
 
 	dst_dlm => "\t",
 	avr_date => 7,
@@ -330,7 +369,7 @@ csvgraph::new($TKO_TRAN_DEF); 						# Load Apple Mobility Trends
 csvgraph::load_csv($TKO_TRAN_DEF);
 csvgraph::dump_cdp($TKO_TRAN_DEF, {ok => 1, lines => 5});
 csvgraph::gen_html($TKO_TRAN_DEF, $TKO_TRAN_GRAPH);		# Generate Graph/HTHML
-exit;
+
 #
 #	Down Load CSV 
 #
@@ -340,7 +379,14 @@ sub	download
 	return 1;
 }
 
-if(0){
+
+
+
+#
+#
+#
+sub	test_seach_list
+{
 	my @skeys = (
 		["Japan", "~Japan-"],
 		["United Kingdom", "United Kingdom-"],
@@ -351,37 +397,4 @@ if(0){
 			dp::dp csvlib::search_listn($item, @$skey) . "[$item]" . join(",", @$skey) . "\n";
 		}
 	}
-	exit;
 }
-
-#
-#
-#
-csvgraph::new($AMT_DEF); 						# Load Apple Mobility Trends
-csvgraph::load_csv($AMT_DEF);
-my $amt_country = {};
-csvgraph::reduce_cdp_target($AMT_DEF, $amt_country, ["$REG"]);
-csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
-csvgraph::add_average($amt_country, 2, "avr");
-csvgraph::comvert2rlavr($amt_country);
-csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
-
-csvgraph::new($CCSE_DEF); 						# Load Johns Hopkings University CCSE
-csvgraph::load_csv($CCSE_DEF);
-my $ccse_country = {};
-csvgraph::reduce_cdp_target($CCSE_DEF, $ccse_country, ["NULL"]);
-csvgraph::comvert2ern($ccse_country);				# Calc ERN
-csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
-
-csvgraph::marge_csv($MARGE_CSV_DEF, $ccse_country, $amt_country);		# Marge CCSE(ERN) and Apple Mobility Trends
-#csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
-csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);		# Gererate Graph
-exit;
-
-my $gdp = $MARGE_GRAPH_PARAMS;
-foreach my $gp (@{$gdp->{graph_params}}){
-	csvgraph::csv2graph($MARGE_CSV_DEF, $gdp, $gp);
-	dp::dp join(",", $gp->{dsc}, $gp->{start_date}, $gp->{end_date},
-			$gp->{fname}, $gp->{plot_png}, $gp->{plot_csv}, $gp->{plot_cmd}) . "\n";
-}
-
