@@ -369,7 +369,7 @@ my $TKO_TRAN_GRAPH = {
 	html_title => $TKO_TRAN_DEF->{title},
 	png_path   => "$PNG_PATH",
 	png_rel_path => $PNG_REL_PATH,
-	html_file => "$HTML_PATH/tokyoTest2.html",
+	html_file => "$HTML_PATH/JapanTokyoKeizai.html",
 
 	dst_dlm => "\t",
 	avr_date => 7,
@@ -379,13 +379,18 @@ my $TKO_TRAN_GRAPH = {
 	timefmt => '%Y-%m-%d', format_x => '%m/%d',
 	term_x_size => 1000, term_y_size => 350,
 
-	y2label => 'ERN', y2min => 0, y2max => 3, y2_source => 0,		# soruce csv definition for y2
-	ylabel => '%', ymin => 0,
+	#y2label => 'ERN', y2min => 0, y2max => 3, y2_source => 0,		# soruce csv definition for y2
+	ylabel => "Number", ymin => 0,
 	additional_plot => "",
 
 	graph_params => [
-		{dsc => "TRY! ", lank => [1,10], static => "", target_col => ["","","","","Tokyo"] },
-		{dsc => "TRY 2! ", lank => [1,10], static => "", target_col => ["","","","","", "testedPositive"] },
+		{dsc => "Japan TestPositive ", lank => [1,10], static => "rlavr", target_col => ["","","","","", "testedPositive"] },
+		{dsc => "Japan PeopleTested", lank => [1,10], static => "rlavr", target_col => ["","","","","", "peopleTested"] },
+		{dsc => "Japan hospitalized", lank => [1,10], static => "rlavr", target_col => ["","","","","", "hospitalized"] },
+		{dsc => "Japan serious", lank => [1,10], static => "rlavr", target_col => ["","","","","", "serious"] },
+		{dsc => "Japan discharged", lank => [1,10], static => "rlavr", target_col => ["","","","","", "discharged"] },
+		{dsc => "Japan deaths", lank => [1,10], static => "rlavr", target_col => ["","","","","", "deaths"] },
+		{dsc => "Japan ERN", lank => [1,10], static => "", target_col => ["","","","","", "effectiveReproductionNumber"], ymax => 3},
 	],
 };
 
