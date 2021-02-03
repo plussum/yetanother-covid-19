@@ -170,6 +170,7 @@ sub	dump_csv_data
 	my $items = $p->{items} // 5;
 	my $src_csv = $p->{src_csv} // "";
 	my $mess = $p->{message} // "";
+	my $search_key = $p->{search_key} // "";
 
 	dp::dp "------ [$mess] Dump csv data ($csv_data) --------\n";
 	csvlib::disp_caller(1..3);
@@ -183,7 +184,11 @@ sub	dump_csv_data
 			dp::dp " --> [$k] csv_data is not assigned\n";
 		}
 		if($ok){
-			last if($lines && $ln++ >= $lines);
+			if($lines && $ln++ >= $lines){
+				last if(!$search_key);
+				next if(! ($k =~ /$search_key/));
+				#dp::dp "much [$k] =~ [$search_key]\n";
+			}
 
 			my $scv = "--";
 			$scv = $src_csv->{$k} if($src_csv && defined $src_csv->{$k});
@@ -696,13 +701,22 @@ sub	copy_cdp
 	&reduce_cdp($dst_cdp, $cdp, $cdp->{load_order});
 }
 
+my $dumpf = 0;
 sub	reduce_cdp_target
 {
 	my ($dst_cdp, $cdp, $target_colp) = @_;
 
 	my @target_keys = ();
 	&select_keys($cdp, $target_colp, \@target_keys);
+	my $ft = $target_colp->[0] ;
+	if(0 && $ft eq "NULL"){
+		$dumpf = 1;
+		dp::dp "###### NULL #######\n";
+		#dp::dp join("\n", @target_keys);
+		#dp::dp "###### NULL #######\n";
+	}
 	&reduce_cdp($dst_cdp, $cdp, \@target_keys);
+	$dumpf = 0;
 }
 
 sub	reduce_cdp
@@ -719,17 +733,22 @@ sub	reduce_cdp
 
 	%$dst_cdp = %$cdp;
 	foreach my $array_item (@arrays){
+		$dst_cdp->{$array_item} = [];
 		@{$dst_cdp->{$array_item}} = @{$cdp->{$array_item}};
 	}
 	foreach my $hash_item (@hashs){
+		$dst_cdp->{$hash_item} = {};
 		%{$dst_cdp->{$hash_item}} = %{$cdp->{$hash_item}};
 	}
 
 	foreach my $hwk (@hash_with_keys){
 		my $src = $cdp->{$hwk};
+		$dst_cdp->{$hwk} = {};
 		my $dst = $dst_cdp->{$hwk};
 		foreach my $key (@$target_keys){
-			@{$src->{$key}} = @{$dst->{$key}};
+			#dp::dp "reduce - target_keys: $hwk:$key\n" if($dumpf);
+			$dst->{$key} = [];
+			@{$dst->{$key}} = @{$src->{$key}};
 		}
 	}
 }
@@ -967,6 +986,7 @@ sub	csv2graph
 	#
 	my @target_keys = ();
 	&select_keys($cdp, $gp->{target_col}, \@target_keys);	# select data for target_keys
+	dp::dp "target_col: " . join(" : ", @{$gp->{target_col}}) . "\n";
 	if($#target_keys < 0){
 		dp::dp "WARNING: No data $cdp->{title} / keys:" . join("; ", @{$gp->{target_col}}) . "\n";
 		return 0;
@@ -1138,8 +1158,8 @@ sub	select_keys
 {
 	my($cdp, $target_colp, $target_keys) = @_;
 
-	my @target_col = ();
-	my @non_target_col = ();
+	my @target_col_array = ();
+	my @non_target_col_array = ();
 	my $condition = 0;
 	my $clm = 0;
 	foreach my $sk (@$target_colp){
@@ -1147,29 +1167,29 @@ sub	select_keys
 		if($sk){
 			my ($tg, $ex) = split(/ *\! */, $sk);
 			my @w = split(/\s*,\s*/, $tg);
-			push(@target_col, [@w]);
+			push(@target_col_array, [@w]);
 			$condition++;
 
 			@w = ();
 			if($ex){
 				@w = split(/\s*,\s*/, $ex);
 			}
-			push(@non_target_col, [@w]);
+			push(@non_target_col_array, [@w]);
 			#dp::dp "NoneTarget:[$clm] " . join(",", @w) . "\n";
 		}
 		else {
-			push(@target_col, []);
-			push(@non_target_col, []);
+			push(@target_col_array, []);
+			push(@non_target_col_array, []);
 		}
 		$clm++;
 	}
 
 	dp::dp "Condition: $condition " . join(", ", @$target_colp) . "\n";
-	#dp::dp "Nontarget: " . join(",", @non_target_col) . "\n";
+	#dp::dp "Nontarget: " . join(",", @non_target_col_array) . "\n";
 	my $key_items = $cdp->{key_items};
 	foreach my $key (keys %$key_items){
 		my $key_in_data = $key_items->{$key};
-		my $res = &check_keys($key_in_data, \@target_col, \@non_target_col, $key);
+		my $res = &check_keys($key_in_data, \@target_col_array, \@non_target_col_array, $key);
 		#dp::dp "[$key:$condition:$res]\n" if($res > 1);
 		#dp::dp "### " . join(", ", (($res >= $condition) ? "#" : "-"), $key, $res, $condition, @$key_in_data) . "\n";
 		next if ($res < 0);
@@ -1190,7 +1210,7 @@ sub	select_keys
 #
 sub	check_keys
 {
-	my($key_in_data, $target_col, $non_target_col, $key) = @_;
+	my($key_in_data, $target_col_array, $non_target_col_array, $key) = @_;
 
 	if(!defined $key_in_data){
 		dp::dp "###!!!! key in data not defined [$key]\n";
@@ -1198,27 +1218,30 @@ sub	check_keys
 	#dp::dp "key_in_data: $key_in_data " . scalar(@$key_in_data) . " [$key]\n";
 	my $kid = join(",", @$key_in_data);
 	my $condition = 0;
-	my $cols = scalar(@$target_col) - 1;
+	my $cols = scalar(@$target_col_array) - 1;
 
 	for(my $kn = 0; $kn <= $cols; $kn++){
-		next if(! ($target_col->[$kn] // ""));			# no key
-		next if(! ($non_target_col->[$kn] // ""));		# no key
+		next if(! ($target_col_array->[$kn] // ""));			# no key
+		next if(scalar($target_col_array->[$kn]) <= 0);			# no key
+
+		next if(! ($non_target_col_array->[$kn] // ""));		# no key
+		next if(scalar($non_target_col_array->[$kn]) <= 0);			# no key
 		
-		#dp::dp ">>> " . join(",", $key_in_data->[$kn] . ":", @{$non_target_col->[$kn]}) . "\n" if($kid =~ /country.*Japan/);
-		if(scalar(@{$non_target_col->[$kn]}) > 0){			# Check execlusion
-			if(csvlib::search_listn($key_in_data->[$kn], @{$non_target_col->[$kn]}) >= 0){
+		#dp::dp ">>> " . join(",", $key_in_data->[$kn] . ":", @{$non_target_col_array->[$kn]}) . "\n" if($kid =~ /country.*Japan/);
+		if(scalar(@{$non_target_col_array->[$kn]}) > 0){			# Check execlusion
+			if(csvlib::search_listn($key_in_data->[$kn], @{$non_target_col_array->[$kn]}) >= 0){
 				#dp::dp "EXECLUSION: $kid \n";
 				$condition = -1;							# hit to execlusion
 				last;
 			}
-			elsif(scalar(@{$target_col->[$kn]}) <= 0){		# Only execlusions were set (no specific target)
+			elsif(scalar(@{$target_col_array->[$kn]}) <= 0){		# Only execlusions were set (no specific target)
 				$condition++;				
 				next;
 			}
 		}
 
-		#dp::dp join(", ", "data ", $kn, $key_in_data->[$kn], @{$target_col->[$kn]}) . "\n";# if($kid =~ /Tokyo/);
-		if(csvlib::search_listn($key_in_data->[$kn], @{$target_col->[$kn]}) >= 0){
+		#dp::dp join(", ", "data ", $kn, $key_in_data->[$kn], @{$target_col_array->[$kn]}) . "\n";# if($kid =~ /Tokyo/);
+		if(csvlib::search_listn($key_in_data->[$kn], @{$target_col_array->[$kn]}) >= 0){
 			$condition++ 									# Hit to target
 		}
 	}

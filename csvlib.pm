@@ -190,7 +190,7 @@ sub search_listn
     for(my $i = 0; $i <= $#w; $i++){
 		my $ntc = $w[$i];
 
-		#dp::dp "search_list: $sk:$ntc\n" if($sk =~ /Japan/);
+		#dp::dp "search_list: $sk:$ntc\n" if($sk =~ /Canada/);
 		if($ntc eq "NULL"){
 			return $i if($sk eq "");
 		}

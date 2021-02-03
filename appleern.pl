@@ -208,6 +208,9 @@ my $MARGE_GRAPH_PARAMS = {
 };
 
 my @TARGET_REAGION = (
+		"Canada", 
+);
+my @TARGET_REAGION__ = (
 		"Japan", "US,United States", 
 		"United Kingdom", "France", "Spain", "Italy", "Russia", 
 			"Germany", "Poland", "Ukraine", "Netherlands", "Czechia,Czech Republic", "Romania",
@@ -216,26 +219,7 @@ my @TARGET_REAGION = (
 		"Brazil", "Colombia", "Argentina",  "Canada", "Chile", "Mexico",
 		"South Africa", 
 );
-my $TARGET_GRAPH_TAG = {dsc => "", lank => [1,10], static => "", target_col => [] };
-my $gp = $MARGE_GRAPH_PARAMS->{graph_params};
 
-foreach my $reagion (@TARGET_REAGION){
-	my $rn = $reagion;
-	$rn =~ s/,.*$//;
-	my @rr = ();
-	foreach my $r (split(/,/, $reagion)){
-		push(@rr, "$r-", "~$r#");
-	}
-	$reagion = join(",", @rr);
-	
-	push (@$gp, {
-		dsc => "Mobiliy and ERN $rn",
-		lank => [1,10],
-		static => "",
-		target_col => [$reagion],
-		}
-	);
-} 
 #foreach my $p (@$gp){
 #	dp::dp join(", ", $p->{dsc}, @{$p->{target_col}}, @{$p->{lank}}, ) . "\n";
 #}
@@ -257,13 +241,42 @@ csvgraph::new($CCSE_DEF); 							# Load Johns Hopkings University CCSE
 csvgraph::load_csv($CCSE_DEF);
 my $ccse_country = {};
 csvgraph::reduce_cdp_target($ccse_country, $CCSE_DEF, ["NULL"]);	# Select Country
-csvgraph::comvert2ern($ccse_country);				# Calc ERN
+csvgraph::dump_csv_data($ccse_country->{csv_data}, {ok => 1, lines => 5, search_key => "Canada"});
+my $gp = $CCSE_GRAPH->{graph_params};
+foreach my $reagion (@TARGET_REAGION){
+	push (@$gp, {
+		dsc => "CCSE $reagion",
+		lank => [1,10],
+		static => "rlavr",
+		target_col => ["", $reagion],
+		}
+	);
+}
 csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
-
+csvgraph::comvert2ern($ccse_country);				# Calc ERN
+exit;
 #	Generate Marged Graph of Apple Mobility Trends and CCSE-ERN
 csvgraph::marge_csv($MARGE_CSV_DEF, $ccse_country, $amt_country);		# Marge CCSE(ERN) and Apple Mobility Trends
 #csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
 csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);		# Gererate Graph
+$gp = $MARGE_GRAPH_PARAMS->{graph_params};
+foreach my $reagion (@TARGET_REAGION){
+	my $rn = $reagion;
+	$rn =~ s/,.*$//;
+	my @rr = ();
+	foreach my $r (split(/,/, $reagion)){
+		push(@rr, "$r-", "~$r#");
+	}
+	$reagion = join(",", @rr);
+	
+	push (@$gp, {
+		dsc => "Mobiliy and ERN $rn",
+		lank => [1,10],
+		static => "",
+		target_col => [$reagion],
+		}
+	);
+} 
 csvgraph::gen_graph_by_list($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);
 
 
