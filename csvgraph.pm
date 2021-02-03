@@ -150,16 +150,33 @@ sub	dump_cdp
 
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
-	my $load_order = $cdp->{load_order};
-
 	my $key_count = keys (%$csv_data);
+	my $load_order = $cdp->{load_order};
 	
-	print "-------- Dump CSV Data($key_items)  $key_count ----------\n";
 	$p->{src_csv} = $cdp->{src_csv};
 	&dump_csv_data($csv_data, $p);
+	&dump_key_items($key_items, $p);
 	#dp::dp "LOAD ORDER " . join(",", @$load_order) . "\n";
 
 	print "#" x 40 . "\n\n";
+}
+
+sub dump_key_items
+{
+	my($key_items, $p) = @_;
+	my $ok = $p->{ok} // 1;
+	my $lines = $p->{lines} // "";
+	my $items = $p->{items} // 5;
+	my $src_csv = $p->{src_csv} // "";
+	my $mess = $p->{message} // "";
+	my $search_key = $p->{search_key} // "";
+
+	dp::dp "------ [$mess] Dump keyitems data ($key_items) --------\n";
+	my $ln = 0;
+	foreach my $k (keys %$key_items){
+		last if($ln++ > $items);
+		print "key_items $k: " . "\n" ; #. join(",", @{$key_items->{$k}}[0..10]) . "\n";
+	}
 }
 
 sub	dump_csv_data
@@ -716,6 +733,7 @@ sub	reduce_cdp_target
 		#dp::dp "################\n";
 	}
 	&reduce_cdp($dst_cdp, $cdp, \@target_keys);
+	&dump_cdp($dst_cdp, {ok => 1, lines => 20, items => 20}); # if($DEBUG);
 	$dumpf = 0;
 }
 
@@ -751,11 +769,17 @@ sub	reduce_cdp
 			@{$dst->{$key}} = @{$src->{$key}};
 		}
 	}
+	my $dst_key = $dst_cdp->{key_items};
 	my $dst_csv = $dst_cdp->{csv_data};
+	my $kn = 0;
 	foreach my $key (keys %$dst_csv){
+		last if($kn++ > 5);
+
 		dp::dp "############ $key\n" if($key =~ /Canada/);
-		dp::dp "[$key] " . join(",", @{$dst_csv->{$key}}[0..5]) . "\n";
+		dp::dp "csv[$key] " . join(",", @{$dst_csv->{$key}}[0..5]) . "\n";
+		dp::dp "key[$key] " . join(",", @{$dst_key->{$key}}[0..5]) . "\n";
 	}
+	&dump_cdp($dst_cdp, {ok => 1, lines => 20, items => 20}); # if($DEBUG);
 }
 
 #

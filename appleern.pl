@@ -209,7 +209,7 @@ my $MARGE_GRAPH_PARAMS = {
 };
 
 my @TARGET_REAGION = (
-		"Canada-", 
+		"Canada", 
 );
 my @TARGET_REAGION__ = (
 		"Japan", "US,United States", 
@@ -233,7 +233,8 @@ csvgraph::new($CCSE_DEF); 							# Load Johns Hopkings University CCSE
 csvgraph::load_csv($CCSE_DEF);
 my $ccse_country = {};
 csvgraph::reduce_cdp_target($ccse_country, $CCSE_DEF, ["NULL"]);	# Select Country
-csvgraph::dump_csv_data($ccse_country->{csv_data}, {ok => 1, lines => 5, search_key => "Canada"});
+csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 20, items => 20}); # if($DEBUG);
+#csvgraph::dump_csv_data($ccse_country->{csv_data}, {ok => 1, lines => 5, search_key => "Canada"});
 my $gp = $CCSE_GRAPH->{graph_params};
 foreach my $reagion (@TARGET_REAGION){
 	push (@$gp, {
