@@ -102,16 +102,21 @@ my $AMT_GRAPH = {
 	graph => "line",
 	additional_plot => "100 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
 	graph_params => [
-		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,10], static => "", 
-			target_col => [$REG, "", "", "", ""], 
-			start_date => "2020-04-01", end_date => "2021-01-13", ymax => ""},
+		{dsc => "Worldwide Apple mobility Trends and ERN", lank => [1,10], static => "", 
+			target_col => [$REG, "", "", "", ""], },
+		{dsc => "Worldwide Apple mobility Trends and ERN", lank => [1,10], static => "rlavr", 
+			target_col => [$REG, "", "", "", ""], },
+		{dsc => "Japan Apple mobility Trends and ERN", lank => [1,10], static => "rlavr", 
+			target_col => [$REG, "Japan", "", "", ""], },
+		{dsc => "Japan Pref Apple mobility Trends and ERN", lank => [1,10], static => "rlavr", 
+			target_col => [$SUBR, "", $AVR, "", "Japan"], },
 	],
 };
 
 #
 #	Definition of Johns Hpkings University CCSE CSV format
 #
-my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
+my $CCSE_BASE_DIR = "$WIN_PATH/ccse/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 my $CCSE_DEF = {
 	id => "ccse",
 	title => "Johns Hopkins Global",
@@ -367,12 +372,20 @@ else {
 	dp::dp "usage:$0 " . join(" | ", "-all", @ids) ."\n";
 	exit;
 }
+if($golist{"amt-ccse"}){
+	$golist{amt} = 1;
+	$golist{ccse} = 1;
+}
 if($all){
 	foreach my $cdp (@cdp_list){
 		my $id = $cdp->{id};
 		$golist{$id} = 1 ;
 	}
 }
+
+#
+#	Load CCSE
+#
 my $ccse_country = {};
 #	Load Johns Hoping Univercity CCSE
 if($golist{ccse}){
@@ -397,17 +410,21 @@ if($golist{ccse}){
 	csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
 	csvgraph::comvert2ern($ccse_country);				# Calc ERN
 }
-
+#
 # Load Apple Mobility Trends
+#
 my $amt_country = {};
 if($golist{amt}){
 	csvgraph::new($AMT_DEF); 
 	csvgraph::load_csv($AMT_DEF);
+
+	#csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, ["$REG"]);
 	csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, ["$REG"]);
 	#csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
 	csvgraph::add_average($amt_country, 2, "avr");
-	csvgraph::comvert2rlavr($amt_country);
 	csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
+
+	csvgraph::comvert2rlavr($amt_country);				# rlavr for marge
 }
 
 #	Generate Marged Graph of Apple Mobility Trends and CCSE-ERN
