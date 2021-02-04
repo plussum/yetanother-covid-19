@@ -108,8 +108,8 @@ my $AMT_GRAPH = {
 			target_col => [$REG, "", "", "", ""], },
 		{dsc => "Japan Apple mobility Trends and ERN", lank => [1,10], static => "rlavr", 
 			target_col => [$REG, "Japan", "", "", ""], },
-		{dsc => "Japan Pref Apple mobility Trends and ERN", lank => [1,10], static => "rlavr", 
-			target_col => [$SUBR, "", $AVR, "", "Japan"], },
+#		{dsc => "Japan Pref Apple mobility Trends and ERN", lank => [1,10], static => "rlavr", 
+#			target_col => [$SUBR, "", $AVR, "", "Japan"], },
 	],
 };
 
@@ -420,7 +420,7 @@ if($golist{amt}){
 
 	#csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, ["$REG"]);
 	csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, ["$REG"]);
-	#csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
+	csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
 	csvgraph::add_average($amt_country, 2, "avr");
 	csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
 

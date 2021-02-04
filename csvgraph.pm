@@ -92,18 +92,47 @@ my $DEBUG = 0;
 my $VERBOSE = 0;
 my $DEFAULT_AVR_DATE = 7;
 my $DEFAULT_KEY_DLM = "-";					# Initial key items
+my $DEFAULT_GRAPH = "line";
 our $CDP = {};
 
 my $FIRST_DATE = "";
 my $LAST_DATE  = "";
 
-my @cdp_arrays = ("date_list", "keys", "load_order");
-my @cdp_hashs = ("order");
-my @cdp_hash_with_keys = ("csv_data", "key_items");
-my @cdp_values = ("title", "main_url", "src_url", "csv_file",
-		"down_load", 
-		"src_dlm", "timefmt", "data_start");
-my $DEFAULT_GRAPH = "line";
+#
+# Province,Region, Lat, Long, 2021-01-23, 2021-01-24
+# ,Japan,33.39,44.12,32,101, 10123, 10124,,,,
+# Tokyo,Japan,33.39,44.12,32,20123, 20124,,,,
+#
+my @cdp_arrays = (
+	"date_list", 	# Date list (formated %Y-%m-%d)
+	"keys", 		# items to gen key [1, 0] -> Japan#Tokyo, Japan#
+	"load_order",	# Load order of the key (Japan#Tokyo, Japan#)
+	"item_name_list",			# set by load csv ["Province","Region","Lat","Long"]
+	"defined_item_name_list",	# set by user (definition)
+);
+
+my @cdp_hashs = (
+	"order",					# sorted order 
+	"item_name_hash",			# {"Province" => 0,"Region" => 1,"Lat" => 2,"Long" => 3]
+	"defined_item_name_hash",	# Set from @defined_item_name_list
+);
+
+my @cdp_hash_with_keys = (
+	"csv_data", 				# csv_data->{Japan#Tokyo}: [10123, 10124,,,,]
+	"key_items"					# key_items->{Japan#Tokyo}: ["Tokyo","Japan",33,39]
+);
+my @cdp_values = (
+	"id",			# ID of the definition "ccse", "amt" ,, etc
+	"title", 		# Title(Description) of the definition
+	"main_url", 	# main url to reffer
+	"src_url", 		# source url of data
+	"csv_file",		# CSV(or other) file to be downloaded
+	"src_dlm", 		# Delimtter of the data "," or "\t"
+	"timefmt", 		# Time format (gnuplot) %Y-%m-%d, %Y/%m/%d, etc
+	"data_start",	# Data start colum, ex, 4 : Province,Region, Lat, Long, 2021-01-23, 
+	"down_load", 	# Download function
+);
+
 sub	new
 {
 	my ($cdp) = @_;
@@ -141,16 +170,38 @@ sub	dump_cdp
 	my $mess = $p->{message} // "";
 
 	print "#" x 10 . "[$mess] CSV DUMP " . $cdp->{title} . " " . "#" x 10 ."\n";
-	#
-	#	Dump Values
-	#
-	foreach my $item (@cdp_values){
-		print join("\t", $item, $cdp->{$item}// "undefined") . "\n"; 
+	print "##### VALUE ######\n";
+	foreach my $k (@cdp_values){
+		print "$k\t" . ($cdp->{$k} // "undef") . "\n";
+	}
+	print "##### ARRAY ######\n";
+	foreach my $k (@cdp_arrays){
+		my $p = $cdp->{$k} // "";
+		if($p){
+			my $arsize = scalar(@$p) - 1;
+			$arsize = $items if($arsize > $items);
+		 	print "$k\t" . join(",", @$p[0..$items]). "\n";
+		}
+		else {
+			print "$k\tundef\n";
+		}
+	}
+	print "##### HASH ######\n";
+	foreach my $k (@cdp_hashs){
+		my $p = $cdp->{$k} // "";
+		if($p){
+			my @ar = %$p;
+			my $arsize = ($#ar > ($items * 2)) ? ($items * 2) : $#ar;
+		 	print "$k\t" . join(",", @$p[0..$items]). "\n";
+		}
+		else {
+			print "$k\tundef\n";
+		}
 	}
 
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
-	my $key_count = keys (%$csv_data);
+	my $key_count = scalar(keys (%$csv_data));
 	my $load_order = $cdp->{load_order};
 	
 	$p->{src_csv} = $cdp->{src_csv};
@@ -168,6 +219,7 @@ sub dump_key_items
 	my $lines = $p->{lines} // 5;
 	my $items = $p->{items} // 5;
 	my $mess = $p->{message} // "";
+
 
 	my $src_csv = $cdp->{src_csv} // "";
 	my $search_key = $p->{search_key} // "";
@@ -196,6 +248,7 @@ sub	dump_csv_data
 	my $mess = $p->{message} // "";
 	my $search_key = $p->{search_key} // "";
 	$lines = 0 if($search_key && ! defined $p->{lines});
+
 
 	print "------ [$mess] Dump csv data ($csv_data) --------\n";
 	#csvlib::disp_caller(1..3);
@@ -296,6 +349,13 @@ sub	load_csv_holizontal
 	$line = decode('utf-8', $line);
 
 	my @w = split(/$src_dlm/, $line);
+
+	@{$cdp->{item_name_list}} = @w[0..($data_start-1)];	# set item_name 
+	my $inhp = $cdp->{item_name_hash};
+	for(my $i = 0; $i < $data_start; $i++){
+		$inhp->{$w[$i]} = $i;
+	}
+
 	@$date_list = @w[$data_start..$#w];
 	for(my $i = 0; $i < scalar(@$date_list); $i++){
 		$date_list->[$i] = &timefmt($timefmt, $date_list->[$i]);
@@ -400,22 +460,9 @@ sub	load_csv_vertical
 	$LAST_DATE = $date_list->[$ln-1];
 }
 
-#{	
-#		src => "$TKY_DIR/data/positive_rate.json",
-#		date => "diagnosed_date",
-#		dst => "tky_pr",
-#		title => "Tokyo Positive Rate",
-#		ylabel => "daiagnosed count",
-#		y2label => "positive rate",
-#		items => [qw (diagnosed_date positive_count negative_count positive_rate)],
-#		y2max => "positive_rate",
-#		dt_start => "0000-00-00",
-#		plot => [
-#			{colm => '($2+$3)', axis => "x1y1", graph => "boxes fill",  item_title => "test total"},
-#			{colm => '2', axis => "x1y1", graph => "boxes fill",  item_title => "positive count"},
-#			{colm => '4', axis => "x1y2", graph => "lines linewidth 2",  item_title => "positive rate"},
-#		],
-#	}
+#
+#	Load Json format
+#
 sub	load_json
 {
 	my ($cdp) = @_;
@@ -481,7 +528,7 @@ sub	load_json
 }
 
 #
-#
+#	Load Transaction format (One record, One line)
 #
 sub	load_transaction
 {
@@ -810,6 +857,31 @@ sub	reduce_cdp
 }
 
 #
+#	format1: ["NULL","Japan"]
+#	fromat2: {"Province/State" => "NULL", "Country/Region" => "Japan"},
+#
+sub	gen_target_col
+{
+	my ($cdp, $target_colp) = @_;
+	my @target_col = ();
+
+	my $ref = ref($target_colp);
+	if($ref eq "ARRAY"){
+		@target_col = @$target_colp;
+	}
+	elsif($ref eq "HASH"){
+		my $itemp = $cdp->{item_name_hash};
+		foreach my $k (%$target_colp){
+			my $itn = $itemp->{$k} // "";
+			if(! $itn){
+				dp::dp "WARNING: no iten_name_hash defined [$k] " . join(",", keys %$itemp) . "\n";
+			}
+			$target_col[$itn] = $target_colp->{$k};
+		}
+	}
+}
+
+#
 #	Select CSV DATA
 #
 sub	select_keys
@@ -820,7 +892,9 @@ sub	select_keys
 	my @non_target_col_array = ();
 	my $condition = 0;
 	my $clm = 0;
-	foreach my $sk (@$target_colp){
+
+	my @target_list = &gen_target_col($cdp, $target_colp);
+	foreach my $sk (@target_list){
 		#dp::dp "Target col $sk\n";
 		if($sk){
 			my ($tg, $ex) = split(/ *\! */, $sk);
