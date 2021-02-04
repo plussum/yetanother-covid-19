@@ -445,7 +445,6 @@ sub	load_csv_vertical
 		$key_items->{$k} = [$k];
 	}
 
-	my $key_name = $cdp->{key_name} // "";
 	$key_name = "key" if(! $key_name);
 	@{$cdp->{item_name_list}} = ($key_name);	# set item_name 
 	my $inhp = $cdp->{item_name_hash};

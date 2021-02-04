@@ -389,7 +389,6 @@ if($all){
 #my $PNG_REL_PATH  = "../PNG2",
 #
 my $gp_list = [];
-my $html_file = "$HTML_PATH/csvgraph.html";
 my $ccse_country = {};
 #	Load Johns Hoping Univercity CCSE
 if($golist{ccse}){
@@ -443,16 +442,6 @@ if($golist{amt}){
 				target_col => {transportation_type => "avr"}},						# target = avr of Driving, Walking, Transport(All Data)
 		])
 	);
-	csvgraph::gen_html_by_gp_list($gp_list, {						# Generate HTML file with graphs
-			html_tilte => "Apple Mobile Trends",
-			src_url => $AMT_DEF->{src_url} // "src_url",
-			html_file => $AMT_GRAPH->{html_file} // "html_file",
-			png_path => $AMT_GRAPH->{png_path} // "png_path",
-			png_rel_path => $AMT_GRAPH->{png_rel_path} // "png_rel_path",
-			data_source => $AMT_GRAPH->{data_source} // "data_source",
-			dst_dlm => $AMT_GRAPH->{dst_dlm} // "dst_dlm",
-		}
-	);
 
 	csvgraph::comvert2rlavr($amt_country);							# rlavr for marge with CCSE
 }
@@ -482,6 +471,8 @@ if($golist{"amt-ccse"}){
 			}
 		);
 	} 
+	push(@$gp_list, 
+		csvgraph::csv2graph_list($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS, $MARGE_GRAPH_PARAMS->{graph_params}));
 	csvgraph::gen_html($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);		# Gererate Graph
 	csvgraph::gen_graph_by_list($MARGE_CSV_DEF, $MARGE_GRAPH_PARAMS);
 }
@@ -504,6 +495,8 @@ if($golist{"tokyo"}){
 	#csvgraph::dump_cdp($y2, {ok => 1, lines => 5});
 	csvgraph::marge_csv($marge, $y1, $y2);		# Gererate Graph
 	csvgraph::dump_cdp($marge, {ok => 1, lines => 5});
+	push(@$gp_list , 
+		csvgraph::csv2graph_list($marge, $TOKYO_GRAPH, $TOKYO_GRAPH->{graph_params}));
 	csvgraph::gen_html($marge, $TOKYO_GRAPH);		# Generate Graph/HTHML
 }
 
@@ -514,8 +507,24 @@ if($golist{japan}){
 	csvgraph::new($TKO_TRAN_DEF); 						# Load Apple Mobility Trends
 	csvgraph::load_csv($TKO_TRAN_DEF);
 	#csvgraph::dump_cdp($TKO_TRAN_DEF, {ok => 1, lines => 5});
+	push(@$gp_list , 
+		csvgraph::csv2graph_list($TKO_TRAN_DEF, $TKO_TRAN_GRAPH, $TKO_TRAN_GRAPH->{graph_params}));
 	csvgraph::gen_html($TKO_TRAN_DEF, $TKO_TRAN_GRAPH);		# Generate Graph/HTHML
 }
+
+#
+#	Generate HTML FILE
+#
+csvgraph::gen_html_by_gp_list($gp_list, {						# Generate HTML file with graphs
+		html_tilte => "Apple Mobile Trends",
+		src_url => $AMT_DEF->{src_url} // "src_url",
+		html_file => "$HTML_PATH/csvgraph.html",
+		png_path => $PNG_PATH // "png_path",
+		png_rel_path => $PNG_REL_PATH // "png_rel_path",
+		data_source => $AMT_GRAPH->{data_source} // "data_source",
+		dst_dlm => $AMT_GRAPH->{dst_dlm} // "dst_dlm",
+	}
+);
 
 #
 #	Down Load CSV 
