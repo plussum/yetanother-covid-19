@@ -385,7 +385,11 @@ if($all){
 
 #
 #	Load CCSE
+#my $PNG_PATH  = "$WIN_PATH/PNG2",
+#my $PNG_REL_PATH  = "../PNG2",
 #
+my $gp_list = [];
+my $html_file = "$HTML_PATH/csvgraph.html";
 my $ccse_country = {};
 #	Load Johns Hoping Univercity CCSE
 if($golist{ccse}){
@@ -407,49 +411,66 @@ if($golist{ccse}){
 			}
 		);
 	}
+	push(@$gp_list,
+		 csvgraph::csv2graph_list($ccse_country, $CCSE_GRAPH, $CCSE_GRAPH->{graph_params}));	# gen Graph and params instead of html
 	csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
 	csvgraph::comvert2ern($ccse_country);				# Calc ERN
 }
 #
 # Load Apple Mobility Trends
 #
-my $amt_country = {};
+my $amt_country = {};		# for marge wtih ccse-ERN
 if($golist{amt}){
-	csvgraph::new($AMT_DEF); 
-	csvgraph::load_csv($AMT_DEF);
+	csvgraph::new($AMT_DEF); 										# Init AMD_DEF
+	csvgraph::load_csv($AMT_DEF);									# Load to memory
+	csvgraph::dump_cdp($AMT_DEF, {ok => 1, lines => 5});			# Dump for debug
 
-	#csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, ["$REG"]);
-	csvgraph::dump_cdp($AMT_DEF, {ok => 1, lines => 5});
+	# reduce by geo_type = "Country/Reagion" (for avoid conflict, Mexico, New Mexico)
 	csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, {geo_type => $REG});
 	csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
-	csvgraph::add_average($amt_country, 2, "avr");
-	csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
+	csvgraph::add_average($amt_country, "transportation_type", "avr");		# gen average(Driving, Walking, Transit)
+	#csvgraph::gen_html($amt_country, $AMT_GRAPH);					# Generate Graph/HTHML
+	push(@$gp_list,
+		 csvgraph::csv2graph_list($amt_country, $AMT_GRAPH, $AMT_GRAPH->{graph_params}));	# gen Graph and params instead of html
 
-	csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, {geo_type => $SUBR, country => "Japan"}, );
-	csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
-	csvgraph::add_average($amt_country, 2, "avr");
-	my %graph = $AMT_GRAPH;
-	$graph{graph_params} = [
-		{dsc => "Worldwide Apple mobility Trends and ERN", lank => [1,10], static => "", 
-			target_col => ["", "", "", "", ""], },
-	];
-	csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
+	# redece by geo_type = "Subregion" & country = "Japan"	
+	my $amt_pref_japan = {};
+	csvgraph::reduce_cdp_target($amt_pref_japan, $AMT_DEF, {geo_type => $SUBR, country => "Japan"}, );
+	csvgraph::add_average($amt_pref_japan, 2, "avr");								# Generate average(Drveing, Walking, Transit))
+	csvgraph::dump_cdp($amt_pref_japan, {ok => 1, lines => 5});
+	push(@$gp_list , csvgraph::csv2graph_list($amt_pref_japan, $AMT_GRAPH, [		# add Graph of Japan Prefecture graph
+			{dsc => "Worldwide Apple mobility Japan Pref.", lank => [1,10], static => "rlavr", 
+				target_col => {transportation_type => "avr"}},						# target = avr of Driving, Walking, Transport(All Data)
+		])
+	);
+	csvgraph::gen_html_by_gp_list($gp_list, {						# Generate HTML file with graphs
+			html_tilte => "Apple Mobile Trends",
+			src_url => $AMT_DEF->{src_url} // "src_url",
+			html_file => $AMT_GRAPH->{html_file} // "html_file",
+			png_path => $AMT_GRAPH->{png_path} // "png_path",
+			png_rel_path => $AMT_GRAPH->{png_rel_path} // "png_rel_path",
+			data_source => $AMT_GRAPH->{data_source} // "data_source",
+			dst_dlm => $AMT_GRAPH->{dst_dlm} // "dst_dlm",
+		}
+	);
 
-	csvgraph::comvert2rlavr($amt_country);				# rlavr for marge
+	csvgraph::comvert2rlavr($amt_country);							# rlavr for marge with CCSE
 }
 
+#
 #	Generate Marged Graph of Apple Mobility Trends and CCSE-ERN
+#
 if($golist{"amt-ccse"}){
 	csvgraph::marge_csv($MARGE_CSV_DEF, $ccse_country, $amt_country);		# Marge CCSE(ERN) and Apple Mobility Trends
 	#csvgraph::dump_cdp($MARGE_CSV_DEF, {ok => 1, lines => 5});
 
 	my $gp = $MARGE_GRAPH_PARAMS->{graph_params};
-	foreach my $reagion (@TARGET_REAGION){
+	foreach my $reagion (@TARGET_REAGION){			# Generate Graph Parameters
 		my $rn = $reagion;
 		$rn =~ s/,.*$//;
 		my @rr = ();
 		foreach my $r (split(/,/, $reagion)){
-			push(@rr, "$r-", "~$r#");
+			push(@rr, "$r-", "~$r#");			# ~ regex
 		}
 		$reagion = join(",", @rr);
 		
@@ -486,6 +507,9 @@ if($golist{"tokyo"}){
 	csvgraph::gen_html($marge, $TOKYO_GRAPH);		# Generate Graph/HTHML
 }
 
+#
+#
+#
 if($golist{japan}){
 	csvgraph::new($TKO_TRAN_DEF); 						# Load Apple Mobility Trends
 	csvgraph::load_csv($TKO_TRAN_DEF);

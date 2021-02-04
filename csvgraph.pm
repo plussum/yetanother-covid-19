@@ -403,6 +403,11 @@ sub	load_csv_holizontal
 #	01/02
 #	01/03
 #
+#		 01/01, 01/02, 01/03
+#	key1, 1,2,3
+#	key2, 11,12,13
+#	key3, 21,22,23
+#
 sub	load_csv_vertical
 {
 	my ($cdp) = @_;
@@ -416,6 +421,8 @@ sub	load_csv_vertical
 	my $key_items = $cdp->{key_items};
 	my @keys = @{$cdp->{keys}};
 	my $timefmt = $cdp->{timefmt};
+	my $key_name = $cdp->{key_name} // "";
+	$key_name = "key" if(! $key_name);
 
 	#
 	#	Load CSV DATA
@@ -437,6 +444,12 @@ sub	load_csv_vertical
 		$csv_data->{$k}= [];		# set csv data array
 		$key_items->{$k} = [$k];
 	}
+
+	my $key_name = $cdp->{key_name} // "";
+	$key_name = "key" if(! $key_name);
+	@{$cdp->{item_name_list}} = ($key_name);	# set item_name 
+	my $inhp = $cdp->{item_name_hash};
+	$inhp->{$key_name} = 0;
 	#dp::dp join(",", "# " , @key_list) . "\n";
 
 	my $ln = 0;
@@ -463,6 +476,9 @@ sub	load_csv_vertical
 
 #
 #	Load Json format
+#
+#		Tokyoのように、１次元データ向けに作ってます。２次元データは未実装
+#		for examanple, apll prefectures,,,
 #
 sub	load_json
 {
@@ -506,6 +522,14 @@ sub	load_json
 		$csv_data->{$k} = [];
 		#dp::dp "csv_data($k) :". $csv_data->{$k} . "\n";
 	}	
+
+	my $key_name = $cdp->{key_name} // "";
+	$key_name = "key" if(! $key_name);
+	@{$cdp->{item_name_list}} = ($key_name);	# set item_name 
+	my $inhp = $cdp->{item_name_hash};
+	$inhp->{$key_name} = 0;
+	#dp::dp join(",", "# " , @key_list) . "\n";
+
 	for(my $rn = 0; $rn <= $#data0; $rn++){
 		my $datap = $data0[$rn];
 		my $date = $datap->{$date_key};
@@ -551,6 +575,12 @@ sub	load_transaction
 	$line =~ s/[\r\n]+$//;
 	my @items = &csv($line);
 
+	my $key_name = $cdp->{key_name} // "";
+	$key_name = "key" if(! $key_name);
+	@{$cdp->{item_name_list}} = ($key_name);	# set item_name 
+	my $inhp = $cdp->{item_name_hash};
+	$inhp->{$key_name} = 0;
+	#dp::dp join(",", "# " , @key_list) . "\n";
 	dp::dp "load_transaction: " . join(", ", @items) . "\n";
 
 	my $dt_end = -1;
@@ -698,7 +728,7 @@ sub	marge_csv
 	$marge->{dates} = int($dates);
 	$marge->{start_date} = $date_start;
 	$marge->{end_date} = $date_end;
-	dp::dp join(", ", $date_start, $date_end, $dates) . "\n" ;# if($DEBUG);
+	#dp::dp join(", ", $date_start, $date_end, $dates) . "\n" ;# if($DEBUG);
 
 	#
 	#	Check Start date(max) and End date(min)
@@ -796,7 +826,7 @@ sub	reduce_cdp_target
 {
 	my ($dst_cdp, $cdp, $target_colp) = @_;
 
-	dp::dp Dumper $target_colp;
+	#dp::dp Dumper $target_colp;
 
 	my @target_keys = ();
 	&select_keys($cdp, $target_colp, \@target_keys);
@@ -872,7 +902,9 @@ sub	gen_target_col
 	my ($cdp, $target_colp) = @_;
 	my @target_col = ();
 
-	csvlib::disp_caller(1..4);
+	#dp::dp "gen_target_col: " . Dumper($target_colp) . "\n";
+	#csvlib::disp_caller(1..4);
+
 	my $ref = ref($target_colp);
 	if($ref eq "ARRAY"){
 		@target_col = @$target_colp;
@@ -890,7 +922,13 @@ sub	gen_target_col
 				$target_col[$itn] = $target_colp->{$k};
 			}
 		}
+		for(my $i = 0; $i <= $#target_col; $i++){
+			$target_col[$i] = "" if(! defined $target_col[$i]);
+		}
 	}
+
+	#dp::dp join(",", @target_col) . "\n";
+	return (@target_col);
 }
 
 #
@@ -1016,6 +1054,16 @@ sub	add_average
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
 
+	if($target_col =~ /\D/){ 
+		my $itemp = $cdp->{item_name_hash};
+		my $tn = $itemp->{$target_col} // "";
+		if($tn eq ""){
+			dp::dp "WARNING: no column naeme [$target_col]\n";
+			exit 1;
+		}
+		$target_col = $tn;
+	}
+
 	my $dates = $cdp->{dates};
 	my @keys = @{$cdp->{keys}};						# Item No for gen HASH Key
 	my $key_dlm = $cdp->{key_dlm} // $DEFAULT_KEY_DLM;
@@ -1068,6 +1116,7 @@ sub	add_average
 sub	gen_graph_by_list
 {
 	my($cdp, $gdp) = @_;
+
 	foreach my $gp (@{$gdp->{graph_params}}){
 		&csv2graph($cdp, $gdp, $gp);
 		#dp::dp join(",", $gp->{dsc}, $gp->{start_date}, $gp->{end_date},
@@ -1075,21 +1124,21 @@ sub	gen_graph_by_list
 	}
 	return (@{$gdp->{graph_params}});
 }
+
 #
 #
 #
 sub gen_html_by_gp_list
 {
-	my ($gp_list, $p) = @_;
+	my ($graph_params, $p) = @_;
 
-	my $date_list = $cdp->{date_list};
-	my $csv_data = $cdp->{csv_data};
-	my $graph_params = $gdp->{graph_params};
-	my $src_url = $cdp->{src_url};
-
-	my $html_file = $gdp->{html_file};
-	my $png_path = $gdp->{png_path};
-	my $png_rel_path = $gdp->{png_rel_path};
+	my $html_title = $p->{html_tilte} // "html_title";
+	my $src_url = $p->{src_url} //"src_url";
+	my $html_file = $p->{html_file} //"html_file";
+	my $png_path = $p->{png_path} //"png_path";
+	my $png_rel_path = $p->{png_rel_path} //"png_rel_path";
+	my $data_source = $p->{data_source} // "data_source";
+	my $dst_dlm = $p->{dst_dlm} // "\t";
 
 	my $CSS = $config::CSS;
 	my $class = $config::CLASS;
@@ -1100,19 +1149,15 @@ sub gen_html_by_gp_list
 
 	print HTML "<HTML>\n";
 	print HTML "<HEAD>\n";
-	print HTML "<TITLE> " . $gdp->{html_title} . "</TITLE>\n";
+	print HTML "<TITLE> " . $html_title . "</TITLE>\n";
 	print HTML $CSS;
 	print HTML "</HEAD>\n";
 	print HTML "<BODY>\n";
 	my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
-	print HTML "<h3>Data Source：</h3>\n";
+	print HTML "<h3>Data Source：$data_source</h3>\n";
 
 	foreach my $gp (@$graph_params){
-		last if($gp->{dsc} eq $gdp->{END_OF_DATA});
-
-		&csv2graph($cdp, $gdp, $gp);
-
 		print HTML "<span class=\"c\">$now</span><br>\n";
 		print HTML '<img src="' . $png_rel_path . "/" . $gp->{plot_png} . '">' . "\n";
 		print HTML "<br>\n";
@@ -1120,11 +1165,11 @@ sub gen_html_by_gp_list
 		#
 		#	Lbale name on HTML for search
 		#
-		my $dst_dlm = $gdp->{dst_dlm} // "\t";
-		my $csv_file = $gdp->{png_path} . "/" . $gp->{plot_csv};
+		my $csv_file = $png_path . "/" . $gp->{plot_csv};
 		open(CSV, $csv_file) || die "canot open $csv_file";
 		binmode(CSV, ":utf8");
-		my $l = <CSV>;
+
+		my $l = <CSV>;		# get label form CSV file
 		close(CSV);
 		$l =~ s/[\r\n]+$//;
 		my @lbl = split($dst_dlm, $l);
@@ -1174,7 +1219,7 @@ sub gen_html_by_gp_list
 #
 sub	gen_html
 {
-	my ($cdp, $gp_list) = @_;
+	my ($cdp, $gdp, $gp) = @_;
 
 	my $html_file = $gdp->{html_file};
 	my $png_path = $gdp->{png_path};
@@ -1186,18 +1231,15 @@ sub	gen_html
 	foreach my $gp (@{$gdp->{graph_params}}){
 		last if($gp->{dsc} eq $gdp->{END_OF_DATA});
 		&csv2graph($cdp, $gdp, $gp);
-
 	}
-	my $date_list = $cdp->{date_list};
-	my $csv_data = $cdp->{csv_data};
-	my $graph_params = $gdp->{graph_params};
-	my $src_url = $cdp->{src_url};
-
-	my $html_file = $gdp->{html_file};
-	my $png_path = $gdp->{png_path};
-	my $png_rel_path = $gdp->{png_rel_path};
-
-
+	my $p = {
+		src_url => $cdp->{src_url} // "",
+		html_title => $gdp->{html_title} // "",
+		html_file => $gdp->{html_file} // "",
+		png_path => $gdp->{png_path} // "",
+		png_rel_path => $gdp->{png_rel_path} // "",
+	};
+	&gen_html_by_gp_list($gdp->{graph_params}, $p);
 }
 
 sub	dup_csv
@@ -1224,6 +1266,19 @@ sub	dup_csv
 		#dp::dp "$key: $csv_data->{$key}\n";
 		push(@{$work_csv->{$key}}, @{$csv_data->{$key}});
 	}
+}
+
+#
+#
+#
+sub	csv2graph_list
+{
+	my($cdp, $gdp, $graph_params) = @_;
+
+	foreach my $gp (@$graph_params){
+		&csv2graph($cdp, $gdp, $gp);
+	}
+	return (@$graph_params);
 }
 
 #
@@ -1320,7 +1375,7 @@ sub	csv2graph
 	#dp::dp "$csv_for_plot\n";
 
 	&graph($csv_for_plot, $cdp, $gdp, $gp);					# Generate Graph
-	return 1;
+	return @;
 }
 
 
@@ -1687,7 +1742,7 @@ _EOD_
 			$graph .= sprintf(" linewidth %d $dot ", ($pn < 7) ? 2 : 1);
 		}
 		elsif($graph =~ /box/){
-			dp::dp "BOX\n";
+			#dp::dp "BOX\n";
 			$graph =~ s/box/box fill/ if(! ($graph =~ /fill/));
 		}
 		my $pl = sprintf("'%s' using 1:%d $axis with $graph title '%s' ", $csvf, $i + 1, $key);
