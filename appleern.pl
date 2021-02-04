@@ -60,7 +60,7 @@ my $ern_adp	= "1 with lines title 'ern=1' lw 1 lc 'red' dt (3,7)";
 #	Definion of Apple Mobility Trends CSV Format
 #
 my $AMT_DEF = {
-	id => "apm",
+	id => "amt",
 	title => "Apple Mobility Trends",
 	main_url =>  "https://covid19.apple.com/mobility",
 	csv_file =>  "$config::WIN_PATH/applemobile/applemobilitytrends.csv.txt",
@@ -128,7 +128,7 @@ my $CCSE_DEF = {
 	direct => "holizontal",		# vertical or holizontal(Default)
 	timefmt => '%m/%d/%y',		# comverbt to %Y-%m-%d
 };
-dp::dp $CCSE_DEF->{csv_file} . "\n";
+#dp::dp $CCSE_DEF->{csv_file} . "\n";
 my $CCSE_GRAPH = {
 	html_title => $CCSE_DEF->{title},
 	png_path   => "$PNG_PATH",
@@ -229,7 +229,7 @@ my @TARGET_REAGION = (
 #
 my $TKY_DIR = "$config::WIN_PATH/tokyo/covid19"; # "/home/masataka/who/tokyo/covid19";
 my $TOKYO_DEF = {
-	id => "tkopen",
+	id => "tko",
 	title => "Tokyo Positive Rate",
 	main_url => "-- tokyo data --- ",
 	src_file => "$TKY_DIR/data/positive_rate.json",
@@ -328,14 +328,33 @@ my $TKO_TRAN_GRAPH = {
 #
 my @cdp_list = ($AMT_DEF, $CCSE_DEF, $MARGE_CSV_DEF, $TKO_TRAN_DEF, $TOKYO_DEF); 
 my %golist = ();
+my $all = "";
 if($#ARGV >= 0){
 	for(@ARGV){
+		if(/-all/){
+			$all = 1;
+			last;
+		}
 		foreach my $cdp (@cdp_list){
-			$golist{$_} = 1 if($cdp->{id} eq $_);
+			if($cdp->{id} eq $_){
+				$golist{$_} = 1 
+			}
+		}
+		if(! (defined $golist{$_})){
+			dp::dp "Undefined dataset [$_]\n";
 		}
 	}
 }
 else {
+	my @ids = ();
+	foreach my $cdp (@cdp_list){
+		my $id = $cdp->{id};
+		push(@ids, $id);
+	}
+	dp::dp "usage:$0 " . join(" | ", "-all", @ids) ."\n";
+	exit;
+}
+if($all){
 	foreach my $cdp (@cdp_list){
 		my $id = $cdp->{id};
 		$golist{$id} = 1 ;

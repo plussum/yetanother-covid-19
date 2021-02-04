@@ -992,13 +992,13 @@ sub	load_vals
 	}
 	close(GP);
 
-	for(my $i = 0; $i <= $#list; $i){
+	for(my $i = 0; $i <= $#list; $i++){
 		if(/Variables beginning with (.*):/){
 			#GPVAL_Y_MIN = 0.0
 			$i++;
 			$list[$i] =~ /([\w_]+) = ([0-9\.])/;
-			my( $val_name , $v) = ($1, $2);
-			$gp->{$val_name} = $v;
+			my($val_name, $v) = ($1, $2);
+			$gp->{$val_name} = $v ;
 			#dp::dp "### $list[$i] \n";
 		}
 	}

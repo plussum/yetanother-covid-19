@@ -236,6 +236,7 @@ sub	load_csv
 		$download->($cdp);
 	}
 
+	dp::dp "LOAD CSV $cdp->{id}\n";
 	my $direct = $cdp->{direct} // "";
 	if($direct =~ /json/i){
 		&load_json($cdp);
