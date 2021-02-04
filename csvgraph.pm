@@ -1053,7 +1053,7 @@ sub	add_average
 	my $csv_data = $cdp->{csv_data};
 	my $key_items = $cdp->{key_items};
 
-	if($target_col =~ /\D/){ 
+	if($target_col =~ /\D/){ 		# array number or item name
 		my $itemp = $cdp->{item_name_hash};
 		my $tn = $itemp->{$target_col} // "";
 		if($tn eq ""){
@@ -1107,6 +1107,62 @@ sub	add_average
 		}
 	}
 	#&dump_cdp($cdp, {ok => 0});
+}
+
+#########################################
+#
+#					day1, d2, d3, d4
+#	nagative_count, 1,2,3,4,5,
+#	positive_count, 11,12,13,14,15
+#	-------------------------------
+#	tested,12,14,16,20
+#
+#	calc_items( $cdp, 
+#			[ "key", "negative_count,positive_count", "tested"],
+#			"tested");
+#		"tested", sum(negative,pitive)
+#
+#########################################
+#
+#				day1, d2, d3, d4
+#	area1,Canada,1,2,3,4,5
+#	area2,Canada,11,12,13,14,15
+#	area3,Canada,21,22,23,24,25
+#	---------------------------
+#	"",Canada,33,36,39,42,45
+#
+#	calc_items( $cdp, "sum",
+#			[
+#			 [{"Country/Region" => "Canada"}],	
+#			 [{"Province/State" => "*", "Country/Region" => "Canada"}],
+#			]
+#
+#			"Canada-Total");
+#		"",Canda,sum(Countru/Region=Canada),sum(Canada)
+#
+#########################################
+#
+#	geo_type,region,transportation,alt,sub-reg,country,day1, d2, d3, d4
+#	country/reagion,Japan,drivig,,,1,2,3,4,5
+#	country/reagion,Japan,walking,,,1,2,3,4,5
+#	country/reagion,Japan,transit,,,1,2,3,4,5
+#	---------------------------
+#	country/reagion,Japan,average,,,3,6,9,12,15
+#
+#	calc_items( $cdp, "sum",
+#			[
+#			 [{"geo_type"=>"Country/Region"}],	
+#			 [{"Province/State" => "*", "Country/Region" => "Canada"}],
+#			]
+#
+#			"Canada-Total");
+#		"",Canda,sum(Countru/Region=Canada),sum(Canada)
+#
+#
+sub	calc_items
+{
+	my ($cdp, $calc, $target_col, $name) = @_;
+	$name = $name // "calc";
 }
 
 #
