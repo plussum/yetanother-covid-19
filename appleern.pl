@@ -99,7 +99,7 @@ my $AMT_GRAPH = {
 
 	END_OF_DATA => $END_OF_DATA,
 
-	default_graph => "line",
+	graph => "line",
 	additional_plot => "100 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
 	graph_params => [
 		{dsc => "Tokyo Apple mobility Trends and ERN", lank => [1,10], static => "", 
@@ -137,7 +137,7 @@ my $CCSE_GRAPH = {
 
 	dst_dlm => "\t",
 	avr_date => 7,
-	default_graph => "line",
+	graph => "line",
 
 	timefmt => '%Y-%m-%d', format_x => '%m/%d',
 	term_x_size => 1000, term_y_size => 350,
@@ -177,7 +177,7 @@ my $MARGE_GRAPH_PARAMS = {
 	dst_dlm => "\t",
 	avr_date => 7,
 	END_OF_DATA => $END_OF_DATA,
-	default_graph => "line",
+	graph => "line",
 
 	timefmt => '%Y-%m-%d', format_x => '%m/%d',
 	term_x_size => 1000, term_y_size => 350,
@@ -227,9 +227,15 @@ my @TARGET_REAGION = (
 #
 #	Tokyo Positive Rate from Tokyo Opensource (JSON)
 #
+#                  d1,d2,d3
+#	positive_count,1,2,3,
+#	negative_count,1,2,3,
+#	positive_rate,1,2,3,
+#	
+#
 my $TKY_DIR = "$config::WIN_PATH/tokyo/covid19"; # "/home/masataka/who/tokyo/covid19";
 my $TOKYO_DEF = {
-	id => "tko",
+	id => "tokyo",
 	title => "Tokyo Positive Rate",
 	main_url => "-- tokyo data --- ",
 	src_file => "$TKY_DIR/data/positive_rate.json",
@@ -253,14 +259,17 @@ my $TOKYO_GRAPH = {
 	dst_dlm => "\t",
 	avr_date => 7,
 	END_OF_DATA => $END_OF_DATA,
-	default_graph => "line",
 
 	timefmt => '%Y-%m-%d', format_x => '%m/%d',
 	term_x_size => 1000, term_y_size => 350,
 
-	y2label => 'ERN', y2min => 0, y2max => 3, y2_source => 0,		# soruce csv definition for y2
+	y2label => 'Number', y2min => "", y2max => "", y2_source => 0,		# soruce csv definition for y2
 	ylabel => '%', ymin => 0,
+
+	graph => 'boxes fill',
+	y2_graph => 'line',
 	additional_plot => "",
+
 
 	graph_params => [
 		{dsc => "Tokyo ", lank => [1,10], static => "", target_col => ["",""] },
@@ -274,11 +283,15 @@ my $TOKYO_GRAPH = {
 # 2020,2,8,東京,Tokyo,3,,,,,,
 #
 #
+#	y,m,d,東京,Tokyo,testedPositive,1,2,3,4,
+#	y,m,d,東京,Tokyo,peopleTested,1,2,3,4,
+#
+#
 my $TKO_PATH = "$config::WIN_PATH/tokyokeizai";
 #/mnt/f/_share/cov/plussum.github.io/tokyokeizai/prefecture.csv.txt
 my $TKO_TRAN_DEF = 
 {
-	id => "tko",
+	id => "japan",
 	title => "Japan COVID-19 data (Tokyo Keizai)",
 	main_url => "-- tokyo keizai data --- ",
 	csv_file => "$TKO_PATH/prefecture.csv.txt",
@@ -302,7 +315,7 @@ my $TKO_TRAN_GRAPH = {
 	dst_dlm => "\t",
 	avr_date => 7,
 	END_OF_DATA => $END_OF_DATA,
-	default_graph => "line",
+	graph => "line",
 
 	timefmt => '%Y-%m-%d', format_x => '%m/%d',
 	term_x_size => 1000, term_y_size => 350,
@@ -425,14 +438,27 @@ if($golist{"amt-ccse"}){
 }
 
 #	Generate Graph
-if($golist{"tko-json"}){
+#
+#	positive_count,1,2,3,
+#	negative_count,1,2,3,
+#	positive_rate,1,2,3,
+#
+if($golist{"tokyo"}){
 	csvgraph::new($TOKYO_DEF); 						# Load Apple Mobility Trends
 	csvgraph::load_csv($TOKYO_DEF);
-	#csvgraph::dump_cdp($TOKYO_DEF, {ok => 1, lines => 5});
-	csvgraph::gen_html($TOKYO_DEF, $TOKYO_GRAPH);		# Generate Graph/HTHML
+	my $y1 = {};
+	my $y2 = {};
+	my $marge = {};
+	csvgraph::reduce_cdp_target($y1, $TOKYO_DEF, ["positive_count,negative_count"]);
+	#csvgraph::dump_cdp($y1, {ok => 1, lines => 5});
+	csvgraph::reduce_cdp_target($y2, $TOKYO_DEF, ["positive_rate"]);
+	#csvgraph::dump_cdp($y2, {ok => 1, lines => 5});
+	csvgraph::marge_csv($marge, $y1, $y2);		# Gererate Graph
+	csvgraph::dump_cdp($marge, {ok => 1, lines => 5});
+	csvgraph::gen_html($marge, $TOKYO_GRAPH);		# Generate Graph/HTHML
 }
 
-if($golist{tko}){
+if($golist{japan}){
 	csvgraph::new($TKO_TRAN_DEF); 						# Load Apple Mobility Trends
 	csvgraph::load_csv($TKO_TRAN_DEF);
 	#csvgraph::dump_cdp($TKO_TRAN_DEF, {ok => 1, lines => 5});

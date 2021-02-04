@@ -103,7 +103,7 @@ my @cdp_hash_with_keys = ("csv_data", "key_items");
 my @cdp_values = ("title", "main_url", "src_url", "csv_file",
 		"down_load", 
 		"src_dlm", "timefmt", "data_start");
-
+my $DEFAULT_GRAPH = "line";
 sub	new
 {
 	my ($cdp) = @_;
@@ -154,8 +154,8 @@ sub	dump_cdp
 	my $load_order = $cdp->{load_order};
 	
 	$p->{src_csv} = $cdp->{src_csv};
-	&dump_csv_data($csv_data, $p);
-	&dump_key_items($key_items, $p);
+	&dump_csv_data($csv_data, $p, $cdp);
+	&dump_key_items($key_items, $p, $cdp);
 	#dp::dp "LOAD ORDER " . join(",", @$load_order) . "\n";
 
 	print "#" x 40 . "\n\n";
@@ -163,12 +163,13 @@ sub	dump_cdp
 
 sub dump_key_items
 {
-	my($key_items, $p) = @_;
+	my($key_items, $p, $cdp) = @_;
 	my $ok = $p->{ok} // 1;
 	my $lines = $p->{lines} // 5;
 	my $items = $p->{items} // 5;
-	my $src_csv = $p->{src_csv} // "";
 	my $mess = $p->{message} // "";
+
+	my $src_csv = $cdp->{src_csv} // "";
 	my $search_key = $p->{search_key} // "";
 	$lines = 0 if($search_key && ! defined $p->{lines});
 
@@ -187,11 +188,11 @@ sub dump_key_items
 
 sub	dump_csv_data
 {
-	my($csv_data, $p) = @_;
+	my($csv_data, $p, $cdp) = @_;
 	my $ok = $p->{ok} // 1;
 	my $lines = $p->{lines} // "";
 	my $items = $p->{items} // 5;
-	my $src_csv = $p->{src_csv} // "";
+	my $src_csv = $cdp->{src_csv} // "";
 	my $mess = $p->{message} // "";
 	my $search_key = $p->{search_key} // "";
 	$lines = 0 if($search_key && ! defined $p->{lines});
@@ -208,8 +209,10 @@ sub	dump_csv_data
 			dp::dp " --> [$k] csv_data is not assigned\n";
 		}
 		if($ok){
-			my $scv = "--";
-			$scv = $src_csv->{$k} if($src_csv && defined $src_csv->{$k});
+			my $scv = "";
+			if($src_csv) {
+				$scv = $src_csv->{$k} // "-" ;
+			}
 
 			if($search_key && $k =~ /search_key/){
 				print "[$ln] " . join(", ", $k, "[$scv]", @w[0..$items]) . " [$search_key]\n";
@@ -620,6 +623,13 @@ sub	marge_csv
 	my ($marge, @src_csv_list) = @_;
 
 	&new($marge);
+	foreach my $key (@cdp_values){
+		my $v = "";
+		foreach my $src_cdp (@src_csv_list){
+			$marge->{$key} = $src_cdp->{$key} // "";
+			last if($marge->{$key});
+		}
+	}
 
 	my $date_start = "0000-00-00";
 	foreach my $cdp (@src_csv_list){
@@ -1000,6 +1010,7 @@ sub	gen_html
 	my $CSS = $config::CSS;
 	my $class = $config::CLASS;
 
+	csvlib::disp_caller(1..3);
 	open(HTML, ">$html_file") || die "Cannot create file $html_file";
 	binmode(HTML, ":utf8");
 
@@ -1532,6 +1543,8 @@ _EOD_
 	$src_csv = "" if($y2_source eq "");
 
 	for(my $i = 1; $i <= $#label; $i++){
+		my $graph = $gp->{graph} // ($gdp->{graph} // ($cdp->{graph} // $DEFAULT_GRAPH));
+		my $y2_graph = "";
 		my $key = $label[$i];
 		$key =~ s/^[0-9]+://;
 		#dp::dp "### $i: $key\n";
@@ -1547,13 +1560,21 @@ _EOD_
 			if($src_csv && $src_csv->{$key} == $y2_source) {
 				$axis = "axis x1y2" ;
 				$dot = "dt (7,3)";
+				$graph = $gp->{y2_graph} // ($gdp->{y2_graph} // ($cdp->{y2_graph} // $DEFAULT_GRAPH));
 			}
 		}
 		#dp::dp "axis:[$axis]\n";
 		#my $pl = sprintf("'%s' using 1:%d $axis with lines title '%d:%s' linewidth %d $dot", 
 		#				$csvf, $i + 1, $i, $label[$i], ($pn < 7) ? 2 : 1);
-		my $pl = sprintf("'%s' using 1:%d $axis with lines title '%s' linewidth %d $dot", 
-						$csvf, $i + 1, $label[$i], ($pn < 7) ? 2 : 1);
+		
+		if($graph =~ /line/){
+			$graph .= sprintf(" linewidth %d $dot ", ($pn < 7) ? 2 : 1);
+		}
+		elsif($graph =~ /box/){
+			dp::dp "BOX\n";
+			$graph =~ s/box/box fill/ if(! ($graph =~ /fill/));
+		}
+		my $pl = sprintf("'%s' using 1:%d $axis with $graph title '%s' ", $csvf, $i + 1, $key);
 		push(@p, $pl);
 	}
 	#push(@p, "0 with lines dt '-' title 'base line'");
