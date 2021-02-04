@@ -1075,14 +1075,12 @@ sub	gen_graph_by_list
 	}
 	return (@{$gdp->{graph_params}});
 }
-
 #
 #
-#	&gen_html($cdp, $GRAPH_PARAMS);
 #
-sub	gen_html
+sub gen_html_by_gp_list
 {
-	my ($cdp, $gdp) = @_;
+	my ($gp_list, $p) = @_;
 
 	my $date_list = $cdp->{date_list};
 	my $csv_data = $cdp->{csv_data};
@@ -1108,7 +1106,7 @@ sub	gen_html
 	print HTML "<BODY>\n";
 	my $now = csvlib::ut2d4(time, "/") . " " . csvlib::ut2t(time, ":");
 
-	print HTML '<h3>Data Source： <a href="' . $cdp->{main_url} . '" target="blank"> ' . $gdp->{html_title} . "</a></h3>\n";
+	print HTML "<h3>Data Source：</h3>\n";
 
 	foreach my $gp (@$graph_params){
 		last if($gp->{dsc} eq $gdp->{END_OF_DATA});
@@ -1168,6 +1166,38 @@ sub	gen_html
 	print HTML "</BODY>\n";
 	print HTML "</HTML>\n";
 	close(HTML);
+}
+
+#
+#
+#	&gen_html($cdp, $GRAPH_PARAMS);
+#
+sub	gen_html
+{
+	my ($cdp, $gp_list) = @_;
+
+	my $html_file = $gdp->{html_file};
+	my $png_path = $gdp->{png_path};
+	my $png_rel_path = $gdp->{png_rel_path};
+	my $data_source = $cdp->{data_source};
+	my $dst_dlm = $gdp->{dst_dlm} // "\t";
+
+	csvlib::disp_caller(1..3);
+	foreach my $gp (@{$gdp->{graph_params}}){
+		last if($gp->{dsc} eq $gdp->{END_OF_DATA});
+		&csv2graph($cdp, $gdp, $gp);
+
+	}
+	my $date_list = $cdp->{date_list};
+	my $csv_data = $cdp->{csv_data};
+	my $graph_params = $gdp->{graph_params};
+	my $src_url = $cdp->{src_url};
+
+	my $html_file = $gdp->{html_file};
+	my $png_path = $gdp->{png_path};
+	my $png_rel_path = $gdp->{png_rel_path};
+
+
 }
 
 sub	dup_csv

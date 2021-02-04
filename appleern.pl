@@ -425,6 +425,16 @@ if($golist{amt}){
 	csvgraph::add_average($amt_country, 2, "avr");
 	csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
 
+	csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, {geo_type => $SUBR, country => "Japan"}, );
+	csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
+	csvgraph::add_average($amt_country, 2, "avr");
+	my %graph = $AMT_GRAPH;
+	$graph{graph_params} = [
+		{dsc => "Worldwide Apple mobility Trends and ERN", lank => [1,10], static => "", 
+			target_col => ["", "", "", "", ""], },
+	];
+	csvgraph::gen_html($amt_country, $AMT_GRAPH);		# Generate Graph/HTHML
+
 	csvgraph::comvert2rlavr($amt_country);				# rlavr for marge
 }
 
