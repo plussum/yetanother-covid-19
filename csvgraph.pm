@@ -169,6 +169,7 @@ sub	dump_cdp
 	my $items =$p->{items} // 5;
 	my $mess = $p->{message} // "";
 
+
 	print "#" x 10 . "[$mess] CSV DUMP " . $cdp->{title} . " " . "#" x 10 ."\n";
 	print "##### VALUE ######\n";
 	foreach my $k (@cdp_values){
@@ -180,7 +181,7 @@ sub	dump_cdp
 		if($p){
 			my $arsize = scalar(@$p) - 1;
 			$arsize = $items if($arsize > $items);
-		 	print "$k\t" . join(",", @$p[0..$items]). "\n";
+		 	print "$k\t" . join(",", @{$p}[0..$arsize]). "\n";
 		}
 		else {
 			print "$k\tundef\n";
@@ -192,7 +193,7 @@ sub	dump_cdp
 		if($p){
 			my @ar = %$p;
 			my $arsize = ($#ar > ($items * 2)) ? ($items * 2) : $#ar;
-		 	print "$k\t" . join(",", @$p[0..$items]). "\n";
+		 	print "$k\t" . join(",", @ar[0..$arsize]). "\n";
 		}
 		else {
 			print "$k\tundef\n";
@@ -795,15 +796,17 @@ sub	reduce_cdp_target
 {
 	my ($dst_cdp, $cdp, $target_colp) = @_;
 
+	dp::dp Dumper $target_colp;
+
 	my @target_keys = ();
 	&select_keys($cdp, $target_colp, \@target_keys);
-	my $ft = $target_colp->[0] ;
-	if(0 && $ft eq "NULL"){
-		$dumpf = 1;
-		#dp::dp "###### TARGET_KEYS #######\n";
-		#dp::dp join("\n", @target_keys);
-		#dp::dp "################\n";
-	}
+	#my $ft = $target_colp->[0] ;
+	#if(0 && $ft eq "NULL"){
+	#	$dumpf = 1;
+	#	#dp::dp "###### TARGET_KEYS #######\n";
+	#	#dp::dp join("\n", @target_keys);
+	#	#dp::dp "################\n";
+	#}
 	&reduce_cdp($dst_cdp, $cdp, \@target_keys);
 	&dump_cdp($dst_cdp, {ok => 1, lines => 20, items => 20}) if($DEBUG);
 	$dumpf = 0;
@@ -817,16 +820,20 @@ sub	reduce_cdp
 
 	@{$dst_cdp->{load_order}} = @$target_keys;		
 
-	my @arrays = ("date_list", "keys");
-	my @hashs = ("order");
+	#my @arrays = ("date_list", "keys");
+	#my @hashs = ("order");
 	my @hash_with_keys = ("csv_data", "key_items");
 
+	&new($dst_cdp);
 	%$dst_cdp = %$cdp;
-	foreach my $array_item (@arrays){
+	foreach my $val (@cdp_values){
+		$dst_cdp->{$val} = $cdp->{$val} // "";
+	}
+	foreach my $array_item (@cdp_arrays){
 		$dst_cdp->{$array_item} = [];
 		@{$dst_cdp->{$array_item}} = @{$cdp->{$array_item}};
 	}
-	foreach my $hash_item (@hashs){
+	foreach my $hash_item (@cdp_hashs){
 		$dst_cdp->{$hash_item} = {};
 		%{$dst_cdp->{$hash_item}} = %{$cdp->{$hash_item}};
 	}
@@ -865,18 +872,23 @@ sub	gen_target_col
 	my ($cdp, $target_colp) = @_;
 	my @target_col = ();
 
+	csvlib::disp_caller(1..4);
 	my $ref = ref($target_colp);
 	if($ref eq "ARRAY"){
 		@target_col = @$target_colp;
 	}
 	elsif($ref eq "HASH"){
 		my $itemp = $cdp->{item_name_hash};
-		foreach my $k (%$target_colp){
-			my $itn = $itemp->{$k} // "";
-			if(! $itn){
-				dp::dp "WARNING: no iten_name_hash defined [$k] " . join(",", keys %$itemp) . "\n";
+		dp::dp join(",", %$target_colp) . "\n";
+		foreach my $k (keys %$target_colp){
+			my $itn = $itemp->{$k} // "UNDEF";
+			dp::dp ">> $k: [$itn]\n";
+			if($itn eq "UNDEF"){
+				dp::dp "WARNING: no item_name_hash defined [$k] (" . join(",", keys %$itemp) . ")\n";
 			}
-			$target_col[$itn] = $target_colp->{$k};
+			else {
+				$target_col[$itn] = $target_colp->{$k};
+			}
 		}
 	}
 }
