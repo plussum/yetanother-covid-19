@@ -59,6 +59,9 @@ my $ern_adp	= "1 with lines title 'ern=1' lw 1 lc 'red' dt (3,7)";
 #
 #	Definion of Apple Mobility Trends CSV Format
 #
+#	geo_type,region,transportation_type,alternative_name,sub-region,country,2020-01-13,,,,
+#
+#
 my $AMT_DEF = {
 	id => "amt",
 	title => "Apple Mobility Trends",
@@ -72,7 +75,7 @@ my $AMT_DEF = {
 	timefmt => '%Y-%m-%d',		# comverbt to %Y-%m-%d
 	src_dlm => ",",
 	key_dlm => "#",
-	keys => [1, 2],		# 5, 1, 2
+	keys => ["region", "transportation_type"],		# 5, 1, 2
 	data_start => 6,
 };
 

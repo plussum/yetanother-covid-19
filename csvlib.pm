@@ -19,6 +19,28 @@ my $DEBUG = 0;
 #
 #
 #
+sub	join_array
+{
+	my ($dlm, @array) = @_;
+
+	my @join = ();
+	foreach my $item (@array){
+		my $ref = ref($item);
+		if($ref eq "ARRAY"){
+			$item = "[" . join($dlm, @$item) . "]";
+		}
+		elsif($ref eq "HASH"){
+			$item = "{" . join($dlm, %$item) . "}";
+		}
+		push(@join, $item);
+	}
+	my $result = join($dlm, @join);
+	return ($result);
+}
+
+#
+#
+#
 sub	sum
 {
 	my ($data, $s, $e) = @_;

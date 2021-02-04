@@ -335,8 +335,8 @@ sub	load_csv_holizontal
 	my $data_start = $cdp->{data_start};
 	my $src_dlm = $cdp->{src_dlm};
 	my $date_list = $cdp->{date_list};
-	my $csv_data = $cdp->{csv_data};
-	my $key_items = $cdp->{key_items};
+	my $csv_data = $cdp->{csv_data};	# Data of record ->{$key}->[]
+	my $key_items = $cdp->{key_items};	# keys of record ->{$key}->[]
 	my @keys = @{$cdp->{keys}};			# Item No for gen HASH Key
 	my $timefmt = $cdp->{timefmt};
 
@@ -368,6 +368,7 @@ sub	load_csv_holizontal
 
 	#dp::dp join(",", "# ", @$date_list) . "\n";
 	#dp::dp "keys : ", join(",", @keys). "\n";
+	my @key_order = &gen_key_order($cdp, $cdp->{keys});		# keys to gen record key
 	my $load_order = $cdp->{load_order};
 	my $key_dlm = $cdp->{key_dlm} // $DEFAULT_KEY_DLM;
 	my $ln = 0;
@@ -378,7 +379,7 @@ sub	load_csv_holizontal
 
 		my @gen_key = ();
 		my $kn = 0;
-		foreach my $n (@keys){
+		foreach my $n (@key_order){		# @keys
 			my $itm = $items[$n];
 			push(@gen_key, $itm);
 			$kn++;
@@ -893,6 +894,36 @@ sub	reduce_cdp
 }
 
 #
+#	geo_type,region,transportation_type,alternative_name,sub-region,country,2020-01-13,,,,
+#	
+#		keys => ["region", "transportation"], => [1,2]
+#
+sub	gen_key_order
+{
+	my ($cdp, $key_order) = @_;
+	my @keys = ();
+
+	my $itemp = $cdp->{item_name_hash};
+	foreach my $k (@$key_order){
+		my $itn = $k;
+		if($k =~ /\D/){
+			$itn = $itemp->{$k} // "UNDEF";
+			dp::dp ">> $k: [$itn]\n";
+			if($itn eq "UNDEF"){
+				dp::dp "WARNING: no item_name_hash defined [$k] (" . join(",", keys %$itemp) . ")\n";
+				exit 1;
+			}
+		}
+		else {
+			dp::dp "[$itn] as numeric\n";
+		}
+		push(@keys, $itn);
+	}
+	dp::dp join(",", @keys) . "\n";
+	return (@keys);
+}
+
+#
 #	format1: ["NULL","Japan"]
 #	fromat2: {"Province/State" => "NULL", "Country/Region" => "Japan"},
 #
@@ -926,7 +957,7 @@ sub	gen_target_col
 		}
 	}
 
-	#dp::dp join(",", @target_col) . "\n";
+	dp::dp join(",", @target_col) . "\n";
 	return (@target_col);
 }
 
@@ -943,6 +974,8 @@ sub	select_keys
 	my $clm = 0;
 
 	my @target_list = &gen_target_col($cdp, $target_colp);
+	dp::dp csvlib::join_array(",", $target_colp) . "\n";
+	dp::dp csvlib::join_array(",", @target_list) . "\n";
 	foreach my $sk (@target_list){
 		#dp::dp "Target col $sk\n";
 		if($sk){
@@ -965,9 +998,10 @@ sub	select_keys
 		$clm++;
 	}
 
-	#dp::dp "Condition: $condition " . join(", ", @$target_colp) . "\n";
-	#dp::dp "Nontarget: " . join(",", @non_target_col_array) . "\n";
+	dp::dp "Condition: $condition " . csvlib::join_array(", ", @target_col_array) . "\n";
+	dp::dp "Nontarget: " . csvlib::join_array(",", @non_target_col_array) . "\n";
 	my $key_items = $cdp->{key_items};
+	#dp::dp "Key_itmes: " . csvlib::join_array(",", $key_items) . "\n";
 	foreach my $key (keys %$key_items){
 		my $key_in_data = $key_items->{$key};
 		my $res = &check_keys($key_in_data, \@target_col_array, \@non_target_col_array, $key);
@@ -982,9 +1016,11 @@ sub	select_keys
 			}
 		}
 	}
-	#dp::dp "## TARGET_KEYS " . join(", ", @$target_keys) . "\n";
+	dp::dp "## TARGET_KEYS " . join(", ", @$target_keys) . "\n";
 	return(scalar(@$target_keys) - 1);
 }
+
+
 
 #
 #	Check keys for select
