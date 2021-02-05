@@ -217,8 +217,8 @@ my $MARGE_GRAPH_PARAMS = {
 
 #my @TARGET_REAGION = (	"Italy", );
 my @TARGET_REAGION = (
-		"Japan", "US,United States", 
-		"United Kingdom", "France", "Spain", "Italy", "Russia", 
+		"Canada", "Japan", "US,United States",
+		"United Kingdom", "France", #"Spain", "Italy", "Russia", 
 #			"Germany", "Poland", "Ukraine", "Netherlands", "Czechia,Czech Republic", "Romania",
 #			"Belgium", "Portugal", "Sweden",
 #		"India",  "Indonesia", "Israel", # "Iran", "Iraq","Pakistan",
@@ -405,7 +405,7 @@ if($golist{ccse}){
 				{"Province/State" => "", "Country/Region" => "Canada"},		# All Province/State with Canada, ["*","Canada",]
 				{"Province/State" => "null", "Country/Region" => "="}		# total gos ["","Canada"] null = "", = keep
 	);
-	#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
+	csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
 
 	csvgraph::reduce_cdp_target($ccse_country, $CCSE_DEF, {"Province/State" => "NULL"});	# Select Country
 	#csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);

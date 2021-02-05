@@ -1111,6 +1111,9 @@ sub	check_keys
 #
 #	Add Average
 #
+#	obsoleted: use calc_items "avr"
+#
+#
 sub	add_average
 {
 	my ($cdp, $target_col, $name) = @_;
@@ -1201,14 +1204,10 @@ sub	add_average
 #	---------------------------
 #	"",Canada,33,36,39,42,45
 #
-#	calc_items( $cdp, "sum",
-#			[
-#			 [{"Country/Region" => "Canada"}],	
-#			 [{"Province/State" => "*", "Country/Region" => "Canada"}],
-#			]
-#
-#			"Canada-Total");
-#		"",Canda,sum(Countru/Region=Canada),sum(Canada)
+#	csvgraph::calc_items($CCSE_DEF, "sum", 
+#				{"Province/State" => "", "Country/Region" => "Canada"},		# All Province/State with Canada, ["*","Canada",]
+#				{"Province/State" => "null", "Country/Region" => "="}		# total gos ["","Canada"] null = "", = keep
+#	);
 #
 #########################################
 #
@@ -1224,16 +1223,15 @@ sub	add_average
 #
 #	calc_items( $cdp, {
 #			method => "sum",
-#			target_colp => {"Province/State" => "NULL", "Country/Region" => "Canada"},
-#			result_colp => {"Province/State" => "", "Country/Region" => ".-total"},
-#																"=": keep item name ("" remove the item name )
-#																".postfix": add positfix 
-#																"+postfix": add positfix (same as .)
-#																"<prefix": add prefix (same as .)
-#																"null": replace to null ""
-#																"other": replace to new name
+#			{"Province/State" => "NULL", "Country/Region" => "Canada"},
+#			{"Province/State" => "", "Country/Region" => ".-total"},
+#														"=": keep item name ("" remove the item name )
+#														".postfix": add positfix 
+#														"+postfix": add positfix (same as .)
+#														"<prefix": add prefix (same as .)
+#														"null": replace to null ""
+#														"other": replace to new name
 #		});
-#
 #
 sub	calc_items
 {
