@@ -1225,7 +1225,13 @@ sub	add_average
 #	calc_items( $cdp, {
 #			method => "sum",
 #			target_colp => {"Province/State" => "NULL", "Country/Region" => "Canada"},
-#			result_colp => {"Province/State" => "", "Country/Region" => "-total"},
+#			result_colp => {"Province/State" => "", "Country/Region" => ".-total"},
+#																"=": keep item name ("" remove the item name )
+#																".postfix": add positfix 
+#																"+postfix": add positfix (same as .)
+#																"<prefix": add prefix (same as .)
+#																"null": replace to null ""
+#																"other": replace to new name
 #		});
 #
 #
@@ -1275,21 +1281,45 @@ sub	calc_items
 		#dp::dp "[$key]\n";
 		my $src_kp = $key_items->{$key};			# ["Qbek", "Canada"]
 		my $src_dp = $csv_data->{$key};	
+
 		my @dst_keys = @$src_kp;
+		foreach my $k (keys %$result_colp){
+			if($result_colp->{$k} eq "null"){
+				my $n = $inhp->{$k} // "";
+				if($n eq ""){
+					dp::dp "WARNING: [$k] is not assigned as column name\n";
+					exit;
+				}
+				$dst_keys[$n] = "";
+			}
+		}
 
 		my @key_list = ();
 		my @key_items = ();
 		for (my $i = 0 ; $i < $#key_order; $i++){				# [0, 1] 
 			my $kn = $key_order[$i];
 			my $item_name = $src_kp->[$kn];				# ["Qbek", "Canada"]
-			#dp::dp "$item_name [$i][$kn]($result_info[$kn])\n";
+			dp::dp "$item_name [$i][$kn]($result_info[$kn])\n";
 			push(@key_items, $item_name);
 			if($result_info[$kn]){
-				$item_name .= $result_info[$kn];		# ex. -Total
+				my $rsi = $result_info[$kn];
+				if($rsi =~ /^[\.\+]/){
+					$rsi =~ s/.//;
+					$item_name .= $rsi;		# ex. -Total
+				}
+				elsif($rsi =~ /^</){
+					$rsi =~ s/.//;
+					$item_name = $rsi . $item_name;		# ex. -Total
+				}
+				elsif($rsi =~ /^=/){
+				}
+				else {
+					$item_name = $rsi;
+				}
 				$dst_keys[$kn] = $item_name;
 			}
 			else {
-				#$item_name = "";						# ex. ""
+				$item_name = "";						# ex. ""
 			}
 			push(@key_list, $item_name);
 		}

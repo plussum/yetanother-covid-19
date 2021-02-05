@@ -403,7 +403,7 @@ if($golist{ccse}){
 	#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 1, items => 10, search_key => "Canada"}); # if($DEBUG);
 	csvgraph::calc_items($CCSE_DEF, "sum", 
 				{"Province/State" => "", "Country/Region" => "Canada"},
-				{"Province/State" => "", "Country/Region" => ""}		# "-total" ... 
+				{"Province/State" => "null", "Country/Region" => "="}		# null=> "", = same as source data
 	);
 	csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
 
