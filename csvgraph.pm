@@ -312,6 +312,8 @@ sub	load_csv
 		&cumrative2daily($cdp);
 	}
 
+	#@{$cdp->{item_name_list}} = @w[0..($data_start-1)];	# set item_name 
+
 	#
 	#	DEBUG: Dump data 
 	#
@@ -351,11 +353,14 @@ sub	load_csv_holizontal
 
 	my @w = split(/$src_dlm/, $line);
 
-	@{$cdp->{item_name_list}} = @w[0..($data_start-1)];	# set item_name 
-	my $inhp = $cdp->{item_name_hash};
-	for(my $i = 0; $i < $data_start; $i++){
-		$inhp->{$w[$i]} = $i;
+	@{$cdp->{item_name_list}} = @w[0..($data_start - 1)];	# set item_name 
+	my $itemp = $cdp->{item_name_list};
+	my $inhp = $cdp->{item_name_hash};						# List and Hash need to make here
+	for(my $i = 0; $i < scalar(@$itemp); $i++){				# use for loading and gen keys
+		my $kn = $itemp->[$i];
+		$inhp->{$kn} = $i;
 	}
+	dp::dp "CSV_HOLIZONTASL: " . join(",", @{$cdp->{item_name_list}}) . "\n";
 
 	@$date_list = @w[$data_start..$#w];
 	for(my $i = 0; $i < scalar(@$date_list); $i++){
@@ -393,6 +398,7 @@ sub	load_csv_holizontal
 		#last if($ln > 50);
 	}
 	close(FD);
+	dp::dp "CSV_HOLIZONTASL: " . join(",", @{$cdp->{item_name_list}}) . "\n";
 	return 0;
 }
 
@@ -404,7 +410,7 @@ sub	load_csv_holizontal
 #	01/02
 #	01/03
 #
-#		 01/01, 01/02, 01/03
+#	"key" 01/01, 01/02, 01/03
 #	key1, 1,2,3
 #	key2, 11,12,13
 #	key3, 21,22,23
@@ -422,8 +428,6 @@ sub	load_csv_vertical
 	my $key_items = $cdp->{key_items};
 	my @keys = @{$cdp->{keys}};
 	my $timefmt = $cdp->{timefmt};
-	my $key_name = $cdp->{key_name} // "";
-	$key_name = "key" if(! $key_name);
 
 	#
 	#	Load CSV DATA
@@ -446,11 +450,10 @@ sub	load_csv_vertical
 		$key_items->{$k} = [$k];
 	}
 
+	my $key_name = $cdp->{key_name} // "";
 	$key_name = "key" if(! $key_name);
 	@{$cdp->{item_name_list}} = ($key_name);	# set item_name 
-	my $inhp = $cdp->{item_name_hash};
-	$inhp->{$key_name} = 0;
-	#dp::dp join(",", "# " , @key_list) . "\n";
+	$cdp->{item_name_hash}->{$key_name} = 0;
 
 	my $ln = 0;
 	while(<FD>){
@@ -508,6 +511,7 @@ sub	load_json
 		$JSON .= $_;
 	}
 	close(FD);
+
 	my $positive = decode_json($JSON);
 	#print Dumper $positive;
 	my @data0 = (@{$positive->{data}});
@@ -526,8 +530,7 @@ sub	load_json
 	my $key_name = $cdp->{key_name} // "";
 	$key_name = "key" if(! $key_name);
 	@{$cdp->{item_name_list}} = ($key_name);	# set item_name 
-	my $inhp = $cdp->{item_name_hash};
-	$inhp->{$key_name} = 0;
+	$cdp->{item_name_hash}->{$key_name} = 0;
 	#dp::dp join(",", "# " , @key_list) . "\n";
 
 	for(my $rn = 0; $rn <= $#data0; $rn++){
@@ -578,8 +581,8 @@ sub	load_transaction
 	my $key_name = $cdp->{key_name} // "";
 	$key_name = "key" if(! $key_name);
 	@{$cdp->{item_name_list}} = ($key_name);	# set item_name 
-	my $inhp = $cdp->{item_name_hash};
-	$inhp->{$key_name} = 0;
+	$cdp->{item_name_hash}->{$key_name} = 0;
+
 	#dp::dp join(",", "# " , @key_list) . "\n";
 	dp::dp "load_transaction: " . join(", ", @items) . "\n";
 
@@ -915,17 +918,28 @@ sub	gen_key_order
 			}
 		}
 		else {
-			dp::dp "[$itn] as numeric\n";
+			dp::dp "[$itn] as numeric\n" if($VERBOSE > 1);
 		}
 		push(@keys, $itn);
 	}
-	dp::dp join(",", @keys) . "\n";
+	dp::dp join(",", @keys) . "\n" if($VERBOSE);
 	return (@keys);
 }
 
 #
-#	format1: ["NULL","Japan"]
+#	form target_col format1 and format2 to format1(output is format1)
+#		No need to selparate items, just keep it ("Japan,Italy" => "Japan,Italy")
+#
+#			geo_type, region, transpotation_type, allternative,sub-reagion,country
+#	format1: ["country/region","Japan","walking,driving"]
+#	format2: {geo_type => "country/region", region => "Japan", transportation_type => "walking,driving"}
+#
+#			Province/State,Country/Region,Lat,Long,1/22/20
+#	format1: ["NULL","Japan"]			# as country of Japan
+#	format1: ["","Japan,Italy"]			# any Province/States in Japan and Itanly
 #	fromat2: {"Province/State" => "NULL", "Country/Region" => "Japan"},
+#	fromat2: {"Province/State" => "", "Country/Region" => "Japan,Italy"}
+#
 #
 sub	gen_target_col
 {
@@ -941,7 +955,7 @@ sub	gen_target_col
 	}
 	elsif($ref eq "HASH"){
 		my $itemp = $cdp->{item_name_hash};
-		dp::dp join(",", %$target_colp) . "\n";
+		dp::dp join(",", %$target_colp) . "\n" if($VERBOSE > 1);
 		foreach my $k (keys %$target_colp){
 			my $itn = $itemp->{$k} // "UNDEF";
 			dp::dp ">> $k: [$itn]\n";
@@ -956,8 +970,7 @@ sub	gen_target_col
 			$target_col[$i] = "" if(! defined $target_col[$i]);
 		}
 	}
-
-	dp::dp join(",", @target_col) . "\n";
+	dp::dp join(",", @target_col) . "\n" if($VERBOSE);
 	return (@target_col);
 }
 
@@ -974,8 +987,8 @@ sub	select_keys
 	my $clm = 0;
 
 	my @target_list = &gen_target_col($cdp, $target_colp);
-	dp::dp csvlib::join_array(",", $target_colp) . "\n";
-	dp::dp csvlib::join_array(",", @target_list) . "\n";
+	dp::dp csvlib::join_array(",", $target_colp) . "\n" if($VERBOSE);
+	dp::dp csvlib::join_array(",", @target_list) . "\n" if($VERBOSE);
 	foreach my $sk (@target_list){
 		#dp::dp "Target col $sk\n";
 		if($sk){
@@ -998,8 +1011,8 @@ sub	select_keys
 		$clm++;
 	}
 
-	dp::dp "Condition: $condition " . csvlib::join_array(", ", @target_col_array) . "\n";
-	dp::dp "Nontarget: " . csvlib::join_array(",", @non_target_col_array) . "\n";
+	dp::dp "Condition: $condition " . csvlib::join_array(", ", @target_col_array) . "\n" if($VERBOSE);
+	dp::dp "Nontarget: " . csvlib::join_array(",", @non_target_col_array) . "\n" if($VERBOSE);
 	my $key_items = $cdp->{key_items};
 	#dp::dp "Key_itmes: " . csvlib::join_array(",", $key_items) . "\n";
 	foreach my $key (keys %$key_items){
@@ -1016,7 +1029,18 @@ sub	select_keys
 			}
 		}
 	}
-	dp::dp "## TARGET_KEYS " . join(", ", @$target_keys) . "\n";
+	if($VERBOSE){
+		my $size = scalar(@$target_keys) - 1;
+		$size = 5 if($size > 5);
+		if($size >= 0){
+			dp::dp "## TARGET_KEYS " . csvlib::join_array(",", @$target_colp) . join(",", @target_list) . "\n";
+			dp::dp "## TARGET_KEYS $size" . "\n";
+			dp::dp "## TARGET_KEYS " . join(", ", @$target_keys[0..$size]) . "\n";
+		}
+		else {
+			dp::dp "## TARGET_KEYS no data" . csvlib::join_array(",", @$target_colp) . join(",", @target_list) . "\n";
+		}
+	}
 	return(scalar(@$target_keys) - 1);
 }
 
@@ -1100,7 +1124,8 @@ sub	add_average
 	}
 
 	my $dates = $cdp->{dates};
-	my @keys = @{$cdp->{keys}};						# Item No for gen HASH Key
+	#my @keys = @{$cdp->{keys}};						# Item No for gen HASH Key
+	my @key_order = &gen_key_order($cdp, $cdp->{keys});		# keys to gen record key
 	my $key_dlm = $cdp->{key_dlm} // $DEFAULT_KEY_DLM;
 	my %ak_list = ();
 	foreach my $key (keys %$csv_data){
@@ -1108,7 +1133,7 @@ sub	add_average
 		$avr_key_items[$target_col] = $name;
 
 		my @gen_key = ();							# generate average key
-		foreach my $n (@keys){
+		foreach my $n (@key_order){
 			my $itm = $avr_key_items[$n];
 			push(@gen_key, $itm);
 		}
@@ -1234,7 +1259,7 @@ sub gen_html_by_gp_list
 	my $CSS = $config::CSS;
 	my $class = $config::CLASS;
 
-	csvlib::disp_caller(1..3);
+	csvlib::disp_caller(1..3) if($VERBOSE);
 	open(HTML, ">$html_file") || die "Cannot create file $html_file";
 	binmode(HTML, ":utf8");
 
@@ -1318,7 +1343,7 @@ sub	gen_html
 	my $data_source = $cdp->{data_source};
 	my $dst_dlm = $gdp->{dst_dlm} // "\t";
 
-	csvlib::disp_caller(1..3);
+	csvlib::disp_caller(1..3) if($VERBOSE);
 	foreach my $gp (@{$gdp->{graph_params}}){
 		last if($gp->{dsc} eq $gdp->{END_OF_DATA});
 		&csv2graph($cdp, $gdp, $gp);

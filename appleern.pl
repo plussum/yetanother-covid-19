@@ -119,6 +119,8 @@ my $AMT_GRAPH = {
 #
 #	Definition of Johns Hpkings University CCSE CSV format
 #
+#	Province/State,Country/Region,Lat,Long,1/22/20
+#
 my $CCSE_BASE_DIR = "$WIN_PATH/ccse/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
 my $CCSE_DEF = {
 	id => "ccse",
@@ -388,6 +390,7 @@ if($all){
 
 #
 #	Load CCSE
+#
 #my $PNG_PATH  = "$WIN_PATH/PNG2",
 #my $PNG_REL_PATH  = "../PNG2",
 #
@@ -438,6 +441,7 @@ if($golist{amt}){
 	# redece by geo_type = "Subregion" & country = "Japan"	
 	my $amt_pref_japan = {};
 	csvgraph::reduce_cdp_target($amt_pref_japan, $AMT_DEF, {geo_type => $SUBR, country => "Japan"}, );
+	csvgraph::dump_cdp($amt_pref_japan, {ok => 1, lines => 5});
 	csvgraph::add_average($amt_pref_japan, 2, "avr");								# Generate average(Drveing, Walking, Transit))
 	csvgraph::dump_cdp($amt_pref_japan, {ok => 1, lines => 5});
 	push(@$gp_list , csvgraph::csv2graph_list($amt_pref_japan, $AMT_GRAPH, [		# add Graph of Japan Prefecture graph
@@ -521,7 +525,7 @@ if($golist{japan}){
 csvgraph::gen_html_by_gp_list($gp_list, {						# Generate HTML file with graphs
 		html_tilte => "Apple Mobile Trends",
 		src_url => $AMT_DEF->{src_url} // "src_url",
-		html_file => "$HTML_PATH/csvgraph.html",
+		html_file => "$HTML_PATH/csvgraph_index.html",
 		png_path => $PNG_PATH // "png_path",
 		png_rel_path => $PNG_REL_PATH // "png_rel_path",
 		data_source => $AMT_GRAPH->{data_source} // "data_source",
