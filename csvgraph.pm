@@ -1257,6 +1257,8 @@ sub	calc_items
 	my @key_order = &gen_key_order($cdp, $cdp->{keys}); # keys to gen record key
 	my @riw = &gen_key_order($cdp, [keys %$result_colp]); # keys order to gen record key
 
+	#dp::dp "key_order: " .join(",", @key_order) . "\n";
+	#dp::dp "restore_order: " .join(",", @riw) . "\n";
 
 	my @result_info = ();
 	for(my $i = 0; $i < $cdp->{data_start}; $i++){			# clear to avoid undef
@@ -1271,7 +1273,7 @@ sub	calc_items
 		}
 		$result_info[$n] = $result_colp->{$k};
 	}
-	dp::dp "################ result_info: " . join(",", @result_info) . "\n" if($VERBOSE);
+	#dp::dp "################ result_info: " . join(",", @result_info) . "\n";# if($VERBOSE);
 
 	#
 	#	Generate record_key and total source data and put to destination(record_key)
@@ -1294,13 +1296,22 @@ sub	calc_items
 			}
 		}
 
+		#
+		# key  			 1,2 (region, transportation_type)
+		#				         v      v
+		#				geo_type,region,transportation_type,alternative_name,sub-region,country,2020-01-13,,,,
+		# restore_info	"",      =,     avr,                ,                ,          ,
+		#     v
+		# dst_key		same,    same,   avr, same, same, same
+		#     v
+		# record_key	region + transportation_type ("avr")
+		#
 		my @key_list = ();
-		my @key_items = ();
-		for (my $i = 0 ; $i < $#key_order; $i++){				# [0, 1] 
+		for (my $i = 0 ; $i <= $#key_order; $i++){				# [0, 1] 
 			my $kn = $key_order[$i];
 			my $item_name = $src_kp->[$kn];				# ["Qbek", "Canada"]
 			#dp::dp "$item_name [$i][$kn]($result_info[$kn])\n";
-			push(@key_items, $item_name);
+			#push(@key_items, $item_name);
 			if($result_info[$kn]){
 				my $rsi = $result_info[$kn];
 				if($rsi =~ /^[\.\+]/){
@@ -1314,6 +1325,7 @@ sub	calc_items
 				elsif($rsi =~ /^=/){
 				}
 				else {
+					#dp::dp "$item_name -> $rsi\n";
 					$item_name = $rsi;
 				}
 				$dst_keys[$kn] = $item_name;
@@ -1323,18 +1335,25 @@ sub	calc_items
 			}
 			push(@key_list, $item_name);
 		}
-		my $record_key = &gen_record_key($key_dlm, \@key_order, \@key_list);
+		#my $record_key = &gen_record_key($key_dlm, \@key_order, \@key_list);
+		my $record_key = &gen_record_key($key_dlm, \@key_order, \@dst_keys);
 		$record_key_list{$record_key}++;
-		#dp::dp "record_key [$record_key]\n";
+		#dp::dp "record_key [$record_key]" . join(",", @key_order, "##", @key_list) . "\n" if($record_key =~ /Japan/);
 		
-		if(! defined $key_items->{$record_key}){			# initial $record_key
+		if(! defined $csv_data->{$record_key}){				# initial $record_key
 			dp::dp "init: $record_key\n" if($VERBOSE);
 			$key_items->{$record_key} = [@dst_keys];
 			$csv_data->{$record_key} = [];
+			my $dst_dp = $csv_data->{$record_key};			# total -> dst
+			for(my $i = 0; $i < scalar(@$src_dp); $i++){	# initial csv_data
+				$dst_dp->[$i] = 0;					
+			}
 		}
 		my $dst_dp = $csv_data->{$record_key};				# total -> dst
 		for(my $i = 0; $i < scalar(@$src_dp); $i++){
-			$dst_dp->[$i] += $src_dp->[$i] // 0;
+			my $v = $src_dp->[$i] // 0;
+			$v = 0 if($v eq "");
+			$dst_dp->[$i] += $v;
 		}
 		# dp::dp "####[$record_key] " . join(",", @$dst_dp[0..5]) . "\n";
 	}
@@ -1344,8 +1363,8 @@ sub	calc_items
 	#
 	if($method eq "avr"){
 		foreach my $record_key (keys %record_key_list){
-			dp::dp "$record_key: \n";
 			my $dst_dp = $csv_data->{$record_key};
+			#dp::dp "$record_key: $record_key_list{$record_key} ". join(",", @$dst_dp[0..10]) . "\n" if($record_key =~ /Japan/);
 			for(my $i = 0; $i < scalar(@$dst_dp); $i++){
 				$dst_dp->[$i] /= $record_key_list{$record_key};
 			}

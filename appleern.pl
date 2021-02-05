@@ -430,6 +430,8 @@ if($golist{ccse}){
 #
 # Load Apple Mobility Trends
 #
+#	geo_type,region,transportation_type,alternative_name,sub-region,country,2020-01-13,,,,
+#
 my $amt_country = {};		# for marge wtih ccse-ERN
 if($golist{amt}){
 	csvgraph::new($AMT_DEF); 										# Init AMD_DEF
@@ -439,7 +441,13 @@ if($golist{amt}){
 	# reduce by geo_type = "Country/Reagion" (for avoid conflict, Mexico, New Mexico)
 	csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, {geo_type => $REG});
 	#csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
-	csvgraph::add_average($amt_country, "transportation_type", "avr");		# gen average(Driving, Walking, Transit)
+	#csvgraph::add_average($amt_country, "transportation_type", "avr");		# gen average(Driving, Walking, Transit)
+
+	csvgraph::calc_items($amt_country, "avr", 
+				{"transportation_type" => "", "region" => "", "country" => ""},	# All Province/State with Canada, ["*","Canada",]
+				{"transportation_type" => "avr", "region" => "="},# total gos ["","Canada"] null = "", = keep
+				#{"transportation_type" => "avr", "region" => "=", "country" => "="}		# total gos ["","Canada"] null = "", = keep
+	);
 	#csvgraph::gen_html($amt_country, $AMT_GRAPH);					# Generate Graph/HTHML
 	push(@$gp_list,
 		 csvgraph::csv2graph_list($amt_country, $AMT_GRAPH, $AMT_GRAPH->{graph_params}));	# gen Graph and params instead of html
