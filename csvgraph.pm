@@ -1299,7 +1299,7 @@ sub	calc_items
 		for (my $i = 0 ; $i < $#key_order; $i++){				# [0, 1] 
 			my $kn = $key_order[$i];
 			my $item_name = $src_kp->[$kn];				# ["Qbek", "Canada"]
-			dp::dp "$item_name [$i][$kn]($result_info[$kn])\n";
+			#dp::dp "$item_name [$i][$kn]($result_info[$kn])\n";
 			push(@key_items, $item_name);
 			if($result_info[$kn]){
 				my $rsi = $result_info[$kn];

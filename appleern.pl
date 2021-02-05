@@ -219,11 +219,11 @@ my $MARGE_GRAPH_PARAMS = {
 my @TARGET_REAGION = (
 		"Japan", "US,United States", 
 		"United Kingdom", "France", "Spain", "Italy", "Russia", 
-			"Germany", "Poland", "Ukraine", "Netherlands", "Czechia,Czech Republic", "Romania",
-			"Belgium", "Portugal", "Sweden",
-		"India",  "Indonesia", "Israel", # "Iran", "Iraq","Pakistan",
-		"Brazil", "Colombia", "Argentina", "Chile", "Mexico", "Canada", 
-		"South Africa", 
+#			"Germany", "Poland", "Ukraine", "Netherlands", "Czechia,Czech Republic", "Romania",
+#			"Belgium", "Portugal", "Sweden",
+#		"India",  "Indonesia", "Israel", # "Iran", "Iraq","Pakistan",
+#		"Brazil", "Colombia", "Argentina", "Chile", "Mexico", "Canada", 
+#		"South Africa", 
 );
 
 #foreach my $p (@$gp){
@@ -402,17 +402,15 @@ if($golist{ccse}){
 	csvgraph::load_csv($CCSE_DEF);
 	#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 1, items => 10, search_key => "Canada"}); # if($DEBUG);
 	csvgraph::calc_items($CCSE_DEF, "sum", 
-				{"Province/State" => "", "Country/Region" => "Canada"},
-				{"Province/State" => "null", "Country/Region" => "="}		# null=> "", = same as source data
+				{"Province/State" => "", "Country/Region" => "Canada"},		# All Province/State with Canada, ["*","Canada",]
+				{"Province/State" => "null", "Country/Region" => "="}		# total gos ["","Canada"] null = "", = keep
 	);
-	csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
+	#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
 
 	csvgraph::reduce_cdp_target($ccse_country, $CCSE_DEF, {"Province/State" => "NULL"});	# Select Country
-	csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
+	#csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
 	$ccse_country->{title} .= "-- reduced";
 	#csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 5, items => 10, search_key => "Japan"}); # if($DEBUG);
-	#csvgraph::dump_csv_data($ccse_country->{csv_data}, {ok => 1, lines => 5, search_key => "Canada"});
-	#csvgraph::dump_key_items($ccse_country->{key_items}, {ok => 1, lines => 5, search_key => "Japan"});
 	my $gp = $CCSE_GRAPH->{graph_params};
 	foreach my $reagion (@TARGET_REAGION){
 		push (@$gp, {
@@ -427,6 +425,7 @@ if($golist{ccse}){
 		 csvgraph::csv2graph_list($ccse_country, $CCSE_GRAPH, $CCSE_GRAPH->{graph_params}));	# gen Graph and params instead of html
 	csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
 	csvgraph::comvert2ern($ccse_country);				# Calc ERN
+	#csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 5});
 }
 #
 # Load Apple Mobility Trends
@@ -435,11 +434,11 @@ my $amt_country = {};		# for marge wtih ccse-ERN
 if($golist{amt}){
 	csvgraph::new($AMT_DEF); 										# Init AMD_DEF
 	csvgraph::load_csv($AMT_DEF);									# Load to memory
-	csvgraph::dump_cdp($AMT_DEF, {ok => 1, lines => 5});			# Dump for debug
+	#csvgraph::dump_cdp($AMT_DEF, {ok => 1, lines => 5});			# Dump for debug
 
 	# reduce by geo_type = "Country/Reagion" (for avoid conflict, Mexico, New Mexico)
 	csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, {geo_type => $REG});
-	csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
+	#csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
 	csvgraph::add_average($amt_country, "transportation_type", "avr");		# gen average(Driving, Walking, Transit)
 	#csvgraph::gen_html($amt_country, $AMT_GRAPH);					# Generate Graph/HTHML
 	push(@$gp_list,
@@ -448,15 +447,14 @@ if($golist{amt}){
 	# redece by geo_type = "Subregion" & country = "Japan"	
 	my $amt_pref_japan = {};
 	csvgraph::reduce_cdp_target($amt_pref_japan, $AMT_DEF, {geo_type => $SUBR, country => "Japan"}, );
-	csvgraph::dump_cdp($amt_pref_japan, {ok => 1, lines => 5});
+	#csvgraph::dump_cdp($amt_pref_japan, {ok => 1, lines => 5});
 	csvgraph::add_average($amt_pref_japan, 2, "avr");								# Generate average(Drveing, Walking, Transit))
-	csvgraph::dump_cdp($amt_pref_japan, {ok => 1, lines => 5});
+	#csvgraph::dump_cdp($amt_pref_japan, {ok => 1, lines => 5});
 	push(@$gp_list , csvgraph::csv2graph_list($amt_pref_japan, $AMT_GRAPH, [		# add Graph of Japan Prefecture graph
 			{dsc => "Worldwide Apple mobility Japan Pref.", lank => [1,10], static => "rlavr", 
 				target_col => {transportation_type => "avr"}},						# target = avr of Driving, Walking, Transport(All Data)
 		])
 	);
-
 	csvgraph::comvert2rlavr($amt_country);							# rlavr for marge with CCSE
 }
 
@@ -473,7 +471,7 @@ if($golist{"amt-ccse"}){
 		$rn =~ s/,.*$//;
 		my @rr = ();
 		foreach my $r (split(/,/, $reagion)){
-			push(@rr, "$r-", "~$r#");			# ~ regex
+			push(@rr, "$r", "~$r#");			# ~ regex
 		}
 		$reagion = join(",", @rr);
 		
@@ -508,7 +506,7 @@ if($golist{"tokyo"}){
 	csvgraph::reduce_cdp_target($y2, $TOKYO_DEF, ["positive_rate"]);
 	#csvgraph::dump_cdp($y2, {ok => 1, lines => 5});
 	csvgraph::marge_csv($marge, $y1, $y2);		# Gererate Graph
-	csvgraph::dump_cdp($marge, {ok => 1, lines => 5});
+	#csvgraph::dump_cdp($marge, {ok => 1, lines => 5});
 	push(@$gp_list , 
 		csvgraph::csv2graph_list($marge, $TOKYO_GRAPH, $TOKYO_GRAPH->{graph_params}));
 	csvgraph::gen_html($marge, $TOKYO_GRAPH);		# Generate Graph/HTHML
