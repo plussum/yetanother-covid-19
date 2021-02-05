@@ -222,7 +222,7 @@ my @TARGET_REAGION = (
 			"Germany", "Poland", "Ukraine", "Netherlands", "Czechia,Czech Republic", "Romania",
 			"Belgium", "Portugal", "Sweden",
 		"India",  "Indonesia", "Israel", # "Iran", "Iraq","Pakistan",
-		"Brazil", "Colombia", "Argentina", "Chile", "Mexico", # "Canada", 
+		"Brazil", "Colombia", "Argentina", "Chile", "Mexico", "Canada", 
 		"South Africa", 
 );
 
@@ -402,14 +402,13 @@ if($golist{ccse}){
 	csvgraph::load_csv($CCSE_DEF);
 	#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 1, items => 10, search_key => "Canada"}); # if($DEBUG);
 	csvgraph::calc_items($CCSE_DEF, "sum", 
-				{"Province/State" => "NULL", "Country/Region" => "Canada"},
-				{"Province/State" => "", "Country/Region" => "-total"}
+				{"Province/State" => "", "Country/Region" => "Canada"},
+				{"Province/State" => "", "Country/Region" => ""}		# "-total" ... 
 	);
 	csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
-	exit;
-	
 
-	csvgraph::reduce_cdp_target($ccse_country, $CCSE_DEF, ["NULL"]);	# Select Country
+	csvgraph::reduce_cdp_target($ccse_country, $CCSE_DEF, {"Province/State" => "NULL"});	# Select Country
+	csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
 	$ccse_country->{title} .= "-- reduced";
 	#csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 5, items => 10, search_key => "Japan"}); # if($DEBUG);
 	#csvgraph::dump_csv_data($ccse_country->{csv_data}, {ok => 1, lines => 5, search_key => "Canada"});

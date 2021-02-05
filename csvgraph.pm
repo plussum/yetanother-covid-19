@@ -250,8 +250,8 @@ sub	dump_csv_data
 	my $search_key = $p->{search_key} // "";
 	$lines = 0 if($search_key && ! defined $p->{lines});
 
-
-	print "------ [$mess] Dump csv data ($csv_data) --------\n";
+	$mess = " [$mess]" if($mess);
+	print "------$mess Dump csv data ($csv_data) [$search_key]--------\n";
 	#csvlib::disp_caller(1..3);
 	print "-" x 30 . "\n";
 	my $ln = 0;
@@ -259,6 +259,8 @@ sub	dump_csv_data
 		my @w = @{$csv_data->{$k}};
 		next if($#w < 0);
 
+		my $f = ($k =~ /$search_key/) ? "*" : " ";
+		#dp::dp "$f $ok $k [$search_key] \n";
 		if(! defined $w[1]){
 			dp::dp " --> [$k] csv_data is not assigned\n";
 		}
@@ -268,7 +270,7 @@ sub	dump_csv_data
 				$scv = $src_csv->{$k} // "-" ;
 			}
 
-			if($search_key && $k =~ /search_key/){
+			if($search_key && $k =~ /$search_key/){
 				print "[$ln] " . join(", ", $k, "[$scv]", @w[0..$items]) . " [$search_key]\n";
 			}
 			elsif($lines eq "" || $ln < $lines){
@@ -345,6 +347,7 @@ sub	load_csv_holizontal
 	#
 	#	Load CSV DATA
 	#
+	dp::dp "CSV_HOLIZONTASL: " . join(",", @{$cdp->{item_name_list}}) . "\n";
 	dp::dp "$csv_file\n";
 	open(FD, $csv_file) || die "Cannot open $csv_file";
 	my $line = <FD>;
@@ -360,7 +363,6 @@ sub	load_csv_holizontal
 		my $kn = $itemp->[$i];
 		$inhp->{$kn} = $i;
 	}
-	dp::dp "CSV_HOLIZONTASL: " . join(",", @{$cdp->{item_name_list}}) . "\n";
 
 	@$date_list = @w[$data_start..$#w];
 	for(my $i = 0; $i < scalar(@$date_list); $i++){
@@ -391,7 +393,7 @@ sub	load_csv_holizontal
 		#last if($ln > 50);
 	}
 	close(FD);
-	dp::dp "CSV_HOLIZONTASL: " . join(",", @{$cdp->{item_name_list}}) . "\n";
+	#dp::dp "CSV_HOLIZONTASL: " . join(",", @{$cdp->{item_name_list}}) . "\n";
 	return 0;
 }
 
@@ -400,13 +402,13 @@ sub	gen_record_key
 	my($dlm, $key_order, $items) = @_;
 
 	my @gen_key = ();
-	my $kn = 0;
+	my $k = "";
 	foreach my $n (@$key_order){		# @keys
 		my $itm = $items->[$n] // "";
 		push(@gen_key, $itm);
-		$kn++;
+		$k .= $itm . $dlm if($itm);
 	}
-	my $k = join($dlm, @gen_key);				# set key_name
+	$k =~ s/$dlm$//;
 	return $k;
 }
 
@@ -918,7 +920,7 @@ sub	gen_key_order
 		my $itn = $k;
 		if($k =~ /\D/){
 			$itn = $itemp->{$k} // "UNDEF";
-			dp::dp ">> $k: [$itn]\n";
+			dp::dp ">> $k: [$itn]\n" if($VERBOSE);
 			if($itn eq "UNDEF"){
 				dp::dp "WARNING: no item_name_hash defined [$k] (" . join(",", keys %$itemp) . ")\n";
 				exit 1;
@@ -965,7 +967,7 @@ sub	gen_target_col
 		dp::dp join(",", %$target_colp) . "\n" if($VERBOSE > 1);
 		foreach my $k (keys %$target_colp){
 			my $itn = $itemp->{$k} // "UNDEF";
-			dp::dp ">> $k: [$itn]\n";
+			#dp::dp ">> $k: [$itn]\n";
 			if($itn eq "UNDEF"){
 				dp::dp "WARNING: no item_name_hash defined [$k] (" . join(",", keys %$itemp) . ")\n";
 			}
@@ -1241,47 +1243,70 @@ sub	calc_items
 	#my $target_colp = $instruction->{target_colp};
 	#my $result_colp = $instruction->{result_colp};
 
-	my $cldp = {};
-	csvgraph::reduce_cdp_target($cldp, $cdp, $target_colp);	# Select Country
+	my $target_keys = [];
+	my $target = &select_keys($cdp, $target_colp, $target_keys);	# set target records
+	dp::dp "target items : $target " . csvlib::join_array(",", $target_colp) . "\n" if($VERBOSE);
+
+
 	my @key_order = &gen_key_order($cdp, $cdp->{keys}); # keys to gen record key
-	my @result_info = &gen_key_order($cdp, [keys %$result_colp]); # keys to gen record key
+	my @riw = &gen_key_order($cdp, [keys %$result_colp]); # keys order to gen record key
+
+
+	my @result_info = ();
+	for(my $i = 0; $i < $cdp->{data_start}; $i++){			# clear to avoid undef
+		$result_info[$i] = "";
+	}
+	my $inhp = $cdp->{item_name_hash};						# List and Hash need to make here
+	foreach my $k (keys %$result_colp){
+		my $n = $inhp->{$k} // "";
+		if($n eq "") {
+			dp::dp "WARNING: [$k] is not item name \n";
+			exit;
+		}
+		$result_info[$n] = $result_colp->{$k};
+	}
+	dp::dp "################ result_info: " . join(",", @result_info) . "\n" if($VERBOSE);
 
 	#
 	#	Generate record_key and total source data and put to destination(record_key)
 	#
 	my %record_key_list = ();
-	foreach my $key (@{$cdp->{load_order}}){
+	foreach my $key (@$target_keys){
+		#dp::dp "[$key]\n";
 		my $src_kp = $key_items->{$key};			# ["Qbek", "Canada"]
 		my $src_dp = $csv_data->{$key};	
+		my @dst_keys = @$src_kp;
 
 		my @key_list = ();
 		my @key_items = ();
 		for (my $i = 0 ; $i < $#key_order; $i++){				# [0, 1] 
 			my $kn = $key_order[$i];
 			my $item_name = $src_kp->[$kn];				# ["Qbek", "Canada"]
-			dp::dp "$item_name [$i][$kn]($result_info[$kn])\n";
+			#dp::dp "$item_name [$i][$kn]($result_info[$kn])\n";
 			push(@key_items, $item_name);
 			if($result_info[$kn]){
 				$item_name .= $result_info[$kn];		# ex. -Total
+				$dst_keys[$kn] = $item_name;
 			}
 			else {
-				$item_name = "";						# ex. ""
+				#$item_name = "";						# ex. ""
 			}
 			push(@key_list, $item_name);
 		}
 		my $record_key = &gen_record_key($key_dlm, \@key_order, \@key_list);
 		$record_key_list{$record_key}++;
-		dp::dp "record_key [$record_key]\n";
+		#dp::dp "record_key [$record_key]\n";
 		
 		if(! defined $key_items->{$record_key}){			# initial $record_key
-			dp::dp "init: $record_key\n";
-			$key_items->{$record_key} = [@key_items];
+			dp::dp "init: $record_key\n" if($VERBOSE);
+			$key_items->{$record_key} = [@dst_keys];
 			$csv_data->{$record_key} = [];
 		}
 		my $dst_dp = $csv_data->{$record_key};				# total -> dst
 		for(my $i = 0; $i < scalar(@$src_dp); $i++){
 			$dst_dp->[$i] += $src_dp->[$i] // 0;
 		}
+		# dp::dp "####[$record_key] " . join(",", @$dst_dp[0..5]) . "\n";
 	}
 	
 	#
@@ -1514,6 +1539,7 @@ sub	csv2graph
 	#dp::dp "target_col: " . join(" : ", @{$gp->{target_col}}) . "\n";
 	if($#target_keys < 0){
 		dp::dp "WARNING: No data $cdp->{title} / keys:" . join("; ", @{$gp->{target_col}}) . "\n";
+		csvlib::disp_caller(1..3);
 		return 0;
 	}
 
