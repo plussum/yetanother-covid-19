@@ -381,15 +381,8 @@ sub	load_csv_holizontal
 		s/[\r\n]+$//;
 		my $line = decode('utf-8', $_);
 		my @items = split(/$src_dlm/, $line);
+		my $k = &gen_record_key($key_dlm, \@key_order, \@items);
 
-		my @gen_key = ();
-		my $kn = 0;
-		foreach my $n (@key_order){		# @keys
-			my $itm = $items[$n];
-			push(@gen_key, $itm);
-			$kn++;
-		}
-		my $k = join($key_dlm, @gen_key);				# set key_name
 		$csv_data->{$k}= [@items[$data_start..$#items]];	# set csv data
 		$key_items->{$k} = [@items[0..($data_start - 1)]];	# set csv data
 		push(@$load_order, $k);
@@ -400,6 +393,21 @@ sub	load_csv_holizontal
 	close(FD);
 	dp::dp "CSV_HOLIZONTASL: " . join(",", @{$cdp->{item_name_list}}) . "\n";
 	return 0;
+}
+
+sub	gen_record_key 
+{
+	my($dlm, $key_order, $items) = @_;
+
+	my @gen_key = ();
+	my $kn = 0;
+	foreach my $n (@$key_order){		# @keys
+		my $itm = $items->[$n] // "";
+		push(@gen_key, $itm);
+		$kn++;
+	}
+	my $k = join($dlm, @gen_key);				# set key_name
+	return $k;
 }
 
 #
@@ -654,7 +662,6 @@ sub	csv
 	return (split(/,/, $line));
 }
 
-1;
 
 
 #
@@ -1210,20 +1217,85 @@ sub	add_average
 #	---------------------------
 #	country/reagion,Japan,average,,,3,6,9,12,15
 #
-#	calc_items( $cdp, "sum",
-#			[
-#			 [{"geo_type"=>"Country/Region"}],	
-#			 [{"Province/State" => "*", "Country/Region" => "Canada"}],
-#			]
 #
-#			"Canada-Total");
-#		"",Canda,sum(Countru/Region=Canada),sum(Canada)
+#	Province/State,Country/Region,Lat,Long,1/22/20
+#
+#	calc_items( $cdp, {
+#			method => "sum",
+#			target_colp => {"Province/State" => "NULL", "Country/Region" => "Canada"},
+#			result_colp => {"Province/State" => "", "Country/Region" => "-total"},
+#		});
 #
 #
 sub	calc_items
 {
-	my ($cdp, $calc, $target_col, $name) = @_;
-	$name = $name // "calc";
+	my ($cdp, $method, $target_colp, $result_colp) = @_;
+
+	#
+	#	Calc 
+	#
+	my $csv_data = $cdp->{csv_data};
+	my $key_items = $cdp->{key_items};
+	my $key_dlm = $cdp->{key_dlm} // $DEFAULT_KEY_DLM;
+
+	#my $target_colp = $instruction->{target_colp};
+	#my $result_colp = $instruction->{result_colp};
+
+	my $cldp = {};
+	csvgraph::reduce_cdp_target($cldp, $cdp, $target_colp);	# Select Country
+	my @key_order = &gen_key_order($cdp, $cdp->{keys}); # keys to gen record key
+	my @result_info = &gen_key_order($cdp, [keys %$result_colp]); # keys to gen record key
+
+	#
+	#	Generate record_key and total source data and put to destination(record_key)
+	#
+	my %record_key_list = ();
+	foreach my $key (@{$cdp->{load_order}}){
+		my $src_kp = $key_items->{$key};			# ["Qbek", "Canada"]
+		my $src_dp = $csv_data->{$key};	
+
+		my @key_list = ();
+		my @key_items = ();
+		for (my $i = 0 ; $i < $#key_order; $i++){				# [0, 1] 
+			my $kn = $key_order[$i];
+			my $item_name = $src_kp->[$kn];				# ["Qbek", "Canada"]
+			dp::dp "$item_name [$i][$kn]($result_info[$kn])\n";
+			push(@key_items, $item_name);
+			if($result_info[$kn]){
+				$item_name .= $result_info[$kn];		# ex. -Total
+			}
+			else {
+				$item_name = "";						# ex. ""
+			}
+			push(@key_list, $item_name);
+		}
+		my $record_key = &gen_record_key($key_dlm, \@key_order, \@key_list);
+		$record_key_list{$record_key}++;
+		dp::dp "record_key [$record_key]\n";
+		
+		if(! defined $key_items->{$record_key}){			# initial $record_key
+			dp::dp "init: $record_key\n";
+			$key_items->{$record_key} = [@key_items];
+			$csv_data->{$record_key} = [];
+		}
+		my $dst_dp = $csv_data->{$record_key};				# total -> dst
+		for(my $i = 0; $i < scalar(@$src_dp); $i++){
+			$dst_dp->[$i] += $src_dp->[$i] // 0;
+		}
+	}
+	
+	#
+	#	Average and others
+	#
+	if($method eq "avr"){
+		foreach my $record_key (keys %record_key_list){
+			dp::dp "$record_key: \n";
+			my $dst_dp = $csv_data->{$record_key};
+			for(my $i = 0; $i < scalar(@$dst_dp); $i++){
+				$dst_dp->[$i] /= $record_key_list{$record_key};
+			}
+		}
+	}
 }
 
 #
