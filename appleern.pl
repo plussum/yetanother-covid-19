@@ -288,6 +288,64 @@ my $TOKYO_GRAPH = {
 
 ####################################################################
 #
+#	Tokyo Positive Status from Tokyo Opensource (JSON)
+#
+#    "date": "2021\/2\/4 19:45",
+#    "data": [
+#        {
+#            "date": "2020-02-28",
+#            "hospitalized": 21,
+#            "severe_case": 5
+#        },
+#                  d1,d2,d3
+#	hospitalized,1,2,3,
+#	sever_case,1,2,3,
+#	
+#
+my $TOKYO_ST_DEF = {
+	id => "tokyo",
+	title => "Tokyo Positive Status",
+	main_url => "-- tokyo data --- ",
+	src_file => "$TKY_DIR/data/positive_status.json",
+	src_url => 	"--- src url ---",		# set
+	json_items => [qw (date hospitalized severe_case)],
+	down_load => \&download,
+
+	direct => "json",		# vertical or holizontal(Default)
+	timefmt => '%Y-%m-%d',		# comverbt to %Y-%m-%d
+	src_dlm => ",",
+	key_dlm => "#",
+	keys => [0],		# 5, 1, 2
+	data_start => 1,
+};
+my $TOKYO_ST_GRAPH = {
+	html_title => $TOKYO_DEF->{title},
+	png_path   => "$PNG_PATH",
+	png_rel_path => $PNG_REL_PATH,
+	html_file => "$HTML_PATH/tokyoTest.html",
+
+	dst_dlm => "\t",
+	avr_date => 7,
+	END_OF_DATA => $END_OF_DATA,
+
+	timefmt => '%Y-%m-%d', format_x => '%m/%d',
+	term_x_size => 1000, term_y_size => 350,
+
+	y2label => 'Number', y2min => "", y2max => "", y2_source => 0,		# soruce csv definition for y2
+	ylabel => '%', ymin => 0,
+
+	graph => 'boxes fill',
+	y2_graph => 'line',
+	additional_plot => "",
+
+	graph_params => [
+		{dsc => "Tokyo Positive Status", lank => [1,10], static => "", target_col => ["",""] },
+		{dsc => "Tokyo Positive Status", lank => [1,10], static => "rlavr", target_col => ["",""] },
+	],
+};
+
+####################################################################
+#
 # year,month,date,prefectureNameJ,prefectureNameE,testedPositive,peopleTested,hospitalized,serious,discharged,deaths,effectiveReproductionNumber
 # 2020,2,8,東京,Tokyo,3,,,,,,
 #
@@ -519,9 +577,29 @@ if($golist{"tokyo"}){
 	csvgraph::reduce_cdp_target($y2, $TOKYO_DEF, ["positive_rate"]);
 	csvgraph::marge_csv($marge, $y1, $y2);		# Gererate Graph
 	#csvgraph::dump_cdp($marge, {ok => 1, lines => 5});
-	push(@$gp_list , 
+	my $tko_graph = [];
+	push(@$tko_graph , 
 		csvgraph::csv2graph_list($marge, $TOKYO_GRAPH, $TOKYO_GRAPH->{graph_params}));
-	csvgraph::gen_html($marge, $TOKYO_GRAPH);		# Generate Graph/HTHML
+	#csvgraph::gen_html($marge, $TOKYO_GRAPH);		# Generate Graph/HTHML
+
+	csvgraph::new($TOKYO_ST_DEF); 						# Load Apple Mobility Trends
+	csvgraph::load_csv($TOKYO_ST_DEF);
+	#csvgraph::dump_cdp($marge, {ok => 1, lines => 5});
+	push(@$tko_graph , 
+		csvgraph::csv2graph_list($TOKYO_ST_DEF, $TOKYO_ST_GRAPH, $TOKYO_ST_GRAPH->{graph_params}));
+
+	push(@$gp_list, @$tko_graph);
+	csvgraph::gen_html_by_gp_list($tko_graph, {						# Generate HTML file with graphs
+			html_tilte => "Tokyo Open Data",
+			src_url => $TOKYO_DEF->{src_url} // "src_url",
+			html_file => "$HTML_PATH/tokyo_opendata.html",
+			png_path => $PNG_PATH // "png_path",
+			png_rel_path => $PNG_REL_PATH // "png_rel_path",
+			data_source => $TOKYO_DEF->{data_source} // "data_source",
+			dst_dlm => $TOKYO_GRAPH->{dst_dlm} // "dst_dlm",
+		}
+	);
+
 }
 
 #
