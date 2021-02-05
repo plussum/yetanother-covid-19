@@ -105,11 +105,11 @@ my $AMT_GRAPH = {
 	graph => "line",
 	additional_plot => "100 with lines title '100%' lw 1 lc 'blue' dt (3,7)",
 	graph_params => [
-		{dsc => "Worldwide Apple mobility Trends and ERN", lank => [1,10], static => "", 
+		{dsc => "Worldwide Apple Mobility Trends World Wilde", lank => [1,10], static => "", 
 			target_col => [$REG, "", "", "", ""], },
-		{dsc => "Worldwide Apple mobility Trends and ERN", lank => [1,10], static => "rlavr", 
-			target_col => [$REG, "", "", "", ""], },
-		{dsc => "Japan Apple mobility Trends and ERN", lank => [1,10], static => "rlavr", 
+		{dsc => "Worldwide Apple Mobility Trends World Wilde average", lank => [1,10], static => "rlavr", 
+			target_col => [$REG, "", "avr", "", ""], },
+		{dsc => "Japan Apple Mobility Trends Japan", lank => [1,10], static => "rlavr", 
 			target_col => [$REG, "Japan", "", "", ""], },
 #		{dsc => "Japan Pref Apple mobility Trends and ERN", lank => [1,10], static => "rlavr", 
 #			target_col => [$SUBR, "", $AVR, "", "Japan"], },
@@ -280,10 +280,9 @@ my $TOKYO_GRAPH = {
 	y2_graph => 'line',
 	additional_plot => "",
 
-
 	graph_params => [
-		{dsc => "Tokyo ", lank => [1,10], static => "", target_col => ["",""] },
-		{dsc => "Tokyo ", lank => [1,10], static => "rlavr", target_col => ["",""] },
+		{dsc => "Tokyo Positve/negative/rate", lank => [1,10], static => "", target_col => ["",""] },
+		{dsc => "Tokyo Positve/negative/rate", lank => [1,10], static => "rlavr", target_col => ["",""] },
 	],
 };
 
@@ -291,7 +290,6 @@ my $TOKYO_GRAPH = {
 #
 # year,month,date,prefectureNameJ,prefectureNameE,testedPositive,peopleTested,hospitalized,serious,discharged,deaths,effectiveReproductionNumber
 # 2020,2,8,東京,Tokyo,3,,,,,,
-#
 #
 #	y,m,d,東京,Tokyo,testedPositive,1,2,3,4,
 #	y,m,d,東京,Tokyo,peopleTested,1,2,3,4,
@@ -341,7 +339,8 @@ my $TKO_TRAN_GRAPH = {
 		{dsc => "Japan serious", lank => [1,10], static => "rlavr", target_col => ["","","","","", "serious"] },
 		{dsc => "Japan discharged", lank => [1,10], static => "rlavr", target_col => ["","","","","", "discharged"] },
 		{dsc => "Japan deaths", lank => [1,10], static => "rlavr", target_col => ["","","","","", "deaths"] },
-		{dsc => "Japan ERN", lank => [1,10], static => "", target_col => ["","","","","Tokyo", "effectiveReproductionNumber"], ymin => "",ymax => ""},
+		{dsc => "Japan ERN", lank => [1,10], static => "", target_col => ["","","","","Tokyo", "effectiveReproductionNumber"], 
+				ymin => "",ymax => ""},
 	],
 };
 
@@ -391,8 +390,7 @@ if($all){
 #
 #	Load CCSE
 #
-#my $PNG_PATH  = "$WIN_PATH/PNG2",
-#my $PNG_REL_PATH  = "../PNG2",
+#	Province/State,Country/Region,Lat,Long,1/22/20
 #
 my $gp_list = [];
 my $ccse_country = {};
@@ -405,7 +403,7 @@ if($golist{ccse}){
 				{"Province/State" => "", "Country/Region" => "Canada"},		# All Province/State with Canada, ["*","Canada",]
 				{"Province/State" => "null", "Country/Region" => "="}		# total gos ["","Canada"] null = "", = keep
 	);
-	csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
+	#csvgraph::dump_cdp($CCSE_DEF, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
 
 	csvgraph::reduce_cdp_target($ccse_country, $CCSE_DEF, {"Province/State" => "NULL"});	# Select Country
 	#csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 5, items => 10, search_key => "Canada"}); # if($DEBUG);
@@ -421,9 +419,18 @@ if($golist{ccse}){
 			}
 		);
 	}
+	my $prov = "Province/State";
+	my $cntry = "Country/Region";
+	my $ccse_graph_01 = [
+		{dsc => "Japan ", lank => [1,10], static => "rlavr", target_col => {"$prov" => "", "$cntry" => "Japan"}},
+	#	{dsc => "Japan top 10", lank => [1,10], static => "rlavr", target_col => {"$prov" => "", "$cntry" => "Japan"}},
+		{dsc => "World Wild ", lank => [1,10], static => "rlavr", target_col => {"$prov" => "", "$cntry" => ""}},
+		{dsc => "World Wild ", lank => [11,20], static => "rlavr", target_col => {"$prov" => "", "$cntry" => ""}},
+	];
 	push(@$gp_list,
-		 csvgraph::csv2graph_list($ccse_country, $CCSE_GRAPH, $CCSE_GRAPH->{graph_params}));	# gen Graph and params instead of html
-	csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
+		 csvgraph::csv2graph_list($ccse_country, $CCSE_GRAPH, $ccse_graph_01)); 
+				#$ccse_graph_01));	# gen Graph and params instead of html
+	#csvgraph::gen_html($ccse_country, $CCSE_GRAPH);		# Generate Graph/HTML
 	csvgraph::comvert2ern($ccse_country);				# Calc ERN
 	#csvgraph::dump_cdp($ccse_country, {ok => 1, lines => 5});
 }
@@ -441,12 +448,11 @@ if($golist{amt}){
 	# reduce by geo_type = "Country/Reagion" (for avoid conflict, Mexico, New Mexico)
 	csvgraph::reduce_cdp_target($amt_country, $AMT_DEF, {geo_type => $REG});
 	#csvgraph::dump_cdp($amt_country, {ok => 1, lines => 5});
-	#csvgraph::add_average($amt_country, "transportation_type", "avr");		# gen average(Driving, Walking, Transit)
 
+	#csvgraph::add_average($amt_country, "transportation_type", "avr");		# change to calc_items
 	csvgraph::calc_items($amt_country, "avr", 
 				{"transportation_type" => "", "region" => "", "country" => ""},	# All Province/State with Canada, ["*","Canada",]
 				{"transportation_type" => "avr", "region" => "="},# total gos ["","Canada"] null = "", = keep
-				#{"transportation_type" => "avr", "region" => "=", "country" => "="}		# total gos ["","Canada"] null = "", = keep
 	);
 	#csvgraph::gen_html($amt_country, $AMT_GRAPH);					# Generate Graph/HTHML
 	push(@$gp_list,
@@ -510,9 +516,7 @@ if($golist{"tokyo"}){
 	my $y2 = {};
 	my $marge = {};
 	csvgraph::reduce_cdp_target($y1, $TOKYO_DEF, ["positive_count,negative_count"]);
-	#csvgraph::dump_cdp($y1, {ok => 1, lines => 5});
 	csvgraph::reduce_cdp_target($y2, $TOKYO_DEF, ["positive_rate"]);
-	#csvgraph::dump_cdp($y2, {ok => 1, lines => 5});
 	csvgraph::marge_csv($marge, $y1, $y2);		# Gererate Graph
 	#csvgraph::dump_cdp($marge, {ok => 1, lines => 5});
 	push(@$gp_list , 
@@ -521,6 +525,7 @@ if($golist{"tokyo"}){
 }
 
 #
+#	Japan provience information from Tokyo Keizai
 #
 #
 if($golist{japan}){

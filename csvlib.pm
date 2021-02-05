@@ -23,9 +23,11 @@ sub	join_array
 {
 	my ($dlm, @array) = @_;
 
+	#dp::dp "#### join_array\n";
 	my @join = ();
 	foreach my $item (@array){
 		my $ref = ref($item);
+		#dp::dp "[$item] $ref\n";
 		if($ref eq "ARRAY"){
 			$item = "[" . join($dlm, @$item) . "]";
 		}
