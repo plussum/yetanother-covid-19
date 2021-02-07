@@ -359,11 +359,11 @@ sub	load_csv_holizontal
 	my @w = split(/$src_dlm/, $line);
 
 	@{$cdp->{item_name_list}} = @w[0..($data_start - 1)];	# set item_name 
-	my $itemp = $cdp->{item_name_list};
-	my $inhp = $cdp->{item_name_hash};						# List and Hash need to make here
-	for(my $i = 0; $i < scalar(@$itemp); $i++){				# use for loading and gen keys
-		my $kn = $itemp->[$i];
-		$inhp->{$kn} = $i;
+	my $item_name_list = $cdp->{item_name_list};
+	my $item_name_hash = $cdp->{item_name_hash};						# List and Hash need to make here
+	for(my $i = 0; $i < scalar(@$item_name_hash); $i++){				# use for loading and gen keys
+		my $kn = $item_name_list->[$i];
+		$item_name_hash->{$kn} = $i;
 	}
 
 	@$date_list = @w[$data_start..$#w];
@@ -452,8 +452,8 @@ sub	load_csv_vertical
 
 	my @key_list = split(/$src_dlm/, $line);
 	if($#key_list <= 1){
-		dp::dp "WARNING: may be wrong delimitter [$src_dlm]\n";
-		dp::dp $line . "\n";
+		dp::WARNING "may be wrong delimitter [$src_dlm]\n";
+		print "\n";
 	}
 	shift(@key_list);
 	foreach my $k (@key_list){
@@ -510,6 +510,7 @@ sub	load_json
 	my $key_items = $cdp->{key_items};
 	my @keys = @{$cdp->{keys}};
 	my $timefmt = $cdp->{timefmt};
+	my $load_order = $cdp->{load_order};
 
 	my $rec = 0;
 	my $date_name = "";
@@ -544,8 +545,11 @@ sub	load_json
 	$key_name = "key" if(! $key_name);
 	@{$cdp->{item_name_list}} = ($key_name);	# set item_name 
 	$cdp->{item_name_hash}->{$key_name} = 0;
-	#dp::dp join(",", "# " , @key_list) . "\n";
+	dp::dp "item_name_list: (" . join(",", @{$cdp->{item_name_list}}). ") [$key_name]\n";
 
+	for(my $itn = 0; $itn <= $#items; $itn++){
+		$load_order->[$itn] = $items[$itn];
+	}
 	for(my $rn = 0; $rn <= $#data0; $rn++){
 		my $datap = $data0[$rn];
 		my $date = $datap->{$date_key};
@@ -759,14 +763,14 @@ sub	marge_csv
 
 		my $dt_start = csvlib::search_listn($date_start, @$date_list);
 		if($dt_start < 0){
-			dp::dp "WARNING: Date $date_start is not in the data\n";
+			dp::WARNING "Date $date_start is not in the data\n";
 			$dt_start = 0;
 		}
 		$infop->{date_start} = $dt_start;
 
 		my $dt_end = csvlib::search_listn($date_end, @$date_list);
 		if($dt_end < 0){
-			dp::dp "WARNING: Date $date_end is not in the data\n";
+			dp::WARNING "Date $date_end is not in the data\n";
 			$dt_end = 0;
 		}
 		$infop->{date_end} = $dt_end;
@@ -786,6 +790,9 @@ sub	marge_csv
 	$marge->{dates} = $dates;
 	$marge->{src_csv} = {};
 	$marge->{data_start} = 1;
+	my $item_name = "key";
+	@{$marge->{item_name_list}} = ($item_name);
+	$marge->{item_name_hash}->{$item_name} = 0;
 	my $src_csv = $marge->{src_csv};
 	#dp::dp ">>> Dates: $dates,  $m_csv_data\n";
 
@@ -814,7 +821,7 @@ sub	marge_csv
 			$m_csv_data->{$k} = [];
 			my $mdp = $m_csv_data->{$k};
 			if(! defined $dp->[1]){
-				dp::dp "WARNING: no data in [$k]\n" if(0);
+				dp::WARNING "no data in [$k]\n" if(0);
 			}
 			for(my $i = 0; $i <= $dates; $i++){
 				$mdp->[$i] = $dp->[$start + $i] // 0;		# may be something wrong
@@ -847,8 +854,9 @@ sub	reduce_cdp_target
 	my @target_keys = ();
 	my $target = &select_keys($cdp, $target_colp, \@target_keys);
 	if($target < 0){
-		dp::dp "WARNING: No data " . csvlib::join_array(",", @$target_colp) . "##" . join(",", @target_keys) . "\n";
+		dp::WARNING "No data " . csvlib::join_array(",", @$target_colp) . "##" . join(",", @target_keys) . "\n";
 		csvlib::disp_caller(1..3);
+		print "\n";
 		return -1;
 	}
 	#my $ft = $target_colp->[0] ;
@@ -888,7 +896,6 @@ sub	reduce_cdp
 		$dst_cdp->{$hash_item} = {};
 		%{$dst_cdp->{$hash_item}} = %{$cdp->{$hash_item}};
 	}
-
 	foreach my $hwk (@hash_with_keys){
 		my $src = $cdp->{$hwk};
 		$dst_cdp->{$hwk} = {};
@@ -924,14 +931,14 @@ sub	gen_key_order
 	my ($cdp, $key_order) = @_;
 	my @keys = ();
 
-	my $itemp = $cdp->{item_name_hash};
+	my $item_name_hash = $cdp->{item_name_hash};
 	foreach my $k (@$key_order){
 		my $itn = $k;
 		if($k =~ /\D/){
-			$itn = $itemp->{$k} // "UNDEF";
+			$itn = $item_name_hash->{$k} // "UNDEF";
 			dp::dp ">> $k: [$itn]\n" if($VERBOSE);
 			if($itn eq "UNDEF"){
-				dp::dp "WARNING: no item_name_hash defined [$k] (" . join(",", keys %$itemp) . ")\n";
+				dp::WARNING "no item_name_hash defined [$k] (" . join(",", keys %$item_name_hash) . ")\n";
 				exit 1;
 			}
 		}
@@ -966,19 +973,30 @@ sub	gen_target_col
 
 	#dp::dp "gen_target_col: " . Dumper($target_colp) . "\n";
 	#csvlib::disp_caller(1..4);
+	my $item_name_list = $cdp->{item_name_list};
+	my $item_name_hash = $cdp->{item_name_hash};						# List and Hash need to make here
 
 	my $ref = ref($target_colp);
 	if($ref eq "ARRAY"){
 		@target_col = @$target_colp;
+		my $target_size = $#target_col;
+		if($target_size > scalar(@$item_name_list)){
+			dp::WARNING "select key out of range[$target_size] :keys in select(" . join(",", @target_col) . ") "
+					. "keys in definiton [" . scalar(@$item_name_list) ."] (". join(",", @$item_name_list) . ")\n";
+			&dump_cdp($cdp, {ok => 1, lines => 5}); 
+		}
+		elsif($target_size < 0){
+			dp::WARNING "no select keys :keys(" . join(",", @$item_name_list) . ")\n";
+		}
 	}
 	elsif($ref eq "HASH"){
-		my $itemp = $cdp->{item_name_hash};
+		my $item_name_hash = $cdp->{item_name_hash};
 		dp::dp join(",", %$target_colp) . "\n" if($VERBOSE > 1);
 		foreach my $k (keys %$target_colp){
-			my $itn = $itemp->{$k} // "UNDEF";
+			my $itn = $item_name_hash->{$k} // "UNDEF";
 			#dp::dp ">> $k: [$itn]\n";
 			if($itn eq "UNDEF"){
-				dp::dp "WARNING: no item_name_hash defined [$k] (" . join(",", keys %$itemp) . ")\n";
+				dp::WARNING "select key not found[$k] :keys(" . join(",", @$item_name_list) . ")\n";
 			}
 			else {
 				$target_col[$itn] = $target_colp->{$k};
@@ -1054,9 +1072,8 @@ sub	select_keys
 		dp::dp "SIZE: $size\n";
 		$size = 5 if($size > 5);
 		if($size >= 0){
-			dp::dp "## TARGET_KEYS " . csvlib::join_array(",", $target_colp) . "\n";
-			dp::dp "## TARGET_KEYS " . join(",", @target_list) . "\n";
-			dp::dp "## TARGET_KEYS $size" . "\n";
+			dp::dp "## TARGET_COLP $size " . csvlib::join_array(",", $target_colp) . "\n";
+			dp::dp "## TARGET_LIST " . join(",", @target_list) . "\n";
 			dp::dp "## TARGET_KEYS " . join(", ", @$target_keys[0..$size]) . "\n";
 		}
 		else {
@@ -1064,8 +1081,10 @@ sub	select_keys
 		}
 	}
 	if(scalar(@$target_keys) <= 0){
-		dp::dp "WARNING: No data " . csvlib::join_array(",", @$target_colp) . "##" . join(",", @$target_keys) . "\n";
-		dp::dp "Poosibly miss use of [ ], {} at target_colp " . ref($target_colp) . "\n";
+		dp::WARNING (
+			"No data " . csvlib::join_array(",", @$target_colp) . "##" . join(",", @$target_keys) . "\n",
+			"Poosibly miss use of [ ], {} at target_colp " . ref($target_colp) . "\n",
+		);
 		csvlib::disp_caller(1..3);
 	}
 	return(scalar(@$target_keys) - 1);
@@ -1144,10 +1163,10 @@ sub	add_average
 	my $key_items = $cdp->{key_items};
 
 	if($target_col =~ /\D/){ 		# array number or item name
-		my $itemp = $cdp->{item_name_hash};
-		my $tn = $itemp->{$target_col} // "";
+		my $item_name_hash = $cdp->{item_name_hash};
+		my $tn = $item_name_hash->{$target_col} // "";
 		if($tn eq ""){
-			dp::dp "WARNING: no column naeme [$target_col]\n";
+			dp::WARNING "no column naeme [$target_col]\n";
 			exit 1;
 		}
 		$target_col = $tn;
@@ -1283,11 +1302,11 @@ sub	calc_items
 	for(my $i = 0; $i < $cdp->{data_start}; $i++){			# clear to avoid undef
 		$result_info[$i] = "";
 	}
-	my $inhp = $cdp->{item_name_hash};						# List and Hash need to make here
+	my $item_name_hash = $cdp->{item_name_hash};						# List and Hash need to make here
 	foreach my $k (keys %$result_colp){
-		my $n = $inhp->{$k} // "";
+		my $n = $item_name_hash->{$k} // "";
 		if($n eq "") {
-			dp::dp "WARNING: [$k] is not item name \n";
+			dp::WARNING "[$k] is not item name \n";
 			exit;
 		}
 		$result_info[$n] = $result_colp->{$k};
@@ -1744,7 +1763,7 @@ sub	date_range
 	#dp::dp "DATE: " . join(", ", $gp->{start_date}, $gp->{end_date}, "#", @$date_list[0..5]) . "\n";
 	my $dt_start = csvlib::search_listn($gp->{start_date}, @$date_list);
 	if($dt_start < 0){
-		dp::dp "WARNING[$id]: Date $gp->{start_date} is not in the data ($cdp->{title}) " . join(",", @$date_list[0..5]) ."\n";
+		dp::WARNING "[$id]: Date $gp->{start_date} is not in the data ($cdp->{title}) " . join(",", @$date_list[0..5]) ."\n";
 		csvlib::disp_caller(1..3);
 		$dt_start = 1;
 	}
@@ -1752,7 +1771,7 @@ sub	date_range
 	my $dt_end   = csvlib::search_listn($gp->{end_date},   @$date_list);
 	if($dt_end < 0){
 		my $dtc = scalar(@$date_list) - 1;
-		dp::dp "WARNING[$id]: Date $gp->{end_date} is not in the data ($cdp->{title}) $dtc" . join(",", @$date_list[($dtc-5)..$dtc]) ."\n";
+		dp::WARNING "[$id]: Date $gp->{end_date} is not in the data ($cdp->{title}) $dtc" . join(",", @$date_list[($dtc-5)..$dtc]) ."\n";
 		csvlib::disp_caller(1..3);
 		$dt_end = $dt_end + 1;
 	}

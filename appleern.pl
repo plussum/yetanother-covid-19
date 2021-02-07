@@ -331,11 +331,12 @@ my $TOKYO_ST_GRAPH = {
 	timefmt => '%Y-%m-%d', format_x => '%m/%d',
 	term_x_size => 1000, term_y_size => 350,
 
-	y2label => 'Number', y2min => "", y2max => "", y2_source => 0,		# soruce csv definition for y2
-	ylabel => '%', ymin => 0,
+	ylabel => 'hospitlized', ymin => 0,
+	y2_source => 1,		# soruce csv definition for y2
+	y2label => 'sever cases', y2min => "", y2max => "", 
 
-	graph => 'boxes fill',
-	y2_graph => 'line',
+	graph => 'line',
+	y2_graph => 'boxes fill',
 	additional_plot => "",
 
 	graph_params => [
@@ -576,17 +577,34 @@ if($golist{"tokyo"}){
 	csvgraph::reduce_cdp_target($y1, $TOKYO_DEF, ["positive_count,negative_count"]);
 	csvgraph::reduce_cdp_target($y2, $TOKYO_DEF, ["positive_rate"]);
 	csvgraph::marge_csv($marge, $y1, $y2);		# Gererate Graph
+
+	#my $dkey = "item_name_list"; # "load_order";
+	#dp::dp "$dkey: " . join(",", @{$TOKYO_DEF->{$dkey}}). "\n";
+	#dp::dp "$dkey: " . join(",", @{$y1->{$dkey}}). "\n";
+	#dp::dp "$dkey: " . join(",", @{$marge->{$dkey}}). "\n";
+
 	#csvgraph::dump_cdp($marge, {ok => 1, lines => 5});
 	my $tko_graph = [];
 	push(@$tko_graph , 
 		csvgraph::csv2graph_list($marge, $TOKYO_GRAPH, $TOKYO_GRAPH->{graph_params}));
 	#csvgraph::gen_html($marge, $TOKYO_GRAPH);		# Generate Graph/HTHML
 
+#	hospitalized,1,2,3,
+#	severe_case,1,2,3,
 	csvgraph::new($TOKYO_ST_DEF); 						# Load Apple Mobility Trends
 	csvgraph::load_csv($TOKYO_ST_DEF);
+	#csvgraph::dump_cdp($TOKYO_ST_DEF, {ok => 1, lines => 5});
+	my $y21 = {};
+	my $y22 = {};
+	my $marge2 = {};
+	csvgraph::reduce_cdp_target($y21, $TOKYO_ST_DEF, ["hospitalized"]);
+	csvgraph::reduce_cdp_target($y22, $TOKYO_ST_DEF, ["severe_case"]);
+	csvgraph::marge_csv($marge2, $y21, $y22);		# Gererate Graph
+	#csvgraph::dump_cdp($marge2, {ok => 1, lines => 5});
+	#csvgraph::gen_html($marge, $TOKYO_GRAPH);		# Generate Graph/HTHML
 	#csvgraph::dump_cdp($marge, {ok => 1, lines => 5});
 	push(@$tko_graph , 
-		csvgraph::csv2graph_list($TOKYO_ST_DEF, $TOKYO_ST_GRAPH, $TOKYO_ST_GRAPH->{graph_params}));
+		csvgraph::csv2graph_list($marge2, $TOKYO_ST_GRAPH, $TOKYO_ST_GRAPH->{graph_params}));
 
 	push(@$gp_list, @$tko_graph);
 	csvgraph::gen_html_by_gp_list($tko_graph, {						# Generate HTML file with graphs

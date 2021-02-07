@@ -289,6 +289,7 @@ sub	aggregate
 	my $graph_html = $fp->{htmlf};
 	my $csv_aggr_mode = csvlib::valdef($fp->{csv_aggr_mode}, "");
 
+	dp::dp $transaction . "\n";
 	my $agrp = {
 		mode => $mode,
 		input_file => $transaction,
