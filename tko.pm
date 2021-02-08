@@ -115,6 +115,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** TOYO KEIZAI ONLINE ****",
     src => "TOYO KEIZAI ONLINE",
 	src_url => $src_url,
+	download_from => "https://toyokeizai.net/sp/visual/tko/covid19/csv/prefectures.csv",
     prefix => "tko_",
     src_file => {
 		NC => $transaction,
@@ -259,9 +260,12 @@ sub	download
 {
 	my ($info_path) = @_;
 
-	system("(cd $TKO_PATH/covid19; git pull origin master)");
-	my $cmd = "(cd $BASE_DIR; pwd; ls; cp prefectures.csv ../../prefecture.csv.txt)";
-	#dp::dp $cmd . "\n";
+#	system("(cd $TKO_PATH/covid19; git pull origin master)");
+#	my $cmd = "(cd $BASE_DIR; pwd; ls; cp prefectures.csv ../../prefecture.csv.txt)";
+
+	my $url = $info_path->{download_from};
+	my $cmd = "wget $url -O $transaction";
+	dp::dp $cmd . "\n";
 	system($cmd);
 }
 
