@@ -38,7 +38,8 @@ my $infopath = $config::INFOPATH->{ccse} ;
 #	Parameter set
 #
 my $EXCLUSION = "";
-my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
+#my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
+my $CCSE_BASE_DIR =  $config::CSV_PATH;
 my @usa_params = (
 	{ext => "#KIND# TOP 10 (#LD#) #SRC#", start_day => "2020/03/14", lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines", avr_date => 7},
 	{ext => "#KIND# TOP 10 (#LD#) #SRC#", start_day => "2020/03/14", lank =>[0, 9], exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines"},
