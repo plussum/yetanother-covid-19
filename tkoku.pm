@@ -85,6 +85,8 @@ our $PARAMS = {			# MODULE PARETER		$mep
 				#{ext => "EOD"},
 
 				{ext => "#KIND# Tokyo TOP20 (#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", avr_date => 7},
+				{ext => "#KIND# Tokyo TOP01-10 2m (#LD#) #SRC# raw", start_day => -61,  lank =>[0, 9] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines",  thresh => 1},
+				#{ext => "#KIND# Tokyo TOP01-10 2m TH:5(#LD#) #SRC#", start_day => -61,  lank =>[0, 9] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7, thresh => 5},
 				{ext => "#KIND# Tokyo TOP01-10 2m (#LD#) #SRC#", start_day => -61,  lank =>[0, 9] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7, thresh => 1},
 				#{ext => "#KIND# Tokyo TOP01-10 2m TH:5(#LD#) #SRC#", start_day => -61,  lank =>[0, 9] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7, thresh => 5},
 				#{ext => "#KIND# Tokyo TOP01-10 2m TH:8(#LD#) #SRC#", start_day => -61,  lank =>[0, 9] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7, thresh => 9},
