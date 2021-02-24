@@ -911,8 +911,15 @@ _EOD_
 		my $RELATIVE_DATE = 7;
 		#my $MARK_DATE = $DATES[$end_day-$RELATIVE_DATE];
 		my @aw = ();
-		my $date = (($final_rec) ? $final_rec : $end_day) - $RELATIVE_DATE; 
-		
+		#my $date = (($final_rec) ? $final_rec : $end_day);# - $RELATIVE_DATE; 
+
+		my $date = (($final_rec) ? $final_rec : $end_day);
+		my $s_date = csvlib::ymds2tm($DATES[$date]) / (24 * 60 * 60);	# Draw arrow on sunday
+		$s_date = ($s_date - 2) % $RELATIVE_DATE;
+		$s_date = $RELATIVE_DATE if($s_date == 0);
+		#dp::dp "DATE: " . $DATES[$date] . "  " . "$date -> $s_date -> " . ($date - $s_date) . "\n";
+		$date -= $s_date;
+
 		for(; $date > 0; $date -= $RELATIVE_DATE){
 			my $mark_date = $DATES[$date];
 			#my $a = sprintf("set arrow from '%s',%d to '%s',%d nohead lw 1 dt (3,7) lc rgb \"red\"",

@@ -767,8 +767,25 @@ _EOD_
 	if(1){
 		my $RELATIVE_DATE = 7 * 24 * 60 * 60;
 		my @aw = ();
+
+		my $last_date = $utime_till / (24 * 60 * 60);	# Draw arrow on sunday
+		my $s_date = ($last_date - 2) % 7;
+		$s_date = 7 if($s_date == 0);
+		#dp::dp "DATE: " . $DATES[$date] . "  " . "$date -> $s_date -> " . ($date - $s_date) . "\n";
+		$utime_till -= $s_date * (24 * 60 * 60);
 		
-		for(my $date = $utime_till - $RELATIVE_DATE; $date > $utime_from; $date -= $RELATIVE_DATE){
+#		for(my $date = $last_utime; $date > $first_utime; $date -= $RELATIVE_DATE){
+#			my $mark_date  = csvlib::ut2d4($date, "-");
+#			#dp::dp "## $mark_date\n";
+#			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"dark-red\"",
+#				$mark_date,  $mark_date);
+#			push(@aw, $a);
+#		}
+		my $arw = join("\n", @aw);
+		#dp::dp "ARROW: $arw\n";
+		
+		#for(my $date = $utime_till - $RELATIVE_DATE; $date > $utime_from; $date -= $RELATIVE_DATE){
+		for(my $date = $utime_till; $date > $utime_from; $date -= $RELATIVE_DATE){
 			my $mark_date = &ut2md($date);
 			#my $a = sprintf("set arrow from '%s',%d to '%s',%d nohead lw 1 dt (3,7) lc rgb \"red\"",
 			#    $mark_date, $ymin, $mark_date, csvlib::calc_max2($max_data));
@@ -776,7 +793,7 @@ _EOD_
 				$mark_date,  $mark_date);
 			push(@aw, $a);
 		}
-		my $arw = join("\n", @aw);
+		$arw = join("\n", @aw);
 		#dp::dp "ARROW: $arw\n";
 
 		$PARAMS =~ s/#ARROW#/$arw/;	

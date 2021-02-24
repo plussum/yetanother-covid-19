@@ -60,6 +60,7 @@ my $POSITIVE = "$TKY_DIR/data/positive_rate.json";		# 新規感染者数
 my $CSS = $config::CSS;
 my $IMG_PATH = $config::PNG_REL_PATH;
 my $class = $config::CLASS;
+my $IMG_REL_PATH = $config::PNG_REL_PATH;
 
 my $plotf = "tpr-plot.txt";
 my $htmlf = "tokyo.html";
@@ -175,12 +176,12 @@ foreach my $p (@PARAMS){
 
 		print HTML "<!-- avr_date $avr_date -->\n";
 		print HTML "<span class=\"c\">$now</span><br>\n";
-		print HTML "<a link img src=\"$IMG_PATH/$dst.png\">\n";
-		print HTML "<img src=\"$IMG_PATH/$dst.png\"> </a>\n";
+		print HTML "<a link img src=\"$IMG_REL_PATH/$dst.png\">\n";
+		print HTML "<img src=\"$IMG_REL_PATH/$dst.png\"> </a>\n";
 
 		print HTML "<span class=\"c\">\n";
-		print HTML "csv:<a href=\"$IMG_PATH/$dst.csv.txt\" target=\"blank\">$IMG_PATH/$dst.csv.txt</a><br>\n"; 
-		print HTML "plot:<a href=\"$IMG_PATH/$dst.-plot.txt\" target=\"blank\">$IMG_PATH/$dst-plot.txt</a><br>\n"; 
+		print HTML "csv:<a href=\"$IMG_REL_PATH/$dst-plot.csv.txt\" target=\"blank\">$IMG_REL_PATH/$dst-plot.csv.txt</a><br>\n"; 
+		print HTML "plot:<a href=\"$IMG_REL_PATH/$dst-plot.txt\" target=\"blank\">$IMG_REL_PATH/$dst-plot.txt</a><br>\n"; 
 		print HTML "</span>\n";
 		print HTML "<br>\n";
 		print HTML "<span $class> Data Source TOKYO OPEN DATA </span>\n";
@@ -394,8 +395,14 @@ _EOD_
 
 		my $RELATIVE_DATE = 7 * 24 * 60 * 60;
 		my @aw = ();
+
+		my $last_date = $last_utime / (24 * 60 * 60);	# Draw arrow on sunday
+		my $s_date = ($last_date - 2) % 7;
+		$s_date = 7 if($s_date == 0);
+		#dp::dp "DATE: " . $DATES[$date] . "  " . "$date -> $s_date -> " . ($date - $s_date) . "\n";
+		$last_utime -= $s_date * (24 * 60 * 60);
 		
-		for(my $date = $last_utime - $RELATIVE_DATE; $date > $first_utime; $date -= $RELATIVE_DATE){
+		for(my $date = $last_utime; $date > $first_utime; $date -= $RELATIVE_DATE){
 			my $mark_date  = csvlib::ut2d4($date, "-");
 			#dp::dp "## $mark_date\n";
 			my $a = sprintf("set arrow from '%s',Y_MIN to '%s',Y_MAX nohead lw 1 dt (3,7) lc rgb \"dark-red\"",
