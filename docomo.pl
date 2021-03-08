@@ -26,6 +26,7 @@ use csvlib;
 
 binmode(STDOUT, ":utf8");
 
+my $CSV_PATH = $config::CSV_PATH;
 my $VERBOSE = 0;
 my $END_OF_DATA = "###EOD###";
 my $TERM_X_SIZE = 1000;
@@ -173,9 +174,12 @@ my @OUTPUT_FILES = ();
 
 
 if($DOWN_LOAD){
-	my $wget = "wget $SRC_URL -O $SRC_CSVF";
-	dp::dp $wget ."\n" if($VERBOSE);
-	system($wget);
+	my $cmd = "wget $SRC_URL -O $SRC_CSVF";
+	dp::dp $cmd ."\n" if($VERBOSE);
+	system($cmd);
+
+	$cmd = "cp $SRC_CSVF $CSV_PATH/";
+	system($cmd);
 }
 
 #
