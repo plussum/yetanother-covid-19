@@ -52,6 +52,16 @@ my @jag_param = (
 	{ext => "#KIND# 大阪、北海道 (#LD#) #SRC#", start_day => "2020/03/12",  lank =>[0, 99] , exclusion => $EXCLUSION, target => "大阪,北海道", label_skip => 7, graph => "lines", avr_date => 7},
 	{ext => "#KIND# 大阪、北海道 2m (#LD#) #SRC#", start_day => -62,  lank =>[0, 99] , exclusion => $EXCLUSION, target => "大阪,北海道", label_skip => 1, graph => "lines", avr_date => 7},
 
+	{ext => "#KIND# 関西など (#LD#) #SRC#", start_day => "2020/03/12",  lank =>[1, 99] , exclusion => $EXCLUSION, 
+		target => "大阪,兵庫,京都,愛知,福岡", label_skip => 7, graph => "lines", avr_date => 7},
+	{ext => "#KIND# 関西など 2m (#LD#) #SRC#", start_day => -62,  lank =>[1, 99] , exclusion => $EXCLUSION, 
+		target => "大阪,兵庫,京都,愛知,福岡", label_skip => 1, graph => "lines", avr_date => 7},
+
+	{ext => "#KIND# 一都三県 (#LD#) #SRC#", start_day => "2020/03/12",  lank =>[0, 99] , exclusion => $EXCLUSION, 
+		target => "東京,神奈川,千葉,埼玉", label_skip => 7, graph => "lines", avr_date => 7},
+	{ext => "#KIND# 一都三県 2m (#LD#) #SRC#", start_day => -62,  lank =>[0, 99] , exclusion => $EXCLUSION, 
+		target => "東京,神奈川,千葉,埼玉", label_skip => 1, graph => "lines", avr_date => 7},
+
 	{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "2020/03/12",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines"},
 
 	{ext => "#KIND# Japan 01-05 (#LD#) #SRC#", start_day => "2020/03/12",  lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines", avr_date => 7},
