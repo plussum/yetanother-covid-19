@@ -38,8 +38,10 @@ my $DEBUG = 1;
 our $EXCLUSION = "";
 my $MAIN_PREF = "東京,神奈川,埼玉,千葉,大阪,京都,兵庫,福岡,愛知,北海道";
 my @jag_param = (
+#	{ext => "#KIND# 兵庫 (#LD#) #SRC#", start_day => "2020/03/12",  lank =>[0, 99] , exclusion => $EXCLUSION, target => "兵庫", label_skip => 7, graph => "lines"},
+#	{ext => "EOD"},
+
 	{ext => "#KIND# Japan TOP20 (#LD#) #SRC#", start_day => "2020/03/12",  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines"},
-#{ext => "EOD"},
 	{ext => "#KIND# Japan TOP20 (#LD#) #SRC#", start_day => "2020/03/12",  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines", avr_date => 7},
 	{ext => "#KIND# Japan TOP20 2m (#LD#) #SRC#", start_day => -62,  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
 	{ext => "#KIND# Japan TOP20 2m (#LD#) #SRC#", start_day => -62,  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines", avr_date => 7},
@@ -343,6 +345,7 @@ sub	tko_csv
 
 	my $vn = ($agp->{mode} =~ /.C/) ? 0 : 5;	# 2020.08.24	 
 	while(<FD>){
+		#dp::dp $_ if(/兵庫/);
 		my ($y, $m, $d, $pref, $prefe, @vals)  = &csv($_);
 		#my $ymd = sprintf("%04d/%02d/%02d", $y, $m, $d);
 		$y += 2000 if($y < 100);
@@ -351,6 +354,7 @@ sub	tko_csv
 		my $v = $vals[$vn];
 		$v = 0 if(!$v || $v eq "-");
 		#dp::dp "$vn:[$v]\n" if(!$v || $v =~ /[^0-9]/);
+		#dp::dp sprintf("%04d/%02d/%02d, %s [$v]", $y, $m, $d, $pref) . join(",", @vals) . "\n";# if($pref =~ /兵庫/);
 
 		$DATES{$ymd}++;
 		$PREFS{$pref} = $v;
@@ -373,9 +377,16 @@ sub	tko_csv
 			my $ymd = $DATE_ORDER[$i];
 			my $v = csvlib::valdef($COUNT{$ymd}{$pref}, 0);
 			$v = 0 if(!$v);
-			#dp::dp "$ymd: $v, $lv => " . ($v - $lv) . "\n";
-			push(@data, $v - $lv);
-			$tl += ($v - $lv);
+#			if($pref =~ /兵庫/){
+#				dp::dp "$ymd: $v, $lv => " . ($v) . "\n" ;#if($pref =~ /兵庫/);
+#				push(@data, $v);
+#				$tl += $v;
+#			}
+#			else {
+#				dp::dp "$ymd: $v, $lv => " . ($v - $lv) . "\n" ;#if($pref =~ /兵庫/);
+				push(@data, $v - $lv);
+				$tl += ($v - $lv);
+#			}
 			$lv= $v;
 		}
 		#dp::dp join(", ", $pref, $#DATE_ORDER, $lv, $DATE_ORDER[$#DATE_ORDER]) . "\n";
