@@ -43,7 +43,7 @@ my $src_url = $tkopdf::src_url;
 my $index_file = $tkopdf::index_file;
 my $transaction = $tkopdf::transaction;
 
-my $EXC = "都外";
+my $EXC = ""; #"都外";
 my $STD = "2020/05/20";
 our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** TOYO-KU  ****",
