@@ -92,7 +92,8 @@ sub	getpdfdata
 	open(HTML, $index_file) || die "cannot open $index_file";
 	while(<HTML>){
 		#	<td><p><a href="/tosei/hodohappyo/press/2020/10/10/01.html">新型コロナウイルスに関連した患者の発生（第895報）</a></p></td>
-		next if(! /新型コロナウイルスに関連した患者の発生/);
+		next if((! /新型コロナウイルスに関連した患者の発生/)
+			&&  (! /新型コロナウイルス関連 患者の発生/));
 
 		#dp::dp $_;
 		chop;

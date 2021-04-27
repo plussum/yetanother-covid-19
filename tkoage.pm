@@ -264,6 +264,7 @@ sub	pdf2data
 {
 	my ($txtf) = @_;
 
+	#dp::dp "$txtf\n";
 	open(PDF, "$txtf") || die "cannot open $txtf";
 	my $date = "";
 	my $kn = 0;
