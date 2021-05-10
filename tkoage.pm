@@ -134,6 +134,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
 		average_date => 7,
 		graphp => [	
 			{ext => "#KIND# ALL (#LD#)", start_day => 0, lank =>[0, 10] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", nosort => 1},
+			{ext => "#KIND# ALL (#LD#) 2m", start_day => -62, lank =>[0, 10] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", nosort => 1, ymax => 2},
 			{ext => "#KIND# ALL (#LD#) max3", start_day => 0, lank =>[0, 10] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", ymax => 3, nosort => 1},
 			{ext => "#KIND# ALL (#LD#) max10", start_day => 0, lank =>[0, 10] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", ymax => 10, nosort => 1},
 			{ext => "#KIND# 1-7 (#LD#) max10", start_day => 0, lank =>[1, 7] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", ymax => 10, nosort => 1},
