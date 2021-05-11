@@ -174,10 +174,17 @@ for(my $i = 0; $i <= $#ARGV; $i++){
 		push(@SUB_MODE_LIST, "COUNT", "FT", "ERN", "KV");
 		push(@AGGR_LIST, "DAY", "POP");
 	}
+	elsif(/^-poplist/){
+		print "$config::POPF\n";
+		system("cat $config::POPF");
+		print "$config::POPF\n";
+		exit;
+	}
 	elsif(/^-[A-Za-z]/){
 		s/^-//;
 		push(@MODE_LIST, $_);
 	}
+
 	if(/^--[A-Za-z]/){
 		s/^--//;
 		if(/POP/i){
@@ -329,7 +336,7 @@ if($DATA_SOURCE eq "comb"){
 }
 
 if(! $DATA_SOURCE){
-	dp::dp "./cov19.pl " . join(" | ", @ALL_DATA_SOURCES) . " -DL -all -FULL --ERN --FT --POP -CRON[F]\n";
+	dp::dp "./cov19.pl " . join(" | ", @ALL_DATA_SOURCES) . " -DL -all -FULL --ERN --FT --POP -CRON[F] -poplist\n";
 	exit 1;
 }
 
