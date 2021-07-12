@@ -63,7 +63,7 @@ our $PARAMS = {			# MODULE PARETER		$mep
     download => \&download,
     copy => \&copy,
 
-	POP_THRESH => 5000,
+	POP_THRESH => 10000,
 	AGGR_MODE => {DAY => 1, POP => 1},		# POP: 7 Days Total / POP
 	#MODE => {NC => 1, ND => 1},
 #	sort_balance =>0.7,  	# ALL = 0; 0.7 = 後半の30%のデータでソート
