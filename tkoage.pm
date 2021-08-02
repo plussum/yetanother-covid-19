@@ -299,6 +299,7 @@ sub	pdf2data
 			my $d = <PDF>;
 			$d =~ s/[\r\n]+$//;
 			$d =~ s/^ +//;
+			$d =~ s/,//g;
 			my @w = split(/ +/, $d);
 			for(my $i = 0; $i <= $#RANGE_NAME; $i++){
 				my $r = $RANGE_NAME[$i];
