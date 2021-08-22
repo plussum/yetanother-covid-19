@@ -42,6 +42,7 @@ my $transaction = $tkopdf::transaction;
 my $EXC = "都外";
 my $STD = "2020/05/20";
 my $aged = "60代,70代,80代,90代,100歳以上代";
+my $yang = "10代,10歳未満";
 our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** TOYO-KU  ****",
     src => "TOYO KU ONLINE",
@@ -102,6 +103,8 @@ our $PARAMS = {			# MODULE PARETER		$mep
 						nosort => 1},
 
 				{ext => "#KIND# Tokyo OLD Age (#LD#) #SRC# 2m rlavr", start_day => -61,  lank =>[0, 19] , exclusion => $EXC, target => "$aged", label_skip => 1, graph => "lines", 
+						avr_date => 7, nosort => 1},
+				{ext => "#KIND# Tokyo Yang Age (#LD#) #SRC# 2m rlavr", start_day => -61,  lank =>[0, 19] , exclusion => $EXC, target => "$yang", label_skip => 1, graph => "lines", 
 						avr_date => 7, nosort => 1},
 
 				#{ext => "#KIND# Tokyo Age (#LD#) #SRC# ruiseki01", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", 
