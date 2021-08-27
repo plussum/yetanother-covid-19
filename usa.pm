@@ -94,7 +94,7 @@ our $PARAMS = {			# MODULE PARETER        $mep
 	DLM => $DLM,
 
 	AGGR_MODE => {DAY => 1, POP => 1},									# Effective AGGR MODE
-	POP_THRESH => 100,
+	POP_THRESH => 10000, #  100,
 	SORT_BALANCE => {		# move to config.pm
 		NC => [0.9, 1],
 		ND => [0.9, 1],
