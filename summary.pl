@@ -49,9 +49,9 @@ my @summary = (
 
 
 			"<H1>TOKYO </H1>",
-			"nonetky_pr_avr[1-9]",
+			##"nonetky_pr_avr[1-9]",
 			#"nonetky_st_avr[1-9]",
-			"nonetky_st_avr0",
+			##"nonetky_st_avr0",
 			#"[0-9]{2}_tko_NEW_CASES_COUNT_DAY_Tokyo_.* rl_avr_[0-9]",
 			#"[0-9]{2}_tko_NEW_DEATHS_COUNT_DAY_Tokyo_.* rl_avr_[0-9]",
 			"[0-9]{2}_tko_NEW_CASES_COUNT_DAY_Tokyo_",
