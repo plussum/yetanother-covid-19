@@ -526,8 +526,11 @@ _EOD_
 		#dp::dp join(",", $i, @target_range) . "\n";
 
 		$pn++;
+		my $lbl = $datap->[0][$i];
+		$lbl =~ s/^東京都 //;			# 2021.09.03 
+		#dp::dp "[$lbl]\n";
 		push(@p, sprintf("'%s' using 1:%d with lines title '$i:%s' linewidth %d ", 
-						$csvf, $i + 1, $datap->[0][$i], ($pn < 7) ? 2 : 1)
+						$csvf, $i + 1, $lbl, ($pn < 7) ? 2 : 1)
 		);
 	}
 	push(@p, "0 with lines dt '-' title 'base line'");
