@@ -39,7 +39,7 @@ our @PARAMS_COUNT = (
 #	{ext => "#KIND# 06-10 from 0301 (#LD#) #SRC#",   start_day => "2020/03/01", lank =>[5,  9] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines", thresh => 1},
 #	{ext => "EOD"},
 
-    {ext => "#KIND# all(#LD#) #SRC#", start_day => 0,  lank =>[0, 29] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
     {ext => "#KIND# all(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 7, graph => "lines"},
 
 
@@ -70,7 +70,7 @@ our @PARAMS_COUNT = (
     {ext => "#KIND# 41-50 from 0301 (#LD#) #SRC#",   start_day => "2020/03/01", lank =>[40, 49] , exclusion => $NONE_EXC, target => "", label_skip => 7, graph => "lines"},
 
     {ext => "#KIND# 2month 01-05 (#LD#) #SRC#", start_day => -60, lank =>[0, 4] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
-    {ext => "#KIND# 2month 06-10 (#LD#) #SRC#", start_day => -60, lank =>[5, 9] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
+    {ext => "#KIND# 2month 01-10 (#LD#) #SRC#", start_day => -60, lank =>[0, 9] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7, term_ysize => 400},
     {ext => "#KIND# 2month 11-20 (#LD#) #SRC#", start_day => -60, lank =>[10,19] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
     {ext => "#KIND# 2month 21-30 (#LD#) #SRC#", start_day => -60, lank =>[20,29] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
     {ext => "#KIND# 2month 31-40 (#LD#) #SRC#", start_day => -60, lank =>[30,39] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7}, 
@@ -80,7 +80,7 @@ our @PARAMS_COUNT = (
 #    {ext => "#KIND# 2month 71-80 (#LD#) #SRC#", start_day => -60, lank =>[70,79] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", avr_date => 7},
 
     {ext => "#KIND# 2month 01-05 (#LD#) #SRC#", start_day => -60, lank =>[0, 4] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines" },
-    {ext => "#KIND# 2month 06-10 (#LD#) #SRC#", start_day => -60, lank =>[5, 9] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
+    {ext => "#KIND# 2month 01-10 (#LD#) #SRC#", start_day => -60, lank =>[0, 9] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines", term_ysize => 400},
     {ext => "#KIND# 2month 11-20 (#LD#) #SRC#", start_day => -60, lank =>[10,19] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
     {ext => "#KIND# 2month 21-30 (#LD#) #SRC#", start_day => -60, lank =>[20,29] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"},
     {ext => "#KIND# 2month 31-40 (#LD#) #SRC#", start_day => -60, lank =>[30,39] , exclusion => $NONE_EXC, target => "", label_skip => 1, graph => "lines"}, 
