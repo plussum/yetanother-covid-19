@@ -41,8 +41,8 @@ my $transaction = $tkopdf::transaction;
 
 my $EXC = "都外";
 my $STD = "2020/05/20";
-my $aged = "60代,70代,80代,90代,100歳以上代";
 my $yang = "10代,10歳未満";
+my $aged = "60代,70代,80代,90代,100歳以上代";
 our $PARAMS = {			# MODULE PARETER		$mep
     comment => "**** TOYO-KU  ****",
     src => "TOYO KU ONLINE",
