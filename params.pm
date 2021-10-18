@@ -16,7 +16,76 @@ my $NONE_EXC = "Others";
 my $EXC_POP = "San Marino,Holy See";
 my $EXC_FT = "";
 #my $EUROPE = "Sweden,United Kingdom,UK,Italy,France,Spain,Belgium,Germany,Netherlands,Switzerland";
-my $EUROPE = "France,United Kingdom,Italy,Germany,Netherlands,Belgium,Romania,Poland,Czechia,Portugal,Sweden,Switzerland,Spain";
+#my $EUROPE = "France,United Kingdom,Italy,Germany,Netherlands,Belgium,Romania,Poland,Czechia,Portugal,Sweden,Switzerland,Spain";
+#my $EUROPE = "Iceland,Italy,Ukraine,Uzbekistan,United Kingdom,Austria,Netherlands,Greece,Switzerland,Sweden,Spain,Czech,Denmark,Germany,Norway,Finland,France,Belgium,Poland,Russia";
+my $EUROPE = <<_EOEU_ ;
+Andorra
+Albania
+Armenia
+Austria
+Åland Islands
+Azerbaijan
+Bosnia And Herzegowina
+Belgium
+Bulgaria
+Belarus
+Switzerland
+Czechoslovakia (former)
+Czech Republic
+Germany
+Denmark
+Estonia
+Spain
+Finland
+Faroe Islands
+France
+Georgia
+Guernsey
+Gibraltar
+Greenland
+Greece
+Croatia 
+Hrvatska
+Hungary
+Ireland
+Isle of Man
+Iceland
+Italy
+Jersey
+Liechtenstein
+Lithuania
+Luxembourg
+Latvia
+Monaco
+Moldova
+Montenegro
+Macedonia
+Malta
+Netherlands
+Norway
+Poland
+Palestina
+Portugal
+Romania
+Serbia
+Sweden
+Slovenia
+Svalbard And Jan Mayen Islands
+Slovakia
+San Marino
+Ukraine
+United Kingdom
+Vatican 
+Yugoslavia
+Russia
+_EOEU_
+
+my @w = split(/[\r\n]+/, $EUROPE);
+for(my $i = 0; $i <= $#w; $i++){
+	$w[$i] =~ s/ +$//;
+}
+$EUROPE = join(",", @w);
+dp::dp "$EUROPE\n";
 my $ASIA = "Japan,Taiwan,Malaysia,Philip,Korea,Singapore,Indonesia"; 
 my $EU_AUTH = "Australia,China,New Zealand,Singapore,Korea,Thailand,Japan";
 
@@ -106,11 +175,11 @@ our @PARAMS_COUNT = (
 #    {ext => "#KIND# UK 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, 
 #		target => "UK,United Kingdom", label_skip => 7, graph => "boxes"},
 
-    {ext => "#KIND# Europe (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 999] , exclusion => $EXCLUSION, target => $EUROPE, label_skip => 7, graph => "lines"},
-    {ext => "#KIND# Europe (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 999] , exclusion => $EXCLUSION, target => $EUROPE, label_skip => 7, graph => "lines", avr_date => 7},
+    {ext => "#KIND# Europe (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 15] , exclusion => $EXCLUSION, target => $EUROPE, label_skip => 7, graph => "lines", term_ysize => 400},
+    {ext => "#KIND# Europe (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 15] , exclusion => $EXCLUSION, target => $EUROPE, label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
 
-    {ext => "#KIND# Europe (#LD#) #SRC# 2month", start_day => -62, lank =>[0, 999] , exclusion => $EXCLUSION, target => $EUROPE, label_skip => 1, graph => "lines"},
-    {ext => "#KIND# Europe (#LD#) #SRC# 2month", start_day => -62, lank =>[0, 999] , exclusion => $EXCLUSION, target => $EUROPE, label_skip => 1, graph => "lines",  avr_date => 7},
+    {ext => "#KIND# Europe (#LD#) #SRC# 2month", start_day => -62, lank =>[0, 15] , exclusion => $EXCLUSION, target => $EUROPE, label_skip => 1, graph => "lines", term_ysize => 400},
+    {ext => "#KIND# Europe (#LD#) #SRC# 2month", start_day => -62, lank =>[0, 15] , exclusion => $EXCLUSION, target => $EUROPE, label_skip => 1, graph => "lines",  avr_date => 7, term_ysize => 400},
 #    {ext => "#KIND# Europe (#LD#) #SRC# 2month ymax 2000", start_day => -62,  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
 #		target => $EUROPE, label_skip => 1, graph => "lines",  avr_date => 7, ymax => 2000},
 #    {ext => "#KIND# Europe (#LD#) #SRC# 2month ymax 100", start_day => -62,  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
@@ -196,11 +265,11 @@ our	@PARMS_RT = (
 		target => "Russia,Canada,Ecuador,Brazil,India", label_skip => 7, graph => "lines", ymax => 10, },
 
 	{ext => "#KIND# Europ 0301 #RT_TD#",   start_day => 39, lank =>[0, 99] , exclusion => $EXCLUSION, 
-		target => $EUROPE, label_skip => 7, graph => "lines", ymax => 10, },
+		target => $EUROPE, label_skip => 7, graph => "lines", ymax => 10, , term_ysize => 400},
 	{ext => "#KIND# Europ 1month #RT_TD#",   start_day => -90, lank =>[0, 99] , exclusion => $EXCLUSION, 
-		target => $EUROPE, label_skip => 7, graph => "lines", ymax => 10, },
+		target => $EUROPE, label_skip => 7, graph => "lines", ymax => 10, , term_ysize => 400},
 	{ext => "#KIND# Europ 1month #RT_TD# ymax2",   start_day => -90, lank =>[0, 99] , exclusion => $EXCLUSION, 
-		target => $EUROPE, label_skip => 7, graph => "lines", ymax => 3, },
+		target => $EUROPE, label_skip => 7, graph => "lines", ymax => 3, , term_ysize => 400},
 
 	{ext => "#KIND# TOP 01-05 from 0301 #RT_TD#",   start_day => 39, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", 
 		label_skip => 7, graph => "lines", ymax => 10, },
@@ -277,11 +346,11 @@ our @PARAMS_KV = (
 		target => "", label_skip => 2, graph => "lines"},
 
     {ext => "#KIND# Europ 3/1(#LD#) #SRC#", start_day => "2020/03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
-		target => $EUROPE, label_skip => 7, graph => "lines"},
+		target => $EUROPE, label_skip => 7, graph => "lines", term_ysize => 400},
     {ext => "#KIND#  Europ 4/1 (#LD#) #SRC#", start_day => "2020/04/01",  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
-		target => $EUROPE, label_skip => 7, graph => "lines"},
+		target => $EUROPE, label_skip => 7, graph => "lines", term_ysize => 400},
     {ext => "#KIND# Europ 1m(#LD#) #SRC#", start_day => -31,  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
-		target => $EUROPE, label_skip => 7, graph => "lines"},
+		target => $EUROPE, label_skip => 7, graph => "lines", term_ysize => 400},
 
 	{ext => "#KIND# Germany (#LD#) 04/01 #SRC#", start_day => "2020/04/01",  lank =>[0, 9], exclusion => $EXEC_KV, 
 		target => "Germany", label_skip => 7, graph => "lines"},
