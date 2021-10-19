@@ -2057,8 +2057,12 @@ _EOD_
 	if(1){
 		my $RELATIVE_DATE = 7;
 		my @aw = ();
+		my $dn = int($gp->{dt_end} / $RELATIVE_DATE) * $REALATIVE_DATE + 3;
+		$dn -= $RELATIVE_DATE if($dn > $gp->{dt_end});
 
-		for(my $dn = $gp->{dt_end} - $RELATIVE_DATE; $dn > $gp->{dt_start}; $dn -= $RELATIVE_DATE){
+		#dp::dp "date $gp->{dt_end} , $dn\n";
+
+		for(; $dn > $gp->{dt_start}; $dn -= $RELATIVE_DATE){
 			my $mark_date = $date_list->[$dn];
 			
 			#dp::dp "ARROW: $dn, [$mark_date]\n";
@@ -2070,6 +2074,7 @@ _EOD_
 		#dp::dp "ARROW: $arw\n";
 		$PARAMS =~ s/#ARROW#/$arw/;	
 	}
+	exit;
 
 	open(PLOT, ">$plotf") || die "cannto create $plotf";
 	binmode(PLOT, ":utf8");

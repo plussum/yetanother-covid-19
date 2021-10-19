@@ -915,7 +915,7 @@ _EOD_
 
 		my $date = (($final_rec) ? $final_rec : $end_day);
 		my $s_date = csvlib::ymds2tm($DATES[$date]) / (24 * 60 * 60);	# Draw arrow on sunday
-		$s_date = ($s_date - 2) % $RELATIVE_DATE;
+		$s_date = ($s_date - 3) % $RELATIVE_DATE;
 		$s_date = $RELATIVE_DATE if($s_date == 0);
 		#dp::dp "DATE: " . $DATES[$date] . "  " . "$date -> $s_date -> " . ($date - $s_date) . "\n";
 		$date -= $s_date;
