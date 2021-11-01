@@ -173,8 +173,19 @@ sub	jhccse
 			#		$dtn = 10**20 - 1;											# 大きな値をセットして、上位に来ないようにする
 			#	}
 			#}
+
 			$COUNT_D{$country}[$dt] = $dtn;										# データを COUNT_D セット
 		}
+		########	Japan 2021/10/30 Adjust
+		if($country eq "Japan"){
+			for(my $dt = 0; $dt <= $ITEMS; $dt++){
+				if($COL[$dt] eq "2021-10-30"){
+					dp::WARNING "Japan: 2021-10-30 $COUNT_D{$country}[$dt]\n";
+					exit;
+				}
+			}
+		}
+		########
 		#print CSV $country. $DLM . $COUNTRY{$country}. $DLM;					# 国、トータル
 		print CSV join($DLM, $country, $COUNTRY{$country}, @{$COUNT_D{$country}}), "\n";						# 1行分（国）のデータの出力
 		dp::dp (join(", ", $country, "DIFF :", $COUNTRY{$country}, @{$COUNT_D{$country}}[0..$ITEMS]), "\n" x 2 ) if(($ln < 3 && $DEBUG > 1));
