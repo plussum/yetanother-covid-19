@@ -39,7 +39,7 @@ my $infopath = $config::INFOPATH->{ccse} ;
 #
 my $EXCLUSION = "Others,US";
 #my $CCSE_BASE_DIR = "/home/masataka/who/COVID-19/csse_covid_19_data/csse_covid_19_time_series";
-my $CCSE_ROOT = "$WIN_PATH/ccse/COVID-19";
+my $CCSE_ROOT = "$WIN_PATH/ccse2/COVID-19";
 my $CCSE_BASE_DIR = "$CCSE_ROOT/csse_covid_19_data/csse_covid_19_time_series";
 
 
@@ -158,6 +158,7 @@ sub	download
 {
 	my ($info_path) = @_;
 	#system("(cd ../COVID-19; git pull origin master)");
+	dp::dp("(cd $CCSE_ROOT; git pull origin master).\n");
 	system("(cd $CCSE_ROOT; git pull origin master)");
 	&copy($info_path);
 	
