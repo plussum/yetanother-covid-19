@@ -108,7 +108,10 @@ our @PARAMS_COUNT = (
 #	{ext => "#KIND# 06-10 from 0301 (#LD#) #SRC#",   start_day => "2020/03/01", lank =>[5,  9] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines", thresh => 1},
 #	{ext => "EOD"},
 
-    {ext => "#KIND# all(#LD#) #SRC#", start_day => "2020/01/22",  end_day => +120, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC# 2020/01/22", start_day => "2020/01/22",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC# 2020/04/01", start_day => "2020/04/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC# 2020/07/01", start_day => "2020/07/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC# 2020/10/01", start_day => "2020/10/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
 	{ext => "EOD"},
 
 

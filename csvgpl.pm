@@ -324,6 +324,7 @@ sub	csv2graph
 	#	Graph Parameter set
 	#
 	my $std = (defined $gplitem->{start_day}) ? $gplitem->{start_day} : 0;
+	#dp::dp "START_DAY: $std\n";
 	if($std =~ /[0-9]+\/[0-9]+/){
 		my $n = csvlib::search_list($std, @DATE_LABEL);
 		#dp::dp ">>>> $std: $n " . $DATE_LABEL[$n-1] . "\n";
@@ -339,7 +340,7 @@ sub	csv2graph
 
 	#dp::dp "DATE_NO $DATE_NUMBER\n";
 	my $end_day = (defined $gplitem->{end_day}) ? $gplitem->{end_day} : ($DATE_NUMBER + 1);
-	#dp::dp "DATE_NO $DATE_NUMBER, from $std to  $end_day\n";
+	#dp::dp "DATE_NO $DATE_NUMBER, from $std to  $end_day   " . $gplitem->{end_day} . "\n";
 	if($end_day =~ /[0-9]+\/[0-9]+/){
 		my $n = csvlib::search_list($end_day, @DATE_LABEL);
 		#dp::dp ">>>> $std: $n " . $DATE_LABEL[$n-1] . "\n";
@@ -348,10 +349,13 @@ sub	csv2graph
 			$std = $n - 1;
 		}
 	}
+	elsif($end_day > 0){
+		$end_day = $std + $end_day;
+	}
 	elsif($end_day >= ($DATE_NUMBER - $std)){
 		$end_day = $DATE_NUMBER - $std ;
 	}	
-	#dp::dp "END_DAY: $end_day\n";
+	dp::dp "START_DAY: $std $DATE_LABEL[$std] END_DAY: $end_day $DATE_LABEL[$end_day]\n";
 
 	my $end = $DATE_NUMBER;
 	my $dates = $end - $std + 1;
@@ -419,7 +423,7 @@ sub	csv2graph
 
 		#dp::dp "DATES: $std:$DATE_COL_NO dates:$dates end_day:$end_day std:$std sw_start:$sw_start\n";
 		#for(my $dn = 0; $dn <= $dates; $dn++){
-		for(my $dn = 0; $dn <= $end_day; $dn++){
+		for(my $dn = 0; $dn <= $end_day; $dn++){		##### 2021/11/22 0 -> std
 			my $p = $dn+$std+$DATE_COL_NO;
 			my $c = csvlib::valdef($DATA[$cn][$p], 0);
 			#dp::dp "$cn:$p -> $c\n" if($c =~ /NaN/);
@@ -454,7 +458,7 @@ sub	csv2graph
 			}
 
 			$COUNT_D{$country}[$dn] = $c;
-			if($dn >= $sw_start){			# 新しい情報を優先してソートする
+			if($dn >= $std && $dn >= $sw_start){			# 新しい情報を優先してソートする
 				#dp::dp "$tl: $c \n";
 				$tl += $c + $c * $SORT_WEIGHT * ($dn - $sw_start);  # 後半に比重を置く
 			}
@@ -765,8 +769,9 @@ sub	csv2graph
 	my $YLABEL = "";
 	my $START_DATE = $DATES[0];
 	# $LAST_DATE = $DATES[$#DATES];
-	$LAST_DATE = $DATES[$end_day];
-	#dp::dp "LAST_DATE: " . join("," , $LAST_DATE, $end_day, $#DATES) .  "\n";
+	#### $LAST_DATE = $DATES[$end_day];
+	$LAST_DATE = $DATE_LABEL[$end_day];
+	dp::dp "LAST_DATE: " . join("," , $LAST_DATE, $end_day, $#DATES) .  "\n";
 	#dp::dp join(",", @DATES) . "\n";
 	if($style eq "boxes"){
 		$START_DATE = &date_offset($START_DATE, -24 * 60 * 60);
