@@ -55,7 +55,10 @@ sub	sum
 	}
 	dp::dp "sum($s, $e)\n" if($s =~ /[^0-9]/ || $e =~ /[^0-9]/);
 	dp::dp "sum($s, $e)\n" if($s > $e);
-	dp::dp "sum($s, $e) OUT OF RANGE(" . scalar(@$data) . ")\n" if($s < 0 || $e > scalar(@$data));
+	if($s < 0 || $e > scalar(@$data)){
+		dp::dp "sum($s, $e) OUT OF RANGE(" . scalar(@$data) . ")\n" ;
+		&disp_caller(1..3);
+	}
 
 	my $sum = 0;
 	for(my $i = $s; $i <= $e; $i++){

@@ -355,7 +355,10 @@ sub	csv2graph
 	elsif($end_day >= ($DATE_NUMBER - $std)){
 		$end_day = $DATE_NUMBER - $std ;
 	}	
-	dp::dp "START_DAY: $std $DATE_LABEL[$std] END_DAY: $end_day $DATE_LABEL[$end_day]\n";
+	if($end_day > $#DATE_LABEL){
+		$end_day = $#DATE_LABEL;
+	}
+	#dp::dp "START_DAY: $std $DATE_LABEL[$std] END_DAY: $end_day $DATE_LABEL[$end_day]\n";
 
 	my $end = $DATE_NUMBER;
 	my $dates = $end - $std + 1;
@@ -423,8 +426,8 @@ sub	csv2graph
 
 		#dp::dp "DATES: $std:$DATE_COL_NO dates:$dates end_day:$end_day std:$std sw_start:$sw_start\n";
 		#for(my $dn = 0; $dn <= $dates; $dn++){
-		for(my $dn = 0; $dn <= $end_day; $dn++){		##### 2021/11/22 0 -> std
-			my $p = $dn+$std+$DATE_COL_NO;
+		for(my $dn = 0; $dn <= ($end_day - $std); $dn++){		##### 2021/11/22 end_day ->	 end_day - $std
+			my $p = $dn+$DATE_COL_NO + $std;			##### 2021/11/22 
 			my $c = csvlib::valdef($DATA[$cn][$p], 0);
 			#dp::dp "$cn:$p -> $c\n" if($c =~ /NaN/);
 			#if($c =~ /[^0-9-\.]/){
@@ -444,9 +447,11 @@ sub	csv2graph
 				last;
 			}
 			if($avr_date){
-				my $pp = $p - $DATE_COL_NO;
-				my $s = ($pp > $avr_date) ? ($p - $avr_date + 1): $DATE_COL_NO;
+				#my $pp = $p - $DATE_COL_NO;
+				my $s = (($p - $DATE_COL_NO) > $avr_date) ? ($p - $avr_date + 1): $DATE_COL_NO;
 				my $e = $p;
+				#dp::dp "AVR: $s $e " . scalar(@{$DATA[$cn]}) . "\n";
+				#dp::dp "AVR: " . join(", ", $DATE_LABEL[$s]//"NONE",  $DATE_LABEL[$e]//"NONE", $end_day, $dn) . "\n";
 				$c = csvlib::avr($DATA[$cn], $s, $e);
 			}
 			if($count_mode eq "CCM"){
@@ -458,7 +463,7 @@ sub	csv2graph
 			}
 
 			$COUNT_D{$country}[$dn] = $c;
-			if($dn >= $std && $dn >= $sw_start){			# 新しい情報を優先してソートする
+			if($dn >= $sw_start){			# 新しい情報を優先してソートする
 				#dp::dp "$tl: $c \n";
 				$tl += $c + $c * $SORT_WEIGHT * ($dn - $sw_start);  # 後半に比重を置く
 			}
@@ -507,6 +512,7 @@ sub	csv2graph
 			$TOTAL{$country} = $cn;
 		}
 	}
+	#dp::dp "SC: $#sc\n";
 
 	foreach my $country (@sc){
 		#dp::dp "$country  " . $CTG{$country} . "\n";
@@ -565,41 +571,44 @@ sub	csv2graph
 			}
 		}
 	}
-	for(my $dt = 0; $dt <= $end_day; $dt++){
+	#dp::dp ">>>> $#Dataset \n";
+	for(my $dt = 0; $dt <= ($end_day - $std); $dt++){	#### 2021/11/22
+		my $p = $dt;#+$DATE_COL_NO + $std;			##### 2021/11/22 
 		my $dts  = $DATES[$dt];
+		#dp::dp "DATES $dt : $DATES[$dt]\n";
 		$dts =~ s#([0-9]{4})([0-9]{2})([0-9]{2})#$1/$2/$3#;
 		$dts = $dt if(defined $gplitem->{ft});
-		#dp::dp "[[$DATES[$dt]][$dts]\n";
+		#dp::dp " $dt:$p [[$DATES[$dt]][$dts]\n";
 		my @data = ();
 		for (my $i = 1; $i <= $#Dataset; $i++){
-			my $v = $Dataset[$i][$dt];
+			my $v = $Dataset[$i][$p] // 0;
 			my $country = $COUNTRY[$i-1];
 			#dp::dp "### [$country]: ";
 			my $item_number = $TOTAL{$country};
-			#dp::dp "###### [$country] $item_number : $dt" . "\n";
+			#dp::dp "###### [$country] $item_number : $dt $v" . "\n";
 	
 			#
-			#	for Average
+			#	for Average			#### 2021/11/22
 			#
-			if(defined $gplitem->{average_date}){
-				my $av = 0;
-				if($dt > $item_number){ 
-					$v = $NO_DATA;			# for FT, set nodata
-				}
-				else {
-					for(my $ma = $dt - $gplitem->{average_date} + 1; $ma <= $dt; $ma++){		# +1 2020.09.09
-						my $d = $Dataset[$i][$dt];
-						if($ma >= 0) {
-							$d = $Dataset[$i][$ma];
-						}
-						$av += $d;
-						#dp::dp "($i: $dt $ma $av)";
-					}
-					$v = int(0.5 + $av) / $gplitem->{average_date};
-					#$v = int(100 * $av / $gplitem->{average_date}) / 100;
-					#$v = 1 if($v < 1 && defined $gplitem->{logscale});
-				}
-			}
+			#if(defined $gplitem->{average_date}){
+			#	my $av = 0;
+			#	if($dt > $item_number){ 
+			#		$v = $NO_DATA;			# for FT, set nodata
+			#	}
+				#else {
+				#	for(my $ma = $dt - $gplitem->{average_date} + 1; $ma <= $dt; $ma++){		# +1 2020.09.09
+				#		my $d = $Dataset[$i][$p];
+				#		if($ma >= 0) {
+				#			$d = $Dataset[$i][$ma];
+				#		}
+				#		$av += $d;
+				#		#dp::dp "($i: $dt $ma $av)";
+				#	}
+				#	$v = int(0.5 + $av) / $gplitem->{average_date};
+				#	#$v = int(100 * $av / $gplitem->{average_date}) / 100;
+				#	#$v = 1 if($v < 1 && defined $gplitem->{logscale});
+				#}
+			#}
 			if($gplitem->{logscale}){
 				$v = $NO_DATA if($v < 1);
 			}
@@ -771,7 +780,7 @@ sub	csv2graph
 	# $LAST_DATE = $DATES[$#DATES];
 	#### $LAST_DATE = $DATES[$end_day];
 	$LAST_DATE = $DATE_LABEL[$end_day];
-	dp::dp "LAST_DATE: " . join("," , $LAST_DATE, $end_day, $#DATES) .  "\n";
+	#dp::dp "LAST_DATE: " . join("," , $LAST_DATE, $end_day, $#DATES) .  "\n";
 	#dp::dp join(",", @DATES) . "\n";
 	if($style eq "boxes"){
 		$START_DATE = &date_offset($START_DATE, -24 * 60 * 60);

@@ -108,12 +108,8 @@ our @PARAMS_COUNT = (
 #	{ext => "#KIND# 06-10 from 0301 (#LD#) #SRC#",   start_day => "2020/03/01", lank =>[5,  9] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines", thresh => 1},
 #	{ext => "EOD"},
 
-    {ext => "#KIND# all(#LD#) #SRC# 2020/01/22", start_day => "2020/01/22",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
-    {ext => "#KIND# all(#LD#) #SRC# 2020/04/01", start_day => "2020/04/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
-    {ext => "#KIND# all(#LD#) #SRC# 2020/07/01", start_day => "2020/07/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
-    {ext => "#KIND# all(#LD#) #SRC# 2020/10/01", start_day => "2020/10/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
-	{ext => "EOD"},
 
+	#{ext => "EOD"},
 
     {ext => "#KIND# all(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
     {ext => "#KIND# all(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 7, graph => "lines"},
@@ -223,6 +219,15 @@ our @PARAMS_COUNT = (
 #    {ext => "#KIND# Japan 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 9999] , exclusion => $NONE_EXC, target => "Japan", label_skip => 7, graph => "boxes"},
 	{ext => "#KIND# Taiwan (#LD#) #SRC#", start_day => 0, lank =>[0, 999], exclusion => $EXCLUSION, target => "Taiwan", label_skip => 7, graph => "lines", src => "ccse"},
 	{ext => "#KIND# China 3m (#LD#) #SRC#", start_day => -93,  lank =>[0, 19], exclusion => $EXCLUSION, target => "China", label_skip => 2, graph => "lines", src => "ccse"},
+
+    {ext => "#KIND# all(#LD#) #SRC# 2020/01/22", start_day => "2020/01/22",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC# 2020/04/01", start_day => "2020/04/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC# 2020/07/01", start_day => "2020/07/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC# 2020/10/01", start_day => "2020/10/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC# 2021/01/01", start_day => "2021/01/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC# 2021/04/01", start_day => "2021/04/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC# 2021/07/01", start_day => "2021/07/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC# 2021/10/01", start_day => "2021/10/01",  end_day => 90, lank =>[0, 9] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
 );
 
 our	@PARMS_FT = (
