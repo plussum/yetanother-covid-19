@@ -111,15 +111,15 @@ our @PARAMS_COUNT = (
 
 	#{ext => "EOD"},
 
-    {ext => "#KIND# all(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", avr_date => 7, term_ysize => 400},
-    {ext => "#KIND# all(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => 7, graph => "lines"},
+    {ext => "#KIND# all(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => "", graph => "lines", avr_date => 7, term_ysize => 400},
+    {ext => "#KIND# all(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => "", graph => "lines"},
 
 
 #	{ext => "#KIND# TOP5+Japan(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => "Others", target => "", label_skip => 7, graph => "lines", add_target => "Japan"},
 #	{ext => "#KIND# TOP5+Japan(wo US)(#LD#) #SRC#", start_day => 0, lank =>[0, 4] , exclusion => $EXCLUSION, target => "", label_skip => 7, graph => "lines", add_target => "Japan"},
 
-    {ext => "#KIND# Japan 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 7, graph => "lines", avr_date => 7},
-    {ext => "#KIND# Japan 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 7, graph => "lines"},
+    {ext => "#KIND# Japan 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => "", graph => "lines", avr_date => 7},
+    {ext => "#KIND# Japan 0301 (#LD#) #SRC#", start_day => "2020/03/01", lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => "", graph => "lines"},
 #	{ext => "EOD"},
 #	{ext => "#KIND# Japan 1month (#LD#) #SRC#", start_day => -31,  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 1, graph => "boxes"},
 #	{ext => "#KIND# Japan 0520 (#LD#) #SRC# ", start_day => "2020/05/20",  lank =>[0, 4] , exclusion => "Others", target => "Japan", label_skip => 7, graph => "lines", avr_date => 7},

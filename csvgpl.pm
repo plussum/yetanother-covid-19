@@ -907,12 +907,32 @@ _EOD_
 		$xtics = csvlib::valdef($gplitem->{label_skip}, 1);
 	}
 	else {
-		if(defined $gplitem->{label_skip}){
+		if(($gplitem->{label_skip}//"")){
 			$xtics = $gplitem->{label_skip} * 3600 * 24;;
+		}
+		else {
+			
+			my $start_ut = csvlib::ymds2tm($START_DATE);
+			my $end_ut = csvlib::ymds2tm($LAST_DATE);
+			my $dates = ($end_ut - $start_ut) / (60 * 60 * 24);
+			$xtics = 60 * 60 * 24 * 7 * 4;
+			if($dates < 62){
+				$xtics = 1 * 60 * 60 * 24;
+			}
+			elsif($dates < 93){
+				$xtics = 2 * 60 * 60 * 24;
+			}
+			elsif($dates < 120){
+				$xtics = 3 * 60 * 60 * 24;
+			}
+			elsif($dates < 160){
+				$xtics = 7 * 60 * 60 * 24;
+			}
+			dp::dp "###### date:" . join(",", $dates, $xtics, $xtics / (3600 * 24)) . "\n";
 		}
 	}
 	$PARAMS =~ s/#XTICKS#/$xtics/;
-#	dp::dp "[[[$PARAMS]]]\n";
+	#dp::dp "[[[$PARAMS]]]\n";
 
 #	my $PARAMS_SHOW_VALS = $PARAMS;
 #	my $SHOW_VALS = "show variables GPVAL_Y_MIN\nshow variables GPVAL_Y_MAX\n";

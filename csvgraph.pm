@@ -1923,13 +1923,21 @@ sub	graph
 	my $start_ut = csvlib::ymds2tm($start_date);
 	my $end_ut = csvlib::ymds2tm($end_date);
 	my $dates = ($end_ut - $start_ut) / (60 * 60 * 24);
-	my $xtics = 60 * 60 * 24 * 7;
-	if($dates < 93){
+
+	my $xtics = 60 * 60 * 24 * 7 * 4;
+	if($dates < 62){
 		$xtics = 1 * 60 * 60 * 24;
 	}
-	elsif($dates < 120){
+	elsif($dates < 93){
 		$xtics = 2 * 60 * 60 * 24;
 	}
+	elsif($dates < 120){
+		$xtics = 3 * 60 * 60 * 24;
+	}
+	elsif($dates < 160){
+		$xtics = 7 * 60 * 60 * 24;
+	}
+	dp::dp "###### date: $dates, $xtics\n";
 
 	#dp::dp "ymin: [$gdp->{ymin}]\n";
 	my $ymin = $gp->{ymin} // ($gdp->{ymin} // "");
