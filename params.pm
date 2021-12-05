@@ -108,8 +108,8 @@ our @PARAMS_COUNT = (
 #	{ext => "#KIND# 06-10 from 0301 (#LD#) #SRC#",   start_day => "2020/03/01", lank =>[5,  9] , exclusion => $NONE_EXC, target => "", label_skip => 3, graph => "lines", thresh => 1},
 #	{ext => "EOD"},
 
-
-	#{ext => "EOD"},
+#	{ext => "EOD"},
+#
 
     {ext => "#KIND# all(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => "", graph => "lines", avr_date => 7, term_ysize => 400},
     {ext => "#KIND# all(#LD#) #SRC#", start_day => 0,  lank =>[0, 19] , exclusion => "Others", target => "", label_skip => "", graph => "lines"},
@@ -187,6 +187,10 @@ our @PARAMS_COUNT = (
 #		target => $EUROPE, label_skip => 1, graph => "lines",  avr_date => 7, ymax => 2000},
 #    {ext => "#KIND# Europe (#LD#) #SRC# 2month ymax 100", start_day => -62,  lank =>[0, 999] , exclusion => $EXCLUSION, term_ysize => 300,
 #		target => $EUROPE, label_skip => 1, graph => "lines",  avr_date => 7, ymax => 100},
+
+	{ext => "#KIND# South Africa (#LD#) #SRC#", start_day => 0, lank =>[], exclusion => $EXCLUSION, target => "South Africa", label_skip => 7, graph => "lines", src => "ccse"},
+	{ext => "#KIND# South Africa (#LD#) #SRC#", start_day => -60, lank =>[], exclusion => $EXCLUSION, target => "South Africa", label_skip => 7, graph => "lines", avr_date => 7, src => "ccse"},
+	{ext => "#KIND# South Africa (#LD#) #SRC#", start_day => -60, lank =>[], exclusion => $EXCLUSION, target => "South Africa", label_skip => 7, graph => "lines", avr_date => 1, src => "ccse"},
 
     {ext => "#KIND# Sweden(#LD#) #SRC#", start_day => "2020/03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, target => "Sweden", label_skip => 7, graph => "lines", avr_date => 7},
     {ext => "#KIND# New Zealand (#LD#) #SRC#", start_day => "2020/03/01",  lank =>[0, 999] , exclusion => $EXCLUSION, target => "New Zealand", label_skip => 7, graph => "lines", avr_date => 7},
