@@ -46,9 +46,9 @@ my @jag_param = (
 	{ext => "#KIND# Japan TOP20 2m (#LD#) #SRC#", start_day => -62,  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
 	{ext => "#KIND# Japan TOP20 2m (#LD#) #SRC#", start_day => -62,  lank =>[0, 19] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines", avr_date => 7},
 
-	{ext => "#KIND# Japan 2-10 4w (#LD#) #SRC#", start_day => -28,  lank =>[1, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
+	{ext => "#KIND# Japan 1-10 4w (#LD#) #SRC#", start_day => -28,  lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
 	{ext => "#KIND# Japan 11-20 4w (#LD#) #SRC#", start_day => -28,  lank =>[10, 19] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines"},
-	{ext => "#KIND# Japan 2-10 4w (#LD#) #SRC#", start_day => -28,  lank =>[1, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines", avr_date => 7},
+	{ext => "#KIND# Japan 1-10 4w (#LD#) #SRC#", start_day => -28,  lank =>[0, 9] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines", avr_date => 7},
 	{ext => "#KIND# Japan 11-20 4w (#LD#) #SRC#", start_day => -28,  lank =>[10, 19] , exclusion => $EXCLUSION, target => "", label_skip => 1, graph => "lines", avr_date => 7},
 
 	{ext => "#KIND# 大阪、北海道 (#LD#) #SRC#", start_day => "2020/03/12",  lank =>[0, 99] , exclusion => $EXCLUSION, target => "大阪,北海道", label_skip => 7, graph => "lines", avr_date => 7},
