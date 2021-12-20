@@ -97,15 +97,25 @@ our $PARAMS = {			# MODULE PARETER		$mep
 			#			avr_date => 7, nosort => 1, term_ysize => 600},
 				{ext => "#KIND# Tokyo Age (#LD#) #SRC# 2m rlavr", start_day => -61,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", 
 						avr_date => 7, nosort => 1},
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC# 1m rlavr", start_day => -31,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", 
+						avr_date => 7, nosort => 1},
 			#	{ext => "#KIND# Tokyo Age (#LD#) #SRC# 2m large", start_day => -61,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", 
 			#			avr_date => 7, nosort => 1, term_ysize => 600,},
+
 				{ext => "#KIND# Tokyo Age (#LD#) #SRC# 2m", start_day => -61,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", 
+						nosort => 1},
+				{ext => "#KIND# Tokyo Age (#LD#) #SRC# 1m", start_day => -31,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 1, graph => "lines", 
 						nosort => 1},
 
 				{ext => "#KIND# Tokyo OLD Age (#LD#) #SRC# 2m rlavr", start_day => -61,  lank =>[0, 19] , exclusion => $EXC, target => "$aged", label_skip => 1, graph => "lines", 
 						avr_date => 7, nosort => 1},
 				{ext => "#KIND# Tokyo Yang Age (#LD#) #SRC# 2m rlavr", start_day => -61,  lank =>[0, 19] , exclusion => $EXC, target => "$yang", label_skip => 1, graph => "lines", 
 						avr_date => 7, nosort => 1},
+				{ext => "#KIND# Tokyo OLD Age (#LD#) #SRC# 1m rlavr", start_day => -31,  lank =>[0, 19] , exclusion => $EXC, target => "$aged", label_skip => 1, graph => "lines", 
+						avr_date => 7, nosort => 1},
+				{ext => "#KIND# Tokyo Yang Age (#LD#) #SRC# 1m rlavr", start_day => -31,  lank =>[0, 19] , exclusion => $EXC, target => "$yang", label_skip => 1, graph => "lines", 
+						avr_date => 7, nosort => 1},
+
 
 				#{ext => "#KIND# Tokyo Age (#LD#) #SRC# ruiseki01", start_day => 0,  lank =>[0, 19] , exclusion => $EXC, target => "", label_skip => 7, graph => "lines", 
 				#		avr_date => 7, ruiseki => 1, nosort => 1, thresh => ""},
