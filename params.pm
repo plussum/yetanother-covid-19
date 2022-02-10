@@ -85,7 +85,7 @@ for(my $i = 0; $i <= $#w; $i++){
 	$w[$i] =~ s/ +$//;
 }
 $EUROPE = join(",", @w);
-dp::dp "$EUROPE\n";
+#dp::dp "$EUROPE\n";
 my $ASIA = "Japan,Taiwan,Malaysia,Philip,Korea,Singapore,Indonesia"; 
 my $EU_AUTH = "Australia,China,New Zealand,Singapore,Korea,Thailand,Japan";
 

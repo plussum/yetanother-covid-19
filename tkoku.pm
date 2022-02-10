@@ -272,7 +272,7 @@ sub	gencsv
 		#dp::dp $pdf_file . "\n";
 		if($pdf_file =~ "\.pdf\.txt"){
 			$pdf_file = "$pdf_dir/$pdf_file";
-			#dp::dp $pdf_file . "\n" if($rec++ < 3);		# 3
+			#dp::dp $pdf_file . "\n" ;#if($rec++ < 3);		# 3
 			&pdf2data("$pdf_file");
 		}
 	}
@@ -280,7 +280,7 @@ sub	gencsv
 	#
 	#	generate csv file from pdf(text)
 	#
-	dp::dp $csvf . "\n" if($config::VERBOSE);
+	dp::dp $csvf . "\n" ;#if($config::VERBOSE);
 	open(CSV, "> $csvf") || die "cannto create $csvf";
 	my @KUS = (sort {$KU_FLAG{$b} <=> $KU_FLAG{$a}} keys %KU_FLAG);
 	my @DATES = (sort keys %DATE_FLAG);
@@ -296,16 +296,22 @@ sub	gencsv
 		my @nn = ();
 		my $lv = 0;
 		foreach my $date (@DATES){
-			if(!defined $CONFIRMED{$date}{$ku}){
+			if(!defined $CONFIRMED{$date}->{$ku}){
 				dp::dp "### UNDEFINED CONFIRMED: $date $ku\n";
 				next;
 			}
-			my $v = $CONFIRMED{$date}{$ku};
+			my $v = $CONFIRMED{$date}->{$ku};
 			#dp::dp "$date:$ku: $v:$lv\n";# if($ku eq "小笠原");
 			push(@nn, $v - $lv);
 			$lv = $v;
 		}
 		print CSV join($DLM, $ku, @nn) . "\n";
+		if($ku =~ /都外/){
+			my $dt = $#DATES;
+
+			print join($DLM, " ", @DATES[($dt-5)..$dt]) . "\n";
+			print join($DLM, $ku, @nn[($dt-5)..$dt]) . "\n";
+		}
 		#dp::dp join(",", $ku, @nn) . "\n" if($ku eq "小笠原");
 	}
 	close(CSV);
@@ -322,6 +328,7 @@ sub	pdf2data
 	my $date = "";
 	my $kn = 0;
 	my $ku_flag = 0;
+	my $csvf = "";
 	while(<PDF>){
 		s/（/(/g;
 		s/）/)/g;
@@ -341,7 +348,7 @@ sub	pdf2data
 			$y += 2000 if($y < 100);
 			$date = sprintf("%04d/%02d/%02d", $y, $m, $d);
 
-			my $csvf = "$txtf.csv.txt";
+			$csvf = "$txtf.csv.txt";
 			my $csvd = $date;
 			$csvd =~ s#/#-#g;
 			$csvf =~ s/txt/$csvd/; 
@@ -352,7 +359,7 @@ sub	pdf2data
 			#last if($date ne "2020/05/01");		#### 
 
 			$DATE_FLAG{$date} = $date;
-			#dp::dp "$date, $txtf \n";
+			#dp::dp "CSVF: $date, $txtf  $csvf\n";
 			#exit;
 		}
 		elsif(/【参考】区市町村別患者数/){
@@ -397,8 +404,15 @@ sub	pdf2data
 				my $k = $ku[$i];
 				$KU_FLAG{$k} = $number[$i] if(!defined $KU_FLAG{$k} || $number[$i] > $KU_FLAG{$k});
 				#dp::dp join(":", $date, $k, $number[$i]) . " \n";
-				$CONFIRMED{$date}{$k} = $number[$i];
+				if(!defined $CONFIRMED{$date}){
+					$CONFIRMED{$date} = {};
+				}
+				$CONFIRMED{$date}->{$k} = $number[$i];
 				print CSV join("\t", $date, $k, $number[$i]) . "\n" ;
+				if($k =~ "都外" && $date gt "2022/01/01"){
+					#dp::dp "CSVF: $date, $txtf  $csvf\n";
+					print join("\t", $date, $k, $number[$i], $CONFIRMED{$date}->{$k}) . "\n" ;
+				}
 			}
 		}
 	}
