@@ -203,8 +203,9 @@ sub	csv2graph
 {
 	my ($graph_no, $csvf, $png_path, $kind, $gplitem, $clp, $mep, $aggr_mode, $fp) = @_;
 
-	dp::dp join(", ", $gplitem->{ext}, $gplitem->{start_day}, $gplitem->{lank}[0], $gplitem->{lank}[1], $gplitem->{exclusion}, 
-			"[" . $clp->{src} . "]", $mep->{prefix}), "\n" if($config::VERBOSE);
+	dp::dp join(", ", $gplitem->{ext}//"", $gplitem->{start_day}//"", 
+					  $gplitem->{lank}[0]//"", $gplitem->{lank}[1]//"", $gplitem->{exclusion}//"", 
+			"[" . ($clp->{src}//"") . "]", $mep->{prefix}//""), "\n" if($config::VERBOSE);
 	
 	my $src = csvlib::valdefs($gplitem->{src}, "");
 	my $ext = sprintf("#%02d ", $graph_no) . $mep->{prefix} . " " . $gplitem->{ext};
@@ -362,8 +363,8 @@ sub	csv2graph
 
 	my $end = $DATE_NUMBER;
 	my $dates = $end - $std + 1;
-	my $tgcs = $gplitem->{lank}[0];						# 対象ランク
-	my $tgce = $gplitem->{lank}[1];						# 対象ランク 
+	my $tgcs = $gplitem->{lank}[0]//0;						# 対象ランク
+	my $tgce = $gplitem->{lank}[1]//99;						# 対象ランク 
 	#dp::dp "[$tgcs:$tgce]\n";
 	$tgce = $COUNTRY_NUMBER if($tgce > $COUNTRY_NUMBER);
 
@@ -864,8 +865,10 @@ _EOD_
 			}
 		}
 		else {
-			push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d ", 
-						$plot_csvf, $i+$DATE_COL_NO, $country, ($i < 7) ? 2 : 1)
+			my $dot = ($i <= 7) ? "" : "dt (5,5)";
+			$dot = "dt (3, 7)" if($i > 14);
+			push(@w, sprintf("'%s' using 1:%d with lines title '%s' linewidth %d $dot", 
+						$plot_csvf, $i+$DATE_COL_NO, $country, ($i <= 7) ? 2 : 1)
 			);
 		}
 	}

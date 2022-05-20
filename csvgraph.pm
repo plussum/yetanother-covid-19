@@ -2022,6 +2022,9 @@ _EOD_
 
 		my $axis = "";
 		my $dot = "";
+		if($i > 7){
+			$dot = "dt (5.5)";
+		}
 		if($y2_source ne ""){		#####
 			#dp::dp "csv_source: $key [" . $src_csv->{$key} . "]\n";
 			#dp::dp "csv_source: $key [" . $src_csv . "]\n";
